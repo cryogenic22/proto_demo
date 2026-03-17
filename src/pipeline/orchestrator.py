@@ -22,6 +22,7 @@ from src.models.schema import (
 )
 from src.pipeline.cell_extractor import CellExtractor
 from src.pipeline.challenger_agent import ChallengerAgent
+from src.pipeline.footnote_extractor import FootnoteExtractor
 from src.pipeline.footnote_resolver import FootnoteResolver
 from src.pipeline.pdf_ingestion import PDFIngestor
 from src.pipeline.procedure_normalizer import ProcedureNormalizer
@@ -47,6 +48,7 @@ class PipelineOrchestrator:
         self.stitcher = TableStitcher()
         self.structural_analyzer = StructuralAnalyzer(config, self.llm)
         self.cell_extractor = CellExtractor(config, self.llm)
+        self.footnote_extractor = FootnoteExtractor(config, self.llm)
         self.footnote_resolver = FootnoteResolver()
         self.procedure_normalizer = ProcedureNormalizer()
         self.temporal_extractor = TemporalExtractor()
@@ -175,10 +177,10 @@ class PipelineOrchestrator:
                 region, schema, pages, pass_number=2
             )
 
-        # Stage 6: Footnote Resolution
-        logger.info(f"  Table {region.table_id}: Footnote Resolution")
-        # Extract footnote text from the cells that look like footnote definitions
-        footnote_text = self._extract_footnote_definitions(pass1_cells, schema)
+        # Stage 6: Footnote Extraction + Resolution
+        logger.info(f"  Table {region.table_id}: Footnote Extraction")
+        footnote_text = await self.footnote_extractor.extract(region, schema, pages)
+        logger.info(f"  Table {region.table_id}: Footnote Resolution ({len(footnote_text)} definitions)")
         resolved_cells, footnotes = self.footnote_resolver.resolve(
             pass1_cells, footnote_text
         )
@@ -251,20 +253,6 @@ class PipelineOrchestrator:
                 model_used=self.config.vision_model,
             ),
         )
-
-    @staticmethod
-    def _extract_footnote_definitions(
-        cells: list, schema
-    ) -> dict[str, str]:
-        """
-        Extract footnote definitions from the table.
-        This is a simplified version — in production, footnotes would
-        be extracted from the table image directly by a dedicated pass.
-        """
-        footnote_text: dict[str, str] = {}
-        # For now, return empty — footnotes will be extracted by the
-        # structural analyzer in a future enhancement
-        return footnote_text
 
     @staticmethod
     def _build_cost_map(cells, procedures) -> dict:
