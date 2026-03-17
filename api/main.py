@@ -20,8 +20,11 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from dotenv import load_dotenv
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv optional in production
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -214,6 +217,33 @@ async def get_job_result(job_id: str):
         raise HTTPException(status_code=400, detail=f"Job is {job['status']}, not completed")
 
     return job["result"]
+
+
+@app.get("/api/jobs/{job_id}/review")
+async def get_job_review(job_id: str, format: str = "json"):
+    """Get extraction results formatted for medical writer review.
+
+    Args:
+        format: "json" for structured review, "markdown" for human-readable doc
+    """
+    if job_id not in jobs:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    job = jobs[job_id]
+    if job["status"] != "completed":
+        raise HTTPException(status_code=400, detail=f"Job is {job['status']}, not completed")
+
+    from src.models.schema import PipelineOutput as PipelineOutputModel
+    from src.pipeline.review_exporter import export_review_document, export_review_json
+
+    result = PipelineOutputModel.model_validate(job["result"])
+
+    if format == "markdown":
+        from fastapi.responses import PlainTextResponse
+        md = export_review_document(result)
+        return PlainTextResponse(md, media_type="text/markdown")
+    else:
+        return export_review_json(result)
 
 
 async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):

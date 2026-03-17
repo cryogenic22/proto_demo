@@ -1,0 +1,12 @@
+web/node_modules
+web/.next
+web/out
+__pycache__
+*.pyc
+.git
+.hypothesis
+.pytest_cache
+golden_set/cached_pdfs
+.env
+.env.local
+*.egg-info
