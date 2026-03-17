@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This registry catalogs 20 publicly available clinical trial protocols selected for
+This registry catalogs 35 publicly available clinical trial protocols selected for
 evaluating a table extraction pipeline. Protocols are organized from **simple** to
-**complex** table structures across 7 therapeutic areas and 4 trial phases.
+**complex** table structures across 14 therapeutic areas and multiple trial phases.
 
 All PDFs are freely downloadable from the URLs below with no login required.
 
@@ -272,29 +272,223 @@ All PDFs are freely downloadable from the URLs below with no login required.
 
 ---
 
+## Expansion Set (P-21 through P-35) -- Added to Fill Therapeutic Area Gaps
+
+### P-21  CART-19 for Relapsed/Refractory NHL
+
+| Field | Value |
+|---|---|
+| NCT | NCT02030834 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/34/NCT02030834/Prot_SAP_000.pdf |
+| Sponsor | Penn/Novartis |
+| Therapeutic Area | Hematology (Non-Hodgkin Lymphoma, CAR-T) |
+| Phase | I/II |
+| Complexity Tier | 4 |
+| Table Complexity | Multi-period SoA covering leukapheresis, conditioning, infusion, and long-term follow-up. CAR-T-specific monitoring (CRS grading, neurotoxicity) creates unique assessment rows. Nested sub-tables for adverse event management algorithms. |
+
+### P-22  Venetoclax + Obinutuzumab in CLL
+
+| Field | Value |
+|---|---|
+| NCT | NCT04285567 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/67/NCT04285567/Prot_000.pdf |
+| Sponsor | Roche/AbbVie |
+| Therapeutic Area | Hematology (Chronic Lymphocytic Leukemia) |
+| Phase | III |
+| Complexity Tier | 3 |
+| Table Complexity | Cycle-based SoA with venetoclax dose ramp-up schedule. Tumor lysis syndrome monitoring creates dense assessment windows in early cycles. Multi-arm design with different obinutuzumab schedules. Nested sub-tables for dose modifications. |
+
+### P-23  Tisagenlecleucel Phase IIIb for Pediatric ALL
+
+| Field | Value |
+|---|---|
+| NCT | NCT03123939 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/39/NCT03123939/Prot_000.pdf |
+| Sponsor | Novartis |
+| Therapeutic Area | Hematology (Pediatric Acute Lymphoblastic Leukemia, CAR-T) |
+| Phase | IIIb |
+| Complexity Tier | 4 |
+| Table Complexity | Multi-period SoA spanning manufacturing, lymphodepleting chemotherapy, infusion, and 15-year long-term follow-up. Pediatric-specific assessments. CRS and neurotoxicity monitoring windows. |
+
+### P-24  Oral Semaglutide Phase III (Novo Nordisk)
+
+| Field | Value |
+|---|---|
+| NCT | NCT04707469 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/69/NCT04707469/Prot_000.pdf |
+| Sponsor | Novo Nordisk |
+| Therapeutic Area | Endocrinology (Type 2 Diabetes / GLP-1) |
+| Phase | III |
+| Complexity Tier | 3 |
+| Table Complexity | Multi-arm design with dose-escalation sub-schedule. Novo Nordisk template format distinct from Lilly. HbA1c and body weight at frequent intervals. |
+
+### P-25  Adoptive Cell Transfer in Soft Tissue Sarcoma
+
+| Field | Value |
+|---|---|
+| NCT | NCT04052334 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/34/NCT04052334/Prot_SAP_000.pdf |
+| Sponsor | NCI |
+| Therapeutic Area | Oncology (Soft Tissue Sarcoma, Cell Therapy) |
+| Phase | I |
+| Complexity Tier | 4 |
+| Table Complexity | Multi-period SoA covering tumor harvest, TIL expansion, conditioning chemotherapy, cell infusion, and IL-2 administration. Complex inpatient monitoring schedule. |
+
+### P-26  Nemolizumab for Moderate-to-Severe Atopic Dermatitis
+
+| Field | Value |
+|---|---|
+| NCT | NCT03985943 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/43/NCT03985943/Prot_000.pdf |
+| Sponsor | Galderma R&D |
+| Therapeutic Area | Dermatology (Moderate-to-Severe Atopic Dermatitis) |
+| Phase | III |
+| Complexity Tier | 3 |
+| Table Complexity | Multi-arm design (nemolizumab vs. placebo) with 16-week treatment period. Dermatology-specific endpoints (EASI, IGA, NRS pruritus) at frequent intervals. ~750 subjects. Topical corticosteroid co-administration schedule. |
+
+### P-27  Bimekizumab in Moderate-to-Severe Psoriasis
+
+| Field | Value |
+|---|---|
+| NCT | NCT03131219 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/19/NCT03131219/Prot_000.pdf |
+| Sponsor | UCB Pharma |
+| Therapeutic Area | Dermatology (Plaque Psoriasis) |
+| Phase | III |
+| Complexity Tier | 2 |
+| Table Complexity | Multi-arm multi-period design with initial treatment and randomized withdrawal. PASI 75/90/100 and IGA scoring at defined intervals. UCB protocol template. |
+
+### P-28  Faricimab in Diabetic Macular Edema (YOSEMITE)
+
+| Field | Value |
+|---|---|
+| NCT | NCT03823287 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/87/NCT03823287/Prot_000.pdf |
+| Sponsor | Roche/Genentech |
+| Therapeutic Area | Ophthalmology (Diabetic Macular Edema) |
+| Phase | III |
+| Complexity Tier | 3 |
+| Table Complexity | Cycle-based intravitreal injection schedule with treat-and-extend dosing intervals. OCT and BCVA at every visit. Multi-arm design (faricimab Q8W, faricimab personalized, aflibercept Q8W). Ophthalmology-specific assessments. |
+
+### P-29  HPTN 083 -- Cabotegravir PrEP for HIV Prevention
+
+| Field | Value |
+|---|---|
+| NCT | NCT02720094 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/94/NCT02720094/Prot_001.pdf |
+| Sponsor | NIAID |
+| Therapeutic Area | Infectious Disease (HIV Prevention / PrEP) |
+| Phase | IIb/III |
+| Complexity Tier | 3 |
+| Table Complexity | Multi-period design with oral lead-in phase transitioning to injectable phase. Dense lab monitoring for HIV acquisition, hepatitis B/C status, renal function. Behavioral assessments interleaved with clinical visits. Long-acting injectable dosing schedule. |
+
+### P-30  Bictegravir/FTC/TAF in HIV-1/HBV Co-Infection
+
+| Field | Value |
+|---|---|
+| NCT | NCT03547908 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/08/NCT03547908/Prot_000.pdf |
+| Sponsor | Gilead Sciences |
+| Therapeutic Area | Infectious Disease (HIV-1/HBV Co-Infection) |
+| Phase | III |
+| Complexity Tier | 3 |
+| Table Complexity | Multi-arm active-comparator design. Dual monitoring for both HIV viral load and HBV DNA/markers. Dense hepatic function monitoring with HBV flare criteria. Gilead protocol template format. |
+
+### P-31  Tezepelumab in Severe Uncontrolled Asthma (NAVIGATOR)
+
+| Field | Value |
+|---|---|
+| NCT | NCT03347279 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/79/NCT03347279/Prot_002.pdf |
+| Sponsor | AstraZeneca |
+| Therapeutic Area | Respiratory (Severe Uncontrolled Asthma) |
+| Phase | III |
+| Complexity Tier | 3 |
+| Table Complexity | 52-week treatment + 12-week follow-up SoA. Multi-arm design. Spirometry (FEV1) at every visit. FeNO, blood eosinophils, IgE at defined intervals. AstraZeneca template format. Adolescent + adult sub-populations. |
+
+### P-32  Ensifentrine in COPD (ENHANCE-2)
+
+| Field | Value |
+|---|---|
+| NCT | NCT04456673 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/73/NCT04456673/Prot_000.pdf |
+| Sponsor | Verona Pharma |
+| Therapeutic Area | Respiratory (COPD) |
+| Phase | III |
+| Complexity Tier | 2 |
+| Table Complexity | Multi-arm design with nebulized drug. Spirometry at multiple timepoints within single visits. COPD-specific PROs (SGRQ, E-RS). Moderate footnote density. |
+
+### P-33  Esketamine Nasal Spray for Treatment-Resistant Depression (TRANSFORM-2)
+
+| Field | Value |
+|---|---|
+| NCT | NCT02418585 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/85/NCT02418585/Prot_000.pdf |
+| Sponsor | Janssen Research & Development |
+| Therapeutic Area | Psychiatry (Treatment-Resistant Depression) |
+| Phase | III |
+| Complexity Tier | 3 |
+| Table Complexity | Multi-period design: 4-week double-blind induction + optional open-label optimization + follow-up. Nasal spray dosing with post-dose observation periods. MADRS, PHQ-9, CGI-S at frequent intervals. Multi-arm (esketamine + new OAD vs. placebo + new OAD). Janssen protocol template. |
+
+### P-34  Atezolizumab + Chemotherapy in Triple-Negative Breast Cancer (IMpassion031)
+
+| Field | Value |
+|---|---|
+| NCT | NCT03197935 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/35/NCT03197935/Prot_000.pdf |
+| Sponsor | Hoffmann-La Roche |
+| Therapeutic Area | Oncology (Triple-Negative Breast Cancer) |
+| Phase | III |
+| Complexity Tier | 3 |
+| Table Complexity | Multi-phase neoadjuvant design: nab-paclitaxel phase + anthracycline phase + surgery + adjuvant atezolizumab. Cycle-based chemotherapy schedule with different cycle lengths per phase. Cardiac monitoring (LVEF) at defined intervals. PD-L1 biomarker assessments. Roche protocol template. |
+
+### P-35  Onasemnogene Abeparvovec Gene Therapy for SMA (SPR1NT)
+
+| Field | Value |
+|---|---|
+| NCT | NCT03912831 |
+| PDF | https://cdn.clinicaltrials.gov/large-docs/31/NCT03912831/Prot_SAP_000.pdf |
+| Sponsor | Novartis Gene Therapies |
+| Therapeutic Area | Gene Therapy (Spinal Muscular Atrophy, Presymptomatic) |
+| Phase | III |
+| Complexity Tier | 4 |
+| Table Complexity | Single IV infusion with multi-year follow-up SoA. Pediatric-specific milestones (motor function, developmental assessments). Hepatotoxicity monitoring with dense lab panels post-infusion. CHOP INTEND, Bayley-III, HINE-2 scoring instruments. Gene therapy-specific immune monitoring (anti-AAV9 antibodies). |
+
+---
+
 ## Coverage Matrix
 
 ### By Therapeutic Area
 
 | Therapeutic Area | Protocols | Count |
 |---|---|---|
-| Oncology | P-03, P-12, P-17, P-20 | 4 |
+| Oncology | P-03, P-12, P-17, P-20, P-25, P-34 | 6 |
 | Cardiology | P-07, P-10 | 2 |
 | Neurology | P-01, P-05, P-18 | 3 |
 | Rare Disease | P-02, P-06, P-15, P-16 | 4 |
 | Vaccines | P-13, P-14, P-19 | 3 |
-| Pediatric | P-06, P-15, P-20 (also P-02) | 3-4 |
 | Autoimmune / Rheumatology | P-04, P-08, P-11 | 3 |
-| Endocrinology | P-09 | 1 |
+| Endocrinology | P-09, P-24 | 2 |
+| Hematology / CAR-T | P-21, P-22, P-23 | 3 |
+| Dermatology | P-26, P-27 | 2 |
+| Ophthalmology | P-28 | 1 |
+| Infectious Disease | P-29, P-30 | 2 |
+| Respiratory | P-31, P-32 | 2 |
+| Psychiatry | P-33 | 1 |
+| Gene Therapy | P-35 | 1 |
 
 ### By Phase
 
 | Phase | Protocols | Count |
 |---|---|---|
-| I or I/II | P-19, P-20 | 2 |
+| I | P-25 | 1 |
+| I/II | P-19, P-20, P-21 | 3 |
+| IIb/III | P-29 | 1 |
 | II/III | P-18 | 1 |
-| III | P-01 thru P-17 (most) | 15 |
+| III | P-03 thru P-17 (most), P-22, P-24, P-26, P-27, P-28, P-30, P-31, P-32, P-33, P-34, P-35 | 25 |
+| IIIb | P-23 | 1 |
 | IV | P-02 | 1 |
+| I/II/III | P-13 | 1 |
 | Extension | P-01, P-04 | 2 |
 
 ### By Sponsor Template Format
@@ -304,37 +498,52 @@ All PDFs are freely downloadable from the URLs below with no login required.
 | Pfizer | P-13, P-19 |
 | Moderna | P-14 |
 | Eli Lilly | P-04, P-09 |
-| AbbVie | P-11 |
-| AstraZeneca | P-17 |
+| AbbVie | P-11, P-22 |
+| AstraZeneca | P-17, P-31 |
 | Merck | P-10 |
-| Novartis | P-20 |
-| Other (small/mid pharma, academic) | P-01, P-02, P-03, P-05, P-06, P-07, P-08, P-12, P-15, P-16, P-18 |
+| Novartis | P-20, P-23, P-35 |
+| Roche/Genentech | P-22, P-28, P-34 |
+| Gilead | P-30 |
+| Janssen/J&J | P-33 |
+| Novo Nordisk | P-24 |
+| NIAID | P-29 |
+| Other (small/mid pharma, academic) | P-01, P-02, P-03, P-05, P-06, P-07, P-08, P-12, P-15, P-16, P-18, P-21, P-25, P-26, P-27, P-32 |
 
 ### By Table Complexity Dimension
 
 | Dimension | Protocols |
 |---|---|
-| Multi-page SoA | P-03 thru P-20 |
-| Dense footnotes (15+) | P-07, P-08, P-13, P-14, P-18 |
-| Merged/grouped header cells | P-03, P-05, P-10, P-13 |
-| Cycle-repeating structures | P-03, P-09, P-12, P-15, P-17 |
-| Multi-arm / multi-period SoA | P-09, P-11, P-12, P-13, P-14, P-17 |
-| Conditional/branching logic | P-07, P-11, P-16, P-18 |
-| Nested sub-tables | P-09, P-13, P-20 |
-| Multi-year follow-up | P-04, P-06, P-15, P-18 |
-| Multiple distinct SoA sections | P-08, P-13, P-14, P-17, P-18, P-19, P-20 |
-| Pediatric-specific assessments | P-02, P-06, P-15, P-20 |
+| Multi-page SoA | P-03 thru P-35 |
+| Dense footnotes (15+) | P-07, P-08, P-13, P-14, P-18, P-21, P-29, P-33 |
+| Merged/grouped header cells | P-03, P-05, P-10, P-13, P-22, P-26, P-28, P-30 |
+| Cycle-repeating structures | P-03, P-09, P-12, P-15, P-17, P-22, P-28, P-34 |
+| Multi-arm / multi-period SoA | P-09, P-11, P-12, P-13, P-14, P-17, P-21, P-23, P-26, P-27, P-29, P-31, P-33, P-34 |
+| Conditional/branching logic | P-07, P-11, P-16, P-18, P-22 |
+| Nested sub-tables | P-09, P-13, P-20, P-21, P-22 |
+| Multi-year follow-up | P-04, P-06, P-15, P-18, P-23, P-35 |
+| Multiple distinct SoA sections | P-08, P-13, P-14, P-17, P-18, P-19, P-20, P-34 |
+| Pediatric-specific assessments | P-02, P-06, P-15, P-20, P-23, P-35 |
 | Platform/adaptive design | P-18 |
 | High column count (25+) | P-15 |
+| CAR-T / cell therapy monitoring | P-21, P-23, P-25 |
+| Gene therapy immune monitoring | P-35 |
+| Dermatology scoring (PASI/EASI/IGA) | P-26, P-27 |
+| Ophthalmology assessments (OCT/BCVA) | P-28 |
+| Infectious disease viral monitoring | P-29, P-30 |
+| Psychiatric rating scales (MADRS/PHQ) | P-33 |
 
 ---
 
 ## How to Download
 
-All 20 protocols are hosted on ClinicalTrials.gov's CDN at URLs matching:
+All 35 protocols are hosted on ClinicalTrials.gov's CDN at URLs matching:
 ```
 https://cdn.clinicaltrials.gov/large-docs/{last2digits_of_NCT}/{NCT_number}/Prot_000.pdf
 ```
+
+Note: Some protocols use variant filenames (e.g., `Prot_001.pdf`, `Prot_002.pdf`,
+`Prot_SAP_000.pdf`). The exact URL for each protocol is listed in its entry above
+and in `registry.json`.
 
 No authentication is required. PDFs can be downloaded directly via `curl`, `wget`,
 or browser. Protocol P-13 (Pfizer BNT162) is additionally mirrored on Pfizer's CDN
@@ -342,9 +551,7 @@ and the Global Health Network (TGHN).
 
 ---
 
-## Additional Sources for Expansion
-
-If the golden set needs to grow beyond 20 protocols:
+## Additional Sources for Future Expansion
 
 | Source | URL | Access Model |
 |---|---|---|
