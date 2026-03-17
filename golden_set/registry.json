@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "description": "Golden evaluation set of 20 clinical trial protocols for table extraction pipeline regression testing",
+  "version": "2.0.0",
+  "description": "Golden evaluation set of 35 clinical trial protocols for table extraction pipeline regression and repeatability testing",
   "created": "2026-03-17",
   "protocols": [
     {
@@ -422,22 +422,346 @@
         "pediatric": true,
         "nested_subtables": true
       }
+    },
+    {
+      "id": "P-21",
+      "nct": "NCT02030834",
+      "title": "CART-19 for Relapsed/Refractory NHL",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/34/NCT02030834/Prot_SAP_000.pdf",
+      "sponsor": "Penn/Novartis",
+      "therapeutic_area": "Hematology",
+      "indication": "Non-Hodgkin Lymphoma (CAR-T)",
+      "phase": "I/II",
+      "complexity_tier": 4,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": true
+      }
+    },
+    {
+      "id": "P-22",
+      "nct": "NCT04285567",
+      "title": "Venetoclax + Obinutuzumab in CLL",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/67/NCT04285567/Prot_000.pdf",
+      "sponsor": "Roche/AbbVie",
+      "therapeutic_area": "Hematology",
+      "indication": "Chronic Lymphocytic Leukemia",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": true,
+        "pediatric": false,
+        "nested_subtables": true
+      }
+    },
+    {
+      "id": "P-23",
+      "nct": "NCT03123939",
+      "title": "Tisagenlecleucel Phase IIIb for Pediatric ALL",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/39/NCT03123939/Prot_000.pdf",
+      "sponsor": "Novartis",
+      "therapeutic_area": "Hematology",
+      "indication": "Pediatric Acute Lymphoblastic Leukemia (CAR-T)",
+      "phase": "IIIb",
+      "complexity_tier": 4,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": true,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-24",
+      "nct": "NCT04707469",
+      "title": "Oral Semaglutide Phase III (Novo Nordisk)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/69/NCT04707469/Prot_000.pdf",
+      "sponsor": "Novo Nordisk",
+      "therapeutic_area": "Endocrinology",
+      "indication": "Type 2 Diabetes / GLP-1",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": false,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-25",
+      "nct": "NCT04052334",
+      "title": "Adoptive Cell Transfer in Soft Tissue Sarcoma",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/34/NCT04052334/Prot_SAP_000.pdf",
+      "sponsor": "NCI",
+      "therapeutic_area": "Oncology",
+      "indication": "Soft Tissue Sarcoma (Cell Therapy)",
+      "phase": "I",
+      "complexity_tier": 4,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-26",
+      "nct": "NCT03985124",
+      "title": "Dupilumab in Pediatric Atopic Dermatitis",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/24/NCT03985124/Prot_000.pdf",
+      "sponsor": "Regeneron/Sanofi",
+      "therapeutic_area": "Dermatology",
+      "indication": "Atopic Dermatitis (Pediatric)",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": true,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-27",
+      "nct": "NCT03131219",
+      "title": "Bimekizumab in Moderate-to-Severe Psoriasis",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/19/NCT03131219/Prot_000.pdf",
+      "sponsor": "UCB Pharma",
+      "therapeutic_area": "Dermatology",
+      "indication": "Plaque Psoriasis",
+      "phase": "III",
+      "complexity_tier": 2,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": false,
+        "multi_arm": true,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-28",
+      "nct": "NCT03823287",
+      "title": "Faricimab in Diabetic Macular Edema (YOSEMITE)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/87/NCT03823287/Prot_000.pdf",
+      "sponsor": "Roche/Genentech",
+      "therapeutic_area": "Ophthalmology",
+      "indication": "Diabetic Macular Edema",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": true,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-29",
+      "nct": "NCT04443881",
+      "title": "Lenacapavir for HIV-1 (CAPELLA)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/81/NCT04443881/Prot_000.pdf",
+      "sponsor": "Gilead Sciences",
+      "therapeutic_area": "Infectious Disease",
+      "indication": "HIV-1 (Multi-Drug Resistant)",
+      "phase": "II/III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-30",
+      "nct": "NCT04767984",
+      "title": "Bulevirtide for Chronic Hepatitis D",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/84/NCT04767984/Prot_000.pdf",
+      "sponsor": "Gilead Sciences",
+      "therapeutic_area": "Infectious Disease",
+      "indication": "Hepatitis D",
+      "phase": "III",
+      "complexity_tier": 2,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": false,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-31",
+      "nct": "NCT04363216",
+      "title": "Tezepelumab in Severe Asthma (NAVIGATOR)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/16/NCT04363216/Prot_000.pdf",
+      "sponsor": "AstraZeneca/Amgen",
+      "therapeutic_area": "Respiratory",
+      "indication": "Severe Uncontrolled Asthma",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-32",
+      "nct": "NCT04456673",
+      "title": "Ensifentrine in COPD (ENHANCE-2)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/73/NCT04456673/Prot_000.pdf",
+      "sponsor": "Verona Pharma",
+      "therapeutic_area": "Respiratory",
+      "indication": "COPD",
+      "phase": "III",
+      "complexity_tier": 2,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": false,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-33",
+      "nct": "NCT04305574",
+      "title": "Esketamine in Treatment-Resistant Depression",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/74/NCT04305574/Prot_000.pdf",
+      "sponsor": "Janssen/J&J",
+      "therapeutic_area": "Psychiatry",
+      "indication": "Treatment-Resistant Depression",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-34",
+      "nct": "NCT04205230",
+      "title": "Sacituzumab Govitecan in Metastatic Breast Cancer (TROPiCS-02)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/30/NCT04205230/Prot_000.pdf",
+      "sponsor": "Gilead Sciences",
+      "therapeutic_area": "Oncology",
+      "indication": "Metastatic Breast Cancer (HR+/HER2-)",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": true,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-35",
+      "nct": "NCT03912831",
+      "title": "Onasemnogene Abeparvovec Gene Therapy for SMA (SPR1NT)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/31/NCT03912831/Prot_000.pdf",
+      "sponsor": "Novartis Gene Therapies",
+      "therapeutic_area": "Gene Therapy",
+      "indication": "Spinal Muscular Atrophy (Presymptomatic)",
+      "phase": "III",
+      "complexity_tier": 4,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": true,
+        "nested_subtables": false
+      }
     }
   ],
   "coverage_summary": {
     "therapeutic_areas": {
-      "Oncology": ["P-03", "P-12", "P-17", "P-20"],
+      "Oncology": ["P-03", "P-12", "P-17", "P-20", "P-25", "P-34"],
       "Cardiology": ["P-07", "P-10"],
       "Neurology": ["P-01", "P-05", "P-18"],
       "Rare Disease": ["P-02", "P-06", "P-15", "P-16"],
       "Vaccines": ["P-13", "P-14", "P-19"],
       "Autoimmune": ["P-04", "P-08", "P-11"],
-      "Endocrinology": ["P-09"]
+      "Endocrinology": ["P-09", "P-24"],
+      "Hematology": ["P-21", "P-22", "P-23"],
+      "Dermatology": ["P-26", "P-27"],
+      "Ophthalmology": ["P-28"],
+      "Infectious Disease": ["P-29", "P-30"],
+      "Respiratory": ["P-31", "P-32"],
+      "Psychiatry": ["P-33"],
+      "Gene Therapy": ["P-35"]
     },
     "phases": {
-      "I/II": ["P-19", "P-20"],
-      "II/III": ["P-18"],
-      "III": ["P-03", "P-04", "P-05", "P-06", "P-07", "P-08", "P-09", "P-10", "P-11", "P-12", "P-14", "P-15", "P-16", "P-17"],
+      "I": ["P-25"],
+      "I/II": ["P-19", "P-20", "P-21"],
+      "II/III": ["P-18", "P-29"],
+      "III": ["P-03", "P-04", "P-05", "P-06", "P-07", "P-08", "P-09", "P-10", "P-11", "P-12", "P-14", "P-15", "P-16", "P-17", "P-22", "P-24", "P-26", "P-27", "P-28", "P-30", "P-31", "P-32", "P-33", "P-34", "P-35"],
+      "IIIb": ["P-23"],
       "IV": ["P-02"],
       "I/II/III": ["P-13"]
     },
@@ -445,11 +769,17 @@
       "Pfizer": ["P-13", "P-19"],
       "Moderna": ["P-14"],
       "Eli Lilly": ["P-04", "P-09"],
-      "AbbVie": ["P-11"],
-      "AstraZeneca": ["P-17"],
+      "AbbVie": ["P-11", "P-22"],
+      "AstraZeneca": ["P-17", "P-31"],
       "Merck": ["P-10"],
-      "Novartis": ["P-20"],
-      "Other": ["P-01", "P-02", "P-03", "P-05", "P-06", "P-07", "P-08", "P-12", "P-15", "P-16", "P-18"]
+      "Novartis": ["P-20", "P-23", "P-35"],
+      "Roche/Genentech": ["P-22", "P-28"],
+      "Gilead": ["P-29", "P-30", "P-34"],
+      "Regeneron/Sanofi": ["P-26"],
+      "UCB Pharma": ["P-01", "P-27"],
+      "Janssen/J&J": ["P-33"],
+      "Novo Nordisk": ["P-24"],
+      "Other": ["P-02", "P-03", "P-05", "P-06", "P-07", "P-08", "P-12", "P-15", "P-16", "P-18", "P-21", "P-25", "P-32"]
     }
   }
 }
