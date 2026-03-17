@@ -66,10 +66,16 @@ class TableDetector:
             async with semaphore:
                 try:
                     raw_detections = await self._detect_on_page(page)
-                    return [
-                        self._parse_detection(raw, page.page_number)
-                        for raw in raw_detections
-                    ]
+                    regions = []
+                    for raw in raw_detections:
+                        if not isinstance(raw, dict):
+                            logger.warning(f"Skipping non-dict detection on page {page.page_number}: {type(raw)}")
+                            continue
+                        try:
+                            regions.append(self._parse_detection(raw, page.page_number))
+                        except Exception as parse_err:
+                            logger.warning(f"Failed to parse detection on page {page.page_number}: {parse_err}")
+                    return regions
                 except Exception as e:
                     logger.error(
                         f"Table detection failed on page {page.page_number}: {e}"
@@ -120,7 +126,9 @@ class TableDetector:
         except ValueError:
             table_type = TableType.OTHER
 
-        table_id = raw.get("table_id", f"t_{uuid.uuid4().hex[:8]}")
+        # Make table_id unique per page — LLM often returns "t1" on every page
+        raw_id = raw.get("table_id", "t1")
+        table_id = f"p{page_num}_{raw_id}"
 
         return TableRegion(
             table_id=table_id,

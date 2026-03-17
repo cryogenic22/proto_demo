@@ -100,7 +100,7 @@ class TestTableDetector:
             "bbox": {"x0": 50, "y0": 100, "x1": 2500, "y1": 3000},
         }
         region = self.detector._parse_detection(raw, page_num=3)
-        assert region.table_id == "t1"
+        assert region.table_id == "p3_t1"
         assert region.pages == [3]
         assert region.bounding_boxes[0].page == 3
 
