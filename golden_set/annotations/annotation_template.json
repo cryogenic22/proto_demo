@@ -1,0 +1,45 @@
+{
+  "$schema": "Golden Set Annotation Template v1.0",
+  "protocol_id": "P-XX",
+  "annotator_1": "",
+  "annotator_2": "",
+  "adjudicator": "",
+  "annotation_date": "",
+  "tables": [
+    {
+      "table_id": "t1",
+      "table_type": "SOA",
+      "title": "",
+      "source_pages": [],
+      "ground_truth_cells": [
+        {
+          "row": 0,
+          "col": 0,
+          "value": "",
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "difficulty": "trivial",
+          "annotator_agreement": true,
+          "notes": ""
+        }
+      ],
+      "ground_truth_footnotes": [
+        {
+          "marker": "a",
+          "text": "",
+          "footnote_type": "CONDITIONAL",
+          "applies_to_cells": [{"row": 0, "col": 0}]
+        }
+      ],
+      "ground_truth_column_headers": [],
+      "ground_truth_row_count": 0,
+      "ground_truth_col_count": 0
+    }
+  ],
+  "difficulty_distribution": {
+    "trivial": 0,
+    "moderate": 0,
+    "hard": 0,
+    "known_failure": 0
+  }
+}

@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.hypothesis/
+htmlcov/
+.coverage
+
+# Environment
+.env
+.env.local
+
+# Node / Next.js
+web/node_modules/
+web/.next/
+web/out/
+
+# Golden set cached PDFs (large files)
+golden_set/cached_pdfs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log

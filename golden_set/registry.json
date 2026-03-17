@@ -1,0 +1,455 @@
+{
+  "version": "1.0.0",
+  "description": "Golden evaluation set of 20 clinical trial protocols for table extraction pipeline regression testing",
+  "created": "2026-03-17",
+  "protocols": [
+    {
+      "id": "P-01",
+      "nct": "NCT01339559",
+      "title": "Brivaracetam Long-Term Extension (Epilepsy)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/59/NCT01339559/Prot_000.pdf",
+      "sponsor": "UCB Pharma",
+      "therapeutic_area": "Neurology",
+      "indication": "Epilepsy / Partial-Onset Seizures",
+      "phase": "III-Extension",
+      "complexity_tier": 1,
+      "table_features": {
+        "multi_page_soa": false,
+        "footnote_count_range": "1-5",
+        "merged_cells": false,
+        "multi_arm": false,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-02",
+      "nct": "NCT04743206",
+      "title": "Airway Clearance for Cystic Fibrosis",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/06/NCT04743206/Prot_000.pdf",
+      "sponsor": "Investigator-Initiated",
+      "therapeutic_area": "Rare Disease",
+      "indication": "Cystic Fibrosis",
+      "phase": "IV",
+      "complexity_tier": 1,
+      "table_features": {
+        "multi_page_soa": false,
+        "footnote_count_range": "1-5",
+        "merged_cells": false,
+        "multi_arm": false,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": true,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-03",
+      "nct": "NCT03085095",
+      "title": "HERO Trial - Relugolix for Prostate Cancer",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/95/NCT03085095/Prot_001.pdf",
+      "sponsor": "Myovant Sciences",
+      "therapeutic_area": "Oncology",
+      "indication": "Prostate Cancer",
+      "phase": "III",
+      "complexity_tier": 2,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-04",
+      "nct": "NCT01885078",
+      "title": "Baricitinib Long-Term Safety in RA (JADY)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/78/NCT01885078/Prot_000.pdf",
+      "sponsor": "Eli Lilly",
+      "therapeutic_area": "Autoimmune",
+      "indication": "Rheumatoid Arthritis",
+      "phase": "III-Extension",
+      "complexity_tier": 2,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": false,
+        "multi_arm": true,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-05",
+      "nct": "NCT03277261",
+      "title": "ULTIMATE I - Ublituximab in Multiple Sclerosis",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/61/NCT03277261/Prot_000.pdf",
+      "sponsor": "TG Therapeutics",
+      "therapeutic_area": "Neurology",
+      "indication": "Relapsing Multiple Sclerosis",
+      "phase": "III",
+      "complexity_tier": 2,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-06",
+      "nct": "NCT01557400",
+      "title": "Ataluren for Duchenne Muscular Dystrophy (ACT DMD)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/00/NCT01557400/Prot_000.pdf",
+      "sponsor": "PTC Therapeutics",
+      "therapeutic_area": "Rare Disease",
+      "indication": "Duchenne Muscular Dystrophy",
+      "phase": "III",
+      "complexity_tier": 2,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": false,
+        "multi_arm": false,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": true,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-07",
+      "nct": "NCT04576988",
+      "title": "STELLAR - Sotatercept for PAH",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/88/NCT04576988/Prot_SAP_000.pdf",
+      "sponsor": "Acceleron/Merck",
+      "therapeutic_area": "Cardiology",
+      "indication": "Pulmonary Arterial Hypertension",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": false,
+        "cycle_based": true,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-08",
+      "nct": "NCT03996369",
+      "title": "ELEVATE UC 12 - Etrasimod for Ulcerative Colitis",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/69/NCT03996369/Prot_000.pdf",
+      "sponsor": "Arena/Pfizer",
+      "therapeutic_area": "Autoimmune",
+      "indication": "Ulcerative Colitis",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "18+",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-09",
+      "nct": "NCT03861052",
+      "title": "SURPASS J-mono - Tirzepatide for T2DM",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/52/NCT03861052/Prot_000.pdf",
+      "sponsor": "Eli Lilly",
+      "therapeutic_area": "Endocrinology",
+      "indication": "Type 2 Diabetes",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": true
+      }
+    },
+    {
+      "id": "P-10",
+      "nct": "NCT05093933",
+      "title": "VICTOR - Vericiguat for Heart Failure",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/33/NCT05093933/Prot_SAP_000.pdf",
+      "sponsor": "Merck",
+      "therapeutic_area": "Cardiology",
+      "indication": "Heart Failure (HFrEF)",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "6-12",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-11",
+      "nct": "NCT03104400",
+      "title": "Upadacitinib SELECT for Rheumatoid Arthritis",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/00/NCT03104400/Prot_002.pdf",
+      "sponsor": "AbbVie",
+      "therapeutic_area": "Autoimmune",
+      "indication": "Rheumatoid Arthritis",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-12",
+      "nct": "NCT02566993",
+      "title": "ATLANTIS - Lurbinectedin for SCLC",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/93/NCT02566993/Prot_000.pdf",
+      "sponsor": "PharmaMar",
+      "therapeutic_area": "Oncology",
+      "indication": "Small Cell Lung Cancer",
+      "phase": "III",
+      "complexity_tier": 3,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": false,
+        "cycle_based": true,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-13",
+      "nct": "NCT04368728",
+      "title": "Pfizer BNT162b2 COVID-19 Vaccine (C4591001)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/28/NCT04368728/Prot_000.pdf",
+      "sponsor": "Pfizer/BioNTech",
+      "therapeutic_area": "Vaccines",
+      "indication": "COVID-19",
+      "phase": "I/II/III",
+      "complexity_tier": 4,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "18+",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": true
+      }
+    },
+    {
+      "id": "P-14",
+      "nct": "NCT04470427",
+      "title": "Moderna mRNA-1273 COVE Study",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/27/NCT04470427/Prot_000.pdf",
+      "sponsor": "ModernaTX",
+      "therapeutic_area": "Vaccines",
+      "indication": "COVID-19",
+      "phase": "III",
+      "complexity_tier": 4,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-15",
+      "nct": "NCT04632940",
+      "title": "Pamrevlumab LELANTOS-2 for DMD",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/40/NCT04632940/Prot_000.pdf",
+      "sponsor": "FibroGen",
+      "therapeutic_area": "Rare Disease",
+      "indication": "Duchenne Muscular Dystrophy",
+      "phase": "III",
+      "complexity_tier": 4,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": false,
+        "cycle_based": true,
+        "pediatric": true,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-16",
+      "nct": "NCT03506061",
+      "title": "CF Rare CFTR Variants - Trikafta Responsiveness",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/61/NCT03506061/Prot_SAP_001.pdf",
+      "sponsor": "Vertex Pharmaceuticals",
+      "therapeutic_area": "Rare Disease",
+      "indication": "Cystic Fibrosis",
+      "phase": "III",
+      "complexity_tier": 4,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": false,
+        "multi_arm": false,
+        "multi_period": false,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-17",
+      "nct": "NCT03830866",
+      "title": "Durvalumab + Chemoradiation (Immuno-Oncology)",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/66/NCT03830866/Prot_000.pdf",
+      "sponsor": "AstraZeneca",
+      "therapeutic_area": "Oncology",
+      "indication": "Immuno-Oncology Combination",
+      "phase": "III",
+      "complexity_tier": 4,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": false,
+        "multi_period": true,
+        "cycle_based": true,
+        "pediatric": false,
+        "nested_subtables": false
+      }
+    },
+    {
+      "id": "P-18",
+      "nct": "NCT04623242",
+      "title": "DIAN-TU-001 Dominantly Inherited Alzheimer Network",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/42/NCT04623242/Prot_000.pdf",
+      "sponsor": "Washington University",
+      "therapeutic_area": "Neurology",
+      "indication": "Alzheimer's Disease",
+      "phase": "II/III-Adaptive",
+      "complexity_tier": 5,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "18+",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": true
+      }
+    },
+    {
+      "id": "P-19",
+      "nct": "NCT05886777",
+      "title": "Pfizer COVID+RSV Combination Vaccine",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/77/NCT05886777/Prot_000.pdf",
+      "sponsor": "Pfizer",
+      "therapeutic_area": "Vaccines",
+      "indication": "COVID-19 + RSV",
+      "phase": "I/II",
+      "complexity_tier": 5,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": true,
+        "cycle_based": false,
+        "pediatric": false,
+        "nested_subtables": true
+      }
+    },
+    {
+      "id": "P-20",
+      "nct": "NCT02285439",
+      "title": "MEK162 Pediatric Phase I/II Low-Grade Glioma",
+      "url": "https://cdn.clinicaltrials.gov/large-docs/39/NCT02285439/Prot_SAP_000.pdf",
+      "sponsor": "Novartis/NCI",
+      "therapeutic_area": "Oncology",
+      "indication": "Pediatric Low-Grade Glioma",
+      "phase": "I/II",
+      "complexity_tier": 5,
+      "table_features": {
+        "multi_page_soa": true,
+        "footnote_count_range": "13-18",
+        "merged_cells": true,
+        "multi_arm": true,
+        "multi_period": true,
+        "cycle_based": true,
+        "pediatric": true,
+        "nested_subtables": true
+      }
+    }
+  ],
+  "coverage_summary": {
+    "therapeutic_areas": {
+      "Oncology": ["P-03", "P-12", "P-17", "P-20"],
+      "Cardiology": ["P-07", "P-10"],
+      "Neurology": ["P-01", "P-05", "P-18"],
+      "Rare Disease": ["P-02", "P-06", "P-15", "P-16"],
+      "Vaccines": ["P-13", "P-14", "P-19"],
+      "Autoimmune": ["P-04", "P-08", "P-11"],
+      "Endocrinology": ["P-09"]
+    },
+    "phases": {
+      "I/II": ["P-19", "P-20"],
+      "II/III": ["P-18"],
+      "III": ["P-03", "P-04", "P-05", "P-06", "P-07", "P-08", "P-09", "P-10", "P-11", "P-12", "P-14", "P-15", "P-16", "P-17"],
+      "IV": ["P-02"],
+      "I/II/III": ["P-13"]
+    },
+    "sponsor_formats": {
+      "Pfizer": ["P-13", "P-19"],
+      "Moderna": ["P-14"],
+      "Eli Lilly": ["P-04", "P-09"],
+      "AbbVie": ["P-11"],
+      "AstraZeneca": ["P-17"],
+      "Merck": ["P-10"],
+      "Novartis": ["P-20"],
+      "Other": ["P-01", "P-02", "P-03", "P-05", "P-06", "P-07", "P-08", "P-12", "P-15", "P-16", "P-18"]
+    }
+  }
+}
