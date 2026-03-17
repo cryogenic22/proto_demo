@@ -84,6 +84,24 @@ async def health():
     return {"status": "ok", "version": "0.1.0"}
 
 
+@app.get("/api/procedures/mapping")
+async def get_procedure_mapping():
+    """Export the full procedure mapping table for clinical review."""
+    from src.pipeline.procedure_normalizer import ProcedureNormalizer
+    normalizer = ProcedureNormalizer()
+    return {"procedures": normalizer.get_mapping_table(), "total": len(normalizer.get_mapping_table())}
+
+
+@app.post("/api/procedures/check")
+async def check_procedure_mapping(names: list[str]):
+    """Check which procedure names can/cannot be mapped."""
+    from src.pipeline.procedure_normalizer import ProcedureNormalizer
+    normalizer = ProcedureNormalizer()
+    mapped = [normalizer.normalize(n).model_dump() for n in names]
+    unmapped = normalizer.get_unmapped_report(names)
+    return {"mapped": mapped, "unmapped": unmapped}
+
+
 @app.post("/api/extract")
 async def extract_protocol(file: UploadFile = File(...)):
     """

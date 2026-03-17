@@ -1,20 +1,26 @@
 """
 Procedure Normalizer — maps free-text procedure names to canonical codes.
 
-Uses a built-in vocabulary of common clinical trial procedures with
-CPT/SNOMED mappings and cost tiers. Falls back to fuzzy matching
-for variants and abbreviations.
+Loads the procedure vocabulary from data/procedure_mapping.csv so it can
+be reviewed, corrected, and extended by clinical teams without code changes.
+
+Produces a deterministic mapping: same input always yields same output.
+Every mapping decision is logged for audit.
 """
 
 from __future__ import annotations
 
+import csv
 import logging
 import re
 from dataclasses import dataclass
+from pathlib import Path
 
 from src.models.schema import CostTier, NormalizedProcedure
 
 logger = logging.getLogger(__name__)
+
+MAPPING_CSV = Path(__file__).parent.parent.parent / "data" / "procedure_mapping.csv"
 
 
 @dataclass
@@ -27,168 +33,98 @@ class ProcedureEntry:
     aliases: list[str]
 
 
-# ---------------------------------------------------------------------------
-# Built-in procedure vocabulary
-# ---------------------------------------------------------------------------
-_VOCABULARY: list[ProcedureEntry] = [
-    # General
-    ProcedureEntry("Vital Signs", "99000", "CPT", "General", CostTier.LOW,
-                   ["vital signs", "vitals", "vs"]),
-    ProcedureEntry("Physical Examination", "99213", "CPT", "General", CostTier.LOW,
-                   ["physical exam", "physical examination", "pe", "full physical",
-                    "complete physical", "targeted physical"]),
-    ProcedureEntry("Body Weight", None, None, "General", CostTier.LOW,
-                   ["body weight", "weight", "body mass"]),
-    ProcedureEntry("Height", None, None, "General", CostTier.LOW,
-                   ["height", "stature"]),
-    ProcedureEntry("BMI", None, None, "General", CostTier.LOW,
-                   ["bmi", "body mass index"]),
-    ProcedureEntry("Informed Consent", None, None, "General", CostTier.LOW,
-                   ["informed consent", "consent", "icf"]),
-    ProcedureEntry("Medical History", None, None, "General", CostTier.LOW,
-                   ["medical history", "history", "med history"]),
-    ProcedureEntry("Concomitant Medications", None, None, "General", CostTier.LOW,
-                   ["concomitant medications", "con meds", "conmeds",
-                    "prior/concomitant medications", "medications review"]),
-    ProcedureEntry("Adverse Events", None, None, "General", CostTier.LOW,
-                   ["adverse events", "ae", "aes", "ae assessment",
-                    "adverse event assessment"]),
+def _load_vocabulary(csv_path: Path | None = None) -> list[ProcedureEntry]:
+    """Load procedure vocabulary from CSV file."""
+    path = csv_path or MAPPING_CSV
+    entries: list[ProcedureEntry] = []
 
-    # Cardiac
-    ProcedureEntry("Electrocardiogram, 12-lead", "93000", "CPT", "Cardiac", CostTier.MEDIUM,
-                   ["12-lead ecg", "ecg (12l)", "ecg", "12 lead ecg",
-                    "electrocardiogram", "ekg", "12-lead electrocardiogram",
-                    "triplicate ecg"]),
-    ProcedureEntry("Echocardiogram", "93306", "CPT", "Cardiac", CostTier.HIGH,
-                   ["echocardiogram", "echo", "cardiac echo", "transthoracic echo",
-                    "tte"]),
-    ProcedureEntry("Holter Monitor", "93224", "CPT", "Cardiac", CostTier.MEDIUM,
-                   ["holter", "holter monitor", "24-hour ecg", "ambulatory ecg"]),
+    if not path.exists():
+        logger.warning(f"Procedure mapping CSV not found: {path}")
+        return entries
 
-    # Laboratory
-    ProcedureEntry("Complete Blood Count", "85025", "CPT", "Laboratory", CostTier.LOW,
-                   ["complete blood count", "cbc", "full blood count", "fbc",
-                    "blood count"]),
-    ProcedureEntry("Comprehensive Metabolic Panel", "80053", "CPT", "Laboratory", CostTier.LOW,
-                   ["comprehensive metabolic panel", "cmp", "metabolic panel",
-                    "chemistry panel"]),
-    ProcedureEntry("Liver Function Tests", "80076", "CPT", "Laboratory", CostTier.LOW,
-                   ["liver function tests", "lft", "lfts", "hepatic panel",
-                    "hepatic function"]),
-    ProcedureEntry("Renal Function Tests", "80069", "CPT", "Laboratory", CostTier.LOW,
-                   ["renal function", "renal panel", "kidney function"]),
-    ProcedureEntry("Coagulation Panel", "85610", "CPT", "Laboratory", CostTier.LOW,
-                   ["coagulation", "coag panel", "pt/inr", "coagulation panel",
-                    "pt", "aptt", "inr"]),
-    ProcedureEntry("Urinalysis", "81003", "CPT", "Laboratory", CostTier.LOW,
-                   ["urinalysis", "ua", "urine analysis", "urine dipstick"]),
-    ProcedureEntry("Pregnancy Test", "81025", "CPT", "Laboratory", CostTier.LOW,
-                   ["pregnancy test", "serum pregnancy", "urine pregnancy",
-                    "bhcg", "b-hcg", "hcg"]),
-    ProcedureEntry("Thyroid Function Tests", "84443", "CPT", "Laboratory", CostTier.LOW,
-                   ["thyroid function", "tft", "tfts", "tsh", "thyroid panel"]),
-    ProcedureEntry("Lipid Panel", "80061", "CPT", "Laboratory", CostTier.LOW,
-                   ["lipid panel", "lipid profile", "fasting lipids", "cholesterol panel"]),
-    ProcedureEntry("HbA1c", "83036", "CPT", "Laboratory", CostTier.LOW,
-                   ["hba1c", "glycated hemoglobin", "a1c", "hemoglobin a1c"]),
-    ProcedureEntry("Blood Draw", None, None, "Laboratory", CostTier.LOW,
-                   ["blood draw", "blood sample", "phlebotomy", "venipuncture",
-                    "blood collection"]),
-    ProcedureEntry("PK Sample", None, None, "PK", CostTier.LOW,
-                   ["pk sample", "pharmacokinetic sample", "pk blood sample",
-                    "pk sampling"]),
-    ProcedureEntry("PD Sample", None, None, "PK", CostTier.LOW,
-                   ["pd sample", "pharmacodynamic sample"]),
-    ProcedureEntry("Biomarker Sample", None, None, "Laboratory", CostTier.MEDIUM,
-                   ["biomarker", "biomarker sample", "exploratory biomarker"]),
+    import io
+    with open(path, newline="", encoding="utf-8") as f:
+        # Filter out comment lines before passing to DictReader
+        lines = [line for line in f if not line.strip().startswith("#")]
 
-    # Imaging
-    ProcedureEntry("MRI", "70553", "CPT", "Imaging", CostTier.HIGH,
-                   ["mri", "magnetic resonance imaging", "mri scan",
-                    "brain mri", "cardiac mri"]),
-    ProcedureEntry("CT Scan", "74178", "CPT", "Imaging", CostTier.HIGH,
-                   ["ct scan", "ct", "computed tomography", "cat scan"]),
-    ProcedureEntry("X-Ray", "71046", "CPT", "Imaging", CostTier.MEDIUM,
-                   ["x-ray", "xray", "radiograph", "chest x-ray", "cxr"]),
-    ProcedureEntry("PET/CT Scan", "78816", "CPT", "Imaging", CostTier.VERY_HIGH,
-                   ["pet/ct", "pet scan", "pet/ct scan", "pet-ct",
-                    "positron emission tomography"]),
-    ProcedureEntry("DEXA Scan", "77080", "CPT", "Imaging", CostTier.MEDIUM,
-                   ["dexa", "dxa", "bone density", "dexa scan"]),
-    ProcedureEntry("Ultrasound", "76700", "CPT", "Imaging", CostTier.MEDIUM,
-                   ["ultrasound", "us", "sonography", "doppler"]),
+    reader = csv.DictReader(io.StringIO("".join(lines)))
+    for row in reader:
+        canonical = (row.get("canonical_name") or "").strip()
+        if not canonical:
+            continue
 
-    # Procedures
-    ProcedureEntry("Tumor Biopsy", "20206", "CPT", "Procedure", CostTier.VERY_HIGH,
-                   ["tumor biopsy", "biopsy", "tissue biopsy", "core biopsy",
-                    "skin biopsy", "punch biopsy"]),
-    ProcedureEntry("Bone Marrow Biopsy", "38221", "CPT", "Procedure", CostTier.VERY_HIGH,
-                   ["bone marrow biopsy", "bone marrow aspirate", "bma"]),
-    ProcedureEntry("Lumbar Puncture", "62270", "CPT", "Procedure", CostTier.VERY_HIGH,
-                   ["lumbar puncture", "lp", "spinal tap", "csf collection"]),
-    ProcedureEntry("Spirometry", "94010", "CPT", "Respiratory", CostTier.MEDIUM,
-                   ["spirometry", "pulmonary function", "pft", "lung function"]),
+        try:
+            cost = CostTier((row.get("cost_tier") or "LOW").strip())
+        except ValueError:
+            cost = CostTier.LOW
 
-    # Questionnaires / Scales
-    ProcedureEntry("Quality of Life Questionnaire", None, None, "PRO", CostTier.LOW,
-                   ["qol", "quality of life", "eq-5d", "sf-36", "sf36"]),
-    ProcedureEntry("Pain Assessment", None, None, "PRO", CostTier.LOW,
-                   ["pain assessment", "vas", "visual analog scale", "nrs",
-                    "numeric rating scale", "pain score"]),
-    ProcedureEntry("RECIST Assessment", None, None, "Efficacy", CostTier.MEDIUM,
-                   ["recist", "tumor assessment", "response assessment"]),
+        aliases_raw = row.get("aliases") or ""
+        aliases = [a.strip().lower() for a in aliases_raw.split(",") if a.strip()]
 
-    # Genetic / Specialized
-    ProcedureEntry("Genetic Testing", "81479", "CPT", "Genetics", CostTier.VERY_HIGH,
-                   ["genetic testing", "genomic testing", "genotyping",
-                    "pharmacogenomics", "dna sequencing"]),
-    ProcedureEntry("Flow Cytometry", "88182", "CPT", "Laboratory", CostTier.HIGH,
-                   ["flow cytometry", "facs", "immunophenotyping"]),
+        code = (row.get("cpt_code") or "").strip() or None
+        code_system = (row.get("code_system") or "").strip() or None
 
-    # Study Drug
-    ProcedureEntry("Study Drug Administration", None, None, "Treatment", CostTier.MEDIUM,
-                   ["study drug", "ip administration", "investigational product",
-                    "drug administration", "dosing", "study drug administration"]),
-    ProcedureEntry("Randomization", None, None, "General", CostTier.LOW,
-                   ["randomization", "randomisation", "treatment assignment"]),
-]
+        entries.append(ProcedureEntry(
+            canonical_name=canonical,
+            code=code,
+            code_system=code_system,
+            category=(row.get("category") or "").strip(),
+            cost_tier=cost,
+            aliases=aliases,
+        ))
+
+    logger.info(f"Loaded {len(entries)} procedures from {path}")
+    return entries
 
 
 class ProcedureNormalizer:
-    """Maps free-text procedure names to canonical entries."""
+    """Maps free-text procedure names to canonical entries.
 
-    def __init__(self):
+    Deterministic: same input always produces the same output.
+    Auditable: every mapping decision is logged.
+    """
+
+    def __init__(self, csv_path: Path | None = None):
+        vocabulary = _load_vocabulary(csv_path)
+
         # Build lookup: lowercase alias → ProcedureEntry
+        # Deterministic ordering: first match wins
         self._alias_map: dict[str, ProcedureEntry] = {}
-        for entry in _VOCABULARY:
+        for entry in vocabulary:
             for alias in entry.aliases:
-                self._alias_map[alias.lower()] = entry
+                key = alias.lower()
+                if key not in self._alias_map:
+                    self._alias_map[key] = entry
+
+        self._vocabulary = vocabulary
+        logger.info(f"Procedure normalizer initialized: {len(self._alias_map)} aliases → {len(vocabulary)} canonical procedures")
 
     def normalize(self, raw_name: str) -> NormalizedProcedure:
-        """Normalize a single procedure name."""
+        """Normalize a single procedure name. Deterministic."""
         cleaned = raw_name.strip()
         lookup_key = cleaned.lower()
 
-        # Exact match
+        # 1. Exact match
         if lookup_key in self._alias_map:
-            return self._to_model(cleaned, self._alias_map[lookup_key])
+            entry = self._alias_map[lookup_key]
+            logger.debug(f"Procedure '{cleaned}' → '{entry.canonical_name}' (exact match)")
+            return self._to_model(cleaned, entry, "exact")
 
-        # Substring match: check if any alias is a whole-word match in the input
-        # Use word boundaries to avoid "exam" matching "experimental"
-        import re
+        # 2. Whole-word alias match in input text
         for alias, entry in self._alias_map.items():
-            # Only match if alias appears as complete words in the input
             pattern = r"\b" + re.escape(alias) + r"\b"
             if re.search(pattern, lookup_key):
-                return self._to_model(cleaned, entry)
+                logger.debug(f"Procedure '{cleaned}' → '{entry.canonical_name}' (word match: '{alias}')")
+                return self._to_model(cleaned, entry, f"word_match:{alias}")
 
-        # Fuzzy match: check for key terms
+        # 3. Fuzzy match using key clinical terms
         match = self._fuzzy_match(lookup_key)
         if match:
-            return self._to_model(cleaned, match)
+            logger.debug(f"Procedure '{cleaned}' → '{match.canonical_name}' (fuzzy)")
+            return self._to_model(cleaned, match, "fuzzy")
 
-        # Unknown procedure
-        logger.debug(f"No match found for procedure: '{raw_name}'")
+        # 4. Unknown — preserve raw name
+        logger.info(f"Procedure '{cleaned}' → UNMAPPED (no match found)")
         return NormalizedProcedure(
             raw_name=cleaned,
             canonical_name=cleaned,
@@ -199,12 +135,46 @@ class ProcedureNormalizer:
         )
 
     def normalize_batch(self, names: list[str]) -> list[NormalizedProcedure]:
-        """Normalize a list of procedure names."""
-        return [self.normalize(name) for name in names]
+        """Normalize a list of procedure names. Deterministic ordering."""
+        # Sort input for deterministic output order
+        return [self.normalize(name) for name in sorted(set(names))]
+
+    def get_mapping_table(self) -> list[dict]:
+        """Export the full mapping table for review.
+
+        Returns a list of dicts suitable for CSV/JSON export.
+        """
+        rows = []
+        for entry in self._vocabulary:
+            rows.append({
+                "canonical_name": entry.canonical_name,
+                "cpt_code": entry.code or "",
+                "code_system": entry.code_system or "",
+                "category": entry.category,
+                "cost_tier": entry.cost_tier.value,
+                "alias_count": len(entry.aliases),
+                "aliases": ", ".join(entry.aliases),
+            })
+        return rows
+
+    def get_unmapped_report(self, raw_names: list[str]) -> list[dict]:
+        """Report which procedure names could NOT be mapped.
+
+        Returns a list of unmapped names for clinical review.
+        """
+        unmapped = []
+        for name in sorted(set(raw_names)):
+            result = self.normalize(name)
+            if result.canonical_name == name.strip() and result.code is None:
+                unmapped.append({
+                    "raw_name": name,
+                    "suggested_category": "Unknown",
+                    "action_needed": "Map to canonical procedure or confirm as custom",
+                })
+        return unmapped
 
     def _fuzzy_match(self, text: str) -> ProcedureEntry | None:
         """Attempt fuzzy matching using key clinical terms."""
-        # Check for key diagnostic terms
         key_terms = {
             "ecg": "ecg",
             "electrocardiogram": "ecg",
@@ -221,11 +191,10 @@ class ProcedureNormalizer:
             if term in text:
                 if alias in self._alias_map:
                     return self._alias_map[alias]
-
         return None
 
     @staticmethod
-    def _to_model(raw_name: str, entry: ProcedureEntry) -> NormalizedProcedure:
+    def _to_model(raw_name: str, entry: ProcedureEntry, match_type: str) -> NormalizedProcedure:
         return NormalizedProcedure(
             raw_name=raw_name,
             canonical_name=entry.canonical_name,

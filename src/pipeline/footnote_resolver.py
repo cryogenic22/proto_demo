@@ -74,7 +74,8 @@ class FootnoteResolver:
         footnotes: list[ResolvedFootnote] = []
         resolved_lookup: dict[str, str] = {}
 
-        for marker, cell_refs in marker_to_cells.items():
+        for marker in sorted(marker_to_cells.keys()):
+            cell_refs = marker_to_cells[marker]
             if marker in footnote_text:
                 text = footnote_text[marker]
                 fn_type = self._classify_footnote(text)

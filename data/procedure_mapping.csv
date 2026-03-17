@@ -1,0 +1,186 @@
+canonical_name,cpt_code,code_system,category,cost_tier,aliases
+# ===========================================================================
+# GENERAL ASSESSMENTS
+# ===========================================================================
+Informed Consent,,General,General,LOW,"informed consent,consent,icf,signed consent,written consent"
+Medical History,,General,General,LOW,"medical history,history,med history,past medical history,pmh"
+Demographics,,General,General,LOW,"demographics,demographic data,demographic assessment"
+Eligibility Assessment,,General,General,LOW,"eligibility assessment,eligibility review,inclusion/exclusion,i/e criteria,eligibility,ie criteria"
+Randomization,,General,General,LOW,"randomization,randomisation,treatment assignment,randomize,stratification"
+Study Completion,,General,General,LOW,"study completion,study completion/early termination,end of study procedures"
+Survival Follow-up,,General,General,LOW,"survival follow-up,survival status,long-term follow-up,ltfu"
+# ===========================================================================
+# VITAL SIGNS & PHYSICAL
+# ===========================================================================
+Vital Signs,99000,CPT,General,LOW,"vital signs,vitals,vs,vital sign assessment,vital sign measurement"
+Physical Examination,99213,CPT,General,LOW,"physical exam,physical examination,pe,full physical,complete physical,targeted physical,targeted pe,symptom-directed pe,abbreviated physical"
+Body Weight,,General,General,LOW,"body weight,weight,body mass,weight measurement"
+Height,,General,General,LOW,"height,stature,body height"
+Body Mass Index,,General,General,LOW,"bmi,body mass index"
+Body Surface Area,,General,General,LOW,"bsa,body surface area,bsa calculation"
+Waist Circumference,,General,General,LOW,"waist circumference,waist measurement,abdominal circumference"
+# ===========================================================================
+# CARDIAC / ECG
+# ===========================================================================
+"Electrocardiogram, 12-lead",93000,CPT,Cardiac,MEDIUM,"12-lead ecg,ecg (12l),ecg,12 lead ecg,electrocardiogram,ekg,12-lead electrocardiogram,standard ecg,resting ecg,single ecg"
+"Electrocardiogram, triplicate",93000,CPT,Cardiac,MEDIUM,"triplicate ecg,ecg triplicate,3x ecg,ecg (triplicate),serial ecg"
+Echocardiogram,93306,CPT,Cardiac,HIGH,"echocardiogram,echo,cardiac echo,transthoracic echo,tte,transthoracic echocardiogram,cardiac ultrasound"
+Holter Monitor,93224,CPT,Cardiac,MEDIUM,"holter,holter monitor,24-hour ecg,ambulatory ecg,24h holter,48h holter,continuous ecg"
+LVEF Assessment,93306,CPT,Cardiac,HIGH,"lvef,lvef assessment,ejection fraction,left ventricular ejection fraction,muga,muga scan"
+Cardiac MRI,75561,CPT,Cardiac,VERY_HIGH,"cardiac mri,cmr,cardiac magnetic resonance"
+# ===========================================================================
+# LABORATORY — HEMATOLOGY
+# ===========================================================================
+Complete Blood Count,85025,CPT,Laboratory,LOW,"complete blood count,cbc,full blood count,fbc,blood count,cbc with differential,cbc w/diff"
+Coagulation Panel,85610,CPT,Laboratory,LOW,"coagulation,coag panel,pt/inr,coagulation panel,pt,aptt,inr,prothrombin time,activated partial thromboplastin"
+Reticulocyte Count,85044,CPT,Laboratory,LOW,"reticulocyte count,reticulocytes,retic count"
+Blood Smear,85060,CPT,Laboratory,LOW,"blood smear,peripheral blood smear,peripheral smear,blood film"
+ESR,85652,CPT,Laboratory,LOW,"esr,erythrocyte sedimentation rate,sed rate"
+# ===========================================================================
+# LABORATORY — CHEMISTRY
+# ===========================================================================
+Comprehensive Metabolic Panel,80053,CPT,Laboratory,LOW,"comprehensive metabolic panel,cmp,metabolic panel,chemistry panel,serum chemistry,blood chemistry"
+Basic Metabolic Panel,80048,CPT,Laboratory,LOW,"basic metabolic panel,bmp"
+Liver Function Tests,80076,CPT,Laboratory,LOW,"liver function tests,lft,lfts,hepatic panel,hepatic function,liver panel,alt,ast,alkaline phosphatase,bilirubin,liver enzymes"
+Renal Function Tests,80069,CPT,Laboratory,LOW,"renal function,renal panel,kidney function,bun,creatinine,egfr,estimated gfr"
+Electrolytes,80051,CPT,Laboratory,LOW,"electrolytes,serum electrolytes,lytes,sodium potassium chloride bicarbonate"
+Lipid Panel,80061,CPT,Laboratory,LOW,"lipid panel,lipid profile,fasting lipids,cholesterol panel,ldl,hdl,triglycerides"
+Fasting Glucose,82947,CPT,Laboratory,LOW,"fasting glucose,fasting blood glucose,fbg,fasting plasma glucose,fpg"
+HbA1c,83036,CPT,Laboratory,LOW,"hba1c,glycated hemoglobin,a1c,hemoglobin a1c,glycosylated hemoglobin"
+C-Reactive Protein,86140,CPT,Laboratory,LOW,"crp,c-reactive protein,hs-crp,high-sensitivity crp"
+# ===========================================================================
+# LABORATORY — ENDOCRINE / HORMONE
+# ===========================================================================
+Thyroid Function Tests,84443,CPT,Laboratory,LOW,"thyroid function,tft,tfts,tsh,thyroid panel,free t4,ft4,t3"
+Testosterone,84403,CPT,Laboratory,LOW,"testosterone,total testosterone,free testosterone,serum testosterone"
+Cortisol,82533,CPT,Laboratory,LOW,"cortisol,serum cortisol,am cortisol,morning cortisol"
+Insulin Level,83525,CPT,Laboratory,LOW,"insulin,fasting insulin,insulin level,serum insulin"
+FSH/LH,83001,CPT,Laboratory,LOW,"fsh,lh,fsh/lh,follicle stimulating hormone,luteinizing hormone,gonadotropins"
+# ===========================================================================
+# LABORATORY — URINALYSIS / SPECIAL
+# ===========================================================================
+Urinalysis,81003,CPT,Laboratory,LOW,"urinalysis,ua,urine analysis,urine dipstick,urine test"
+Pregnancy Test,81025,CPT,Laboratory,LOW,"pregnancy test,serum pregnancy,urine pregnancy,bhcg,b-hcg,hcg,serum hcg,urine hcg,pregnancy test (serum),pregnancy test (urine)"
+Drug Screen,,,Laboratory,LOW,"drug screen,urine drug screen,uds,drug of abuse screen,toxicology screen"
+Urine Protein-to-Creatinine Ratio,84156,CPT,Laboratory,LOW,"upcr,urine protein,urine protein-to-creatinine,spot urine protein"
+24-Hour Urine Collection,81050,CPT,Laboratory,MEDIUM,"24-hour urine,24h urine,24 hour urine collection,timed urine collection"
+# ===========================================================================
+# LABORATORY — SEROLOGY / VIROLOGY
+# ===========================================================================
+Hepatitis Panel,86709,CPT,Laboratory,LOW,"hepatitis panel,hep panel,hepatitis b,hepatitis c,hbsag,anti-hcv,hbv,hcv,hepatitis serology"
+HIV Test,86701,CPT,Laboratory,LOW,"hiv test,hiv screening,hiv antibody,hiv-1/2,hiv serology"
+Viral Load,,,Laboratory,MEDIUM,"viral load,hiv viral load,hbv dna,hcv rna,pcr viral load"
+CD4 Count,86359,CPT,Laboratory,LOW,"cd4,cd4 count,cd4+ t-cell,cd4 cell count,t-cell subset"
+# ===========================================================================
+# LABORATORY — TUMOR MARKERS / BIOMARKERS
+# ===========================================================================
+PSA,84153,CPT,Laboratory,LOW,"psa,prostate specific antigen,total psa"
+CA-125,86304,CPT,Laboratory,LOW,"ca-125,ca125,cancer antigen 125"
+CEA,82378,CPT,Laboratory,LOW,"cea,carcinoembryonic antigen"
+AFP,82105,CPT,Laboratory,LOW,"afp,alpha-fetoprotein"
+NT-proBNP,83880,CPT,Laboratory,LOW,"nt-probnp,nt pro-bnp,n-terminal pro-bnp,brain natriuretic peptide,bnp"
+Troponin,84484,CPT,Laboratory,LOW,"troponin,troponin i,troponin t,hs-troponin,high-sensitivity troponin"
+CK/CPK,82550,CPT,Laboratory,LOW,"ck,cpk,creatine kinase,creatine phosphokinase"
+LDH,83615,CPT,Laboratory,LOW,"ldh,lactate dehydrogenase"
+Calprotectin,83993,CPT,Laboratory,LOW,"calprotectin,fecal calprotectin,stool calprotectin"
+ctDNA,,,Laboratory,HIGH,"ctdna,circulating tumor dna,cell-free dna,cfdna,liquid biopsy"
+# ===========================================================================
+# LABORATORY — PK/PD SAMPLES
+# ===========================================================================
+Blood Draw/Phlebotomy,,,Laboratory,LOW,"blood draw,blood sample,phlebotomy,venipuncture,blood collection,venous blood draw"
+PK Sample,,,PK,LOW,"pk sample,pharmacokinetic sample,pk blood sample,pk sampling,pk blood draw"
+PK Sample (Dense),,,PK,MEDIUM,"dense pk,dense pk sampling,dense pharmacokinetic,intensive pk,serial pk"
+PK Sample (Sparse/Trough),,,PK,LOW,"sparse pk,pk trough,trough sample,trough level,ctrough,pre-dose pk,pre-dose sample,trough pk"
+PD Sample,,,PK,LOW,"pd sample,pharmacodynamic sample,pd biomarker"
+Immunogenicity Sample,,,PK,LOW,"immunogenicity,ada,anti-drug antibody,ada sample,immunogenicity sample,anti-drug antibody sample"
+Biomarker Sample,,,Laboratory,MEDIUM,"biomarker,biomarker sample,exploratory biomarker,translational biomarker"
+# ===========================================================================
+# IMAGING
+# ===========================================================================
+MRI,70553,CPT,Imaging,HIGH,"mri,magnetic resonance imaging,mri scan,brain mri,abdominal mri,pelvic mri"
+CT Scan,74178,CPT,Imaging,HIGH,"ct scan,ct,computed tomography,cat scan,ct chest/abdomen/pelvis,ct c/a/p"
+X-Ray,71046,CPT,Imaging,MEDIUM,"x-ray,xray,radiograph,chest x-ray,cxr,chest radiograph"
+PET/CT Scan,78816,CPT,Imaging,VERY_HIGH,"pet/ct,pet scan,pet/ct scan,pet-ct,positron emission tomography,fdg-pet"
+DEXA Scan,77080,CPT,Imaging,MEDIUM,"dexa,dxa,bone density,dexa scan,bone densitometry"
+Ultrasound,76700,CPT,Imaging,MEDIUM,"ultrasound,us,sonography,doppler,abdominal ultrasound"
+Bone Scan,78300,CPT,Imaging,HIGH,"bone scan,bone scintigraphy,technetium bone scan,skeletal scintigraphy"
+Mammography,77067,CPT,Imaging,MEDIUM,"mammogram,mammography,bilateral mammogram"
+# ===========================================================================
+# PROCEDURES
+# ===========================================================================
+Tumor Biopsy,20206,CPT,Procedure,VERY_HIGH,"tumor biopsy,biopsy,tissue biopsy,core biopsy,skin biopsy,punch biopsy,core needle biopsy,fresh biopsy,archival biopsy,tumor tissue collection"
+Bone Marrow Biopsy,38221,CPT,Procedure,VERY_HIGH,"bone marrow biopsy,bone marrow aspirate,bma,bone marrow aspirate and biopsy"
+Lumbar Puncture,62270,CPT,Procedure,VERY_HIGH,"lumbar puncture,lp,spinal tap,csf collection,cerebrospinal fluid"
+Spirometry,94010,CPT,Respiratory,MEDIUM,"spirometry,pulmonary function,pft,lung function,pulmonary function test,fev1,fvc"
+FeNO Measurement,95012,CPT,Respiratory,MEDIUM,"feno,fractional exhaled nitric oxide,exhaled no"
+Bronchoscopy,31622,CPT,Procedure,VERY_HIGH,"bronchoscopy,bronchial biopsy,bal,bronchoalveolar lavage"
+Endoscopy,43239,CPT,Procedure,VERY_HIGH,"endoscopy,upper endoscopy,colonoscopy,egd,esophagogastroduodenoscopy,flexible sigmoidoscopy"
+Skin Punch Biopsy,11104,CPT,Procedure,HIGH,"skin punch biopsy,punch biopsy,4mm punch,skin biopsy"
+# ===========================================================================
+# OPHTHALMOLOGY
+# ===========================================================================
+BCVA Assessment,92015,CPT,Ophthalmology,MEDIUM,"bcva,best corrected visual acuity,visual acuity,etdrs,snellen"
+OCT Scan,92134,CPT,Ophthalmology,MEDIUM,"oct,optical coherence tomography,retinal oct,macular oct"
+Intravitreal Injection,67028,CPT,Ophthalmology,HIGH,"intravitreal injection,ivt,intravitreal,ivt injection"
+IOP Measurement,92100,CPT,Ophthalmology,LOW,"iop,intraocular pressure,tonometry,iop measurement"
+Fundoscopy,92250,CPT,Ophthalmology,MEDIUM,"fundoscopy,fundus exam,fundus photography,dilated fundus exam,ophthalmoscopy"
+Slit Lamp Exam,92012,CPT,Ophthalmology,LOW,"slit lamp,slit lamp examination,slit lamp exam,anterior segment exam"
+# ===========================================================================
+# QUESTIONNAIRES / PATIENT-REPORTED OUTCOMES
+# ===========================================================================
+Quality of Life Questionnaire,,,PRO,LOW,"qol,quality of life,eq-5d,eq5d,sf-36,sf36,whoqol"
+Pain Assessment,,,PRO,LOW,"pain assessment,vas,visual analog scale,nrs,numeric rating scale,pain score,pain nrs"
+ECOG Performance Status,,,Efficacy,LOW,"ecog,ecog ps,ecog performance status,performance status,ecog score,karnofsky"
+RECIST Assessment,,,Efficacy,MEDIUM,"recist,tumor assessment,response assessment,recist 1.1,recist evaluation,tumor response"
+NYHA Classification,,,Efficacy,LOW,"nyha,nyha class,nyha classification,nyha functional class,new york heart association"
+KCCQ (Kansas City Cardiomyopathy),,,Efficacy,LOW,"kccq,kansas city cardiomyopathy questionnaire,kccq-12,kccq-os,kccq-tss"
+6-Minute Walk Test,,,Efficacy,MEDIUM,"6mwt,6-minute walk test,6mwd,6 minute walk distance,6-minute walk distance,six minute walk"
+DAS28,,,Efficacy,LOW,"das28,disease activity score,das28-crp,das28-esr,das 28"
+ACR Response (ACR20/50/70),,,Efficacy,LOW,"acr20,acr50,acr70,acr20/50/70,acr response,american college of rheumatology"
+HAQ-DI,,,Efficacy,LOW,"haq-di,haq,health assessment questionnaire,haq disability index"
+PASI Score,,,Efficacy,LOW,"pasi,pasi 75,pasi 90,pasi 100,psoriasis area severity index,pasi score"
+IGA Score,,,Efficacy,LOW,"iga,investigator global assessment,iga score,iga 0/1"
+EASI Score,,,Efficacy,LOW,"easi,eczema area and severity index,easi score,easi-50,easi-75"
+Pruritus NRS,,,Efficacy,LOW,"pruritus nrs,itch nrs,pruritus numeric rating scale,peak pruritus nrs"
+MADRS,,,Efficacy,LOW,"madrs,montgomery-asberg depression rating scale,madrs total score"
+PHQ-9,,,Efficacy,LOW,"phq-9,phq9,patient health questionnaire,phq-9 score"
+CGI-S,,,Efficacy,LOW,"cgi-s,clinical global impression,cgi-s score,cgi severity"
+SGRQ,,,Efficacy,LOW,"sgrq,st george's respiratory questionnaire,sgrq score,sgrq total"
+ACQ,,,Efficacy,LOW,"acq,asthma control questionnaire,acq-5,acq-6,acq-7"
+CDAI,,,Efficacy,LOW,"cdai,clinical disease activity index,cdai score"
+Modified Mayo Score,,,Efficacy,LOW,"modified mayo,mayo score,modified mayo score,partial mayo,mayo subscore"
+Columbia Suicide Severity Rating,,,Efficacy,LOW,"c-ssrs,columbia suicide,cssrs,columbia suicide severity rating scale,suicidality assessment"
+# ===========================================================================
+# STUDY DRUG
+# ===========================================================================
+Study Drug Administration,,,Treatment,MEDIUM,"study drug,ip administration,investigational product,drug administration,dosing,study drug administration,imp administration,study treatment"
+Concomitant Medications Review,,,General,LOW,"concomitant medications,con meds,conmeds,prior/concomitant medications,medications review,prior medications,concomitant medication review"
+Adverse Event Assessment,,,General,LOW,"adverse events,ae,aes,ae assessment,adverse event assessment,adverse event review,safety assessment"
+Drug Accountability,,,General,LOW,"drug accountability,medication accountability,pill count,drug reconciliation,ip accountability"
+Compliance Assessment,,,General,LOW,"compliance,adherence,medication compliance,treatment compliance,drug compliance,medication adherence"
+# ===========================================================================
+# GENETIC / SPECIALIZED
+# ===========================================================================
+Genetic Testing,81479,CPT,Genetics,VERY_HIGH,"genetic testing,genomic testing,genotyping,pharmacogenomics,dna sequencing,ngs,next-generation sequencing,whole exome"
+Flow Cytometry,88182,CPT,Laboratory,HIGH,"flow cytometry,facs,immunophenotyping,flow cytometric analysis"
+Bone Marrow MRD,81479,CPT,Laboratory,VERY_HIGH,"mrd,minimal residual disease,mrd assessment,measurable residual disease"
+HLA Typing,81370,CPT,Laboratory,HIGH,"hla typing,hla,human leukocyte antigen,tissue typing"
+Karyotype,88262,CPT,Laboratory,HIGH,"karyotype,cytogenetics,chromosome analysis,fish"
+Anti-AAV Antibody,,,Laboratory,HIGH,"anti-aav,anti-aav antibody,anti-aav9,aav antibody,pre-existing antibody"
+# ===========================================================================
+# VACCINE-SPECIFIC
+# ===========================================================================
+Vaccination,,,Treatment,MEDIUM,"vaccination,vaccine administration,immunization,vaccine dose,dose 1,dose 2,booster"
+Reactogenicity Assessment,,,Safety,LOW,"reactogenicity,solicited adverse events,solicited ae,local reactions,systemic reactions,reactogenicity assessment"
+Serology/Antibody Titer,,,Laboratory,MEDIUM,"serology,antibody titer,neutralizing antibody,nab,binding antibody,igg titer,gmt,geometric mean titer,seroconversion"
+e-Diary,,,PRO,LOW,"e-diary,ediary,electronic diary,patient diary,daily diary"
+Telephone Contact,,,General,LOW,"telephone contact,phone contact,phone call,telephone visit,phone visit"
+# ===========================================================================
+# ONCOLOGY-SPECIFIC
+# ===========================================================================
+ECOG Performance Status,,,Efficacy,LOW,"ecog,ecog ps,performance status"
+Tumor Marker Assessment,,,Laboratory,LOW,"tumor marker,tumor markers,serum tumor markers"
+Dose Modification Assessment,,,Treatment,LOW,"dose modification,dose reduction,dose adjustment,dose delay assessment"
+DLT Assessment,,,Safety,LOW,"dlt,dose limiting toxicity,dlt assessment,dlt evaluation"
+Response Assessment,,,Efficacy,MEDIUM,"response assessment,tumor response,disease assessment,restaging"
+Disease Progression Assessment,,,Efficacy,LOW,"disease progression,pd assessment,progressive disease assessment"
