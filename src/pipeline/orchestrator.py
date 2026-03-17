@@ -57,6 +57,7 @@ class PipelineOrchestrator:
         self,
         pdf_bytes: bytes,
         document_name: str = "document.pdf",
+        on_progress: callable = None,
     ) -> PipelineOutput:
         """
         Run the full extraction pipeline on a PDF document.
@@ -64,6 +65,7 @@ class PipelineOrchestrator:
         Args:
             pdf_bytes: Raw PDF file content.
             document_name: Name of the document for output metadata.
+            on_progress: Optional callback(progress: int, message: str).
 
         Returns:
             PipelineOutput with all extracted tables.
@@ -73,8 +75,13 @@ class PipelineOrchestrator:
         warnings: list[str] = []
         tables: list[ExtractedTable] = []
 
+        def _progress(pct: int, msg: str):
+            if on_progress:
+                on_progress(pct, msg)
+
         # Stage 1: PDF Ingestion
         logger.info("Stage 1: PDF Ingestion")
+        _progress(10, "Ingesting PDF pages...")
         try:
             pages = self.ingestor.ingest_from_bytes(pdf_bytes)
         except Exception as e:
@@ -91,6 +98,7 @@ class PipelineOrchestrator:
         logger.info(f"Ingested {total_pages} pages")
 
         # Stage 2: Table Detection
+        _progress(20, f"Detecting tables across {total_pages} pages...")
         logger.info("Stage 2: Table Detection")
         try:
             regions = await self.detector.detect(pages)
@@ -100,6 +108,7 @@ class PipelineOrchestrator:
             warnings.append(f"Table detection failed: {e}")
 
         # Stage 3: Table Stitching
+        _progress(35, f"Stitching {len(regions)} table regions...")
         logger.info("Stage 3: Table Stitching")
         try:
             regions = self.stitcher.stitch(regions)
@@ -121,7 +130,9 @@ class PipelineOrchestrator:
         logger.info(f"Found {len(regions)} logical tables")
 
         # Process each table independently
-        for region in regions:
+        for i, region in enumerate(regions):
+            pct = 40 + int(55 * i / max(len(regions), 1))
+            _progress(pct, f"Extracting table {i+1}/{len(regions)}: {region.title or region.table_id}...")
             try:
                 table = await self._process_table(region, pages)
                 tables.append(table)

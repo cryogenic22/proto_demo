@@ -294,7 +294,7 @@ class TestPipelineOutput:
 class TestPipelineConfig:
     def test_defaults(self):
         cfg = PipelineConfig()
-        assert cfg.render_dpi == 300
+        assert cfg.render_dpi == 150
         assert cfg.confidence_threshold == 0.85
         assert cfg.max_extraction_passes == 2
 

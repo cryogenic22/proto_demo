@@ -14,7 +14,7 @@ class TestPDFIngestor:
         self.ingestor = PDFIngestor(self.config)
 
     def test_ingestor_creation(self):
-        assert self.ingestor.config.render_dpi == 300
+        assert self.ingestor.config.render_dpi == 150
 
     @patch("src.pipeline.pdf_ingestion.fitz")
     def test_ingest_from_bytes(self, mock_fitz):
@@ -51,7 +51,7 @@ class TestPDFIngestor:
         assert all(isinstance(p, PageImage) for p in pages)
         assert pages[0].page_number == 0
         assert pages[1].page_number == 1
-        assert pages[0].dpi == 300
+        assert pages[0].dpi == 150
 
     @patch("src.pipeline.pdf_ingestion.fitz")
     def test_ingest_respects_dpi(self, mock_fitz):

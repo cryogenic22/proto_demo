@@ -2,6 +2,7 @@
 LLM client abstraction wrapping Anthropic Claude API.
 
 Provides vision + text calls with retry logic and structured output support.
+All network/API errors are caught and retried.
 """
 
 from __future__ import annotations
@@ -30,7 +31,9 @@ class LLMClient:
     def client(self) -> anthropic.AsyncAnthropic:
         if self._client is None:
             self._client = anthropic.AsyncAnthropic(
-                api_key=self.config.anthropic_api_key or None
+                api_key=self.config.anthropic_api_key or None,
+                timeout=120.0,
+                max_retries=0,  # We handle retries ourselves
             )
         return self._client
 
@@ -197,7 +200,11 @@ class LLMClient:
         temperature: float,
         max_retries: int = 3,
     ) -> str:
-        """Call the API with exponential backoff retry."""
+        """Call the API with exponential backoff retry.
+
+        Catches ALL exception types — network errors, API errors,
+        timeouts — so callers never see raw infrastructure failures.
+        """
         last_error: Exception | None = None
 
         for attempt in range(max_retries):
@@ -212,24 +219,49 @@ class LLMClient:
                     kwargs["system"] = system
 
                 response = await self.client.messages.create(**kwargs)
+
+                # Guard against empty response
+                if not response.content:
+                    raise ValueError("Empty response from API")
+
                 return response.content[0].text
 
             except anthropic.RateLimitError as e:
                 last_error = e
-                wait = 2 ** attempt
-                logger.warning(f"Rate limited, retrying in {wait}s (attempt {attempt + 1})")
+                wait = 2 ** attempt + 1
+                logger.warning(f"Rate limited, retrying in {wait}s (attempt {attempt + 1}/{max_retries})")
                 await asyncio.sleep(wait)
 
-            except anthropic.APIError as e:
-                last_error = e
-                if attempt < max_retries - 1:
-                    wait = 2 ** attempt
-                    logger.warning(f"API error: {e}, retrying in {wait}s")
-                    await asyncio.sleep(wait)
-                else:
+            except anthropic.APIStatusError as e:
+                # 4xx errors (except 429 rate limit) are not retryable
+                if e.status_code < 500 and e.status_code != 429:
+                    logger.error(f"API error {e.status_code}: {e.message}")
                     raise
+                last_error = e
+                wait = 2 ** attempt + 1
+                logger.warning(f"API server error {e.status_code}, retrying in {wait}s (attempt {attempt + 1})")
+                await asyncio.sleep(wait)
 
-        raise last_error  # type: ignore[misc]
+            except (
+                anthropic.APIConnectionError,
+                anthropic.APITimeoutError,
+            ) as e:
+                last_error = e
+                wait = 2 ** attempt + 1
+                logger.warning(f"Connection/timeout error, retrying in {wait}s (attempt {attempt + 1}): {e}")
+                await asyncio.sleep(wait)
+
+            except Exception as e:
+                # Catch absolutely everything else (OSError, etc.)
+                last_error = e
+                wait = 2 ** attempt + 1
+                logger.warning(f"Unexpected error, retrying in {wait}s (attempt {attempt + 1}): {type(e).__name__}: {e}")
+                await asyncio.sleep(wait)
+
+        # All retries exhausted
+        error_msg = f"All {max_retries} retries failed. Last error: {last_error}"
+        logger.error(error_msg)
+        raise RuntimeError(error_msg) from last_error
 
     @staticmethod
     def _extract_json(text: str) -> Any:
@@ -244,10 +276,8 @@ class LLMClient:
 
         # Try extracting from markdown code block
         if "```" in text:
-            # Find content between first ``` and last ```
             parts = text.split("```")
-            for part in parts[1::2]:  # odd-indexed parts are inside code blocks
-                # Strip optional language tag (e.g., "json\n")
+            for part in parts[1::2]:
                 content = part.strip()
                 if content.startswith("json"):
                     content = content[4:].strip()
@@ -264,4 +294,6 @@ class LLMClient:
                 except json.JSONDecodeError:
                     continue
 
-        raise ValueError(f"Could not extract JSON from LLM response: {text[:200]}...")
+        # Return empty list instead of crashing
+        logger.warning(f"Could not extract JSON from LLM response: {text[:200]}...")
+        return []

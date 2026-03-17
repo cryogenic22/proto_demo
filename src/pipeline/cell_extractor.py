@@ -114,17 +114,30 @@ class CellExtractor:
             for h in schema.column_headers
         ) or f"{schema.num_cols} columns"
 
-        # If we have row groups, extract per group for better accuracy
+        # If we have row groups, extract per group in parallel
         if schema.row_groups:
+            import asyncio
+            semaphore = asyncio.Semaphore(self.config.max_concurrent_llm_calls)
+
+            async def extract_group(group):
+                async with semaphore:
+                    prompt = prompt_template.format(
+                        columns=col_desc,
+                        row_range=f"{group.start_row}-{group.end_row}",
+                        row_group=group.name,
+                    )
+                    return await self._extract_chunk(table_images, prompt)
+
+            results = await asyncio.gather(
+                *(extract_group(g) for g in schema.row_groups),
+                return_exceptions=True,
+            )
             all_cells: list[ExtractedCell] = []
-            for group in schema.row_groups:
-                prompt = prompt_template.format(
-                    columns=col_desc,
-                    row_range=f"{group.start_row}-{group.end_row}",
-                    row_group=group.name,
-                )
-                cells = await self._extract_chunk(table_images, prompt)
-                all_cells.extend(cells)
+            for i, res in enumerate(results):
+                if isinstance(res, Exception):
+                    logger.error(f"Row group extraction failed: {res}")
+                else:
+                    all_cells.extend(res)
             return all_cells
         else:
             # Single extraction for entire table

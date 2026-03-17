@@ -7,6 +7,7 @@ PDFs and scanned documents.
 
 from __future__ import annotations
 
+import gc
 import logging
 from pathlib import Path
 
@@ -39,7 +40,10 @@ class PDFIngestor:
         scale = self.config.render_dpi / 72.0
         matrix = fitz.Matrix(scale, scale)
 
-        for page_num in range(doc.page_count):
+        total_pages = doc.page_count
+        logger.info(f"PDF has {total_pages} pages, rendering at {self.config.render_dpi} DPI")
+
+        for page_num in range(total_pages):
             page = doc[page_num]
             pixmap = page.get_pixmap(matrix=matrix, alpha=False)
             image_bytes = pixmap.tobytes("png")
@@ -52,10 +56,12 @@ class PDFIngestor:
                 dpi=self.config.render_dpi,
             ))
 
-            logger.debug(
-                f"Rendered page {page_num}: {pixmap.width}x{pixmap.height} "
-                f"at {self.config.render_dpi} DPI"
-            )
+            # Free pixmap memory immediately
+            pixmap = None
+
+            if (page_num + 1) % 20 == 0:
+                logger.info(f"  Rendered {page_num + 1}/{total_pages} pages")
+                gc.collect()
 
         doc.close()
         logger.info(f"Ingested {len(pages)} pages from PDF")

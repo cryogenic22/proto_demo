@@ -301,9 +301,9 @@ class PipelineOutput(BaseModel):
 # ---------------------------------------------------------------------------
 
 class PipelineConfig(BaseModel):
-    render_dpi: int = Field(default=300, ge=72, le=600)
-    llm_model: str = "claude-sonnet-4-6-20250514"
-    vision_model: str = "claude-sonnet-4-6-20250514"
+    render_dpi: int = Field(default=150, ge=72, le=600)
+    llm_model: str = "claude-sonnet-4-6"
+    vision_model: str = "claude-sonnet-4-6"
     confidence_threshold: float = Field(default=0.85, ge=0.0, le=1.0)
     high_cost_threshold: float = Field(default=0.95, ge=0.0, le=1.0)
     max_extraction_passes: int = Field(default=2, ge=1, le=5)

@@ -1,12 +1,13 @@
 """
 Table Detection — identifies table regions in page images using vision LLM.
 
-Sends each page image to a VLM and asks it to identify all table regions,
-their bounding boxes, types, and titles.
+Sends page images to a VLM in parallel batches and asks it to identify
+all table regions, their bounding boxes, types, and titles.
 """
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import uuid
 from typing import Any
@@ -50,20 +51,44 @@ class TableDetector:
         self.llm = llm_client or LLMClient(config)
 
     async def detect(self, pages: list[PageImage]) -> list[TableRegion]:
-        """Detect all table regions across all pages."""
+        """Detect all table regions across all pages, processing in parallel."""
+        if not pages:
+            return []
+
+        concurrency = self.config.max_concurrent_llm_calls
+        semaphore = asyncio.Semaphore(concurrency)
+        logger.info(
+            f"Detecting tables on {len(pages)} pages "
+            f"(concurrency={concurrency})"
+        )
+
+        async def detect_one(page: PageImage) -> list[TableRegion]:
+            async with semaphore:
+                try:
+                    raw_detections = await self._detect_on_page(page)
+                    return [
+                        self._parse_detection(raw, page.page_number)
+                        for raw in raw_detections
+                    ]
+                except Exception as e:
+                    logger.error(
+                        f"Table detection failed on page {page.page_number}: {e}"
+                    )
+                    return []
+
+        # Run all pages concurrently (bounded by semaphore)
+        results = await asyncio.gather(
+            *(detect_one(page) for page in pages),
+            return_exceptions=False,
+        )
+
         all_regions: list[TableRegion] = []
+        for page_regions in results:
+            all_regions.extend(page_regions)
 
-        for page in pages:
-            try:
-                raw_detections = await self._detect_on_page(page)
-                for raw in raw_detections:
-                    region = self._parse_detection(raw, page.page_number)
-                    all_regions.append(region)
-            except Exception as e:
-                logger.error(f"Table detection failed on page {page.page_number}: {e}")
-                continue
-
-        logger.info(f"Detected {len(all_regions)} table regions across {len(pages)} pages")
+        logger.info(
+            f"Detected {len(all_regions)} table regions across {len(pages)} pages"
+        )
         return all_regions
 
     async def _detect_on_page(self, page: PageImage) -> list[dict[str, Any]]:
@@ -81,7 +106,6 @@ class TableDetector:
         """Parse a raw detection dict into a TableRegion model."""
         bbox_raw = raw.get("bbox", {})
 
-        # Convert percentage-based bbox to absolute if needed
         bbox = BoundingBox(
             page=page_num,
             x0=float(bbox_raw.get("x0", 0)),
@@ -90,7 +114,6 @@ class TableDetector:
             y1=float(bbox_raw.get("y1", 100)),
         )
 
-        # Parse table type safely
         raw_type = raw.get("table_type", "OTHER")
         try:
             table_type = TableType(raw_type)

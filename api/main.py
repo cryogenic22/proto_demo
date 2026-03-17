@@ -20,6 +20,9 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -52,6 +55,16 @@ app.add_middleware(
 
 # In-memory job store (production: use Redis or database)
 jobs: dict[str, dict[str, Any]] = {}
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    """Catch-all so the server never crashes on unhandled errors."""
+    logger.exception(f"Unhandled error on {request.url}: {exc}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Internal server error: {str(exc)}"},
+    )
 
 
 class JobStatus(BaseModel):
@@ -99,10 +112,21 @@ async def extract_protocol(file: UploadFile = File(...)):
         "completed_at": None,
     }
 
-    # Run extraction in background
-    asyncio.create_task(_run_extraction(job_id, pdf_bytes, file.filename))
+    # Run extraction in background with error logging
+    task = asyncio.create_task(_run_extraction(job_id, pdf_bytes, file.filename))
+    task.add_done_callback(_task_done_callback)
 
     return {"job_id": job_id, "status": "pending"}
+
+
+def _task_done_callback(task: asyncio.Task):
+    """Log any unhandled exception from background tasks so they don't crash the server."""
+    if task.cancelled():
+        logger.warning("Extraction task was cancelled")
+        return
+    exc = task.exception()
+    if exc:
+        logger.error(f"Extraction task failed with unhandled exception: {exc}", exc_info=exc)
 
 
 @app.get("/api/jobs/{job_id}")
@@ -144,6 +168,23 @@ async def list_jobs():
     ]
 
 
+@app.delete("/api/jobs")
+async def clear_all_jobs():
+    """Clear all jobs from the queue."""
+    count = len(jobs)
+    jobs.clear()
+    return {"cleared": count}
+
+
+@app.delete("/api/jobs/{job_id}")
+async def delete_job(job_id: str):
+    """Delete a specific job."""
+    if job_id not in jobs:
+        raise HTTPException(status_code=404, detail="Job not found")
+    del jobs[job_id]
+    return {"deleted": job_id}
+
+
 @app.get("/api/jobs/{job_id}/result")
 async def get_job_result(job_id: str):
     """Get the full result of a completed extraction job."""
@@ -158,7 +199,11 @@ async def get_job_result(job_id: str):
 
 
 async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
-    """Background task to run the extraction pipeline."""
+    """Background task to run the extraction pipeline.
+
+    Wrapped in broad exception handling so the server NEVER crashes —
+    any failure is captured and reported back through the job status.
+    """
     try:
         jobs[job_id]["status"] = "processing"
         jobs[job_id]["progress"] = 5
@@ -166,18 +211,44 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
 
         config = PipelineConfig(
             anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
+            render_dpi=150,  # Lower DPI for memory safety on large docs
+            max_concurrent_llm_calls=5,
         )
         orchestrator = PipelineOrchestrator(config)
 
         jobs[job_id]["progress"] = 10
         jobs[job_id]["message"] = "Ingesting PDF..."
 
-        result = await orchestrator.run(pdf_bytes, filename)
+        def on_progress(pct: int, msg: str):
+            jobs[job_id]["progress"] = pct
+            jobs[job_id]["message"] = msg
+
+        result = await orchestrator.run(pdf_bytes, filename, on_progress=on_progress)
+
+        # Serialize result — use try/except to handle serialization errors
+        try:
+            result_json = json.loads(result.model_dump_json())
+        except Exception as ser_err:
+            logger.error(f"Result serialization failed: {ser_err}")
+            result_json = {
+                "document_name": filename,
+                "tables": [],
+                "total_pages": result.total_pages,
+                "warnings": result.warnings + [f"Serialization error: {ser_err}"],
+            }
 
         jobs[job_id]["status"] = "completed"
         jobs[job_id]["progress"] = 100
         jobs[job_id]["message"] = f"Extracted {len(result.tables)} tables"
-        jobs[job_id]["result"] = json.loads(result.model_dump_json())
+        jobs[job_id]["result"] = result_json
+        jobs[job_id]["completed_at"] = time.time()
+
+    except MemoryError:
+        logger.error(f"Out of memory processing job {job_id}")
+        jobs[job_id]["status"] = "failed"
+        jobs[job_id]["progress"] = 0
+        jobs[job_id]["message"] = "Out of memory — try a smaller document or reduce DPI"
+        jobs[job_id]["error"] = "MemoryError: document too large"
         jobs[job_id]["completed_at"] = time.time()
 
     except Exception as e:
@@ -187,6 +258,11 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["message"] = f"Extraction failed: {str(e)}"
         jobs[job_id]["error"] = str(e)
         jobs[job_id]["completed_at"] = time.time()
+
+    finally:
+        # Force garbage collection after processing
+        import gc
+        gc.collect()
 
 
 if __name__ == "__main__":
