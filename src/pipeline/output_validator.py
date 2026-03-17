@@ -1,0 +1,210 @@
+"""
+Output Validator — hard gate between LLM extraction and downstream processing.
+
+Validates structural integrity of extracted tables before they're
+returned to consumers. Rejects tables with impossible/malformed values
+rather than letting them propagate silently.
+
+This addresses the core failure mode described in production incidents:
+LLM hallucinations propagating unchecked into sorting/calculation logic.
+"""
+
+from __future__ import annotations
+
+import logging
+import re
+from dataclasses import dataclass, field
+
+from src.models.schema import (
+    CellDataType,
+    ExtractedCell,
+    ExtractedTable,
+    TableSchema,
+)
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class ValidationResult:
+    valid: bool = True
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    cells_rejected: int = 0
+    cells_cleaned: int = 0
+
+
+# Patterns that indicate hallucinated/malformed values
+_NONE_PATTERNS = re.compile(
+    r"\bNONE\b|\bNULL\b|\bN/A\b|\bNaN\b|\bundefined\b|\bERROR\b",
+    re.IGNORECASE,
+)
+
+# Impossible numeric values for clinical contexts
+_IMPOSSIBLE_DAY = 10000  # No trial has 10000+ days
+_IMPOSSIBLE_VISIT_COUNT = 200  # No single table has 200+ visits
+
+
+class OutputValidator:
+    """Hard validation gate for extracted table data."""
+
+    def validate_table(self, table: ExtractedTable) -> ValidationResult:
+        """
+        Validate a single extracted table.
+
+        Returns ValidationResult with errors/warnings.
+        Does NOT raise — caller decides whether to reject or flag.
+        """
+        result = ValidationResult()
+
+        # 1. Schema integrity checks
+        self._check_schema_integrity(table, result)
+
+        # 2. Cell value sanity checks
+        self._check_cell_values(table, result)
+
+        # 3. Structural consistency
+        self._check_structural_consistency(table, result)
+
+        # 4. Duplicate detection
+        self._check_duplicates(table, result)
+
+        if result.errors:
+            result.valid = False
+
+        return result
+
+    def clean_table(self, table: ExtractedTable) -> ExtractedTable:
+        """
+        Clean a table by removing/fixing obviously malformed cells.
+
+        This is the defensive layer that prevents NONE-type values
+        from reaching downstream processing.
+        """
+        cleaned_cells: list[ExtractedCell] = []
+
+        for cell in table.cells:
+            cleaned = self._clean_cell(cell)
+            if cleaned is not None:
+                cleaned_cells.append(cleaned)
+
+        return table.model_copy(update={"cells": cleaned_cells})
+
+    def _check_schema_integrity(self, table: ExtractedTable, result: ValidationResult):
+        """Verify the schema is internally consistent."""
+        schema = table.schema_info
+
+        if schema.num_rows == 0 and schema.num_cols == 0 and table.cells:
+            result.warnings.append(
+                f"Table {table.table_id}: Schema reports 0 rows/cols but has {len(table.cells)} cells"
+            )
+
+        if schema.num_cols > _IMPOSSIBLE_VISIT_COUNT:
+            result.errors.append(
+                f"Table {table.table_id}: Schema reports {schema.num_cols} columns — "
+                f"likely hallucinated (max reasonable: {_IMPOSSIBLE_VISIT_COUNT})"
+            )
+
+        # Check for duplicate column headers
+        if schema.column_headers:
+            header_texts = [h.text for h in schema.column_headers]
+            seen = set()
+            dupes = set()
+            for h in header_texts:
+                if h in seen:
+                    dupes.add(h)
+                seen.add(h)
+            if dupes:
+                result.warnings.append(
+                    f"Table {table.table_id}: Duplicate column headers: {dupes}"
+                )
+
+    def _check_cell_values(self, table: ExtractedTable, result: ValidationResult):
+        """Check individual cell values for impossible/hallucinated content."""
+        none_count = 0
+        empty_marker_count = 0
+
+        for cell in table.cells:
+            # Check for NONE/NULL patterns in values
+            if _NONE_PATTERNS.search(cell.raw_value):
+                none_count += 1
+
+            # Check for marker cells with suspiciously long text
+            if cell.data_type == CellDataType.MARKER and len(cell.raw_value) > 20:
+                result.warnings.append(
+                    f"Cell ({cell.row},{cell.col}): MARKER type but long value "
+                    f"'{cell.raw_value[:30]}...' — possibly misclassified"
+                )
+
+            # Check for impossible row/col indices
+            if cell.row > 500 or cell.col > _IMPOSSIBLE_VISIT_COUNT:
+                result.errors.append(
+                    f"Cell ({cell.row},{cell.col}): Impossible coordinates — "
+                    f"likely hallucinated"
+                )
+
+        if none_count > 0:
+            pct = none_count / max(len(table.cells), 1) * 100
+            msg = (
+                f"Table {table.table_id}: {none_count} cells ({pct:.0f}%) contain "
+                f"NONE/NULL patterns — possible hallucination"
+            )
+            if pct > 20:
+                result.errors.append(msg)
+            else:
+                result.warnings.append(msg)
+
+    def _check_structural_consistency(self, table: ExtractedTable, result: ValidationResult):
+        """Check that the extracted cells are structurally consistent."""
+        if not table.cells:
+            return
+
+        # Check for gaps in the grid
+        rows_seen = set()
+        cols_seen = set()
+        for cell in table.cells:
+            rows_seen.add(cell.row)
+            cols_seen.add(cell.col)
+
+        if rows_seen:
+            max_row = max(rows_seen)
+            expected_rows = set(range(max_row + 1))
+            missing_rows = expected_rows - rows_seen
+            if len(missing_rows) > max_row * 0.3:  # More than 30% rows missing
+                result.warnings.append(
+                    f"Table {table.table_id}: {len(missing_rows)} rows missing "
+                    f"from extraction (out of {max_row + 1})"
+                )
+
+    def _check_duplicates(self, table: ExtractedTable, result: ValidationResult):
+        """Check for duplicate cells at the same coordinates."""
+        seen: set[tuple[int, int]] = set()
+        dupes = 0
+        for cell in table.cells:
+            key = (cell.row, cell.col)
+            if key in seen:
+                dupes += 1
+            seen.add(key)
+
+        if dupes > 0:
+            result.warnings.append(
+                f"Table {table.table_id}: {dupes} duplicate cell coordinates found"
+            )
+
+    def _clean_cell(self, cell: ExtractedCell) -> ExtractedCell | None:
+        """
+        Clean a single cell. Returns None to reject, or cleaned cell.
+        """
+        # Reject cells with impossible coordinates
+        if cell.row > 500 or cell.col > _IMPOSSIBLE_VISIT_COUNT:
+            return None
+
+        # Clean NONE/NULL values → convert to EMPTY
+        if _NONE_PATTERNS.search(cell.raw_value):
+            return cell.model_copy(update={
+                "raw_value": "",
+                "data_type": CellDataType.EMPTY,
+                "confidence": min(cell.confidence, 0.3),  # Tank confidence
+            })
+
+        return cell

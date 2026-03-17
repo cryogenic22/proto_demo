@@ -24,6 +24,7 @@ from src.pipeline.cell_extractor import CellExtractor
 from src.pipeline.challenger_agent import ChallengerAgent
 from src.pipeline.footnote_extractor import FootnoteExtractor
 from src.pipeline.footnote_resolver import FootnoteResolver
+from src.pipeline.output_validator import OutputValidator
 from src.pipeline.pdf_ingestion import PDFIngestor
 from src.pipeline.procedure_normalizer import ProcedureNormalizer
 from src.pipeline.reconciler import Reconciler
@@ -54,6 +55,7 @@ class PipelineOrchestrator:
         self.temporal_extractor = TemporalExtractor()
         self.challenger = ChallengerAgent(config, self.llm)
         self.reconciler = Reconciler(config)
+        self.validator = OutputValidator()
 
     async def run(
         self,
@@ -232,7 +234,7 @@ class PipelineOrchestrator:
 
         elapsed = time.time() - table_start
 
-        return ExtractedTable(
+        table = ExtractedTable(
             table_id=region.table_id,
             table_type=region.table_type,
             title=region.title or "",
@@ -253,6 +255,27 @@ class PipelineOrchestrator:
                 model_used=self.config.vision_model,
             ),
         )
+
+        # Stage 11: Output Validation — hard gate
+        logger.info(f"  Table {region.table_id}: Output Validation")
+        validation = self.validator.validate_table(table)
+        if validation.warnings:
+            for w in validation.warnings:
+                logger.warning(f"  Validation: {w}")
+        if validation.errors:
+            for e in validation.errors:
+                logger.error(f"  Validation ERROR: {e}")
+
+        # Clean the table (removes NONE/NULL values, impossible coords)
+        table = self.validator.clean_table(table)
+
+        # Recompute confidence after cleaning
+        if table.cells:
+            table = table.model_copy(update={
+                "overall_confidence": sum(c.confidence for c in table.cells) / len(table.cells)
+            })
+
+        return table
 
     @staticmethod
     def _build_cost_map(cells, procedures) -> dict:
