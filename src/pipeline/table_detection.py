@@ -1,8 +1,9 @@
 """
 Table Detection — identifies table regions in page images using vision LLM.
 
-Sends page images to a VLM in parallel batches and asks it to identify
-all table regions, their bounding boxes, types, and titles.
+Supports two modes:
+- SOA-only: Focused detection of Schedule of Activities tables (fast, cheap)
+- All tables: Detects every table type (comprehensive, expensive)
 """
 
 from __future__ import annotations
@@ -23,7 +24,46 @@ from src.models.schema import (
 
 logger = logging.getLogger(__name__)
 
-DETECTION_PROMPT = """Analyze this page from a clinical trial protocol document.
+# Fast pre-screening prompt — just asks "is there an SOA table on this page?"
+SOA_PRESCREEN_PROMPT = """Look at this page from a clinical trial protocol.
+
+Does this page contain a Schedule of Activities (SoA) table, or a
+Schedule of Assessments table? These are the large grid tables that show
+clinical procedures (rows) mapped against study visits (columns), with
+X marks or checkmarks in the cells.
+
+Also check if this page contains a CONTINUATION of such a table from a
+previous page (repeated column headers, data rows without a title, or
+"continued" / "cont'd" markers).
+
+Return a JSON object:
+{
+  "has_soa": true or false,
+  "is_continuation": true or false,
+  "title": "table title if visible" or null
+}
+
+Return ONLY the JSON object."""
+
+# Detailed SOA extraction prompt — only runs on pages that passed pre-screen
+SOA_DETAIL_PROMPT = """This page contains a Schedule of Activities (SoA) table
+from a clinical trial protocol.
+
+Return a JSON array with ONE object for this table:
+[{
+  "table_id": "soa",
+  "title": "the table title/caption if visible, or null",
+  "table_type": "SOA",
+  "bbox": {"x0": <left>, "y0": <top>, "x1": <right>, "y1": <bottom>},
+  "is_continuation": true if this is a continuation from a previous page,
+  "continuation_markers": ["continued"] if applicable, or []
+}]
+
+The bbox should be percentage of page dimensions (0-100).
+Return ONLY the JSON array."""
+
+# Original comprehensive detection prompt
+ALL_TABLES_PROMPT = """Analyze this page from a clinical trial protocol document.
 Identify ALL tables on this page. For each table found, return a JSON array with objects containing:
 
 - "table_id": a unique identifier (e.g., "t1", "t2")
@@ -51,16 +91,111 @@ class TableDetector:
         self.llm = llm_client or LLMClient(config)
 
     async def detect(self, pages: list[PageImage]) -> list[TableRegion]:
-        """Detect all table regions across all pages, processing in parallel."""
+        """Detect table regions across all pages."""
         if not pages:
             return []
 
+        if self.config.soa_only:
+            return await self._detect_soa_only(pages)
+        else:
+            return await self._detect_all_tables(pages)
+
+    async def _detect_soa_only(self, pages: list[PageImage]) -> list[TableRegion]:
+        """Two-phase SOA detection: fast pre-screen → detailed extraction.
+
+        Phase 1: Quick pre-screen every page (~cheap, small prompt)
+        Phase 2: Detailed extraction only on pages that have SOA tables
+        """
         concurrency = self.config.max_concurrent_llm_calls
         semaphore = asyncio.Semaphore(concurrency)
-        logger.info(
-            f"Detecting tables on {len(pages)} pages "
-            f"(concurrency={concurrency})"
+
+        # Phase 1: Pre-screen all pages in parallel
+        logger.info(f"SOA detection Phase 1: Pre-screening {len(pages)} pages")
+
+        async def prescreen_one(page: PageImage) -> tuple[int, bool, bool, str | None]:
+            """Returns (page_num, has_soa, is_continuation, title)."""
+            async with semaphore:
+                try:
+                    raw = await self.llm.vision_json_query(
+                        page.image_bytes,
+                        SOA_PRESCREEN_PROMPT,
+                        system="You are a clinical protocol analyst. Return valid JSON only.",
+                        max_tokens=256,  # Small response = fast + cheap
+                    )
+                    if isinstance(raw, dict):
+                        return (
+                            page.page_number,
+                            bool(raw.get("has_soa", False)),
+                            bool(raw.get("is_continuation", False)),
+                            raw.get("title"),
+                        )
+                    return (page.page_number, False, False, None)
+                except Exception as e:
+                    logger.warning(f"Pre-screen failed on page {page.page_number}: {e}")
+                    return (page.page_number, False, False, None)
+
+        results = await asyncio.gather(
+            *(prescreen_one(p) for p in pages),
+            return_exceptions=False,
         )
+
+        # Identify SOA pages
+        soa_pages = [(pn, is_cont, title) for pn, has_soa, is_cont, title in results if has_soa or is_cont]
+        non_soa_count = len(pages) - len(soa_pages)
+        logger.info(
+            f"SOA pre-screen: {len(soa_pages)} SOA pages found, "
+            f"{non_soa_count} pages skipped"
+        )
+
+        if not soa_pages:
+            return []
+
+        # Phase 2: Detailed extraction on SOA pages only
+        logger.info(f"SOA detection Phase 2: Extracting from {len(soa_pages)} pages")
+        page_map = {p.page_number: p for p in pages}
+        all_regions: list[TableRegion] = []
+
+        async def extract_one(page_num: int, is_cont: bool, title: str | None) -> list[TableRegion]:
+            async with semaphore:
+                page = page_map.get(page_num)
+                if not page:
+                    return []
+                try:
+                    raw = await self.llm.vision_json_query(
+                        page.image_bytes,
+                        SOA_DETAIL_PROMPT,
+                        system="You are a clinical protocol analyst. Return valid JSON only.",
+                    )
+                    if isinstance(raw, list):
+                        regions = []
+                        for item in raw:
+                            if isinstance(item, dict):
+                                try:
+                                    regions.append(self._parse_detection(item, page_num))
+                                except Exception as e:
+                                    logger.warning(f"Parse failed on SOA page {page_num}: {e}")
+                        return regions
+                    return []
+                except Exception as e:
+                    logger.error(f"SOA detail extraction failed on page {page_num}: {e}")
+                    return []
+
+        detail_results = await asyncio.gather(
+            *(extract_one(pn, is_cont, title) for pn, is_cont, title in soa_pages),
+            return_exceptions=False,
+        )
+
+        for page_regions in detail_results:
+            all_regions.extend(page_regions)
+
+        logger.info(f"SOA detection complete: {len(all_regions)} SOA table regions found")
+        return all_regions
+
+    async def _detect_all_tables(self, pages: list[PageImage]) -> list[TableRegion]:
+        """Comprehensive detection of all table types (original behavior)."""
+        concurrency = self.config.max_concurrent_llm_calls
+        semaphore = asyncio.Semaphore(concurrency)
+        logger.info(f"Detecting all tables on {len(pages)} pages (concurrency={concurrency})")
 
         async def detect_one(page: PageImage) -> list[TableRegion]:
             async with semaphore:
@@ -69,7 +204,6 @@ class TableDetector:
                     regions = []
                     for raw in raw_detections:
                         if not isinstance(raw, dict):
-                            logger.warning(f"Skipping non-dict detection on page {page.page_number}: {type(raw)}")
                             continue
                         try:
                             regions.append(self._parse_detection(raw, page.page_number))
@@ -77,12 +211,9 @@ class TableDetector:
                             logger.warning(f"Failed to parse detection on page {page.page_number}: {parse_err}")
                     return regions
                 except Exception as e:
-                    logger.error(
-                        f"Table detection failed on page {page.page_number}: {e}"
-                    )
+                    logger.error(f"Table detection failed on page {page.page_number}: {e}")
                     return []
 
-        # Run all pages concurrently (bounded by semaphore)
         results = await asyncio.gather(
             *(detect_one(page) for page in pages),
             return_exceptions=False,
@@ -92,16 +223,13 @@ class TableDetector:
         for page_regions in results:
             all_regions.extend(page_regions)
 
-        logger.info(
-            f"Detected {len(all_regions)} table regions across {len(pages)} pages"
-        )
+        logger.info(f"Detected {len(all_regions)} table regions across {len(pages)} pages")
         return all_regions
 
     async def _detect_on_page(self, page: PageImage) -> list[dict[str, Any]]:
-        """Run table detection on a single page."""
         result = await self.llm.vision_json_query(
             page.image_bytes,
-            DETECTION_PROMPT,
+            ALL_TABLES_PROMPT,
             system="You are a clinical document analysis expert. Return valid JSON only.",
         )
         if isinstance(result, list):
@@ -109,7 +237,6 @@ class TableDetector:
         return []
 
     def _parse_detection(self, raw: dict[str, Any], page_num: int) -> TableRegion:
-        """Parse a raw detection dict into a TableRegion model."""
         bbox_raw = raw.get("bbox", {})
 
         bbox = BoundingBox(
@@ -120,14 +247,13 @@ class TableDetector:
             y1=float(bbox_raw.get("y1", 100)),
         )
 
-        raw_type = raw.get("table_type", "OTHER")
+        raw_type = raw.get("table_type", "SOA" if self.config.soa_only else "OTHER")
         try:
             table_type = TableType(raw_type)
         except ValueError:
-            table_type = TableType.OTHER
+            table_type = TableType.SOA if self.config.soa_only else TableType.OTHER
 
-        # Make table_id unique per page — LLM often returns "t1" on every page
-        raw_id = raw.get("table_id", "t1")
+        raw_id = raw.get("table_id", "soa" if self.config.soa_only else "t1")
         table_id = f"p{page_num}_{raw_id}"
 
         return TableRegion(

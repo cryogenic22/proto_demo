@@ -310,4 +310,5 @@ class PipelineConfig(BaseModel):
     enable_challenger: bool = True
     enable_round_trip_test: bool = False
     max_concurrent_llm_calls: int = Field(default=5, ge=1)
+    soa_only: bool = Field(default=True, description="Only extract Schedule of Activities tables")
     anthropic_api_key: str = ""

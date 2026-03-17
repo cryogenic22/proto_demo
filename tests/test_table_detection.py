@@ -26,7 +26,7 @@ def _make_page(page_num: int = 0) -> PageImage:
 
 class TestTableDetector:
     def setup_method(self):
-        self.config = PipelineConfig()
+        self.config = PipelineConfig(soa_only=False)  # Test with all-tables mode
         self.detector = TableDetector(self.config)
 
     def test_creation(self):

@@ -102,8 +102,9 @@ class PipelineOrchestrator:
         logger.info(f"Ingested {total_pages} pages")
 
         # Stage 2: Table Detection
-        _progress(20, f"Detecting tables across {total_pages} pages...")
-        logger.info("Stage 2: Table Detection")
+        mode = "SOA tables" if self.config.soa_only else "all tables"
+        _progress(20, f"Detecting {mode} across {total_pages} pages...")
+        logger.info(f"Stage 2: Table Detection ({mode})")
         try:
             regions = await self.detector.detect(pages)
         except Exception as e:

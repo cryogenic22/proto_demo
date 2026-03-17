@@ -213,6 +213,7 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
             anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
             render_dpi=150,  # Lower DPI for memory safety on large docs
             max_concurrent_llm_calls=5,
+            soa_only=True,  # Focus on Schedule of Activities tables for site budgeting
         )
         orchestrator = PipelineOrchestrator(config)
 
