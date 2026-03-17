@@ -22,6 +22,12 @@ from src.models.schema import (
 )
 from src.pipeline.cell_extractor import CellExtractor
 from src.pipeline.challenger_agent import ChallengerAgent
+from src.pipeline.clinical_domain import (
+    ClinicalDomainClassifier,
+    TherapeuticDomain,
+    get_extraction_hints,
+    detect_pk_pd_rows,
+)
 from src.pipeline.footnote_extractor import FootnoteExtractor
 from src.pipeline.footnote_resolver import FootnoteResolver
 from src.pipeline.output_validator import OutputValidator
@@ -56,6 +62,8 @@ class PipelineOrchestrator:
         self.challenger = ChallengerAgent(config, self.llm)
         self.reconciler = Reconciler(config)
         self.validator = OutputValidator()
+        self.domain_classifier = ClinicalDomainClassifier()
+        self.detected_domain: TherapeuticDomain = TherapeuticDomain.GENERAL
 
     async def run(
         self,
@@ -133,6 +141,11 @@ class PipelineOrchestrator:
             )
 
         logger.info(f"Found {len(regions)} logical tables")
+
+        # Domain classification from table titles
+        title_text = " ".join(r.title or "" for r in regions)
+        self.detected_domain = self.domain_classifier.classify_from_text(title_text)
+        logger.info(f"Protocol domain: {self.detected_domain.value}")
 
         # Process each table independently
         for i, region in enumerate(regions):
