@@ -29,6 +29,7 @@ from src.pipeline.clinical_domain import (
     detect_pk_pd_rows,
 )
 from src.pipeline.footnote_extractor import FootnoteExtractor
+from src.pipeline.ocr_grounding import OCRGroundingVerifier
 from src.pipeline.footnote_resolver import FootnoteResolver
 from src.pipeline.output_validator import OutputValidator
 from src.pipeline.pdf_ingestion import PDFIngestor
@@ -61,6 +62,7 @@ class PipelineOrchestrator:
         self.temporal_extractor = TemporalExtractor()
         self.challenger = ChallengerAgent(config, self.llm)
         self.reconciler = Reconciler(config)
+        self.ocr_verifier = OCRGroundingVerifier(config)
         self.validator = OutputValidator()
         self.domain_classifier = ClinicalDomainClassifier()
         self.detected_domain: TherapeuticDomain = TherapeuticDomain.GENERAL
@@ -225,6 +227,15 @@ class PipelineOrchestrator:
                 region, schema, resolved_cells, pages
             )
             logger.info(f"  Challenger found {len(challenges)} issues")
+
+        # Stage 9b: OCR Grounding (cross-modal verification)
+        if self.ocr_verifier.available:
+            logger.info(f"  Table {region.table_id}: OCR Grounding")
+            verdicts = self.ocr_verifier.verify_cells(resolved_cells, region, pages)
+            grounding_challenges = self.ocr_verifier.verdicts_to_challenges(verdicts)
+            challenges.extend(grounding_challenges)
+            if grounding_challenges:
+                logger.info(f"  OCR grounding flagged {len(grounding_challenges)} potential hallucinations")
 
         # Stage 10: Reconciliation
         logger.info(f"  Table {region.table_id}: Reconciliation")

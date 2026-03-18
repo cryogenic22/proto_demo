@@ -6,3 +6,4 @@ python-dotenv>=1.0
 fastapi>=0.110
 uvicorn[standard]>=0.29
 httpx>=0.27
+python-doctr[torch]>=0.10
