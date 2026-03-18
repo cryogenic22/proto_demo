@@ -251,6 +251,11 @@ async def get_job_review(job_id: str, format: str = "json"):
         comparison_html = comparison.to_html_section() if comparison else ""
         html = generate_html_report(result, comparison_html=comparison_html)
         return HTMLResponse(html)
+    elif format == "budget":
+        from fastapi.responses import HTMLResponse
+        from src.pipeline.budget_calculator import generate_budget_html
+        html = generate_budget_html(result)
+        return HTMLResponse(html)
     else:
         return export_review_json(result)
 
