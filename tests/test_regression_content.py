@@ -210,11 +210,36 @@ class TestProcedureNormalizationRegression:
         assert result.canonical_name == "Zorblax Experimental Test"
         assert result.code is None
 
-    # False positive prevention
+    # False positive prevention — CRITICAL for client trust
     def test_experimental_does_not_match_exam(self):
         """'experimental' should NOT match 'exam' or 'physical exam'."""
         result = self.normalizer.normalize("Experimental Zorblax Test")
         assert result.canonical_name == "Experimental Zorblax Test"
+
+    def test_collect_does_not_match_ct_scan(self):
+        """'Collect blood sample' should NOT match 'CT scan'."""
+        result = self.normalizer.normalize("Collect blood sample for hematology")
+        assert result.canonical_name != "CT Scan", f"False match: 'Collect' matched CT Scan"
+
+    def test_reactogenicity_does_not_match_ct(self):
+        """'Reactogenicity' should NOT match 'CT scan'."""
+        result = self.normalizer.normalize("Review reactogenicity e-diary data")
+        assert result.canonical_name != "CT Scan"
+
+    def test_contraceptive_does_not_match_ct(self):
+        """'Contraceptive' should NOT match 'CT scan'."""
+        result = self.normalizer.normalize("Confirm use of contraceptives")
+        assert result.canonical_name != "CT Scan"
+
+    def test_prohibited_does_not_match_ct(self):
+        """'Collect prohibited medication' should NOT match 'CT scan'."""
+        result = self.normalizer.normalize("Collect prohibited medication use")
+        assert result.canonical_name != "CT Scan"
+
+    def test_covid_collection_does_not_match_ct(self):
+        """'Collection of COVID-19-related information' should NOT match CT."""
+        result = self.normalizer.normalize("Collection of COVID-19-related clinical and laboratory information")
+        assert result.canonical_name != "CT Scan"
 
     # Batch processing
     def test_batch_returns_correct_count(self):

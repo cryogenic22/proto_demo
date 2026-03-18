@@ -174,21 +174,28 @@ class ProcedureNormalizer:
         return unmapped
 
     def _fuzzy_match(self, text: str) -> ProcedureEntry | None:
-        """Attempt fuzzy matching using key clinical terms."""
+        """Attempt fuzzy matching using key clinical terms.
+
+        Uses word-boundary matching to prevent 'ct' in 'collect'
+        from matching 'CT scan'.
+        """
         key_terms = {
             "ecg": "ecg",
             "electrocardiogram": "ecg",
             "mri": "mri",
-            "ct": "ct scan",
+            "ct scan": "ct scan",     # Require full "ct scan", not just "ct"
+            "ct ": "ct scan",          # "CT " with space (e.g., "CT chest")
             "pet": "pet/ct",
             "biopsy": "tumor biopsy",
             "x-ray": "x-ray",
             "xray": "x-ray",
             "spirometry": "spirometry",
-            "echo": "echocardiogram",
+            "echocardiogram": "echocardiogram",
         }
         for term, alias in key_terms.items():
-            if term in text:
+            # Use word boundary matching
+            pattern = r"\b" + re.escape(term) + r"\b"
+            if re.search(pattern, text):
                 if alias in self._alias_map:
                     return self._alias_map[alias]
         return None
