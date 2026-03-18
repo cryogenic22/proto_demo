@@ -242,6 +242,11 @@ async def get_job_review(job_id: str, format: str = "json"):
         from fastapi.responses import PlainTextResponse
         md = export_review_document(result)
         return PlainTextResponse(md, media_type="text/markdown")
+    elif format == "html":
+        from fastapi.responses import HTMLResponse
+        from src.pipeline.html_report import generate_html_report
+        html = generate_html_report(result)
+        return HTMLResponse(html)
     else:
         return export_review_json(result)
 
