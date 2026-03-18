@@ -102,6 +102,19 @@ h3 {{ font-size: 14px; font-weight: 600; color: #334155; margin: 20px 0 8px; }}
 .review-item {{ display: flex; gap: 12px; padding: 10px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; margin-bottom: 8px; font-size: 12px; }}
 .review-icon {{ width: 28px; height: 28px; background: #fef3c7; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }}
 
+/* Narrative */
+.narrative {{ background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 24px; margin-bottom: 24px; }}
+.narrative h2 {{ margin-top: 0; }}
+.narrative-section {{ margin-bottom: 16px; }}
+.narrative-section h3 {{ color: #0f172a; font-size: 13px; margin-bottom: 6px; }}
+.narrative-section p {{ font-size: 12px; color: #475569; line-height: 1.6; }}
+.finding {{ display: flex; gap: 10px; padding: 8px 12px; border-radius: 6px; margin-bottom: 6px; font-size: 12px; }}
+.finding-good {{ background: #ecfdf5; color: #065f46; }}
+.finding-warn {{ background: #fffbeb; color: #92400e; }}
+.finding-bad {{ background: #fef2f2; color: #991b1b; }}
+.finding-info {{ background: #eff6ff; color: #1e40af; }}
+.finding-icon {{ font-size: 14px; flex-shrink: 0; }}
+
 /* Print */
 @media print {{
   body {{ background: white; }}
@@ -155,6 +168,9 @@ h3 {{ font-size: 14px; font-weight: 600; color: #334155; margin: 20px 0 8px; }}
 
 {"".join(f'<div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:10px 16px;margin-bottom:12px;font-size:12px;color:#92400e;">{_esc(w)}</div>' for w in output.warnings) if output.warnings else ""}
 
+<!-- Narrative Analysis -->
+{_render_narrative_analysis(output)}
+
 <!-- Tables -->
 {tables_html}
 
@@ -166,6 +182,161 @@ h3 {{ font-size: 14px; font-weight: 600; color: #334155; margin: 20px 0 8px; }}
         path.write_text(html, encoding="utf-8")
 
     return html
+
+
+def _render_narrative_analysis(output: PipelineOutput) -> str:
+    """Generate narrative analysis of extraction quality."""
+    if not output.tables:
+        return '<div class="narrative"><h2>Analysis</h2><p>No tables were extracted.</p></div>'
+
+    total_cells = sum(len(t.cells) for t in output.tables)
+    total_flagged = sum(len(t.flagged_cells) for t in output.tables)
+    total_footnotes = sum(len(t.footnotes) for t in output.tables)
+    total_procs = sum(len(t.procedures) for t in output.tables)
+    avg_conf = sum(t.overall_confidence for t in output.tables) / len(output.tables)
+
+    # Analyze what's working and what's not
+    findings: list[tuple[str, str, str]] = []  # (icon_class, icon, text)
+
+    # Overall confidence assessment
+    if avg_conf >= 0.90:
+        findings.append(("finding-good", "&#10003;",
+            f"<strong>High extraction confidence.</strong> Average confidence across all tables is {avg_conf:.0%}. "
+            f"The majority of cell values are consistent across dual-pass extraction."))
+    elif avg_conf >= 0.80:
+        findings.append(("finding-warn", "&#9888;",
+            f"<strong>Moderate extraction confidence.</strong> Average confidence is {avg_conf:.0%}. "
+            f"Some cells showed disagreement between extraction passes, indicating potential ambiguity in the source document."))
+    else:
+        findings.append(("finding-bad", "&#10007;",
+            f"<strong>Low extraction confidence.</strong> Average confidence is only {avg_conf:.0%}. "
+            f"Significant disagreement between extraction passes — manual review of flagged cells is strongly recommended."))
+
+    # Flagged cells analysis
+    if total_flagged == 0:
+        findings.append(("finding-good", "&#10003;",
+            "No cells flagged for review. All extracted values passed confidence thresholds."))
+    else:
+        flag_pct = total_flagged / max(total_cells, 1) * 100
+        # Break down by table
+        worst_table = max(output.tables, key=lambda t: len(t.flagged_cells))
+        findings.append(("finding-warn", "&#9888;",
+            f"<strong>{total_flagged} cells ({flag_pct:.0f}%) require human review.</strong> "
+            f"These cells either showed disagreement between extraction passes, were flagged by the "
+            f"adversarial challenger, or fell below confidence thresholds. "
+            f"The table with the most flagged cells is \"{_esc(worst_table.title or worst_table.table_id)}\" "
+            f"({len(worst_table.flagged_cells)} flagged)."))
+
+    # Footnotes analysis
+    if total_footnotes > 0:
+        fn_types: dict[str, int] = {}
+        for t in output.tables:
+            for fn in t.footnotes:
+                fn_types[fn.footnote_type.value] = fn_types.get(fn.footnote_type.value, 0) + 1
+        type_desc = ", ".join(f"{v} {k.lower()}" for k, v in sorted(fn_types.items(), key=lambda x: -x[1]))
+        findings.append(("finding-good", "&#10003;",
+            f"<strong>{total_footnotes} footnotes extracted and classified.</strong> "
+            f"Types found: {type_desc}. Footnotes are anchored to specific cells "
+            f"and displayed as superscripts in the grid view."))
+    else:
+        findings.append(("finding-info", "&#9432;",
+            "<strong>No footnotes were extracted.</strong> "
+            "This may indicate the SoA tables in this document have no footnotes, or the "
+            "footnote extraction pass did not find definitions matching the markers detected in cells. "
+            "Check the source PDF to verify."))
+
+    # Procedure mapping analysis
+    if total_procs > 0:
+        unmapped = sum(
+            1 for t in output.tables for p in t.procedures
+            if p.code is None and p.category == "Unknown"
+        )
+        mapped_with_code = sum(
+            1 for t in output.tables for p in t.procedures if p.code
+        )
+        if unmapped == 0:
+            findings.append(("finding-good", "&#10003;",
+                f"<strong>All {total_procs} procedures mapped successfully.</strong> "
+                f"{mapped_with_code} have CPT codes assigned."))
+        else:
+            findings.append(("finding-warn", "&#9888;",
+                f"<strong>{unmapped} of {total_procs} procedures could not be mapped</strong> to the "
+                f"canonical vocabulary. These are shown as their raw extracted names in the procedure "
+                f"mapping tables below. {mapped_with_code} procedures have CPT codes. "
+                f"Unmapped procedures may be protocol-specific assessments or novel procedures "
+                f"not yet in the mapping database."))
+
+    # Per-table confidence variation
+    confs = [t.overall_confidence for t in output.tables]
+    if len(confs) >= 2:
+        min_conf = min(confs)
+        max_conf = max(confs)
+        weakest = min(output.tables, key=lambda t: t.overall_confidence)
+        if max_conf - min_conf > 0.15:
+            findings.append(("finding-info", "&#9432;",
+                f"<strong>Confidence varies significantly across tables</strong> "
+                f"(range: {min_conf:.0%} to {max_conf:.0%}). "
+                f"The lowest-confidence table is \"{_esc(weakest.title or weakest.table_id)}\" "
+                f"at {weakest.overall_confidence:.0%}. This table may have complex structure "
+                f"(multi-level headers, dense footnotes, or spanning cells) that is harder to extract reliably."))
+
+    # Multi-page table detection
+    multi_page = [t for t in output.tables if len(t.source_pages) > 1]
+    if multi_page:
+        findings.append(("finding-info", "&#9432;",
+            f"<strong>{len(multi_page)} table(s) span multiple pages.</strong> "
+            f"These were automatically stitched from continuation pages. "
+            f"Multi-page tables are more prone to extraction errors at page boundaries — "
+            f"pay special attention to rows near page breaks."))
+
+    # Build HTML
+    html_parts = ['<div class="narrative">', '<h2>Extraction Analysis</h2>']
+
+    # Summary paragraph
+    html_parts.append(
+        f'<div class="narrative-section"><p>'
+        f'This report contains the extraction results for <strong>{_esc(output.document_name)}</strong> '
+        f'({output.total_pages} pages). The pipeline identified <strong>{len(output.tables)} SOA '
+        f'(Schedule of Activities) table(s)</strong> and extracted <strong>{total_cells:,} cells</strong> '
+        f'with an average confidence of <strong>{avg_conf:.0%}</strong>. '
+        f'Each cell was extracted twice using different prompts, cross-checked by an adversarial '
+        f'validation agent, and verified against OCR output where available. '
+        f'Cells highlighted in <span style="background:#fef2f2;padding:2px 4px;border-radius:3px;">red</span> '
+        f'have low confidence; cells with <span style="outline:2px solid #f59e0b;padding:2px 4px;border-radius:3px;">orange outlines</span> '
+        f'are flagged for human review.'
+        f'</p></div>'
+    )
+
+    # Individual findings
+    html_parts.append('<div class="narrative-section"><h3>Key Findings</h3>')
+    for cls, icon, text in findings:
+        html_parts.append(
+            f'<div class="finding {cls}">'
+            f'<span class="finding-icon">{icon}</span>'
+            f'<div>{text}</div>'
+            f'</div>'
+        )
+    html_parts.append('</div>')
+
+    # Reviewer guidance
+    html_parts.append(
+        '<div class="narrative-section"><h3>Reviewer Guidance</h3>'
+        '<p>When reviewing this extraction:</p>'
+        '<ul style="font-size:12px;color:#475569;margin:6px 0 0 20px;line-height:1.8;">'
+        '<li><strong>Flagged cells (orange outline)</strong> — These require verification against the source PDF. '
+        'The pipeline was not confident in the extracted value.</li>'
+        '<li><strong>Red-background cells</strong> — Low confidence (&lt;70%). The two extraction passes disagreed, '
+        'or the adversarial checker found a potential error.</li>'
+        '<li><strong>Procedure mapping</strong> — Verify that raw procedure names are correctly mapped to canonical names. '
+        '"Unknown" category procedures need manual mapping.</li>'
+        '<li><strong>Footnotes</strong> — Verify that footnote markers (superscripts) are anchored to the correct cells '
+        'and that the footnote text matches the source document.</li>'
+        '<li><strong>Visit windows</strong> — Confirm that Day/Week/Month calculations and window ranges match the protocol.</li>'
+        '</ul></div>'
+    )
+
+    html_parts.append('</div>')
+    return "\n".join(html_parts)
 
 
 def _render_table_section(table: ExtractedTable) -> str:
