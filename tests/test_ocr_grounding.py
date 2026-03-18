@@ -43,9 +43,17 @@ class TestGroundingVerifier:
         verdict = self.verifier._verify_one_cell(cell, ocr_text, [])
         assert verdict.grounded is True
 
+    def test_row_header_auto_passes(self):
+        """Column 0 cells (row headers) should always pass grounding."""
+        cell = _cell(0, 0, "Fabricated Procedure Name")
+        ocr_text = "nothing matching here"
+        verdict = self.verifier._verify_one_cell(cell, ocr_text, [])
+        assert verdict.grounded is True
+        assert verdict.confidence_adjustment == 1.0
+
     def test_text_confirmed_by_ocr(self):
         """Text cell where OCR confirms the words → grounded."""
-        cell = _cell(0, 0, "Complete Blood Count")
+        cell = _cell(0, 2, "Complete Blood Count")
         ocr_text = "screening complete blood count and chemistry panel"
         verdict = self.verifier._verify_one_cell(cell, ocr_text, [])
         assert verdict.grounded is True
@@ -53,7 +61,7 @@ class TestGroundingVerifier:
 
     def test_text_not_in_ocr_flagged(self):
         """Text cell where OCR does NOT find the words → ungrounded."""
-        cell = _cell(0, 0, "Fabricated Procedure Name")
+        cell = _cell(0, 3, "Fabricated Procedure Name")
         ocr_text = "vital signs physical exam ecg laboratory tests"
         verdict = self.verifier._verify_one_cell(cell, ocr_text, [])
         assert verdict.grounded is False
@@ -61,7 +69,7 @@ class TestGroundingVerifier:
 
     def test_partial_match_partial_confidence(self):
         """Cell with some words confirmed, some not → partial confidence."""
-        cell = _cell(0, 0, "Review hematology and chemistry results")
+        cell = _cell(0, 2, "Review hematology and chemistry results")
         ocr_text = "review hematology results from central laboratory"
         verdict = self.verifier._verify_one_cell(cell, ocr_text, [])
         # "review", "hematology", "results" confirmed; "chemistry" not

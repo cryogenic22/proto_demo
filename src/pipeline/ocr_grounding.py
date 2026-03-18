@@ -285,7 +285,7 @@ class OCRGroundingVerifier:
                     ),
                     extracted_value=v.extracted_value,
                     suggested_value=v.ocr_evidence if v.ocr_evidence else None,
-                    severity=0.7,
+                    severity=0.4,  # Moderate — flag but don't tank confidence
                 ))
         return challenges
 
@@ -295,8 +295,22 @@ class OCRGroundingVerifier:
         ocr_text: str,
         all_words: list[OCRWord],
     ) -> GroundingVerdict:
-        """Verify a single cell against OCR output."""
+        """Verify a single cell against OCR output.
+
+        Column 0 cells (procedure names / row headers) and marker cells
+        get lenient treatment — OCR is weak on these and dual-pass
+        extraction already validates them.
+        """
         ref = CellRef(row=cell.row, col=cell.col)
+
+        # Row headers (column 0) — these are procedure names that OCR
+        # often segments differently. Don't penalize.
+        if cell.col == 0:
+            return GroundingVerdict(
+                cell_ref=ref, extracted_value=cell.raw_value,
+                grounded=True, ocr_evidence="row_header",
+                confidence_adjustment=1.0,
+            )
         value = cell.raw_value.strip()
 
         # Empty cells and markers are easy to verify
@@ -354,13 +368,13 @@ class OCRGroundingVerifier:
             )
         else:
             # OCR cannot confirm this value — possible hallucination
-            # Find what OCR DID read nearby
+            # But be cautious: OCR quality varies, especially on complex tables
             nearby = self._find_nearby_ocr_text(value_lower, ocr_text)
             return GroundingVerdict(
                 cell_ref=ref, extracted_value=value,
                 grounded=False,
                 ocr_evidence=nearby,
-                confidence_adjustment=0.5,
+                confidence_adjustment=0.75,  # Moderate penalty, not destructive
             )
 
     @staticmethod
