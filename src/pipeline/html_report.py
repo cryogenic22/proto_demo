@@ -22,8 +22,9 @@ from src.models.schema import ExtractedTable, PipelineOutput
 def generate_html_report(
     output: PipelineOutput,
     path: Path | None = None,
+    comparison_html: str = "",
 ) -> str:
-    """Generate a self-contained HTML report."""
+    """Generate a self-contained HTML report with optional comparison."""
     total_cells = sum(len(t.cells) for t in output.tables)
     total_flagged = sum(len(t.flagged_cells) for t in output.tables)
     total_footnotes = sum(len(t.footnotes) for t in output.tables)
@@ -170,6 +171,9 @@ h3 {{ font-size: 14px; font-weight: 600; color: #334155; margin: 20px 0 8px; }}
 
 <!-- Narrative Analysis -->
 {_render_narrative_analysis(output)}
+
+<!-- Comparison with Previous Run -->
+{comparison_html}
 
 <!-- Tables -->
 {tables_html}

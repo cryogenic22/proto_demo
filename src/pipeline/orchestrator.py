@@ -34,6 +34,7 @@ from src.pipeline.footnote_resolver import FootnoteResolver
 from src.pipeline.output_validator import OutputValidator
 from src.pipeline.pdf_ingestion import PDFIngestor
 from src.pipeline.procedure_normalizer import ProcedureNormalizer
+from src.pipeline.protocol_synopsis import ProtocolSynopsisExtractor
 from src.pipeline.reconciler import Reconciler
 from src.pipeline.structural_analyzer import StructuralAnalyzer
 from src.pipeline.table_detection import TableDetector
@@ -64,6 +65,8 @@ class PipelineOrchestrator:
         self.reconciler = Reconciler(config)
         self.ocr_verifier = OCRGroundingVerifier(config)
         self.validator = OutputValidator()
+        self.synopsis_extractor = ProtocolSynopsisExtractor(config, self.llm)
+        self.protocol_synopsis = None
         self.domain_classifier = ClinicalDomainClassifier()
         self.detected_domain: TherapeuticDomain = TherapeuticDomain.GENERAL
 
@@ -110,6 +113,23 @@ class PipelineOrchestrator:
 
         total_pages = len(pages)
         logger.info(f"Ingested {total_pages} pages")
+
+        # Stage 1b: Protocol Synopsis Extraction
+        _progress(15, "Extracting protocol synopsis...")
+        try:
+            self.protocol_synopsis = await self.synopsis_extractor.extract(pages)
+            synopsis_context = self.protocol_synopsis.to_prompt_context()
+            if synopsis_context:
+                logger.info(f"Protocol synopsis extracted:\n{synopsis_context[:200]}")
+                # Update domain classifier with synopsis info
+                if self.protocol_synopsis.therapeutic_area:
+                    self.detected_domain = self.domain_classifier.classify_from_text(
+                        self.protocol_synopsis.therapeutic_area + " " +
+                        self.protocol_synopsis.indication
+                    )
+        except Exception as e:
+            logger.warning(f"Synopsis extraction failed (non-fatal): {e}")
+            self.protocol_synopsis = None
 
         # Stage 2: Table Detection
         mode = "SOA tables" if self.config.soa_only else "all tables"

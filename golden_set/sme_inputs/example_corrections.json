@@ -1,0 +1,34 @@
+{
+  "expert_name": "example_medical_writer",
+  "date": "2026-03-18T00:00:00Z",
+  "reason": "Example SME correction file — shows format for adding procedures, aliases, and rules",
+  "procedure_corrections": [
+    {
+      "action": "add",
+      "canonical_name": "CHOP-INTEND Assessment",
+      "aliases": ["chop-intend", "chop intend", "children's hospital of philadelphia infant test"],
+      "cpt_code": null,
+      "code_system": null,
+      "category": "Efficacy",
+      "cost_tier": "MEDIUM"
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Electrocardiogram, 12-lead",
+      "add_aliases": ["12-lead electrocardiogram with rhythm strip", "ecg with qtcf"]
+    }
+  ],
+  "mapping_overrides": [
+    {
+      "action": "override",
+      "raw_name": "Assess acute reactions for at least 30 minutes after study intervention administration",
+      "correct_canonical": "Post-Dose Observation"
+    }
+  ],
+  "validation_rules": [
+    {
+      "rule": "PET/CT scans should not occur more than 4 times in a typical Phase III oncology protocol",
+      "domain": "ONCOLOGY"
+    }
+  ]
+}

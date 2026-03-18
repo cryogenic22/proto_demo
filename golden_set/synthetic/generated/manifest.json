@@ -1,0 +1,102 @@
+[
+  {
+    "name": "simple_general",
+    "html_file": "simple_general.html",
+    "ground_truth_file": "simple_general_ground_truth.json",
+    "complexity_tier": 1,
+    "procedures": 8,
+    "visits": 6,
+    "footnotes": 2,
+    "total_cells": 48
+  },
+  {
+    "name": "simple_vaccine",
+    "html_file": "simple_vaccine.html",
+    "ground_truth_file": "simple_vaccine_ground_truth.json",
+    "complexity_tier": 2,
+    "procedures": 10,
+    "visits": 7,
+    "footnotes": 3,
+    "total_cells": 70
+  },
+  {
+    "name": "moderate_general",
+    "html_file": "moderate_general.html",
+    "ground_truth_file": "moderate_general_ground_truth.json",
+    "complexity_tier": 2,
+    "procedures": 15,
+    "visits": 10,
+    "footnotes": 5,
+    "total_cells": 150
+  },
+  {
+    "name": "moderate_oncology",
+    "html_file": "moderate_oncology.html",
+    "ground_truth_file": "moderate_oncology_ground_truth.json",
+    "complexity_tier": 3,
+    "procedures": 15,
+    "visits": 8,
+    "footnotes": 6,
+    "total_cells": 120
+  },
+  {
+    "name": "complex_vaccine",
+    "html_file": "complex_vaccine.html",
+    "ground_truth_file": "complex_vaccine_ground_truth.json",
+    "complexity_tier": 3,
+    "procedures": 18,
+    "visits": 10,
+    "footnotes": 8,
+    "total_cells": 180
+  },
+  {
+    "name": "complex_oncology",
+    "html_file": "complex_oncology.html",
+    "ground_truth_file": "complex_oncology_ground_truth.json",
+    "complexity_tier": 3,
+    "procedures": 20,
+    "visits": 11,
+    "footnotes": 10,
+    "total_cells": 220
+  },
+  {
+    "name": "dense_general",
+    "html_file": "dense_general.html",
+    "ground_truth_file": "dense_general_ground_truth.json",
+    "complexity_tier": 3,
+    "procedures": 17,
+    "visits": 12,
+    "footnotes": 7,
+    "total_cells": 204
+  },
+  {
+    "name": "sparse_general",
+    "html_file": "sparse_general.html",
+    "ground_truth_file": "sparse_general_ground_truth.json",
+    "complexity_tier": 2,
+    "procedures": 12,
+    "visits": 8,
+    "footnotes": 4,
+    "total_cells": 96
+  },
+  {
+    "name": "many_footnotes",
+    "html_file": "many_footnotes.html",
+    "ground_truth_file": "many_footnotes_ground_truth.json",
+    "complexity_tier": 4,
+    "procedures": 15,
+    "visits": 8,
+    "footnotes": 12,
+    "total_cells": 120
+  },
+  {
+    "name": "wide_table",
+    "html_file": "wide_table.html",
+    "ground_truth_file": "wide_table_ground_truth.json",
+    "complexity_tier": 2,
+    "procedures": 10,
+    "visits": 12,
+    "footnotes": 5,
+    "total_cells": 120
+  }
+]

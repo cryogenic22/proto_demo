@@ -245,7 +245,11 @@ async def get_job_review(job_id: str, format: str = "json"):
     elif format == "html":
         from fastapi.responses import HTMLResponse
         from src.pipeline.html_report import generate_html_report
-        html = generate_html_report(result)
+        from src.pipeline.run_comparator import compare_runs
+        # Compare against previous run if available
+        comparison = compare_runs(job["result"])
+        comparison_html = comparison.to_html_section() if comparison else ""
+        html = generate_html_report(result, comparison_html=comparison_html)
         return HTMLResponse(html)
     else:
         return export_review_json(result)

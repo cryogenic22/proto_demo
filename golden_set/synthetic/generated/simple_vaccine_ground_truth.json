@@ -1,0 +1,551 @@
+{
+  "table_id": "simple_vaccine",
+  "procedures": [
+    "Informed Consent",
+    "Medical History",
+    "Physical Examination",
+    "Vital Signs",
+    "12-lead ECG",
+    "Complete Blood Count",
+    "Comprehensive Metabolic Panel",
+    "Pregnancy Test",
+    "Vaccination",
+    "Immunogenicity Blood Draw"
+  ],
+  "visits": [
+    "Screening",
+    "Day 1",
+    "Day 8",
+    "Day 15",
+    "Day 29",
+    "Day 57",
+    "Day 85"
+  ],
+  "cells": [
+    {
+      "row": 0,
+      "col": 0,
+      "value": "Informed Consent",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 3,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 4,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 0,
+      "value": "Medical History",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 6,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "a"
+      ]
+    },
+    {
+      "row": 2,
+      "col": 0,
+      "value": "Physical Examination",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 2,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "c"
+      ]
+    },
+    {
+      "row": 2,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 4,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 6,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "a"
+      ]
+    },
+    {
+      "row": 3,
+      "col": 0,
+      "value": "Vital Signs",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 1,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "a"
+      ]
+    },
+    {
+      "row": 3,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 3,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 0,
+      "value": "12-lead ECG",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 3,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 6,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 0,
+      "value": "Complete Blood Count",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 4,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 5,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "c"
+      ]
+    },
+    {
+      "row": 5,
+      "col": 6,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 0,
+      "value": "Comprehensive Metabolic Panel",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 4,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 0,
+      "value": "Pregnancy Test",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 6,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 0,
+      "value": "Vaccination",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 3,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "a"
+      ]
+    },
+    {
+      "row": 8,
+      "col": 4,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "b"
+      ]
+    },
+    {
+      "row": 8,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 6,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 0,
+      "value": "Immunogenicity Blood Draw",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 3,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "c"
+      ]
+    },
+    {
+      "row": 9,
+      "col": 4,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "a",
+      "text": "Only if clinically indicated",
+      "type": "CONDITIONAL"
+    },
+    {
+      "marker": "b",
+      "text": "If female of childbearing potential",
+      "type": "CONDITIONAL"
+    },
+    {
+      "marker": "c",
+      "text": "Blood samples collected in EDTA tubes",
+      "type": "CLARIFICATION"
+    }
+  ],
+  "num_rows": 10,
+  "num_cols": 7
+}

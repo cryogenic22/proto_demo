@@ -1,0 +1,956 @@
+{
+  "table_id": "many_footnotes",
+  "procedures": [
+    "Informed Consent",
+    "Medical History",
+    "Physical Examination",
+    "Vital Signs",
+    "ECOG Performance Status",
+    "12-lead ECG",
+    "CT Scan (chest/abdomen/pelvis)",
+    "Bone Scan",
+    "Brain MRI",
+    "Complete Blood Count",
+    "Comprehensive Metabolic Panel",
+    "Coagulation Panel",
+    "Urinalysis",
+    "Pregnancy Test",
+    "Tumor Biopsy"
+  ],
+  "visits": [
+    "Screening",
+    "C1D1",
+    "C1D8",
+    "C1D15",
+    "C2D1",
+    "C3D1",
+    "C4D1",
+    "C5D1"
+  ],
+  "cells": [
+    {
+      "row": 0,
+      "col": 0,
+      "value": "Informed Consent",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 2,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "b"
+      ]
+    },
+    {
+      "row": 0,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 4,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "f"
+      ]
+    },
+    {
+      "row": 0,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 0,
+      "col": 7,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 0,
+      "value": "Medical History",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 1,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 3,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 1,
+      "col": 7,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 0,
+      "value": "Physical Examination",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 2,
+      "col": 7,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 0,
+      "value": "Vital Signs",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 3,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 3,
+      "col": 7,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 0,
+      "value": "ECOG Performance Status",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 4,
+      "col": 7,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 0,
+      "value": "12-lead ECG",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 5,
+      "col": 7,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 0,
+      "value": "CT Scan (chest/abdomen/pelvis)",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 1,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 3,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 4,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 6,
+      "col": 7,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 0,
+      "value": "Bone Scan",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 1,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 4,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "b"
+      ]
+    },
+    {
+      "row": 7,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 6,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 7,
+      "col": 7,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 0,
+      "value": "Brain MRI",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 1,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 8,
+      "col": 7,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "c"
+      ]
+    },
+    {
+      "row": 9,
+      "col": 0,
+      "value": "Complete Blood Count",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 1,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 4,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "a"
+      ]
+    },
+    {
+      "row": 9,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 9,
+      "col": 7,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 10,
+      "col": 0,
+      "value": "Comprehensive Metabolic Panel",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 10,
+      "col": 1,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 10,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 10,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 10,
+      "col": 4,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "j"
+      ]
+    },
+    {
+      "row": 10,
+      "col": 5,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 10,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 10,
+      "col": 7,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "h"
+      ]
+    },
+    {
+      "row": 11,
+      "col": 0,
+      "value": "Coagulation Panel",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 11,
+      "col": 1,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 11,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 11,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 11,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 11,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 11,
+      "col": 6,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "b"
+      ]
+    },
+    {
+      "row": 11,
+      "col": 7,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 12,
+      "col": 0,
+      "value": "Urinalysis",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 12,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 12,
+      "col": 2,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 12,
+      "col": 3,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 12,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 12,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 12,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 12,
+      "col": 7,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 13,
+      "col": 0,
+      "value": "Pregnancy Test",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 13,
+      "col": 1,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    },
+    {
+      "row": 13,
+      "col": 2,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "e"
+      ]
+    },
+    {
+      "row": 13,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 13,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 13,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 13,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 13,
+      "col": 7,
+      "value": "X",
+      "data_type": "CONDITIONAL",
+      "footnote_markers": [
+        "g"
+      ]
+    },
+    {
+      "row": 14,
+      "col": 0,
+      "value": "Tumor Biopsy",
+      "data_type": "TEXT",
+      "footnote_markers": []
+    },
+    {
+      "row": 14,
+      "col": 1,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 14,
+      "col": 2,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 14,
+      "col": 3,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 14,
+      "col": 4,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 14,
+      "col": 5,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 14,
+      "col": 6,
+      "value": "",
+      "data_type": "EMPTY",
+      "footnote_markers": []
+    },
+    {
+      "row": 14,
+      "col": 7,
+      "value": "X",
+      "data_type": "MARKER",
+      "footnote_markers": []
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "a",
+      "text": "Unless already performed within 28 days",
+      "type": "EXCEPTION"
+    },
+    {
+      "marker": "b",
+      "text": "Pre-dose and 2 hours post-dose",
+      "type": "CONDITIONAL"
+    },
+    {
+      "marker": "c",
+      "text": "If female of childbearing potential",
+      "type": "CONDITIONAL"
+    },
+    {
+      "marker": "d",
+      "text": "Except at the early termination visit",
+      "type": "EXCEPTION"
+    },
+    {
+      "marker": "e",
+      "text": "Administered as IV infusion over 30 minutes",
+      "type": "CLARIFICATION"
+    },
+    {
+      "marker": "f",
+      "text": "Per investigator judgment",
+      "type": "CONDITIONAL"
+    },
+    {
+      "marker": "g",
+      "text": "At visits where study drug is administered",
+      "type": "CONDITIONAL"
+    },
+    {
+      "marker": "h",
+      "text": "Blood samples collected in EDTA tubes",
+      "type": "CLARIFICATION"
+    },
+    {
+      "marker": "i",
+      "text": "Only if clinically indicated",
+      "type": "CONDITIONAL"
+    },
+    {
+      "marker": "j",
+      "text": "Within 72 hours of study drug administration",
+      "type": "CONDITIONAL"
+    },
+    {
+      "marker": "k",
+      "text": "Every 4 weeks after Week 12",
+      "type": "CONDITIONAL"
+    },
+    {
+      "marker": "l",
+      "text": "At screening visit only",
+      "type": "CONDITIONAL"
+    }
+  ],
+  "num_rows": 15,
+  "num_cols": 8
+}
