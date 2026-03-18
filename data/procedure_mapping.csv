@@ -184,3 +184,72 @@ Dose Modification Assessment,,,Treatment,LOW,"dose modification,dose reduction,d
 DLT Assessment,,,Safety,LOW,"dlt,dose limiting toxicity,dlt assessment,dlt evaluation"
 Response Assessment,,,Efficacy,MEDIUM,"response assessment,tumor response,disease assessment,restaging"
 Disease Progression Assessment,,,Efficacy,LOW,"disease progression,pd assessment,progressive disease assessment"
+# ===========================================================================
+# ONCOLOGY — EXPANDED (from domain research)
+# ===========================================================================
+PD-L1 IHC,88360,CPT,Oncology,MEDIUM,"pd-l1,pd-l1 ihc,immunohistochemistry,companion diagnostic,22c3,sp263,pd-l1 expression"
+NGS Panel (5-50 genes),81445,CPT,Genetics,VERY_HIGH,"ngs panel,next-generation sequencing panel,molecular panel,tumor profiling,f1cdx,foundationone"
+NGS Panel (51+ genes),81455,CPT,Genetics,VERY_HIGH,"comprehensive genomic profiling,cgp,expanded ngs,foundation medicine,whole exome"
+Serum Pregnancy Test (Quantitative),84703,CPT,Laboratory,LOW,"serum hcg,beta-hcg,quantitative pregnancy,serum pregnancy test,quantitative hcg"
+Venipuncture,36415,CPT,Laboratory,LOW,"venipuncture,blood draw procedure,phlebotomy procedure"
+# ===========================================================================
+# HEMATOLOGY — EXPANDED
+# ===========================================================================
+Bone Marrow Aspirate,38220,CPT,Procedure,MEDIUM,"bone marrow aspirate,bm aspirate,marrow aspirate"
+"Bone Marrow Biopsy and Aspirate",38222,CPT,Procedure,VERY_HIGH,"bone marrow biopsy and aspirate,bm bx and asp,trephine biopsy,bone marrow biopsy"
+MRD by Flow Cytometry,88184,CPT,Laboratory,HIGH,"mrd flow,mrd by flow,minimal residual disease flow"
+MRD by NGS (clonoSEQ),81479,CPT,Laboratory,VERY_HIGH,"mrd ngs,clonoseq,molecular mrd,ngs mrd"
+SPEP,86316,CPT,Laboratory,MEDIUM,"spep,serum protein electrophoresis,m-spike,serum electrophoresis"
+Immunofixation Electrophoresis,86334,CPT,Laboratory,MEDIUM,"ife,immunofixation,serum ife,immunofixation electrophoresis"
+Free Light Chains,83883,CPT,Laboratory,MEDIUM,"flc,free light chains,sflc,kappa/lambda ratio,free lights"
+Serum Ferritin,82728,CPT,Laboratory,LOW,"ferritin,serum ferritin,iron stores"
+IL-6,83519,CPT,Laboratory,MEDIUM,"il-6,interleukin-6,interleukin 6"
+Cytokine Panel,83519,CPT,Laboratory,HIGH,"cytokine panel,cytokine storm panel,inflammatory panel,luminex,multiplex cytokine"
+# ===========================================================================
+# CARDIOLOGY — EXPANDED
+# ===========================================================================
+Right Heart Catheterization,93451,CPT,Cardiac,VERY_HIGH,"rhc,right heart cath,right heart catheterization,swan-ganz,hemodynamics,invasive hemodynamics"
+24-Hour Ambulatory BP Monitoring,93784,CPT,Cardiac,MEDIUM,"abpm,ambulatory bp,24h bp monitoring,ambulatory blood pressure"
+Cardiac MRI with Contrast,75561,CPT,Cardiac,VERY_HIGH,"cmr with gad,cardiac mri w/contrast,lge mri,cardiac mri with gadolinium"
+Cardiac MRI with Stress,75563,CPT,Cardiac,VERY_HIGH,"stress cmr,dobutamine cmr,stress cardiac mri"
+hs-CRP,86141,CPT,Laboratory,LOW,"hs-crp,high-sensitivity crp,cardiac crp"
+# ===========================================================================
+# NEUROLOGY — EXPANDED
+# ===========================================================================
+Brain MRI without Contrast,70551,CPT,Imaging,HIGH,"brain mri w/o,non-contrast mri head,brain mri without contrast"
+Brain MRI with/without Contrast,70553,CPT,Imaging,HIGH,"brain mri,cranial mri,head mri,neuroimaging,brain mri with and without contrast"
+Routine EEG,95816,CPT,Neurology,MEDIUM,"eeg,routine eeg,standard eeg,brain wave test,electroencephalogram"
+Video EEG Monitoring,95711,CPT,Neurology,HIGH,"veeg,video eeg,eeg monitoring,emu monitoring"
+Neuropsychological Testing,96132,CPT,Neurology,HIGH,"np testing,neuropsych,cognitive testing,neurocog battery,neuropsychological assessment"
+Amyloid PET,78608,CPT,Imaging,VERY_HIGH,"amyloid pet,florbetapir pet,amyloid imaging,amyloid pet scan"
+Volumetric Brain MRI,0865T,CPT,Imaging,HIGH,"volumetric mri,brain volumetrics,neuroquant"
+MoCA,96127,CPT,Neurology,LOW,"moca,montreal cognitive assessment,cognitive screen"
+Nerve Conduction Studies,95907,CPT,Neurology,MEDIUM,"ncs,nerve conduction,emg/ncs"
+EMG,95860,CPT,Neurology,MEDIUM,"emg,needle emg,electromyography"
+# ===========================================================================
+# DERMATOLOGY — EXPANDED
+# ===========================================================================
+SCORAD Assessment,,,Efficacy,LOW,"scorad,scoring atopic dermatitis,scorad score"
+DLQI,,,Efficacy,LOW,"dlqi,dermatology life quality index,dermatology qol"
+Clinical Photography,96904,CPT,Imaging,MEDIUM,"clinical photography,total body photography,clinical photos,standardized photography,lesion photos"
+TB Screening (QuantiFERON),86480,CPT,Laboratory,MEDIUM,"tb test,qft,quantiferon,igra,tb gold,tuberculosis screening"
+Skin Shave Biopsy,11102,CPT,Procedure,MEDIUM,"shave biopsy,shave bx,tangential biopsy,skin shave"
+# ===========================================================================
+# OPHTHALMOLOGY — EXPANDED
+# ===========================================================================
+Fluorescein Angiography,92235,CPT,Ophthalmology,MEDIUM,"fa,ffa,fluorescein angio,angiography,fluorescein angiography"
+ICG Angiography,92240,CPT,Ophthalmology,MEDIUM,"icg,icga,icg angio,indocyanine green angiography"
+Visual Field Testing,92083,CPT,Ophthalmology,MEDIUM,"vf,humphrey vf,perimetry,automated perimetry,hvf,visual field"
+OCT Angiography,92242,CPT,Ophthalmology,MEDIUM,"octa,oct-a,oct angiography"
+Electroretinography,92273,CPT,Ophthalmology,MEDIUM,"erg,fferg,full-field erg,electroretinogram"
+Corneal Pachymetry,76514,CPT,Ophthalmology,LOW,"pachymetry,corneal thickness,cct"
+Comprehensive Eye Exam (New),92004,CPT,Ophthalmology,MEDIUM,"comprehensive eye exam,complete eye exam new patient"
+Comprehensive Eye Exam (Established),92014,CPT,Ophthalmology,MEDIUM,"comprehensive eye exam,complete eye exam,follow-up eye exam"
+# ===========================================================================
+# VACCINES — EXPANDED
+# ===========================================================================
+T-Cell Immune Response (ELISPOT),86353,CPT,Laboratory,HIGH,"elispot,cellular immunity,t-cell assay,cmi,ics,intracellular cytokine staining"
+Vaccine Administration,90471,CPT,Treatment,LOW,"vaccine admin,injection administration,im injection"
+Post-Dose Observation,,,Safety,LOW,"post-dose observation,30-minute observation,acute reaction monitoring,post-injection observation"
+Injection Site Assessment,,,Safety,LOW,"injection site,local reactions,injection site exam,isr,local reaction assessment"
+Seroconversion Assessment,,,Efficacy,LOW,"seroconversion,seroresponse,seroconversion rate,seroconversion assessment"
