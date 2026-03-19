@@ -40,3 +40,14 @@ Thumbs.db
 
 # Misc
 *.log
+
+# MD files — keep only key documentation
+starter.md
+rough_notes.md
+spec/SPEC.md
+golden_set/protocol_registry.md
+web/README.md
+
+# Large extraction outputs (keep HTML reports and budget)
+output/*.json
+extraction_result_pfizer_bnt162.json
