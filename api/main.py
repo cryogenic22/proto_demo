@@ -95,6 +95,57 @@ async def get_procedure_mapping():
     return {"procedures": normalizer.get_mapping_table(), "total": len(normalizer.get_mapping_table())}
 
 
+@app.post("/api/sections")
+async def parse_sections(file: UploadFile = File(...)):
+    """Parse all sections from a protocol PDF or DOCX. Returns the full document outline."""
+    from src.pipeline.section_parser import SectionParser
+    file_bytes = await file.read()
+    parser = SectionParser()
+    sections = parser.parse(file_bytes, filename=file.filename or "")
+    return {
+        "sections": [s.to_dict() for s in sections],
+        "total": len(sections),
+        "outline": parser.to_outline(sections),
+    }
+
+
+@app.post("/api/verbatim")
+async def extract_verbatim(file: UploadFile = File(...), instruction: str = ""):
+    """Extract verbatim content from a protocol PDF based on an instruction.
+
+    The LLM locates the content; PyMuPDF extracts the exact text.
+    Zero hallucination — the output text is never LLM-generated.
+
+    Example instructions:
+    - "Copy Section 5.1"
+    - "Extract the inclusion criteria"
+    - "Get the Schedule of Activities table"
+    - "Copy the primary endpoint definition from Section 3"
+    """
+    if not instruction:
+        raise HTTPException(status_code=400, detail="Provide an 'instruction' query parameter")
+
+    from src.pipeline.verbatim_extractor import VerbatimExtractor
+    file_bytes = await file.read()
+    config = PipelineConfig(
+        llm_provider=os.environ.get("LLM_PROVIDER", "anthropic"),
+        anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
+        openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
+    )
+    extractor = VerbatimExtractor(config)
+    result = await extractor.extract(file_bytes, instruction, filename=file.filename or "")
+    return {
+        "instruction": result.instruction,
+        "sections_found": result.sections_found,
+        "content_type": result.content_type,
+        "text": result.text,
+        "tables": result.tables,
+        "source_pages": result.source_pages,
+        "explanation": result.explanation,
+        "is_verbatim": result.is_verbatim,
+    }
+
+
 @app.post("/api/procedures/check")
 async def check_procedure_mapping(names: list[str]):
     """Check which procedure names can/cannot be mapped."""
