@@ -272,10 +272,14 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["message"] = "Initializing pipeline..."
 
         config = PipelineConfig(
+            llm_provider=os.environ.get("LLM_PROVIDER", "anthropic"),
+            llm_model=os.environ.get("LLM_MODEL", ""),
+            vision_model=os.environ.get("VISION_MODEL", ""),
             anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
-            render_dpi=150,  # Lower DPI for memory safety on large docs
+            openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
+            render_dpi=150,
             max_concurrent_llm_calls=5,
-            soa_only=True,  # Focus on Schedule of Activities tables for site budgeting
+            soa_only=True,
         )
         orchestrator = PipelineOrchestrator(config)
 
