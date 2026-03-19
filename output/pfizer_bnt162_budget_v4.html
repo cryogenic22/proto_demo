@@ -6,7 +6,7 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1e293b; background: #f8fafc; }
-.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+.container { max-width: 1600px; margin: 0 auto; padding: 20px; }
 h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
 .subtitle { font-size: 12px; color: #64748b; margin-bottom: 16px; }
 .summary { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -17,12 +17,17 @@ h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
 .budget-table th { background: #0f172a; color: white; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; position: sticky; top: 0; z-index: 10; }
 .budget-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
 .budget-table tr:hover { background: #f8fafc; }
-.proc-name { font-weight: 500; max-width: 250px; }
-.mono { font-family: 'Cascadia Code', monospace; font-size: 10px; color: #475569; }
+.proc-name { min-width: 260px; }
+.proc-primary { font-weight: 600; font-size: 12px; color: #0f172a; line-height: 1.4; }
+.proc-canonical { font-size: 10px; color: #64748b; margin-top: 2px; }
+.mono { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 11px; color: #475569; }
 .center { text-align: center; }
-.visits { font-size: 10px; color: #64748b; max-width: 200px; }
-.notes { font-size: 10px; color: #94a3b8; max-width: 180px; font-style: italic; }
-.guidance { font-size: 10px; max-width: 220px; }
+.freq { font-size: 14px; font-weight: 700; color: #0f172a; }
+.visits-cell { font-size: 10px; color: #64748b; max-width: 280px; line-height: 1.5; }
+.guidance { font-size: 10px; max-width: 260px; line-height: 1.6; }
+.cost-cell { white-space: nowrap; }
+.currency { color: #94a3b8; font-size: 11px; margin-right: 2px; }
+.needs-input { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
 .conf-green { }
 .conf-amber { background: #fffbeb !important; }
 .conf-red { background: #fef2f2 !important; }
@@ -57,7 +62,7 @@ h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
 <div class="container">
 
 <h1>Site Budget Worksheet</h1>
-<p class="subtitle">Prot_0001 1.pdf | Generated 2026-03-19 01:12 UTC</p>
+<p class="subtitle">Prot_0001 1.pdf | Generated 2026-03-19 02:08 UTC</p>
 
 <div class="summary">
   <div class="summary-card">
@@ -81,397 +86,516 @@ h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
 <table class="budget-table">
 <thead>
 <tr>
-  <th>Procedure</th>
-  <th>Canonical Name</th>
-  <th>CPT Code</th>
+  <th style="min-width:260px">Procedure / Canonical Name</th>
+  <th>CPT</th>
   <th>Category</th>
-  <th>Cost Tier</th>
+  <th>Tier</th>
   <th>Freq</th>
-  <th>Visits Required</th>
-  <th>Confidence</th>
-  <th>Unit Cost ($)</th>
+  <th style="min-width:200px">Visits Required</th>
+  <th>Conf.</th>
+  <th style="min-width:100px">Unit Cost ($)</th>
   <th>Line Total</th>
-  <th>Review Guidance</th>
+  <th style="min-width:220px">Action Required</th>
 </tr>
 </thead>
 <tbody>
 
         <tr class="conf-red" title="Source: Protocol pages 48, 49, 50&#10;Low confidence at: 1 / Vaccination 1 / Day 1c (70%)&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Assign participant number <span class="page-ref">p.48,49,50</span></td>
-          <td>Demographics</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Assign participant number</div>
+            <div class="proc-canonical">Demographics <span class="page-ref">(p.48, 49, 50)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">1</td>
-          <td class="visits">1 / Vaccination 1 / Day 1c, 401 / Vaccination 1 / Day 1c</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">401 / Vaccination 1 / Day 1c, 1 / Vaccination 1 / Day 1c</td>
           <td class="center">
-            <span class="conf-dot conf-dot-red" title="Extraction confidence: 70%"></span>
+            <span class="conf-dot conf-dot-red"></span>
             70%
           </td>
-          <td><input type="number" class="cost-input" id="cost_0"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_0"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_0">
             $75</td>
           <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;No CPT code mapped — needs manual assignment&#10;Conditional: Two swabs will be taken at Visits 1 and 4. One will be tested (if possible at the site, otherwise at the central laboratory) within 24 hours and vaccination will only proceed if it is NAAT-negative for SARS-CoV-2 genomes. The second will be sent to the central laboratory for potential later testing.">
-          <td class="proc-name">Collect AEs and SAEs as appropriate <span class="page-ref">p.41,42,43</span></td>
-          <td>Adverse Event Assessment</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Collect AEs and SAEs as appropriate</div>
+            <div class="proc-canonical">Adverse Event Assessment <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">15</td>
-          <td class="visits">405 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 402, Unplanned | Potential COVID-19 Illness Visitᵇ | Optimally Within 3 Days After Potential COVID-19 Illness Onsetᶜ, 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, Visit 7 / 1-Month Follow-up Visit (28 to 35 Days After Visit 4), 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, Visit 8c / 1-Month Follow-up Visit After Vax 3 (28 to 35 Days After Visit 8a), Screening (0 to 28 Days Before Visit 1), Visit 2 / Next-Day Follow-up Visit (Vax 1) (1 to 3 Days After Visit 1)... (+36)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">15</td>
+          <td class="visits-cell">104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, Visit 1 / Vax 1 (Day 1), 604 / Dose 5a / At Least 175 Days After Visit 303, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 405 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 402, 307 / 18-Month Follow-up Visitc / 532 to 560 Days After Visit 301, Unplanned / Potential COVID-19 Illness Visitc / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 301 / Vax 3a / 150 to 210 Days After Visit 2, 503 | 6-Month Telephone Contactᵃ | 175 to 189 Days After Visit 501, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, Visit 9 / 12-Month Follow-up Visit (350 to 378 Days After Visit 4), Visit 7 / 1-Month Follow-up Visit (28 to 35 Days After Visit 4), 304 / 1-Week Follow-up Visit (After Vax 4)b / 6 to 8 Days After Visit 303, Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset, Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4), Visit 8c / 1-Month Follow-up Visit After Vax 3 (28 to 35 Days After Visit 8a), Screening (0 to 28 Days Before Visit 1), 401 / Vaccination 1 / Day 1c, Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4), 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 502 | 1-Month Telephone Contact | 28 to 35 Days After Visit 501, Unplanned / Potential COVID-19 Illness Visit / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 306 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 301, 201, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 403 / 1-Week Follow-up Visit / 6 to 8 Days After Visit 402, 305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303, Visit 2 / Next-Day Follow-up Visit (Vax 1) (1 to 3 Days After Visit 1), Visit 8 / 6-Month Follow-up Visit (175 to 189 Days After Visit 4), 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, Visit 4 / Vax 2 (19 to 23 Days After Visit 1), Unplanned / Potential COVID-19 Illness Visit (Optimally Within 3 Days After Potential COVID-19 Illness Onset), 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, Visit 8b / 1-Week Follow-up Visit After Vax 3 (6 to 8 Days After Visit 8a), Unplanned | Potential COVID-19 Illness Visitᵇ | Optimally Within 3 Days After Potential COVID-19 Illness Onsetᶜ, 602 / 1-Month Telephone Contact / 28 to 35 Days After Visit 601, Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1), 302 / 1-Week Follow-up Visit (After Vax 3) / 6 to 8 Days After Visit 301, 404 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 402, Unplanned / Potential COVID-19 Illness Visitb / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 406 / 18-Month Follow-up Visita / 532 to 560 Days After Visit 402</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_1"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_1"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_1">
             $1,125</td>
           <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Two swabs will be taken at Visits 1 and 4. One wil</span></td>
         </tr>
         <tr class="conf-red" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;Low confidence at: Visit 2 / Next-Day Follow-up Visit (Vax 1) (1 to 3 Days After Visit 1) (50%), Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1) (50%), Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4) (50%), Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4) (50%), Visit 7 / 1-Month Follow-up Visit (28 to 35 Days After Visit 4) (50%)&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Collect nonstudy vaccine information <span class="page-ref">p.41,42,43</span></td>
-          <td>Concomitant Medications Review</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Collect nonstudy vaccine information</div>
+            <div class="proc-canonical">Concomitant Medications Review <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">12</td>
-          <td class="visits">Unplanned | Potential COVID-19 Illness Visitᵇ | Optimally Within 3 Days After Potential COVID-19 Illness Onsetᶜ, 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, Visit 7 / 1-Month Follow-up Visit (28 to 35 Days After Visit 4), 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, Visit 8c / 1-Month Follow-up Visit After Vax 3 (28 to 35 Days After Visit 8a), Screening (0 to 28 Days Before Visit 1), Visit 2 / Next-Day Follow-up Visit (Vax 1) (1 to 3 Days After Visit 1)... (+38)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">12</td>
+          <td class="visits-cell">104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, 1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), 604 / Dose 5a / At Least 175 Days After Visit 303, 5 / 12-Month Follow-up Visit / 350 to 378 Days After Visit 2, 307 / 18-Month Follow-up Visitc / 532 to 560 Days After Visit 301, 2 / Vaccination 2 / 19 to 23 Days After Visit 1, Unplanned / Potential COVID-19 Illness Visitc / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, 301 / Vax 3a / 150 to 210 Days After Visit 2, 503 | 6-Month Telephone Contactᵃ | 175 to 189 Days After Visit 501, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 105 / 18-Month Telephone Contact / 532 to 560 Days After Visit 102, 6 / 24-Month Follow-up Visita / 714 to 742 Days After Visit 2 [ONLY FOR THOSE PARTICIPANTS ORIGINALLY ASSIGNED TO BNT162b2 OR PLACEBO RECIPIENTS WHO DECLINE BNT162b2], 606 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 604, 304 / 1-Week Follow-up Visit (After Vax 4)b / 6 to 8 Days After Visit 303, Visit 7 / 1-Month Follow-up Visit (28 to 35 Days After Visit 4), Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset, Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4), Visit 8c / 1-Month Follow-up Visit After Vax 3 (28 to 35 Days After Visit 8a), Screening (0 to 28 Days Before Visit 1), Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4), 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 502 | 1-Month Telephone Contact | 28 to 35 Days After Visit 501, Unplanned / Potential COVID-19 Illness Visit / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 4 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 2, 306 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 301, 201, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303, 504 | 12-Month Follow-up Visitᵃ | 350 to 378 Days After Visit 501, Visit 2 / Next-Day Follow-up Visit (Vax 1) (1 to 3 Days After Visit 1), Visit 8 / 6-Month Follow-up Visit (175 to 189 Days After Visit 4), 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 602 / 1-Month Telephone Contact / 28 to 35 Days After Visit 601, Visit 8b / 1-Week Follow-up Visit After Vax 3 (6 to 8 Days After Visit 8a), Unplanned | Potential COVID-19 Illness Visitᵇ | Optimally Within 3 Days After Potential COVID-19 Illness Onsetᶜ, 603 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 601, Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1), 302 / 1-Week Follow-up Visit (After Vax 3) / 6 to 8 Days After Visit 301, Unplanned / Potential COVID-19 Illness Visitb / Optimally Within 3 Days After Potential COVID-19 Illness Onset</td>
           <td class="center">
-            <span class="conf-dot conf-dot-red" title="Extraction confidence: 74%"></span>
+            <span class="conf-dot conf-dot-red"></span>
             74%
           </td>
-          <td><input type="number" class="cost-input" id="cost_2"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_2"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_2">
             $900</td>
           <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-red" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;Low confidence at: Screening (0 to 28 Days Before Visit 1) (50%), Visit 1 / Vax 1 (Day 1) (50%)&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Confirm eligibility <span class="page-ref">p.41,42,43</span></td>
-          <td>Eligibility Assessment</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Confirm eligibility</div>
+            <div class="proc-canonical">Eligibility Assessment <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">4</td>
-          <td class="visits">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 1 / Vaccination 1 / Day 1c, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, Visit 1 / Vax 1 (Day 1), 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, 4 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 2, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301... (+5)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 102 / Vaccination 4 / 19 to 23 Days After Visit 101, Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), 604 / Dose 5a / At Least 175 Days After Visit 303, 4 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 2, 2 / Vaccination 2 / 19 to 23 Days After Visit 1, 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, Screening (0 to 28 Days Before Visit 1), 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ</td>
           <td class="center">
-            <span class="conf-dot conf-dot-red" title="Extraction confidence: 58%"></span>
+            <span class="conf-dot conf-dot-red"></span>
             58%
           </td>
-          <td><input type="number" class="cost-input" id="cost_3"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_3"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_3">
             $300</td>
           <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-amber" title="Source: Protocol pages 51, 52&#10;Low confidence at: 105 / 18-Month Telephone Contact / 532 to 560 Days After Visit 102 (50%)&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Contact the participant by telephone <span class="page-ref">p.51,52</span></td>
-          <td>Telephone Contact</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Contact the participant by telephone</div>
+            <div class="proc-canonical">Telephone Contact <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">4</td>
-          <td class="visits">105 / 18-Month Telephone Contact / 532 to 560 Days After Visit 102, 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 502 | 1-Month Telephone Contact | 28 to 35 Days After Visit 501, 503 | 6-Month Telephone Contactᵃ | 175 to 189 Days After Visit 501, 602 / 1-Month Telephone Contact / 28 to 35 Days After Visit 601, 606 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 604... (+1)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">105 / 18-Month Telephone Contact / 532 to 560 Days After Visit 102, 104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 603 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 601, 502 | 1-Month Telephone Contact | 28 to 35 Days After Visit 501, 606 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 604, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 503 | 6-Month Telephone Contactᵃ | 175 to 189 Days After Visit 501, 602 / 1-Month Telephone Contact / 28 to 35 Days After Visit 601</td>
           <td class="center">
-            <span class="conf-dot conf-dot-amber" title="Extraction confidence: 80%"></span>
+            <span class="conf-dot conf-dot-amber"></span>
             80%
           </td>
-          <td><input type="number" class="cost-input" id="cost_4"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_4"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_4">
             $300</td>
           <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-red" title="Source: Protocol pages 48, 49, 50&#10;Low confidence at: 1 / Vaccination 1 / Day 1c (70%)&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Measure height and weight <span class="page-ref">p.48,49,50</span></td>
-          <td>Body Weight</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Measure height and weight</div>
+            <div class="proc-canonical">Body Weight <span class="page-ref">(p.48, 49, 50)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">1</td>
-          <td class="visits">1 / Vaccination 1 / Day 1c, 401 / Vaccination 1 / Day 1c</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">401 / Vaccination 1 / Day 1c, 1 / Vaccination 1 / Day 1c</td>
           <td class="center">
-            <span class="conf-dot conf-dot-red" title="Extraction confidence: 70%"></span>
+            <span class="conf-dot conf-dot-red"></span>
             70%
           </td>
-          <td><input type="number" class="cost-input" id="cost_5"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_5"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_5">
             $75</td>
           <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46">
-          <td class="proc-name">Measure vital signs (including body temperatu <span class="page-ref">p.41,42,43</span></td>
-          <td>Vital Signs</td>
-          <td class="mono">99000</td>
+          <td class="proc-name">
+            <div class="proc-primary">Measure vital signs (including body temperature)</div>
+            <div class="proc-canonical">Vital Signs <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="mono">99000</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">8</td>
-          <td class="visits">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1), Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4), 1 / Vaccination 1 / Day 1c, Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4), Visit 1 / Vax 1 (Day 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 401 / Vaccination 1 / Day 1c... (+4)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">8</td>
+          <td class="visits-cell">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 2 / Vaccination 2 / 19 to 23 Days After Visit 1, Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4), Screening (0 to 28 Days Before Visit 1), 401 / Vaccination 1 / Day 1c, Visit 2 / Next-Day Follow-up Visit (Vax 1) (1 to 3 Days After Visit 1), Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4)</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_6"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_6"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_6">
             $600</td>
           <td class="guidance"><span class="hint-ok">OK</span></td>
         </tr>
         <tr class="conf-red" title="Source: Protocol pages 48, 49, 50&#10;Low confidence at: 1 / Vaccination 1 / Day 1c (70%)&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Obtain demography and medical history data <span class="page-ref">p.48,49,50</span></td>
-          <td>Medical History</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Obtain demography and medical history data</div>
+            <div class="proc-canonical">Medical History <span class="page-ref">(p.48, 49, 50)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">1</td>
-          <td class="visits">1 / Vaccination 1 / Day 1c, 401 / Vaccination 1 / Day 1c</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">401 / Vaccination 1 / Day 1c, 1 / Vaccination 1 / Day 1c</td>
           <td class="center">
-            <span class="conf-dot conf-dot-red" title="Extraction confidence: 70%"></span>
+            <span class="conf-dot conf-dot-red"></span>
             70%
           </td>
-          <td><input type="number" class="cost-input" id="cost_7"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_7"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_7">
             $75</td>
           <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-red" title="Source: Protocol pages 48, 49, 50&#10;Low confidence at: 1 / Vaccination 1 / Day 1c (70%)&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Obtain informed consent <span class="page-ref">p.48,49,50</span></td>
-          <td>Informed Consent</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Obtain informed consent</div>
+            <div class="proc-canonical">Informed Consent <span class="page-ref">(p.48, 49, 50)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">2</td>
-          <td class="visits">1 / Vaccination 1 / Day 1c, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, 201, 401 / Vaccination 1 / Day 1c, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 604 / Dose 5a / At Least 175 Days After Visit 303, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 301 / Vax 3a / 150 to 210 Days After Visit 2</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 1 / Vaccination 1 / Day 1c, 604 / Dose 5a / At Least 175 Days After Visit 303, 201, 301 / Vax 3a / 150 to 210 Days After Visit 2, 401 / Vaccination 1 / Day 1c, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ</td>
           <td class="center">
-            <span class="conf-dot conf-dot-red" title="Extraction confidence: 70%"></span>
+            <span class="conf-dot conf-dot-red"></span>
             70%
           </td>
-          <td><input type="number" class="cost-input" id="cost_8"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_8"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_8">
             $150</td>
           <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Obtain randomization number and study interve <span class="page-ref">p.41,42,43</span></td>
-          <td>Randomization</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Obtain randomization number and study intervention allocation</div>
+            <div class="proc-canonical">Randomization <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">2</td>
-          <td class="visits">402 / Vaccination 2 / 19 to 23 Days After Visit 401, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 1 / Vaccination 1 / Day 1c, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, Visit 1 / Vax 1 (Day 1), 401 / Vaccination 1 / Day 1c, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 301 / Vax 3a / 150 to 210 Days After Visit 2</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">102 / Vaccination 4 / 19 to 23 Days After Visit 101, 1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 301 / Vax 3a / 150 to 210 Days After Visit 2, 401 / Vaccination 1 / Day 1c, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_9"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_9"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_9">
             $150</td>
           <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46">
-          <td class="proc-name">Perform physical examination <span class="page-ref">p.41,42,43</span></td>
-          <td>Physical Examination</td>
-          <td class="mono">99213</td>
+          <td class="proc-name">
+            <div class="proc-primary">Perform physical examination</div>
+            <div class="proc-canonical">Physical Examination <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="mono">99213</span></td>
           <td>General</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">7</td>
-          <td class="visits">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1), Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4), 1 / Vaccination 1 / Day 1c, Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4), Visit 1 / Vax 1 (Day 1), 401 / Vaccination 1 / Day 1c, Screening (0 to 28 Days Before Visit 1)... (+1)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">7</td>
+          <td class="visits-cell">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1), 401 / Vaccination 1 / Day 1c, Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4), Screening (0 to 28 Days Before Visit 1), Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4), Visit 2 / Next-Day Follow-up Visit (Vax 1) (1 to 3 Days After Visit 1)</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_10"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_10"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_10">
             $525</td>
           <td class="guidance"><span class="hint-ok">OK</span></td>
         </tr>
         <tr class="conf-red" title="Source: Protocol pages 48, 49, 50&#10;Low confidence at: 1 / Vaccination 1 / Day 1c (70%), 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2 (70%), 4 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 2 (70%), 5 / 12-Month Follow-up Visit / 350 to 378 Days After Visit 2 (70%), 6 / 24-Month Follow-up Visita / 714 to 742 Days After Visit 2 [ONLY FOR THOSE PARTICIPANTS ORIGINALLY ASSIGNED TO BNT162b2 OR PLACEBO RECIPIENTS WHO DECLINE BNT162b2] (70%)">
-          <td class="proc-name">For participants who are HIV-positive, record <span class="page-ref">p.48,49,50</span></td>
-          <td>CD4 Count</td>
-          <td class="mono">86359</td>
+          <td class="proc-name">
+            <div class="proc-primary">For participants who are HIV-positive, record latest CD4 count and HIV viral load</div>
+            <div class="proc-canonical">CD4 Count <span class="page-ref">(p.48, 49, 50)</span></div>
+          </td>
+          <td class="center"><span class="mono">86359</span></td>
           <td>Laboratory</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">6</td>
-          <td class="visits">103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 606 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 604, 104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, 5 / 12-Month Follow-up Visit / 350 to 378 Days After Visit 2, 604 / Dose 5a / At Least 175 Days After Visit 303, 503 | 6-Month Telephone Contactᵃ | 175 to 189 Days After Visit 501... (+11)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, 1 / Vaccination 1 / Day 1c, 604 / Dose 5a / At Least 175 Days After Visit 303, 5 / 12-Month Follow-up Visit / 350 to 378 Days After Visit 2, 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, 503 | 6-Month Telephone Contactᵃ | 175 to 189 Days After Visit 501, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 105 / 18-Month Telephone Contact / 532 to 560 Days After Visit 102, 6 / 24-Month Follow-up Visita / 714 to 742 Days After Visit 2 [ONLY FOR THOSE PARTICIPANTS ORIGINALLY ASSIGNED TO BNT162b2 OR PLACEBO RECIPIENTS WHO DECLINE BNT162b2], 606 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 604, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, 502 | 1-Month Telephone Contact | 28 to 35 Days After Visit 501, 4 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 2, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 504 | 12-Month Follow-up Visitᵃ | 350 to 378 Days After Visit 501, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 602 / 1-Month Telephone Contact / 28 to 35 Days After Visit 601, 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 603 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 601</td>
           <td class="center">
-            <span class="conf-dot conf-dot-red" title="Extraction confidence: 70%"></span>
+            <span class="conf-dot conf-dot-red"></span>
             70%
           </td>
-          <td><input type="number" class="cost-input" id="cost_11"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_11"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_11">
             $450</td>
           <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;Conditional: Two swabs will be taken at Visits 1 and 4. One will be tested (if possible at the site, otherwise at the central laboratory) within 24 hours and vaccination will only proceed if it is NAAT-negative for SARS-CoV-2 genomes. The second will be sent to the central laboratory for potential later testing.">
-          <td class="proc-name">Obtain nasal (midturbinate) swab(s)c <span class="page-ref">p.41,42,43</span></td>
-          <td>Nasal Swab</td>
-          <td class="mono">87635</td>
+          <td class="proc-name">
+            <div class="proc-primary">Obtain nasal (midturbinate) swab(s)c</div>
+            <div class="proc-canonical">Nasal Swab <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="mono">87635</span></td>
           <td>Laboratory</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">5</td>
-          <td class="visits">Unplanned | Potential COVID-19 Illness Visitᵇ | Optimally Within 3 Days After Potential COVID-19 Illness Onsetᶜ, Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 201, Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, Unplanned / Potential COVID-19 Illness Visit (Optimally Within 3 Days After Potential COVID-19 Illness Onset)... (+11)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">5</td>
+          <td class="visits-cell">1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 2 / Vaccination 2 / 19 to 23 Days After Visit 1, 301 / Vax 3a / 150 to 210 Days After Visit 2, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 401 / Vaccination 1 / Day 1c, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, Visit 8a / Vax 3 (175 to 315 Days After Visit 4), Unplanned / Potential COVID-19 Illness Visit / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 201, 202 Onward, Visit 4 / Vax 2 (19 to 23 Days After Visit 1), Unplanned / Potential COVID-19 Illness Visit (Optimally Within 3 Days After Potential COVID-19 Illness Onset), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, Unplanned | Potential COVID-19 Illness Visitᵇ | Optimally Within 3 Days After Potential COVID-19 Illness Onsetᶜ, Unplanned / Potential COVID-19 Illness Visitb / Optimally Within 3 Days After Potential COVID-19 Illness Onset</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_12"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_12"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_12">
             $375</td>
           <td class="guidance"><span class="hint-info">Conditional: Two swabs will be taken at Visits 1 and 4. One wil</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46">
-          <td class="proc-name">Perform urine pregnancy test (if appropriate) <span class="page-ref">p.41,42,43</span></td>
-          <td>Pregnancy Test</td>
-          <td class="mono">81025</td>
+          <td class="proc-name">
+            <div class="proc-primary">Perform urine pregnancy test (if appropriate)</div>
+            <div class="proc-canonical">Pregnancy Test <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="mono">81025</span></td>
           <td>Laboratory</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">4</td>
-          <td class="visits">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 1 / Vaccination 1 / Day 1c, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, Visit 1 / Vax 1 (Day 1), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 401 / Vaccination 1 / Day 1c... (+7)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 604 / Dose 5a / At Least 175 Days After Visit 303, 2 / Vaccination 2 / 19 to 23 Days After Visit 1, 301 / Vax 3a / 150 to 210 Days After Visit 2, Screening (0 to 28 Days Before Visit 1), 401 / Vaccination 1 / Day 1c, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_13"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_13"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_13">
             $300</td>
           <td class="guidance"><span class="hint-ok">OK</span></td>
         </tr>
         <tr class="conf-red" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;Low confidence at: Visit 1 / Vax 1 (Day 1) (70%), Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1) (70%), Visit 4 / Vax 2 (19 to 23 Days After Visit 1) (70%), Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4) (70%), Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4) (70%)">
-          <td class="proc-name">Review hematology and chemistry results <span class="page-ref">p.41,42,43</span></td>
-          <td>Complete Blood Count</td>
-          <td class="mono">85025</td>
+          <td class="proc-name">
+            <div class="proc-primary">Review hematology and chemistry results</div>
+            <div class="proc-canonical">Complete Blood Count <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="mono">85025</span></td>
           <td>Laboratory</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">5</td>
-          <td class="visits">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1), Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4), Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4), Visit 1 / Vax 1 (Day 1)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">5</td>
+          <td class="visits-cell">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), Visit 1 / Vax 1 (Day 1), Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1), Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4), Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4)</td>
           <td class="center">
-            <span class="conf-dot conf-dot-red" title="Extraction confidence: 70%"></span>
+            <span class="conf-dot conf-dot-red"></span>
             70%
           </td>
-          <td><input type="number" class="cost-input" id="cost_14"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_14"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_14">
             $375</td>
           <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Explain participant communication methods (in <span class="page-ref">p.41,42,43</span></td>
-          <td>e-Diary</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Explain participant communication methods (including for e-diary completion), assist the participant with downloading the app, or issue provisioned device, if required</div>
+            <div class="proc-canonical">e-Diary <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>PRO</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">4</td>
-          <td class="visits">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 6 / 24-Month Follow-up Visita / 714 to 742 Days After Visit 2 [ONLY FOR THOSE PARTICIPANTS ORIGINALLY ASSIGNED TO BNT162b2 OR PLACEBO RECIPIENTS WHO DECLINE BNT162b2], 1 / Vaccination 1 / Day 1c, 105 / 18-Month Telephone Contact / 532 to 560 Days After Visit 102, Visit 1 / Vax 1 (Day 1), 504 | 12-Month Follow-up Visitᵃ | 350 to 378 Days After Visit 501, Visit 10 / 24-Month Follow-up Visit (714 to 742 Days After Visit 4), Visit 8a / Vax 3 (175 to 315 Days After Visit 4)... (+8)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 105 / 18-Month Telephone Contact / 532 to 560 Days After Visit 102, Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 1 / Vaccination 1 / Day 1c, 6 / 24-Month Follow-up Visita / 714 to 742 Days After Visit 2 [ONLY FOR THOSE PARTICIPANTS ORIGINALLY ASSIGNED TO BNT162b2 OR PLACEBO RECIPIENTS WHO DECLINE BNT162b2], Visit 1 / Vax 1 (Day 1), 603 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 601, 606 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 604, Visit 10 / 24-Month Follow-up Visit (714 to 742 Days After Visit 4), 307 / 18-Month Follow-up Visitc / 532 to 560 Days After Visit 301, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 301 / Vax 3a / 150 to 210 Days After Visit 2, 406 / 18-Month Follow-up Visita / 532 to 560 Days After Visit 402, 504 | 12-Month Follow-up Visitᵃ | 350 to 378 Days After Visit 501, 401 / Vaccination 1 / Day 1c, 602 / 1-Month Telephone Contact / 28 to 35 Days After Visit 601</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_15"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_15"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_15">
             $300</td>
           <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;No CPT code mapped — needs manual assignment&#10;Conditional: The first 5 participants in in each group will be observed at the site for at least 4 hours after study intervention administration. Further vaccination will commence no sooner than 24 hours after the fifth participant received his or her vaccination.">
-          <td class="proc-name">Assess acute reactions for at least 30 minute <span class="page-ref">p.41,42,43</span></td>
-          <td>Post-Dose Observation</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Assess acute reactions for at least 30 minutes after study intervention administratione</div>
+            <div class="proc-canonical">Post-Dose Observation <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>Safety</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">3</td>
-          <td class="visits">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 1 / Vaccination 1 / Day 1c, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, Visit 1 / Vax 1 (Day 1), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 401 / Vaccination 1 / Day 1c, Visit 8a / Vax 3 (175 to 315 Days After Visit 4)... (+2)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 2 / Vaccination 2 / 19 to 23 Days After Visit 1, 301 / Vax 3a / 150 to 210 Days After Visit 2, 401 / Vaccination 1 / Day 1c, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_16"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_16"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_16">
             $225</td>
           <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: The first 5 participants in in each group will be </span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Review ongoing reactogenicity e-diary symptom <span class="page-ref">p.41,42,43</span></td>
-          <td>Reactogenicity Assessment</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Review ongoing reactogenicity e-diary symptoms and obtain stop dates</div>
+            <div class="proc-canonical">Reactogenicity Assessment <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>Safety</td>
-          <td class="center"><span class="tier-low">LOW</span></td>
-          <td class="center">3</td>
-          <td class="visits">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 1 / Vaccination 1 / Day 1c, 404 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 402, Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4), 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 401 / Vaccination 1 / Day 1c... (+3)</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 1 / Vaccination 1 / Day 1c, 404 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 402, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 2 / Vaccination 2 / 19 to 23 Days After Visit 1, 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, Visit 8c / 1-Month Follow-up Visit After Vax 3 (28 to 35 Days After Visit 8a), 305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303, 401 / Vaccination 1 / Day 1c, Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4)</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_17"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_17"
               value="75"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_17">
             $225</td>
           <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Administer study intervention <span class="page-ref">p.41,42,43</span></td>
-          <td>Study Drug Administration</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Administer study intervention</div>
+            <div class="proc-canonical">Study Drug Administration <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>Treatment</td>
-          <td class="center"><span class="tier-med">MEDIUM</span></td>
-          <td class="center">3</td>
-          <td class="visits">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 1 / Vaccination 1 / Day 1c, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, Visit 1 / Vax 1 (Day 1), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 401 / Vaccination 1 / Day 1c... (+4)</td>
+          <td class="center"><span class="tier-med">$$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 2 / Vaccination 2 / 19 to 23 Days After Visit 1, 301 / Vax 3a / 150 to 210 Days After Visit 2, 401 / Vaccination 1 / Day 1c, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 501 | Third Dose of BNT162b2 | Per Recommendationᶜ</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_18"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_18"
               value="350"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_18">
             $1,050</td>
           <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
         </tr>
         <tr class="conf-green" title="Source: Protocol pages 41, 42, 43, 44, 45, 46&#10;No CPT code mapped — needs manual assignment">
-          <td class="proc-name">Confirm use of contraceptives (if appropriate <span class="page-ref">p.41,42,43</span></td>
-          <td>Vaccination</td>
-          <td class="mono"><span class="action-needed">NEEDS CPT</span></td>
+          <td class="proc-name">
+            <div class="proc-primary">Confirm use of contraceptives (if appropriate)</div>
+            <div class="proc-canonical">Vaccination <span class="page-ref">(p.41, 42, 43)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
           <td>Treatment</td>
-          <td class="center"><span class="tier-med">MEDIUM</span></td>
-          <td class="center">11</td>
-          <td class="visits">Visit 7 / 1-Month Follow-up Visit (28 to 35 Days After Visit 4), 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, Visit 8c / 1-Month Follow-up Visit After Vax 3 (28 to 35 Days After Visit 8a), Screening (0 to 28 Days Before Visit 1), Visit 2 / Next-Day Follow-up Visit (Vax 1) (1 to 3 Days After Visit 1), Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 102 / Vaccination 4 / 19 to 23 Days After Visit 101, Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4)... (+20)</td>
+          <td class="center"><span class="tier-med">$$</span></td>
+          <td class="center freq">11</td>
+          <td class="visits-cell">1 / Vaccination 1 / Day 1c, Visit 1 / Vax 1 (Day 1), 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 604 / Dose 5a / At Least 175 Days After Visit 303, 2 / Vaccination 2 / 19 to 23 Days After Visit 1, 3 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 2, 301 / Vax 3a / 150 to 210 Days After Visit 2, 101 / Vaccination 3 / From Recommendation or At Least 175 Days After Vaccination 2, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 304 / 1-Week Follow-up Visit (After Vax 4)b / 6 to 8 Days After Visit 303, Visit 7 / 1-Month Follow-up Visit (28 to 35 Days After Visit 4), Visit 5 / 1-Week Follow-up Visit (Vax 2) (6 to 8 Days After Visit 4), Visit 8c / 1-Month Follow-up Visit After Vax 3 (28 to 35 Days After Visit 8a), Screening (0 to 28 Days Before Visit 1), 401 / Vaccination 1 / Day 1c, Visit 6 / 2-Week Follow-up Visit (Vax 2) (12 to 16 Days After Visit 4), 501 | Third Dose of BNT162b2 | Per Recommendationᶜ, Visit 8a / Vax 3 (175 to 315 Days After Visit 4), 403 / 1-Week Follow-up Visit / 6 to 8 Days After Visit 402, 305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303, Visit 2 / Next-Day Follow-up Visit (Vax 1) (1 to 3 Days After Visit 1), 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, Visit 4 / Vax 2 (19 to 23 Days After Visit 1), 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, Visit 8b / 1-Week Follow-up Visit After Vax 3 (6 to 8 Days After Visit 8a), Visit 3 / 1-Week Follow-up Visit (Vax 1) (6 to 8 Days After Visit 1), 302 / 1-Week Follow-up Visit (After Vax 3) / 6 to 8 Days After Visit 301, 404 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 402</td>
           <td class="center">
-            <span class="conf-dot conf-dot-green" title="Extraction confidence: 95%"></span>
+            <span class="conf-dot conf-dot-green"></span>
             95%
           </td>
-          <td><input type="number" class="cost-input" id="cost_19"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_19"
               value="350"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_19">
             $3,850</td>
           <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
@@ -488,10 +612,20 @@ h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
 </table>
 
 <div class="footer">
-  <p><strong>Instructions:</strong> Edit the "Unit Cost ($)" column with your site's actual costs. Line totals and the grand total update automatically.</p>
-  <p>Cost tier estimates: LOW=$75, MEDIUM=$350, HIGH=$1,200, VERY_HIGH=$3,500. These are placeholders — replace with actual negotiated rates.</p>
-  <p>Frequency is the number of visits where this procedure is marked as required in the SoA table. Conditional procedures (footnoted) may have lower actual frequency.</p>
-  <p>CPT codes are mapped from the pipeline's procedure library. Verify against your institution's fee schedule.</p>
+  <h3 style="font-size:13px;color:#0f172a;margin-bottom:8px;">How to Complete This Worksheet</h3>
+  <ol style="font-size:12px;color:#475569;line-height:1.8;margin-left:20px;">
+    <li><strong>Review the "Action Required" column</strong> — green rows are ready, amber/red rows need your attention.</li>
+    <li><strong>Enter your site's unit costs</strong> in the cost column. Current values are estimates (LOW=$75, MEDIUM=$350, HIGH=$1,200, VERY_HIGH=$3,500). Line totals and the grand total will recalculate automatically.</li>
+    <li><strong>Add CPT codes</strong> where marked "Enter CPT" — check your institution's fee schedule.</li>
+    <li><strong>Verify amber/red rows</strong> against the source protocol (page numbers shown in parentheses after each procedure name).</li>
+    <li><strong>Check conditional procedures</strong> — the "Action Required" column shows footnote conditions that may reduce the actual frequency.</li>
+  </ol>
+  <div style="margin-top:12px;padding:10px 16px;background:#eff6ff;border-radius:6px;font-size:11px;color:#1e40af;">
+    <strong>Confidence Legend:</strong>
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#059669;margin:0 4px;vertical-align:middle;"></span> Green (≥90%) = reliable, no action needed &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d97706;margin:0 4px;vertical-align:middle;"></span> Amber (75-90%) = spot-check recommended &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#dc2626;margin:0 4px;vertical-align:middle;"></span> Red (<75%) = verify against source PDF
+  </div>
 </div>
 
 </div>

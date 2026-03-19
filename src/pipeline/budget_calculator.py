@@ -187,41 +187,46 @@ def generate_budget_html(output: PipelineOutput, path: Path | None = None) -> st
 
     rows_html = ""
     for i, line in enumerate(lines):
-        visits_str = ", ".join(line.visits_required[:8])
-        if len(line.visits_required) > 8:
-            visits_str += f"... (+{len(line.visits_required) - 8})"
+        visits_str = ", ".join(line.visits_required)
 
         tier_class = {
             "LOW": "tier-low", "MEDIUM": "tier-med",
             "HIGH": "tier-high", "VERY_HIGH": "tier-vhigh",
         }.get(line.cost_tier, "tier-low")
+        tier_label = {"LOW": "$", "MEDIUM": "$$", "HIGH": "$$$", "VERY_HIGH": "$$$$"}.get(line.cost_tier, "?")
 
-        # Build review guidance
         guidance = _build_review_guidance(line)
         conf_class = f"conf-{line.confidence_color}"
 
-        # Build tooltip for hover
         tooltip_parts = [f"Source: Protocol pages {', '.join(str(p) for p in line.source_pages)}"]
         tooltip_parts.extend(line.issues)
         tooltip = "&#10;".join(_esc(t) for t in tooltip_parts)
-        page_ref = f"p.{','.join(str(p) for p in line.source_pages[:3])}" if line.source_pages else ""
+        page_ref = f"(p.{', '.join(str(p) for p in line.source_pages[:3])})" if line.source_pages else ""
+
+        cpt_cell = f'<span class="mono">{line.cpt_code}</span>' if line.cpt_code else '<span class="needs-input">Enter CPT</span>'
 
         rows_html += f"""
         <tr class="{conf_class}" title="{tooltip}">
-          <td class="proc-name">{_esc(line.procedure[:45])} <span class="page-ref">{page_ref}</span></td>
-          <td>{_esc(line.canonical_name[:35])}</td>
-          <td class="mono">{line.cpt_code or '<span class="action-needed">NEEDS CPT</span>'}</td>
+          <td class="proc-name">
+            <div class="proc-primary">{_esc(line.procedure)}</div>
+            <div class="proc-canonical">{_esc(line.canonical_name)} <span class="page-ref">{page_ref}</span></div>
+          </td>
+          <td class="center">{cpt_cell}</td>
           <td>{_esc(line.category)}</td>
-          <td class="center"><span class="{tier_class}">{line.cost_tier}</span></td>
-          <td class="center">{line.total_occurrences}</td>
-          <td class="visits">{_esc(visits_str)}</td>
+          <td class="center"><span class="{tier_class}">{tier_label}</span></td>
+          <td class="center freq">{line.total_occurrences}</td>
+          <td class="visits-cell">{_esc(visits_str)}</td>
           <td class="center">
-            <span class="conf-dot conf-dot-{line.confidence_color}" title="Extraction confidence: {line.avg_confidence:.0%}"></span>
+            <span class="conf-dot conf-dot-{line.confidence_color}"></span>
             {line.avg_confidence:.0%}
           </td>
-          <td><input type="number" class="cost-input" id="cost_{i}"
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_{i}"
               value="{line.estimated_unit_cost:.0f}"
-              onchange="recalculate()" min="0" step="10"></td>
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
           <td class="line-total" id="total_{i}">
             ${line.estimated_unit_cost * line.total_occurrences:,.0f}</td>
           <td class="guidance">{guidance}</td>
@@ -235,7 +240,7 @@ def generate_budget_html(output: PipelineOutput, path: Path | None = None) -> st
 <style>
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 body {{ font-family: 'Segoe UI', system-ui, sans-serif; color: #1e293b; background: #f8fafc; }}
-.container {{ max-width: 1400px; margin: 0 auto; padding: 20px; }}
+.container {{ max-width: 1600px; margin: 0 auto; padding: 20px; }}
 h1 {{ font-size: 20px; font-weight: 700; margin-bottom: 4px; }}
 .subtitle {{ font-size: 12px; color: #64748b; margin-bottom: 16px; }}
 .summary {{ display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }}
@@ -246,12 +251,17 @@ h1 {{ font-size: 20px; font-weight: 700; margin-bottom: 4px; }}
 .budget-table th {{ background: #0f172a; color: white; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; position: sticky; top: 0; z-index: 10; }}
 .budget-table td {{ padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }}
 .budget-table tr:hover {{ background: #f8fafc; }}
-.proc-name {{ font-weight: 500; max-width: 250px; }}
-.mono {{ font-family: 'Cascadia Code', monospace; font-size: 10px; color: #475569; }}
+.proc-name {{ min-width: 260px; }}
+.proc-primary {{ font-weight: 600; font-size: 12px; color: #0f172a; line-height: 1.4; }}
+.proc-canonical {{ font-size: 10px; color: #64748b; margin-top: 2px; }}
+.mono {{ font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 11px; color: #475569; }}
 .center {{ text-align: center; }}
-.visits {{ font-size: 10px; color: #64748b; max-width: 200px; }}
-.notes {{ font-size: 10px; color: #94a3b8; max-width: 180px; font-style: italic; }}
-.guidance {{ font-size: 10px; max-width: 220px; }}
+.freq {{ font-size: 14px; font-weight: 700; color: #0f172a; }}
+.visits-cell {{ font-size: 10px; color: #64748b; max-width: 280px; line-height: 1.5; }}
+.guidance {{ font-size: 10px; max-width: 260px; line-height: 1.6; }}
+.cost-cell {{ white-space: nowrap; }}
+.currency {{ color: #94a3b8; font-size: 11px; margin-right: 2px; }}
+.needs-input {{ background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }}
 .conf-green {{ }}
 .conf-amber {{ background: #fffbeb !important; }}
 .conf-red {{ background: #fef2f2 !important; }}
@@ -310,17 +320,16 @@ h1 {{ font-size: 20px; font-weight: 700; margin-bottom: 4px; }}
 <table class="budget-table">
 <thead>
 <tr>
-  <th>Procedure</th>
-  <th>Canonical Name</th>
-  <th>CPT Code</th>
+  <th style="min-width:260px">Procedure / Canonical Name</th>
+  <th>CPT</th>
   <th>Category</th>
-  <th>Cost Tier</th>
+  <th>Tier</th>
   <th>Freq</th>
-  <th>Visits Required</th>
-  <th>Confidence</th>
-  <th>Unit Cost ($)</th>
+  <th style="min-width:200px">Visits Required</th>
+  <th>Conf.</th>
+  <th style="min-width:100px">Unit Cost ($)</th>
   <th>Line Total</th>
-  <th>Review Guidance</th>
+  <th style="min-width:220px">Action Required</th>
 </tr>
 </thead>
 <tbody>
@@ -337,10 +346,20 @@ h1 {{ font-size: 20px; font-weight: 700; margin-bottom: 4px; }}
 </table>
 
 <div class="footer">
-  <p><strong>Instructions:</strong> Edit the "Unit Cost ($)" column with your site's actual costs. Line totals and the grand total update automatically.</p>
-  <p>Cost tier estimates: LOW=$75, MEDIUM=$350, HIGH=$1,200, VERY_HIGH=$3,500. These are placeholders — replace with actual negotiated rates.</p>
-  <p>Frequency is the number of visits where this procedure is marked as required in the SoA table. Conditional procedures (footnoted) may have lower actual frequency.</p>
-  <p>CPT codes are mapped from the pipeline's procedure library. Verify against your institution's fee schedule.</p>
+  <h3 style="font-size:13px;color:#0f172a;margin-bottom:8px;">How to Complete This Worksheet</h3>
+  <ol style="font-size:12px;color:#475569;line-height:1.8;margin-left:20px;">
+    <li><strong>Review the "Action Required" column</strong> — green rows are ready, amber/red rows need your attention.</li>
+    <li><strong>Enter your site's unit costs</strong> in the cost column. Current values are estimates (LOW=$75, MEDIUM=$350, HIGH=$1,200, VERY_HIGH=$3,500). Line totals and the grand total will recalculate automatically.</li>
+    <li><strong>Add CPT codes</strong> where marked "Enter CPT" — check your institution's fee schedule.</li>
+    <li><strong>Verify amber/red rows</strong> against the source protocol (page numbers shown in parentheses after each procedure name).</li>
+    <li><strong>Check conditional procedures</strong> — the "Action Required" column shows footnote conditions that may reduce the actual frequency.</li>
+  </ol>
+  <div style="margin-top:12px;padding:10px 16px;background:#eff6ff;border-radius:6px;font-size:11px;color:#1e40af;">
+    <strong>Confidence Legend:</strong>
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#059669;margin:0 4px;vertical-align:middle;"></span> Green (≥90%) = reliable, no action needed &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d97706;margin:0 4px;vertical-align:middle;"></span> Amber (75-90%) = spot-check recommended &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#dc2626;margin:0 4px;vertical-align:middle;"></span> Red (<75%) = verify against source PDF
+  </div>
 </div>
 
 </div>
