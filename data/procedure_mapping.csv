@@ -253,3 +253,8 @@ Vaccine Administration,90471,CPT,Treatment,LOW,"vaccine admin,injection administ
 Post-Dose Observation,,,Safety,LOW,"post-dose observation,30-minute observation,acute reaction monitoring,post-injection observation"
 Injection Site Assessment,,,Safety,LOW,"injection site,local reactions,injection site exam,isr,local reaction assessment"
 Seroconversion Assessment,,,Efficacy,LOW,"seroconversion,seroresponse,seroconversion rate,seroconversion assessment"
+# ===========================================================================
+# ADDITIONAL PROCEDURES (from protocol analysis)
+# ===========================================================================
+Nasal Swab,87635,CPT,Laboratory,LOW,"nasal swab,nasal sample,nasal midturbinate,midturbinate swab,nasopharyngeal swab,np swab,nasal specimen"
+Post-Dose Observation,,,Safety,LOW,"post-dose observation,30-minute observation,acute reaction monitoring,post-injection observation,assess acute reactions"

@@ -79,14 +79,18 @@ def generate_budget_from_output(output: PipelineOutput) -> list[BudgetLine]:
 
 def _extract_budget_lines(table: ExtractedTable) -> list[BudgetLine]:
     """Extract budget lines from one SoA table."""
+    from src.pipeline.procedure_normalizer import ProcedureNormalizer
+
     lines: list[BudgetLine] = []
+    # Use current normalizer (with SME corrections) for live re-mapping
+    normalizer = ProcedureNormalizer()
 
     # Build visit header map from schema
     visit_names: dict[int, str] = {}
     for h in table.schema_info.column_headers:
         visit_names[h.col_index] = h.text
 
-    # Build procedure map from normalized procedures
+    # Build procedure map — RE-NORMALIZE using current vocabulary
     proc_map: dict[str, dict] = {}
     for p in table.procedures:
         proc_map[p.raw_name.lower()] = {
@@ -123,19 +127,12 @@ def _extract_budget_lines(table: ExtractedTable) -> list[BudgetLine]:
         if not required_visits:
             continue
 
-        # Look up procedure info
-        proc_info = proc_map.get(proc_name.lower(), {})
-        if not proc_info:
-            # Try partial match
-            for key, info in proc_map.items():
-                if key in proc_name.lower() or proc_name.lower() in key:
-                    proc_info = info
-                    break
-
-        canonical = proc_info.get("canonical", proc_name)
-        cpt = proc_info.get("cpt", "")
-        category = proc_info.get("category", "Unknown")
-        cost_tier = proc_info.get("cost_tier", "LOW")
+        # Look up procedure info — use LIVE normalizer for best mapping
+        normalized = normalizer.normalize(proc_name)
+        canonical = normalized.canonical_name
+        cpt = normalized.code or ""
+        category = normalized.category
+        cost_tier = normalized.estimated_cost_tier.value
 
         # Build footnote notes
         notes_parts = []

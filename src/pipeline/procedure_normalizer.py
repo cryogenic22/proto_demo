@@ -87,6 +87,9 @@ class ProcedureNormalizer:
     def __init__(self, csv_path: Path | None = None):
         vocabulary = _load_vocabulary(csv_path)
 
+        # Load SME corrections and apply them
+        vocabulary = self._apply_sme_corrections(vocabulary)
+
         # Build lookup: lowercase alias → ProcedureEntry
         # Deterministic ordering: first match wins
         self._alias_map: dict[str, ProcedureEntry] = {}
@@ -97,7 +100,59 @@ class ProcedureNormalizer:
                     self._alias_map[key] = entry
 
         self._vocabulary = vocabulary
-        logger.info(f"Procedure normalizer initialized: {len(self._alias_map)} aliases → {len(vocabulary)} canonical procedures")
+        logger.info(f"Procedure normalizer initialized: {len(self._alias_map)} aliases -> {len(vocabulary)} canonical procedures")
+
+    @staticmethod
+    def _apply_sme_corrections(vocabulary: list[ProcedureEntry]) -> list[ProcedureEntry]:
+        """Apply SME corrections from JSON files in golden_set/sme_inputs/."""
+        import json
+        sme_dir = Path(__file__).parent.parent.parent / "golden_set" / "sme_inputs"
+        if not sme_dir.exists():
+            return vocabulary
+
+        # Build name→entry lookup
+        by_name: dict[str, ProcedureEntry] = {}
+        for entry in vocabulary:
+            by_name[entry.canonical_name.lower()] = entry
+
+        for path in sorted(sme_dir.glob("*.json")):
+            try:
+                with open(path, encoding="utf-8") as f:
+                    data = json.load(f)
+
+                for c in data.get("procedure_corrections", []):
+                    action = c.get("action", "")
+                    target = (c.get("canonical_name") or "").lower()
+
+                    if action == "add" and target not in by_name:
+                        new_entry = ProcedureEntry(
+                            canonical_name=c["canonical_name"],
+                            code=c.get("cpt_code"),
+                            code_system=c.get("code_system"),
+                            category=c.get("category", "Unknown"),
+                            cost_tier=CostTier(c.get("cost_tier", "LOW")),
+                            aliases=[a.lower() for a in c.get("aliases", [])],
+                        )
+                        vocabulary.append(new_entry)
+                        by_name[target] = new_entry
+
+                    elif action == "update_aliases" and target in by_name:
+                        entry = by_name[target]
+                        new_aliases = [a.lower() for a in c.get("add_aliases", [])]
+                        entry.aliases.extend(new_aliases)
+
+                    elif action == "update_code" and target in by_name:
+                        entry = by_name[target]
+                        if c.get("cpt_code"):
+                            entry.code = c["cpt_code"]
+                        if c.get("code_system"):
+                            entry.code_system = c["code_system"]
+
+                logger.info(f"Applied SME corrections from {path.name}")
+            except Exception as e:
+                logger.warning(f"Failed to load SME corrections from {path}: {e}")
+
+        return vocabulary
 
     def normalize(self, raw_name: str) -> NormalizedProcedure:
         """Normalize a single procedure name. Deterministic."""
@@ -107,17 +162,23 @@ class ProcedureNormalizer:
         # 1. Exact match
         if lookup_key in self._alias_map:
             entry = self._alias_map[lookup_key]
-            logger.debug(f"Procedure '{cleaned}' → '{entry.canonical_name}' (exact match)")
             return self._to_model(cleaned, entry, "exact")
 
-        # 2. Whole-word alias match in input text
+        # 2. Check if input STARTS WITH any alias (handles long SoA descriptions)
+        # Sort by alias length descending — prefer longest match
+        for alias, entry in sorted(self._alias_map.items(), key=lambda x: -len(x[0])):
+            if len(alias) >= 5 and lookup_key.startswith(alias):
+                return self._to_model(cleaned, entry, f"starts_with:{alias}")
+
+        # 3. Whole-word alias match in input text
         for alias, entry in self._alias_map.items():
+            if len(alias) < 3:
+                continue  # Skip very short aliases to prevent false positives
             pattern = r"\b" + re.escape(alias) + r"\b"
             if re.search(pattern, lookup_key):
-                logger.debug(f"Procedure '{cleaned}' → '{entry.canonical_name}' (word match: '{alias}')")
                 return self._to_model(cleaned, entry, f"word_match:{alias}")
 
-        # 3. Fuzzy match using key clinical terms
+        # 4. Fuzzy match using key clinical terms
         match = self._fuzzy_match(lookup_key)
         if match:
             logger.debug(f"Procedure '{cleaned}' → '{match.canonical_name}' (fuzzy)")

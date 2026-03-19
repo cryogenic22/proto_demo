@@ -1,0 +1,207 @@
+{
+  "expert_name": "pipeline_auto",
+  "date": "2026-03-19T00:00:00Z",
+  "reason": "Map long-form SoA procedure descriptions from Pfizer BNT162b2 protocol to canonical procedures",
+  "procedure_corrections": [
+    {
+      "action": "update_aliases",
+      "canonical_name": "Adverse Event Assessment",
+      "add_aliases": [
+        "collect aes and saes as appropriate",
+        "collect aes and saes",
+        "collect adverse events"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Eligibility Assessment",
+      "add_aliases": [
+        "confirm eligibility",
+        "confirm participant eligibility",
+        "confirm participant has only received",
+        "confirm participant has received at least",
+        "confirm participant originally received placebo"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Body Weight",
+      "add_aliases": [
+        "measure height and weight",
+        "height and weight"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Medical History",
+      "add_aliases": [
+        "obtain demography and medical history data",
+        "demography and medical history"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Informed Consent",
+      "add_aliases": [
+        "obtain informed consent"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Randomization",
+      "add_aliases": [
+        "obtain randomization number and study intervention allocation",
+        "obtain vaccine vial allocation",
+        "vaccine vial allocation via irt",
+        "obtain the participant's vaccine vial allocation"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Study Drug Administration",
+      "add_aliases": [
+        "administer study intervention",
+        "administer bnt162b2",
+        "administer bnt162b2sa"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Post-Dose Observation",
+      "add_aliases": [
+        "assess acute reactions for at least 30 minutes",
+        "assess acute reactions",
+        "30-minute observation"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Demographics",
+      "add_aliases": [
+        "assign participant number"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Concomitant Medications Review",
+      "add_aliases": [
+        "collect nonstudy vaccine information",
+        "nonstudy vaccine information",
+        "obtain details of medications currently taken",
+        "collect prohibited medication use",
+        "prohibited medication"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "e-Diary",
+      "add_aliases": [
+        "explain participant communication methods",
+        "remind participant of e-diary completion",
+        "collect e-diary or assist",
+        "provide thermometer and measuring device"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Reactogenicity Assessment",
+      "add_aliases": [
+        "review reactogenicity e-diary data",
+        "review ongoing reactogenicity e-diary symptoms",
+        "review ongoing reactogenicity"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Vital Signs",
+      "add_aliases": [
+        "measure vital signs",
+        "measure vital signs (including body temperature)",
+        "measure temperature",
+        "measure temperature (body)"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Physical Examination",
+      "add_aliases": [
+        "perform physical examination",
+        "perform clinical assessment",
+        "clinical assessment"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Complete Blood Count",
+      "add_aliases": [
+        "review hematology and chemistry laboratory test results",
+        "review hematology and chemistry results",
+        "collect blood sample for hematology"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Pregnancy Test",
+      "add_aliases": [
+        "perform urine pregnancy test"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Vaccination",
+      "add_aliases": [
+        "review temporary delay criteria",
+        "confirm use of contraceptives"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Immunogenicity Sample",
+      "add_aliases": [
+        "collect blood sample for immunogenicity assessment",
+        "immunogenicity blood draw"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Hepatitis Panel",
+      "add_aliases": [
+        "collect screening blood sample for hiv, hbsag",
+        "screening blood sample for hiv"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "CD4 Count",
+      "add_aliases": [
+        "for participants who are hiv-positive, record latest cd4 count",
+        "record latest cd4 count"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Telephone Contact",
+      "add_aliases": [
+        "contact the participant by telephone"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Nasal Swab",
+      "add_aliases": [
+        "obtain nasal (midturbinate) swab",
+        "obtain nasal swab",
+        "nasal (midturbinate) swab(s)"
+      ]
+    },
+    {
+      "action": "update_aliases",
+      "canonical_name": "Adverse Event Assessment",
+      "add_aliases": [
+        "collection of covid-19",
+        "covid-19-related clinical and laboratory information"
+      ]
+    }
+  ],
+  "mapping_overrides": []
+}
