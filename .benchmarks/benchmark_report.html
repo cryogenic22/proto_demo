@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ProtoExtract Benchmark Report</title>
+<style>
+body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1e293b; background: #f8fafc; margin: 0; padding: 20px; }
+.container { max-width: 1600px; margin: 0 auto; }
+h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.sub { font-size: 10px; color: #94a3b8; }
+.meta { font-size: 12px; color: #64748b; margin-bottom: 20px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.kpi { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; text-align: center; }
+.kpi-val { font-size: 24px; font-weight: 700; }
+.kpi-lbl { font-size: 10px; color: #64748b; text-transform: uppercase; }
+.k-blue { color: #0284c7; } .k-green { color: #059669; } .k-amber { color: #d97706; } .k-red { color: #dc2626; }
+table { width: 100%; border-collapse: collapse; font-size: 11px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; }
+th { background: #0f172a; color: white; padding: 8px 6px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; position: sticky; top: 0; }
+td { padding: 6px; border-bottom: 1px solid #f1f5f9; }
+tr:hover { background: #f8fafc; }
+.center { text-align: center; }
+.st-pass { color: #059669; font-size: 14px; text-align: center; }
+.st-warn { color: #d97706; font-size: 14px; text-align: center; }
+.st-fail { color: #dc2626; font-size: 14px; text-align: center; }
+.c-good { color: #059669; font-weight: 600; }
+.c-warn { color: #d97706; font-weight: 600; }
+.c-bad { color: #dc2626; font-weight: 600; }
+.legend { margin-top: 16px; font-size: 11px; color: #64748b; }
+.legend span { margin-right: 16px; }
+@media print { body { background: white; } th { background: #333; } }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>ProtoExtract — Benchmark Report</h1>
+<p class="meta">2 protocols tested | Generated 2026-03-20 23:26 UTC</p>
+
+<div class="kpis">
+<div class="kpi"><div class="kpi-val k-green">2</div><div class="kpi-lbl">Passed</div></div>
+<div class="kpi"><div class="kpi-val k-amber">0</div><div class="kpi-lbl">Partial</div></div>
+<div class="kpi"><div class="kpi-val k-red">0</div><div class="kpi-lbl">Failed</div></div>
+<div class="kpi"><div class="kpi-val k-blue">2,003</div><div class="kpi-lbl">Total Cells</div></div>
+<div class="kpi"><div class="kpi-val k-blue">37</div><div class="kpi-lbl">Footnotes</div></div>
+<div class="kpi"><div class="kpi-val k-green">89%</div><div class="kpi-lbl">Avg Confidence</div></div>
+<div class="kpi"><div class="kpi-val k-blue">1090s</div><div class="kpi-lbl">Avg Time</div></div>
+</div>
+
+<table>
+<thead><tr>
+<th></th><th>Protocol</th><th>Area</th><th>Pages</th><th>Tables</th><th>Cells</th>
+<th>Foot-notes</th><th>Conf.</th><th>Flagged</th><th>Procs Mapped</th><th>CPT</th>
+<th>Time</th><th>Cost</th><th>Warns</th>
+</tr></thead>
+<tbody><tr>
+<td class="st-pass">&#10003;</td>
+<td><strong>P-08-ELEVATE-UC</strong><br><span class="sub">P08_elevate_uc.pdf</span></td>
+<td>Autoimmune (UC)</td>
+<td class="center">135</td>
+<td class="center">2</td>
+<td class="center">369</td>
+<td class="center">10</td>
+<td class="center c-good">87%</td>
+<td class="center">20%</td>
+<td class="center">36/55</td>
+<td class="center">21</td>
+<td class="center">613s</td>
+<td class="center">$1.23</td>
+<td class="center">0</td>
+</tr><tr>
+<td class="st-pass">&#10003;</td>
+<td><strong>PFIZER-BNT162</strong><br><span class="sub">Prot_0001 1.pdf</span></td>
+<td>Vaccines</td>
+<td class="center">252</td>
+<td class="center">8</td>
+<td class="center">1634</td>
+<td class="center">27</td>
+<td class="center c-good">90%</td>
+<td class="center">17%</td>
+<td class="center">76/141</td>
+<td class="center">11</td>
+<td class="center">1568s</td>
+<td class="center">$3.14</td>
+<td class="center">0</td>
+</tr></tbody>
+</table>
+
+<div class="legend">
+<span><strong>Status:</strong> &#10003; = all tables extracted | &#9888; = some tables failed | &#10007; = no tables</span><br>
+<span><strong>Conf.:</strong> green ≥85% | amber 70-85% | red &lt;70%</span>
+</div>
+</div>
+</body>
+</html>

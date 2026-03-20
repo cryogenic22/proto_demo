@@ -131,6 +131,23 @@ async def get_checkpoint(doc_hash: str):
     return data
 
 
+@app.get("/api/benchmark")
+async def get_benchmark():
+    """Get benchmark comparison across all tested protocols."""
+    from src.pipeline.benchmark import load_benchmark
+    benchmarks = load_benchmark()
+    return {"protocols": [b.__dict__ for b in benchmarks], "total": len(benchmarks)}
+
+
+@app.get("/api/benchmark/report")
+async def get_benchmark_report():
+    """Get benchmark HTML report."""
+    from fastapi.responses import HTMLResponse
+    from src.pipeline.benchmark import generate_benchmark_html
+    html = generate_benchmark_html()
+    return HTMLResponse(html)
+
+
 @app.get("/api/procedures/mapping")
 async def get_procedure_mapping():
     """Export the full procedure mapping table for clinical review."""
@@ -429,6 +446,14 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["message"] = f"Extracted {len(result.tables)} tables"
         jobs[job_id]["result"] = result_json
         jobs[job_id]["completed_at"] = time.time()
+
+        # Auto-record benchmark
+        try:
+            from src.pipeline.benchmark import from_pipeline_output, add_benchmark
+            bm = from_pipeline_output(result_json, job_id)
+            add_benchmark(bm)
+        except Exception as bm_err:
+            logger.warning(f"Benchmark recording failed: {bm_err}")
 
         tel.log_run_end(
             job_id, "completed", tables=len(result.tables), cells=total_cells,
