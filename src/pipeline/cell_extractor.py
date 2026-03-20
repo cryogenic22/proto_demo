@@ -185,15 +185,25 @@ class CellExtractor:
             data_type = CellDataType.TEXT
 
         return ExtractedCell(
-            row=raw.get("row", 0),
-            col=raw.get("col", 0),
-            raw_value=raw.get("raw_value", ""),
+            row=_safe_int(raw.get("row", 0)),
+            col=_safe_int(raw.get("col", 0)),
+            raw_value=str(raw.get("raw_value", "")),
             data_type=data_type,
-            footnote_markers=raw.get("footnote_markers", []),
-            row_header=raw.get("row_header", ""),
-            col_header=raw.get("col_header", ""),
-            confidence=1.0,  # Will be adjusted by reconciler
+            footnote_markers=raw.get("footnote_markers", []) or [],
+            row_header=str(raw.get("row_header", "")),
+            col_header=str(raw.get("col_header", "")),
+            confidence=1.0,
         )
+
+
+def _safe_int(value, default: int = 0) -> int:
+    """Safely convert LLM output to int — handles float, str, None."""
+    if value is None:
+        return default
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return default
 
     @staticmethod
     def _get_table_images(

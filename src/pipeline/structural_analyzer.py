@@ -25,6 +25,16 @@ from src.models.schema import (
 
 logger = logging.getLogger(__name__)
 
+
+def _safe_int(value, default: int = 0) -> int:
+    """Safely convert LLM output to int."""
+    if value is None:
+        return default
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return default
+
 SCHEMA_PROMPT = """Analyze this clinical trial protocol table image. Your task is to
 understand the TABLE STRUCTURE — not to extract individual cell values.
 
@@ -123,10 +133,10 @@ class StructuralAnalyzer:
         try:
             column_headers = [
                 ColumnHeader(
-                    col_index=h.get("col_index", i),
+                    col_index=_safe_int(h.get("col_index", i), i),
                     text=str(h.get("text", "")),
-                    span=int(h.get("span", 1)),
-                    level=int(h.get("level", 0)),
+                    span=_safe_int(h.get("span", 1)),
+                    level=_safe_int(h.get("level", 0)),
                     parent_col=h.get("parent_col"),
                 )
                 for i, h in enumerate(raw.get("column_headers", []))
@@ -140,8 +150,8 @@ class StructuralAnalyzer:
             row_groups = [
                 RowGroup(
                     name=str(g.get("name", "")),
-                    start_row=int(g.get("start_row", 0)),
-                    end_row=int(g.get("end_row", 0)),
+                    start_row=_safe_int(g.get("start_row", 0)),
+                    end_row=_safe_int(g.get("end_row", 0)),
                     category=str(g.get("category", "")),
                 )
                 for g in raw.get("row_groups", [])
@@ -154,10 +164,10 @@ class StructuralAnalyzer:
         try:
             merged_regions = [
                 MergedRegion(
-                    start_row=int(m.get("start_row", 0)),
-                    end_row=int(m.get("end_row", 0)),
-                    start_col=int(m.get("start_col", 0)),
-                    end_col=int(m.get("end_col", 0)),
+                    start_row=_safe_int(m.get("start_row", 0)),
+                    end_row=_safe_int(m.get("end_row", 0)),
+                    start_col=_safe_int(m.get("start_col", 0)),
+                    end_col=_safe_int(m.get("end_col", 0)),
                     value=str(m.get("value", "")),
                 )
                 for m in raw.get("merged_regions", [])
@@ -177,6 +187,6 @@ class StructuralAnalyzer:
             row_groups=row_groups,
             merged_regions=merged_regions,
             footnote_markers=footnote_markers,
-            num_rows=int(raw.get("num_rows", 0)),
-            num_cols=int(raw.get("num_cols", 0)),
+            num_rows=_safe_int(raw.get("num_rows", 0)),
+            num_cols=_safe_int(raw.get("num_cols", 0)),
         )
