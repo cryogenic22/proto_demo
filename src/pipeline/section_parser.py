@@ -79,9 +79,18 @@ def _looks_like_equation(text: str) -> bool:
     # If 2+ math indicators, it's likely an equation
     return math_count >= 2 or pattern_matches >= 2
 
-# Matches section headers like "1.", "1.1", "1.1.1", "4.2.3.1"
+# Matches section headers:
+# Numbered: "1.", "1.1", "1.1.1", "4.2.3.1"
+# Lettered: "A.", "B.1", "C.2.3"
+# Roman: "I.", "II.", "III.1"
 _SECTION_RE = re.compile(
-    r"^(\d{1,2}(?:\.\d{1,3}){0,4})\.?\s+([A-Z][A-Za-z\s,\-/&\(\)]+)"
+    r"^(\d{1,2}(?:\.\d{1,3}){0,4})\.?\s+([A-Z][A-Za-z\s,\-/&\(\):;'\"]+)"
+)
+_SECTION_LETTER_RE = re.compile(
+    r"^([A-Z](?:\.\d{1,3}){0,3})\.?\s+([A-Z][A-Za-z\s,\-/&\(\):;'\"]+)"
+)
+_SECTION_ROMAN_RE = re.compile(
+    r"^((?:IX|IV|V?I{1,3}|VI{1,3}|X{1,3})(?:\.\d{1,3}){0,3})\.?\s+([A-Z][A-Za-z\s,\-/&\(\):;'\"]+)"
 )
 
 # Matches TOC entries like "1.  INTRODUCTION .................. 8"
@@ -488,7 +497,7 @@ Return ONLY the JSON array."""
         try:
             raw = await llm_client.vision_json_query_multi(
                 images, prompt,
-                system="You are a clinical document structure analyst. Return valid JSON only.",
+                system="You are a document structure analyst. Extract ALL sections from any document type — protocols, contracts, agreements, reports. Return valid JSON only.",
                 max_tokens=4096,
             )
 
@@ -844,6 +853,7 @@ Return ONLY the JSON array."""
 
         # ICH standard section titles for validation
         standard_titles = {
+            # Clinical protocol sections
             "introduction", "background", "objectives", "endpoints",
             "study design", "study population", "inclusion", "exclusion",
             "study intervention", "discontinuation", "assessments",
@@ -852,6 +862,19 @@ Return ONLY the JSON array."""
             "synopsis", "summary", "schedule of activities",
             "adverse events", "safety", "efficacy", "laboratory",
             "pharmacokinetic", "pharmacodynamic", "dosing",
+            # General document / contract sections
+            "definitions", "scope", "purpose", "terms", "conditions",
+            "obligations", "responsibilities", "payment", "compensation",
+            "indemnification", "indemnity", "confidentiality", "termination",
+            "amendment", "governing law", "jurisdiction", "dispute",
+            "insurance", "liability", "warranty", "representations",
+            "compliance", "regulatory", "data protection", "privacy",
+            "intellectual property", "publication", "force majeure",
+            "notices", "general provisions", "miscellaneous", "signatures",
+            "exhibits", "schedules", "attachments", "budget", "fees",
+            "milestones", "deliverables", "timeline", "protocol",
+            "investigator", "sponsor", "site", "institution",
+            "clinical trial agreement", "overview", "recitals",
         }
 
         for page_num in range(doc.page_count):
@@ -861,7 +884,12 @@ Return ONLY the JSON array."""
             text = page.get_text("text")
             for line in text.split("\n"):
                 line = line.strip()
+                # Try numbered, lettered, and Roman numeral patterns
                 match = _SECTION_RE.match(line)
+                if not match:
+                    match = _SECTION_LETTER_RE.match(line)
+                if not match:
+                    match = _SECTION_ROMAN_RE.match(line)
                 if match:
                     sec_num = match.group(1)
                     sec_title = match.group(2).strip()
@@ -907,10 +935,15 @@ Return ONLY the JSON array."""
                             is_bold = flags & 2 ** 4  # bit 4 = bold
 
                             # Large bold text (>12pt) that looks like a heading
-                            if font_size >= 12 and is_bold and len(text_span) > 5:
-                                # Check if it matches a known section title pattern
+                            if font_size >= 12 and is_bold and len(text_span) > 3:
                                 text_lower = text_span.lower()
-                                if any(kw in text_lower for kw in standard_titles):
+                                # Accept if: has a known keyword OR is uppercase OR
+                                # looks like a title (capitalized words, no period at end)
+                                is_title_case = text_span[0].isupper() and not text_span.endswith(".")
+                                is_all_upper = text_span == text_span.upper() and len(text_span) > 3
+                                has_keyword = any(kw in text_lower for kw in standard_titles)
+
+                                if has_keyword or is_all_upper or (is_title_case and len(text_span) > 5):
                                     # Try to extract section number
                                     num_match = re.match(
                                         r"^(\d{1,2}(?:\.\d{1,3}){0,4})\.?\s+(.*)",

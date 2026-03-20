@@ -68,11 +68,14 @@ class TestSectionParserOnPfizer:
         assert len(results) >= 1
 
     def test_section_numbers_are_valid(self):
-        """All section numbers should be properly formatted."""
+        """All section numbers should be properly formatted (numeric, lettered, or Roman)."""
         import re
+        valid_pattern = re.compile(
+            r"^(\d{1,2}|[A-Z]|(?:IX|IV|V?I{1,3}|VI{1,3}|X{1,3}))(\.\d{1,3}){0,4}$"
+        )
         for s in self.sections:
             if s.number:
-                assert re.match(r"^\d{1,2}(\.\d{1,3}){0,4}$", s.number), \
+                assert valid_pattern.match(s.number), \
                     f"Invalid section number: {s.number}"
 
     def test_pages_are_valid(self):

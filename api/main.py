@@ -82,6 +82,26 @@ class JobStatus(BaseModel):
     completed_at: float | None = None
 
 
+def _build_config(**overrides) -> PipelineConfig:
+    """Build PipelineConfig from environment variables. Single source of truth."""
+    return PipelineConfig(
+        llm_provider=os.environ.get("LLM_PROVIDER", "anthropic"),
+        llm_model=os.environ.get("LLM_MODEL", ""),
+        vision_model=os.environ.get("VISION_MODEL", ""),
+        anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
+        openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
+        azure_openai_api_key=os.environ.get("AZURE_OPENAI_API_KEY", ""),
+        azure_openai_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", ""),
+        azure_openai_api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview"),
+        azure_openai_deployment=os.environ.get("AZURE_OPENAI_DEPLOYMENT", ""),
+        render_dpi=150,
+        max_concurrent_llm_calls=int(os.environ.get("MAX_CONCURRENT_LLM_CALLS", "10")),
+        openai_batch_mode=os.environ.get("OPENAI_BATCH_MODE", "").lower() in ("true", "1", "yes"),
+        soa_only=True,
+        **overrides,
+    )
+
+
 @app.get("/api/health")
 async def health():
     return {"status": "ok", "version": "0.1.0"}
@@ -120,16 +140,33 @@ async def get_procedure_mapping():
 
 
 @app.post("/api/sections")
-async def parse_sections(file: UploadFile = File(...)):
-    """Parse all sections from a protocol PDF or DOCX. Returns the full document outline."""
+async def parse_sections(file: UploadFile = File(...), use_llm: bool = False):
+    """Parse all sections from a PDF or DOCX. Returns the full document outline.
+
+    Args:
+        use_llm: Force LLM-assisted parsing (recommended for non-standard documents)
+    """
     from src.pipeline.section_parser import SectionParser
+    from src.llm.client import LLMClient
+
     file_bytes = await file.read()
     parser = SectionParser()
     sections = parser.parse(file_bytes, filename=file.filename or "")
+
+    # Auto-trigger LLM fallback if deterministic parsing found too few sections
+    if (use_llm or parser.needs_llm_fallback) and len(sections) < 10:
+        logger.info(f"Section parser found {len(sections)} sections — using LLM fallback")
+        config = _build_config()
+        llm = LLMClient(config)
+        llm_sections = await parser.parse_with_llm(file_bytes, llm_client=llm)
+        if len(llm_sections) > len(sections):
+            sections = llm_sections
+
     return {
         "sections": [s.to_dict() for s in sections],
         "total": len(sections),
         "outline": parser.to_outline(sections),
+        "method": "llm_fallback" if parser.needs_llm_fallback else "deterministic",
     }
 
 
@@ -161,15 +198,7 @@ async def extract_verbatim(
 
     from src.pipeline.verbatim_extractor import VerbatimExtractor
     file_bytes = await file.read()
-    config = PipelineConfig(
-        llm_provider=os.environ.get("LLM_PROVIDER", "anthropic"),
-        anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
-        openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
-        azure_openai_api_key=os.environ.get("AZURE_OPENAI_API_KEY", ""),
-        azure_openai_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", ""),
-        azure_openai_api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview"),
-        azure_openai_deployment=os.environ.get("AZURE_OPENAI_DEPLOYMENT", ""),
-    )
+    config = _build_config()
     extractor = VerbatimExtractor(config)
     result = await extractor.extract(file_bytes, instruction, filename=file.filename or "")
     return {
@@ -364,21 +393,7 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["progress"] = 5
         jobs[job_id]["message"] = "Initializing pipeline..."
 
-        config = PipelineConfig(
-            llm_provider=os.environ.get("LLM_PROVIDER", "anthropic"),
-            llm_model=os.environ.get("LLM_MODEL", ""),
-            vision_model=os.environ.get("VISION_MODEL", ""),
-            anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
-            openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
-            azure_openai_api_key=os.environ.get("AZURE_OPENAI_API_KEY", ""),
-            azure_openai_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", ""),
-            azure_openai_api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview"),
-            azure_openai_deployment=os.environ.get("AZURE_OPENAI_DEPLOYMENT", ""),
-            render_dpi=150,
-            max_concurrent_llm_calls=int(os.environ.get("MAX_CONCURRENT_LLM_CALLS", "10")),
-            openai_batch_mode=os.environ.get("OPENAI_BATCH_MODE", "").lower() in ("true", "1", "yes"),
-            soa_only=True,
-        )
+        config = _build_config()
         orchestrator = PipelineOrchestrator(config)
 
         jobs[job_id]["progress"] = 10
