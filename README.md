@@ -2,7 +2,7 @@
 
 AI-powered clinical trial protocol extraction pipeline for site budgeting.
 
-Extracts Schedule of Activities (SoA) tables from protocol PDFs, maps procedures
+Extracts Schedule of Activities (SoA) tables from protocol PDFs/DOCX, maps procedures
 to CPT codes, resolves footnotes, and generates interactive site budget worksheets —
 with confidence scoring, adversarial validation, and OCR grounding to minimize hallucination.
 
@@ -10,12 +10,14 @@ with confidence scoring, adversarial validation, and OCR grounding to minimize h
 
 | Capability | Description |
 |-----------|-------------|
-| **SoA Table Extraction** | Extracts all Schedule of Activities tables from protocol PDFs with 90% confidence |
-| **Site Budget Worksheet** | Auto-generates editable budget with procedures, CPT codes, frequencies, and cost estimates |
+| **SoA Table Extraction** | Extracts Schedule of Activities tables from protocol PDFs with 90% confidence |
+| **Site Budget Worksheet** | Auto-generates editable budget with procedures, CPT codes, frequencies, cost estimates, confidence colors, and review guidance |
 | **Procedure Normalization** | Maps 840+ aliases → 180 canonical procedures with CPT codes across 15 categories |
 | **Footnote Resolution** | Extracts and classifies footnotes (conditional/exception/reference) anchored to cells |
-| **Section Parser** | Deterministic extraction of document outline (239 sections from a 252-page protocol) |
-| **Verbatim Extraction** | Zero-hallucination copy-paste from protocols — LLM locates, PyMuPDF extracts exact text |
+| **Section Parser** | Deterministic extraction of document outline with LLM fallback (PDF + DOCX) |
+| **Verbatim Extraction** | Zero-hallucination copy-paste — LLM locates content, PyMuPDF extracts exact text |
+| **Equation Preservation** | Detects formulas, outputs as LaTeX or OMML XML (editable in Word/MathType) |
+| **Clinical Domain Intelligence** | Auto-classifies therapeutic area, applies domain-specific extraction hints |
 | **Repeatability Testing** | Run N times, measure cell-level variance, track stability over time |
 
 ## Quick Start
@@ -26,7 +28,7 @@ pip install -r requirements.txt
 
 # 2. Configure API key
 cp .env.example .env
-# Edit .env: set ANTHROPIC_API_KEY or OPENAI_API_KEY
+# Edit .env: set your API key(s)
 
 # 3. Start the API
 python -m uvicorn api.main:app --host 0.0.0.0 --port 8000
@@ -34,12 +36,12 @@ python -m uvicorn api.main:app --host 0.0.0.0 --port 8000
 # 4. Start the frontend (optional)
 cd web && npm install && npm run dev
 
-# 5. Upload a protocol at http://localhost:3000
+# 5. Open http://localhost:3000
 ```
 
 ## LLM Provider Configuration
 
-Supports both **Anthropic Claude** and **OpenAI GPT**:
+Supports **Anthropic Claude**, **OpenAI GPT**, and **Azure OpenAI**:
 
 ```env
 # Anthropic (default)
@@ -50,9 +52,25 @@ ANTHROPIC_API_KEY=sk-ant-...
 LLM_PROVIDER=openai
 OPENAI_API_KEY=sk-...
 
+# Azure OpenAI
+LLM_PROVIDER=azure
+AZURE_OPENAI_API_KEY=your-key
+AZURE_OPENAI_ENDPOINT=https://your-instance.openai.azure.com
+AZURE_OPENAI_DEPLOYMENT=gpt-4o
+
 # Optional model overrides
 LLM_MODEL=claude-sonnet-4-6
 VISION_MODEL=gpt-4.1
+```
+
+### Performance Tuning
+
+```env
+# Concurrent LLM calls (default: 10)
+MAX_CONCURRENT_LLM_CALLS=10
+
+# OpenAI Batch Mode — 50% cheaper, async processing (minutes not seconds)
+OPENAI_BATCH_MODE=true
 ```
 
 ## API Endpoints
@@ -74,19 +92,23 @@ VISION_MODEL=gpt-4.1
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/api/sections` | POST | Parse document outline (PDF or DOCX) |
-| `/api/verbatim?instruction=...` | POST | Extract verbatim content by section or keyword |
+| `/api/verbatim?instruction=...` | POST | Extract verbatim content (zero hallucination) |
 
 ```bash
-# Parse all sections from a protocol
+# Parse all sections
 curl -X POST -F "file=@protocol.pdf" http://localhost:8000/api/sections
 
-# Copy Section 5.1 verbatim (no LLM needed — instant)
+# Copy Section 5.1 verbatim (instant, no LLM needed)
 curl -X POST -F "file=@protocol.pdf" \
   "http://localhost:8000/api/verbatim?instruction=Section 5.1"
 
 # Find and copy inclusion criteria (one LLM call to locate)
 curl -X POST -F "file=@protocol.pdf" \
   "http://localhost:8000/api/verbatim?instruction=Copy the inclusion criteria"
+
+# Extract with LaTeX equations
+curl -X POST -F "file=@protocol.pdf" \
+  "http://localhost:8000/api/verbatim?instruction=Section 9.1&output_format=latex"
 ```
 
 ### Domain Library
@@ -106,36 +128,32 @@ Temporal Extraction → Challenger Agent → OCR Grounding → Reconciliation �
 Output Validation → Budget Worksheet
 ```
 
-See [Pipeline Efficacy Report](docs/pipeline_efficacy_report.md) for detailed
-step-by-step explanation with rationale and evidence.
-
 ## Validation Results
 
 Tested on Pfizer BNT162b2 COVID-19 vaccine protocol (252 pages):
 
-| Metric | Value |
-|--------|-------|
-| SoA tables extracted | 8 |
-| Total cells | 1,634 |
-| Footnotes resolved | 27 |
-| Procedures mapped | 20 (100%) |
-| Average confidence | 90% |
-| Processing time | 26 minutes |
-| Cost per protocol | ~$3 |
+| Version | Confidence | Flagged | Footnotes | Time | Cost |
+|---------|-----------|---------|-----------|------|------|
+| v1 (all tables) | 82% | 28% | 0 | 93 min | $14 |
+| v2 (SOA + footnotes) | 85% | 20% | 28 | 28 min | $3 |
+| v3 (+ synopsis + OCR) | 84% | 23% | 27 | 27 min | $3 |
+| **v4 (OCR calibrated)** | **90%** | **17%** | **27** | **26 min** | **$3** |
 
-### Pipeline Version Progression
+### Section Parser Results
 
-| Version | Confidence | Flagged | Time | Cost |
-|---------|-----------|---------|------|------|
-| v1 (all tables) | 82% | 28% | 93 min | $14 |
-| v2 (SOA + footnotes) | 85% | 20% | 28 min | $3 |
-| v3 (+ synopsis + OCR) | 84% | 23% | 27 min | $3 |
-| **v4 (OCR calibrated)** | **90%** | **17%** | **26 min** | **$3** |
+Tested on 11 protocols across 8 therapeutic areas:
+
+| Metric | Result |
+|--------|--------|
+| Protocols parsed | 11/11 (100%) |
+| Deterministic | 11/11 (100%) |
+| Pfizer BNT162b2 | 239 sections, 19/19 tests pass |
+| Verbatim extraction | 9/10 instructions correct |
 
 ## Test Suite
 
 ```bash
-python -m pytest tests/ -v     # 212+ tests
+python -m pytest tests/ -v     # 231+ tests
 ```
 
 | Category | Tests |
@@ -153,8 +171,7 @@ python -m pytest tests/ -v     # 212+ tests
 
 ## Golden Evaluation Set
 
-35 publicly available clinical trial protocols across 14 therapeutic areas
-with repeatability testing support.
+35 publicly available protocols across 14 therapeutic areas with repeatability testing:
 
 ```bash
 # Single run
@@ -162,65 +179,76 @@ python -m golden_set.evaluate --protocol P-01 --report
 
 # Repeatability test (5 runs)
 python -m golden_set.evaluate --protocol P-13 --repeat 5 --report --save
+
+# Full golden set with batch mode
+python -m golden_set.evaluate --all --repeat 3 --report --save --tag "v4"
 ```
 
 ## SME Corrections
 
-Clinical experts can extend the procedure vocabulary without code changes:
+Clinical experts extend the procedure vocabulary without code changes:
 
-```bash
-# Add corrections as JSON files
-golden_set/sme_inputs/my_corrections.json
+```json
+// golden_set/sme_inputs/my_corrections.json
+{
+  "expert_name": "Dr. Smith",
+  "procedure_corrections": [
+    {
+      "action": "update_aliases",
+      "canonical_name": "Electrocardiogram, 12-lead",
+      "add_aliases": ["ecg with qtcf", "12-lead with rhythm strip"]
+    }
+  ]
+}
 ```
-
-See `golden_set/sme_inputs/example_corrections.json` for format.
 
 ## Project Structure
 
 ```
 src/
-├── pipeline/              # Extraction pipeline (14 stages)
-│   ├── pdf_ingestion.py
-│   ├── protocol_synopsis.py
-│   ├── table_detection.py
-│   ├── table_stitcher.py
-│   ├── structural_analyzer.py
-│   ├── cell_extractor.py
-│   ├── footnote_extractor.py
-│   ├── footnote_resolver.py
-│   ├── procedure_normalizer.py
-│   ├── temporal_extractor.py
-│   ├── challenger_agent.py
-│   ├── ocr_grounding.py
-│   ├── reconciler.py
-│   ├── output_validator.py
-│   ├── section_parser.py     # Deterministic document outline
+├── pipeline/                # 14-stage extraction pipeline
+│   ├── pdf_ingestion.py     # PDF → page images
+│   ├── protocol_synopsis.py # Study design extraction
+│   ├── table_detection.py   # SOA-only 2-phase detection
+│   ├── table_stitcher.py    # Multi-page table merging
+│   ├── structural_analyzer.py # Table schema extraction
+│   ├── cell_extractor.py    # Dual-pass cell extraction
+│   ├── footnote_extractor.py # Footnote definition extraction
+│   ├── footnote_resolver.py # Marker → cell anchoring
+│   ├── procedure_normalizer.py # 180 procedures, 840 aliases
+│   ├── temporal_extractor.py # Visit window parsing
+│   ├── challenger_agent.py  # Adversarial validation
+│   ├── ocr_grounding.py     # Cross-modal verification (docTR)
+│   ├── reconciler.py        # Multi-pass confidence scoring
+│   ├── output_validator.py  # Hallucination blocking gate
+│   ├── section_parser.py    # Document outline (PDF + DOCX + LLM fallback)
 │   ├── verbatim_extractor.py # Zero-hallucination copy-paste
-│   ├── clinical_domain.py    # Therapeutic area intelligence
-│   ├── budget_calculator.py  # Site budget worksheet
-│   ├── html_report.py        # Extraction report generator
-│   ├── review_exporter.py    # Medical writer review docs
-│   └── run_comparator.py     # Cross-version comparison
-├── domain/                # Standalone clinical domain library
-│   ├── procedures.py      # Procedure vocabulary (180 procs, 840 aliases)
-│   └── sme_corrections.py # Expert correction mechanism
+│   ├── clinical_domain.py   # Therapeutic area intelligence
+│   ├── budget_calculator.py # Site budget worksheet
+│   ├── html_report.py       # Extraction report generator
+│   ├── review_exporter.py   # Medical writer review docs
+│   └── run_comparator.py    # Cross-version comparison
+├── domain/                  # Standalone clinical domain library
+│   ├── procedures.py        # Procedure vocabulary with SME overlay
+│   └── sme_corrections.py   # Expert correction mechanism
 ├── models/
-│   └── schema.py          # Pydantic data models
+│   └── schema.py            # Pydantic data models
 └── llm/
-    └── client.py          # Multi-provider LLM client (Anthropic + OpenAI)
+    └── client.py            # Multi-provider (Anthropic + OpenAI + Azure)
 
-api/main.py               # FastAPI backend
-web/                      # Next.js frontend
-data/procedure_mapping.csv # Reviewable procedure vocabulary
-golden_set/               # 35-protocol evaluation set
-docs/                     # Technical documentation
+api/main.py                  # FastAPI backend
+web/                         # Next.js frontend
+data/procedure_mapping.csv   # Reviewable procedure vocabulary
+golden_set/                  # 35-protocol evaluation set
+docs/                        # Technical documentation
 ```
 
 ## Documentation
 
 - [Pipeline Efficacy Report](docs/pipeline_efficacy_report.md) — 14-step walkthrough with evidence
 - [Technical Overview](docs/technical_overview.md) — Architecture and test harnesses
-- [Section & Verbatim Test Report](docs/section_verbatim_test_report.md) — Comprehensive testing results
+- [Section & Verbatim Test Report](docs/section_verbatim_test_report.md) — Testing results
+- [Cathedral Keeper Analysis](docs/cathedral_keeper_analysis.md) — Architecture governance
 
 ## License
 
