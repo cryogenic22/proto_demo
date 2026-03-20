@@ -87,6 +87,20 @@ async def health():
     return {"status": "ok", "version": "0.1.0"}
 
 
+@app.get("/api/telemetry/runs")
+async def get_telemetry_runs(limit: int = 20):
+    """Get recent pipeline run telemetry."""
+    from src.pipeline.telemetry import get_telemetry
+    return {"runs": get_telemetry().get_recent_runs(limit)}
+
+
+@app.get("/api/telemetry/errors")
+async def get_telemetry_errors(limit: int = 50):
+    """Get recent pipeline errors with tracebacks."""
+    from src.pipeline.telemetry import get_telemetry
+    return {"errors": get_telemetry().get_errors(limit)}
+
+
 @app.get("/api/procedures/mapping")
 async def get_procedure_mapping():
     """Export the full procedure mapping table for clinical review."""
@@ -331,6 +345,10 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
     Wrapped in broad exception handling so the server NEVER crashes —
     any failure is captured and reported back through the job status.
     """
+    from src.pipeline.telemetry import get_telemetry
+    tel = get_telemetry()
+    start_time = time.time()
+
     try:
         jobs[job_id]["status"] = "processing"
         jobs[job_id]["progress"] = 5
@@ -356,9 +374,12 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["progress"] = 10
         jobs[job_id]["message"] = "Ingesting PDF..."
 
+        tel.log_run_start(job_id, filename, 0, config.model_dump())
+
         def on_progress(pct: int, msg: str):
             jobs[job_id]["progress"] = pct
             jobs[job_id]["message"] = msg
+            tel.log_stage(job_id, "progress", detail=f"{pct}% {msg}")
 
         result = await orchestrator.run(pdf_bytes, filename, on_progress=on_progress)
 
@@ -374,11 +395,21 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
                 "warnings": result.warnings + [f"Serialization error: {ser_err}"],
             }
 
+        total_cells = sum(len(t.cells) for t in result.tables)
+        total_fn = sum(len(t.footnotes) for t in result.tables)
+        avg_conf = sum(t.overall_confidence for t in result.tables) / max(len(result.tables), 1)
+
         jobs[job_id]["status"] = "completed"
         jobs[job_id]["progress"] = 100
         jobs[job_id]["message"] = f"Extracted {len(result.tables)} tables"
         jobs[job_id]["result"] = result_json
         jobs[job_id]["completed_at"] = time.time()
+
+        tel.log_run_end(
+            job_id, "completed", tables=len(result.tables), cells=total_cells,
+            footnotes=total_fn, confidence=avg_conf,
+            duration_s=time.time() - start_time, warnings=len(result.warnings),
+        )
 
     except MemoryError:
         logger.error(f"Out of memory processing job {job_id}")
@@ -387,6 +418,8 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["message"] = "Out of memory — try a smaller document or reduce DPI"
         jobs[job_id]["error"] = "MemoryError: document too large"
         jobs[job_id]["completed_at"] = time.time()
+        tel.log_run_end(job_id, "failed_oom", 0, 0, 0, 0, time.time() - start_time,
+                        errors=["MemoryError"])
 
     except Exception as e:
         logger.exception(f"Extraction failed for job {job_id}")
@@ -395,9 +428,12 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["message"] = f"Extraction failed: {str(e)}"
         jobs[job_id]["error"] = str(e)
         jobs[job_id]["completed_at"] = time.time()
+        import traceback
+        tel.log_run_end(job_id, "failed", 0, 0, 0, 0, time.time() - start_time,
+                        errors=[str(e)])
+        tel.log_error(job_id, "pipeline", str(e), traceback.format_exc())
 
     finally:
-        # Force garbage collection after processing
         import gc
         gc.collect()
 

@@ -83,14 +83,32 @@ class DocTRBackend(OCRBackend):
         return self._model
 
     def run(self, image_bytes: bytes) -> OCRResult:
-        from doctr.io import DocumentFile
+        import numpy as np
         from PIL import Image
 
-        # Convert bytes to PIL Image for docTR
-        img = Image.open(io.BytesIO(image_bytes))
-        doc = DocumentFile.from_images([img])
+        # Convert bytes → PIL → numpy array (docTR expects numpy)
+        img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        img_array = np.array(img)
+
         model = self._get_model()
-        result = model(doc)
+
+        # docTR accepts list of numpy arrays directly
+        try:
+            from doctr.io import DocumentFile
+            doc = DocumentFile.from_images([img_array])
+            result = model(doc)
+        except TypeError:
+            # Fallback: some docTR versions want file paths
+            # Save to temp file and load
+            import tempfile, os
+            with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as f:
+                img.save(f, format="PNG")
+                tmp_path = f.name
+            try:
+                doc = DocumentFile.from_images([tmp_path])
+                result = model(doc)
+            finally:
+                os.unlink(tmp_path)
 
         words: list[OCRWord] = []
         full_text_parts: list[str] = []

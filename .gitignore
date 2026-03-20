@@ -38,6 +38,9 @@ golden_set/cached_pdfs/
 .DS_Store
 Thumbs.db
 
+# Telemetry
+.telemetry/
+
 # Misc
 *.log
 
