@@ -170,17 +170,23 @@ class PipelineOrchestrator:
         logger.info(f"Protocol domain: {self.detected_domain.value}")
 
         # Process each table independently
+        # Process each table with incremental checkpointing
+        checkpoint = _CheckpointManager(document_name, doc_hash)
+
         for i, region in enumerate(regions):
             pct = 40 + int(55 * i / max(len(regions), 1))
             _progress(pct, f"Extracting table {i+1}/{len(regions)}: {region.title or region.table_id}...")
             try:
                 table = await self._process_table(region, pages)
                 tables.append(table)
+                # Save checkpoint after each successful table
+                checkpoint.save_table(table, i + 1, len(regions))
             except Exception as e:
                 logger.error(f"Failed to process table {region.table_id}: {e}")
                 warnings.append(f"Table {region.table_id} failed: {e}")
 
         elapsed = time.time() - start_time
+        checkpoint.finalize()
         logger.info(
             f"Pipeline complete: {len(tables)} tables extracted "
             f"in {elapsed:.1f}s"
@@ -339,3 +345,68 @@ class PipelineOrchestrator:
                 cost_map[CellRef(row=cell.row, col=cell.col)] = tier
 
         return cost_map
+
+
+class _CheckpointManager:
+    """Saves extracted tables incrementally so data survives pipeline crashes.
+
+    After each successful table extraction, saves a checkpoint JSON file.
+    If the pipeline crashes at table 7/8, the first 6 tables are recoverable.
+    """
+
+    def __init__(self, document_name: str, doc_hash: str):
+        import os
+        from pathlib import Path
+
+        self._dir = Path(os.environ.get("CHECKPOINT_DIR", ".checkpoints"))
+        self._dir.mkdir(parents=True, exist_ok=True)
+        self._doc_name = document_name
+        self._doc_hash = doc_hash[:12]
+        self._path = self._dir / f"checkpoint_{self._doc_hash}.json"
+        self._tables: list[dict] = []
+
+    def save_table(self, table, current: int, total: int):
+        """Save checkpoint after each successfully extracted table."""
+        import json
+        try:
+            self._tables.append(json.loads(table.model_dump_json()))
+            checkpoint = {
+                "document": self._doc_name,
+                "hash": self._doc_hash,
+                "tables_completed": current,
+                "tables_total": total,
+                "tables": self._tables,
+                "status": "in_progress" if current < total else "complete",
+            }
+            with open(self._path, "w", encoding="utf-8") as f:
+                json.dump(checkpoint, f)
+            logger.debug(f"Checkpoint saved: {current}/{total} tables")
+        except Exception as e:
+            logger.warning(f"Checkpoint save failed: {e}")
+
+    def finalize(self):
+        """Mark checkpoint as complete. Keep for recovery."""
+        import json
+        try:
+            if self._path.exists():
+                with open(self._path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                data["status"] = "complete"
+                with open(self._path, "w", encoding="utf-8") as f:
+                    json.dump(data, f)
+        except Exception:
+            pass
+
+    @staticmethod
+    def load_checkpoint(doc_hash: str) -> dict | None:
+        """Load a saved checkpoint for recovery."""
+        import json
+        from pathlib import Path
+        import os
+
+        checkpoint_dir = Path(os.environ.get("CHECKPOINT_DIR", ".checkpoints"))
+        path = checkpoint_dir / f"checkpoint_{doc_hash[:12]}.json"
+        if path.exists():
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        return None

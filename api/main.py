@@ -101,6 +101,16 @@ async def get_telemetry_errors(limit: int = 50):
     return {"errors": get_telemetry().get_errors(limit)}
 
 
+@app.get("/api/checkpoints/{doc_hash}")
+async def get_checkpoint(doc_hash: str):
+    """Recover extracted tables from a crashed pipeline run."""
+    from src.pipeline.orchestrator import _CheckpointManager
+    data = _CheckpointManager.load_checkpoint(doc_hash)
+    if not data:
+        raise HTTPException(status_code=404, detail="No checkpoint found")
+    return data
+
+
 @app.get("/api/procedures/mapping")
 async def get_procedure_mapping():
     """Export the full procedure mapping table for clinical review."""

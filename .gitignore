@@ -38,8 +38,9 @@ golden_set/cached_pdfs/
 .DS_Store
 Thumbs.db
 
-# Telemetry
+# Telemetry & checkpoints
 .telemetry/
+.checkpoints/
 
 # Misc
 *.log
