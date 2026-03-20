@@ -302,7 +302,7 @@ class PipelineOutput(BaseModel):
 
 class PipelineConfig(BaseModel):
     render_dpi: int = Field(default=150, ge=72, le=600)
-    llm_provider: str = Field(default="anthropic", description="LLM provider: 'anthropic' or 'openai'")
+    llm_provider: str = Field(default="anthropic", description="LLM provider: 'anthropic', 'openai', or 'azure'")
     llm_model: str = Field(default="", description="Model name. Leave empty for provider default.")
     vision_model: str = Field(default="", description="Vision model. Leave empty for provider default.")
     confidence_threshold: float = Field(default=0.85, ge=0.0, le=1.0)
@@ -314,11 +314,17 @@ class PipelineConfig(BaseModel):
     soa_only: bool = Field(default=True, description="Only extract Schedule of Activities tables")
     anthropic_api_key: str = ""
     openai_api_key: str = ""
+    azure_openai_api_key: str = ""
+    azure_openai_endpoint: str = Field(default="", description="Azure OpenAI endpoint URL (e.g., https://myinstance.openai.azure.com)")
+    azure_openai_api_version: str = Field(default="2024-12-01-preview", description="Azure OpenAI API version")
+    azure_openai_deployment: str = Field(default="", description="Azure OpenAI deployment name (overrides llm_model)")
 
     @property
     def resolved_llm_model(self) -> str:
         if self.llm_model:
             return self.llm_model
+        if self.llm_provider == "azure":
+            return self.azure_openai_deployment or "gpt-4o"
         if self.llm_provider == "openai":
             return "gpt-4.1"
         return "claude-sonnet-4-6"
@@ -327,6 +333,8 @@ class PipelineConfig(BaseModel):
     def resolved_vision_model(self) -> str:
         if self.vision_model:
             return self.vision_model
+        if self.llm_provider == "azure":
+            return self.azure_openai_deployment or "gpt-4o"
         if self.llm_provider == "openai":
             return "gpt-4.1"
         return "claude-sonnet-4-6"

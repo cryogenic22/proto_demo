@@ -21,20 +21,23 @@ logger = logging.getLogger(__name__)
 
 
 class LLMClient:
-    """Unified async LLM client — auto-selects Anthropic or OpenAI backend."""
+    """Unified async LLM client — auto-selects Anthropic, OpenAI, or Azure backend."""
 
     def __init__(self, config: PipelineConfig):
         self.config = config
-        self._backend: _AnthropicBackend | _OpenAIBackend | None = None
+        self._backend = None
 
     @property
     def backend(self):
         if self._backend is None:
-            if self.config.llm_provider == "openai":
+            provider = self.config.llm_provider
+            if provider == "openai":
                 self._backend = _OpenAIBackend(self.config)
+            elif provider == "azure":
+                self._backend = _AzureOpenAIBackend(self.config)
             else:
                 self._backend = _AnthropicBackend(self.config)
-            logger.info(f"LLM backend: {self.config.llm_provider}")
+            logger.info(f"LLM backend: {provider}")
         return self._backend
 
     async def vision_query(self, image_bytes: bytes, prompt: str, *,
@@ -231,6 +234,94 @@ class _OpenAIBackend:
                 await asyncio.sleep(2 ** attempt + 1)
 
         raise RuntimeError(f"OpenAI: all {max_retries} retries failed: {last_error}") from last_error
+
+
+# ---------------------------------------------------------------------------
+# Azure OpenAI Backend
+# ---------------------------------------------------------------------------
+
+class _AzureOpenAIBackend:
+    """Azure OpenAI backend — same API as OpenAI but uses Azure endpoints."""
+
+    def __init__(self, config: PipelineConfig):
+        self.config = config
+        self._client = None
+
+    @property
+    def client(self):
+        if self._client is None:
+            from openai import AsyncAzureOpenAI
+            self._client = AsyncAzureOpenAI(
+                api_key=self.config.azure_openai_api_key or None,
+                azure_endpoint=self.config.azure_openai_endpoint,
+                api_version=self.config.azure_openai_api_version,
+                timeout=120.0, max_retries=0,
+            )
+        return self._client
+
+    async def vision_query(self, image_bytes, prompt, *, system, model, max_tokens, temperature):
+        b64 = base64.standard_b64encode(image_bytes).decode("utf-8")
+        messages = self._build_messages(system, [
+            {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}", "detail": "high"}},
+            {"type": "text", "text": prompt},
+        ])
+        return await self._call(model=model, messages=messages,
+                                max_tokens=max_tokens, temperature=temperature)
+
+    async def vision_query_multi(self, images, prompt, *, system, model, max_tokens, temperature):
+        content = []
+        for img in images:
+            b64 = base64.standard_b64encode(img).decode("utf-8")
+            content.append({"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}", "detail": "high"}})
+        content.append({"type": "text", "text": prompt})
+        messages = self._build_messages(system, content)
+        return await self._call(model=model, messages=messages,
+                                max_tokens=max_tokens, temperature=temperature)
+
+    async def text_query(self, prompt, *, system, model, max_tokens, temperature):
+        messages = self._build_messages(system, prompt)
+        return await self._call(model=model, messages=messages,
+                                max_tokens=max_tokens, temperature=temperature)
+
+    def _build_messages(self, system: str, user_content) -> list[dict]:
+        msgs = []
+        if system:
+            msgs.append({"role": "system", "content": system})
+        msgs.append({"role": "user", "content": user_content})
+        return msgs
+
+    async def _call(self, *, model, messages, max_tokens, temperature, max_retries=3):
+        from openai import RateLimitError, APIStatusError
+        # For Azure, model = deployment name
+        deployment = self.config.azure_openai_deployment or model
+        last_error = None
+        for attempt in range(max_retries):
+            try:
+                response = await self.client.chat.completions.create(
+                    model=deployment, messages=messages,
+                    max_tokens=max_tokens, temperature=temperature,
+                )
+                choice = response.choices[0]
+                if not choice.message.content:
+                    raise ValueError("Empty response from Azure OpenAI API")
+                return choice.message.content
+
+            except RateLimitError as e:
+                last_error = e
+                wait = 2 ** attempt + 1
+                logger.warning(f"Azure rate limited, retry in {wait}s ({attempt+1}/{max_retries})")
+                await asyncio.sleep(wait)
+            except APIStatusError as e:
+                if e.status_code < 500 and e.status_code != 429:
+                    logger.error(f"Azure API error {e.status_code}: {e.message}")
+                    raise
+                last_error = e
+                await asyncio.sleep(2 ** attempt + 1)
+            except Exception as e:
+                last_error = e
+                await asyncio.sleep(2 ** attempt + 1)
+
+        raise RuntimeError(f"Azure OpenAI: all {max_retries} retries failed: {last_error}") from last_error
 
 
 # ---------------------------------------------------------------------------

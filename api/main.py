@@ -141,6 +141,10 @@ async def extract_verbatim(
         llm_provider=os.environ.get("LLM_PROVIDER", "anthropic"),
         anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
         openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
+        azure_openai_api_key=os.environ.get("AZURE_OPENAI_API_KEY", ""),
+        azure_openai_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", ""),
+        azure_openai_api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview"),
+        azure_openai_deployment=os.environ.get("AZURE_OPENAI_DEPLOYMENT", ""),
     )
     extractor = VerbatimExtractor(config)
     result = await extractor.extract(file_bytes, instruction, filename=file.filename or "")
@@ -338,6 +342,10 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
             vision_model=os.environ.get("VISION_MODEL", ""),
             anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", ""),
             openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
+            azure_openai_api_key=os.environ.get("AZURE_OPENAI_API_KEY", ""),
+            azure_openai_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", ""),
+            azure_openai_api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview"),
+            azure_openai_deployment=os.environ.get("AZURE_OPENAI_DEPLOYMENT", ""),
             render_dpi=150,
             max_concurrent_llm_calls=5,
             soa_only=True,
