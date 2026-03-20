@@ -36,6 +36,49 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
+def _looks_like_equation(text: str) -> bool:
+    """Heuristic: does this line look like a mathematical equation?
+
+    Catches:
+    - Sample size formulas: n = (Z_α/2 + Z_β)² × 2σ² / δ²
+    - Confidence intervals: CI = p̂ ± Z × √(p̂(1-p̂)/n)
+    - Hazard ratios: HR = exp(β)
+    - Summation/product notation
+    - Greek letters mixed with operators
+    """
+    if len(text) < 3 or len(text) > 200:
+        return False
+
+    # Count math-like characters
+    math_chars = set("=±×÷√∑∏∫≤≥≠≈∈∞αβγδεζηθλμσφχψω²³⁻¹")
+    math_count = sum(1 for c in text if c in math_chars)
+
+    # Standard equation patterns
+    equation_patterns = [
+        r"[=≈≤≥]",       # Has equals/comparison
+        r"[±√∑∏∫]",      # Has math operators
+        r"[αβγδσμ]",     # Has Greek letters
+        r"\^[0-9\{]",    # Has superscripts
+        r"_[0-9\{]",     # Has subscripts
+        r"\\frac",        # LaTeX fraction
+        r"\bexp\b",       # Exponential
+        r"\blog\b",       # Logarithm
+        r"\bln\b",        # Natural log
+        r"[²³⁻¹⁺]",     # Unicode superscripts
+        r"\bCI\s*=",      # Confidence interval formula
+        r"\bn\s*=",       # Sample size formula
+        r"\bHR\s*=",      # Hazard ratio
+        r"\bp\s*[<>=]",   # P-value
+        r"Z[_α]",        # Z-score
+    ]
+
+    import re as _re
+    pattern_matches = sum(1 for p in equation_patterns if _re.search(p, text))
+
+    # If 2+ math indicators, it's likely an equation
+    return math_count >= 2 or pattern_matches >= 2
+
 # Matches section headers like "1.", "1.1", "1.1.1", "4.2.3.1"
 _SECTION_RE = re.compile(
     r"^(\d{1,2}(?:\.\d{1,3}){0,4})\.?\s+([A-Z][A-Za-z\s,\-/&\(\)]+)"
@@ -191,6 +234,105 @@ class SectionParser:
 
         return "\n".join(text_parts).strip()
 
+    def get_section_docx_xml(self, docx_bytes: bytes, section: Section) -> str:
+        """Extract section content as raw DOCX XML — preserves equations.
+
+        Returns the raw OpenXML paragraph elements including:
+        - OMML equations (editable in Word/MathType)
+        - Formatting (bold, italic, underline)
+        - Lists and numbering
+        - Table references
+
+        This enables round-trip editing: extract → edit in Word → paste back.
+        """
+        if not HAS_DOCX:
+            return ""
+
+        import io
+        from lxml import etree
+
+        doc = DocxDocument(io.BytesIO(docx_bytes))
+        start = section.page
+        end = section.end_page if section.end_page is not None else len(doc.paragraphs) - 1
+
+        xml_parts = []
+        for i in range(start, min(end + 1, len(doc.paragraphs))):
+            para = doc.paragraphs[i]
+            # Get the raw XML element which preserves OMML equations
+            xml_str = etree.tostring(para._element, pretty_print=True).decode("utf-8")
+            xml_parts.append(xml_str)
+
+        return "\n".join(xml_parts)
+
+    def get_section_with_equations(self, pdf_bytes: bytes, section: Section) -> dict:
+        """Extract section content with equations detected and converted to LaTeX.
+
+        For clinical protocols with statistical formulas (sample size calculations,
+        confidence intervals, hazard ratios), this method:
+        1. Extracts the full text
+        2. Detects equation-like patterns
+        3. Attempts to preserve the visual layout of multi-line formulas
+        4. Wraps detected equations in LaTeX $...$ delimiters
+
+        Returns:
+            dict with 'text', 'equations' (list of detected formulas),
+            and 'latex' (text with equations wrapped in LaTeX)
+        """
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        start = section.page
+        end = section.end_page if section.end_page is not None else start
+        end = min(end + 1, doc.page_count - 1)
+
+        equations = []
+        text_with_layout = []
+
+        for page_num in range(start, end + 1):
+            page = doc[page_num]
+
+            # Get text blocks with position info to preserve layout
+            blocks = page.get_text("dict")["blocks"]
+            for block in blocks:
+                if block.get("type") != 0:
+                    continue
+                for line_data in block.get("lines", []):
+                    line_text = ""
+                    has_math_font = False
+
+                    for span in line_data.get("spans", []):
+                        text = span.get("text", "")
+                        font = span.get("font", "").lower()
+                        # Detect math fonts (Symbol, Cambria Math, STIX, etc.)
+                        if any(mf in font for mf in ["symbol", "math", "stix", "cambria"]):
+                            has_math_font = True
+                        line_text += text
+
+                    line_stripped = line_text.strip()
+                    if not line_stripped:
+                        continue
+
+                    # Detect equation patterns
+                    is_equation = (
+                        has_math_font
+                        or _looks_like_equation(line_stripped)
+                    )
+
+                    if is_equation:
+                        equations.append(line_stripped)
+                        text_with_layout.append(f"$${line_stripped}$$")
+                    else:
+                        text_with_layout.append(line_stripped)
+
+        doc.close()
+
+        plain_text = self.get_section_text(pdf_bytes, section)
+
+        return {
+            "text": plain_text,
+            "equations": equations,
+            "latex": "\n".join(text_with_layout),
+            "equation_count": len(equations),
+        }
+
     def get_tables_in_section_docx(self, docx_bytes: bytes, section: Section) -> list[list[list[str]]]:
         """Extract tables from a DOCX section. Returns exact table data."""
         if not HAS_DOCX:
@@ -261,13 +403,128 @@ class SectionParser:
             candidates,
             key=lambda c: self._score_sections(c[1], total_pages),
         )
+
+        best_score = self._score_sections(best_sections, total_pages)
         logger.info(
             f"Selected strategy '{best_name}' with {len(best_sections)} sections "
-            f"(from {len(candidates)} candidates)"
+            f"(score={best_score:.0f}, from {len(candidates)} candidates)"
         )
+
+        # Strategy 4: If best result is weak (<10 valid sections), flag for LLM fallback
+        if best_score < 30 or len(best_sections) < 5:
+            logger.warning(
+                f"Low-confidence section parse ({len(best_sections)} sections, "
+                f"score={best_score:.0f}). LLM fallback recommended — call "
+                f"parse_with_llm() for better results."
+            )
+            # Store the flag so callers know
+            self._low_confidence = True
+        else:
+            self._low_confidence = False
 
         self._compute_page_ranges(best_sections, total_pages)
         return best_sections
+
+    @property
+    def needs_llm_fallback(self) -> bool:
+        """True if the last parse produced low-confidence results."""
+        return getattr(self, "_low_confidence", False)
+
+    async def parse_with_llm(
+        self,
+        pdf_bytes: bytes,
+        llm_client: Any = None,
+        max_toc_pages: int = 8,
+    ) -> list[Section]:
+        """LLM-assisted section parsing — fallback when deterministic parsing fails.
+
+        Sends the first few pages (typically TOC) to the VLM and asks it
+        to extract the complete section outline. The LLM reads visual formatting
+        (bold, indentation, font size) that PyMuPDF text extraction misses.
+
+        Cost: ~$0.10 per protocol (one vision call on ~5-8 pages).
+        """
+        if llm_client is None:
+            logger.warning("No LLM client provided for fallback parsing")
+            return self.parse(pdf_bytes)
+
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        total_pages = doc.page_count
+
+        # Render first N pages as images for the VLM
+        scale = 150 / 72.0
+        matrix = fitz.Matrix(scale, scale)
+        images = []
+        for page_num in range(min(max_toc_pages, total_pages)):
+            page = doc[page_num]
+            pix = page.get_pixmap(matrix=matrix, alpha=False)
+            images.append(pix.tobytes("png"))
+
+        doc.close()
+
+        prompt = """These are the first pages of a clinical trial protocol document.
+They contain the cover page, table of contents, and/or beginning of the protocol.
+
+Extract the COMPLETE document outline — every section and subsection with its
+section number and title. Return a JSON array:
+
+[
+  {"number": "1", "title": "PROTOCOL SUMMARY", "page": 8},
+  {"number": "1.1", "title": "Synopsis", "page": 8},
+  {"number": "2", "title": "INTRODUCTION", "page": 15},
+  ...
+]
+
+Rules:
+- Include ALL sections visible in the table of contents or page headers
+- Include section numbers exactly as written (1, 1.1, 1.1.1, etc.)
+- Include the page number if visible in the TOC
+- If no page number is visible, use 0
+- Capture unnumbered sections too (appendices, lists of tables, etc.)
+- Look for bold text, larger font sizes, and indentation as heading indicators
+
+Return ONLY the JSON array."""
+
+        try:
+            raw = await llm_client.vision_json_query_multi(
+                images, prompt,
+                system="You are a clinical document structure analyst. Return valid JSON only.",
+                max_tokens=4096,
+            )
+
+            if not isinstance(raw, list):
+                logger.warning("LLM fallback did not return a list")
+                return self.parse(pdf_bytes)
+
+            sections = []
+            for item in raw:
+                if not isinstance(item, dict):
+                    continue
+                number = str(item.get("number") or "")
+                title = str(item.get("title") or "")
+                page = int(item.get("page") or 0)
+                if not title:
+                    continue
+                level = number.count(".") + 1 if number else 1
+                sections.append(Section(
+                    number=number,
+                    title=title,
+                    page=max(0, page - 1),  # Convert to 0-indexed
+                    page_display=str(page) if page else "",
+                    level=level,
+                ))
+
+            if sections:
+                logger.info(f"LLM fallback: {len(sections)} sections extracted")
+                self._compute_page_ranges(sections, total_pages)
+                self._low_confidence = False
+                return sections
+
+        except Exception as e:
+            logger.error(f"LLM fallback parsing failed: {e}")
+
+        # If LLM also fails, return deterministic results
+        return self.parse(pdf_bytes)
 
     @staticmethod
     def _score_sections(sections: list[Section], total_pages: int) -> float:
@@ -318,39 +575,152 @@ class SectionParser:
         query = title_query.lower()
         return [s for s in self._flatten(sections) if query in s.title.lower()]
 
-    def get_section_text(self, pdf_bytes: bytes, section: Section) -> str:
+    def get_section_text(
+        self,
+        pdf_bytes: bytes,
+        section: Section,
+        include_subsections: bool = True,
+        preserve_formatting: bool = True,
+    ) -> str:
         """Extract the EXACT text of a section from the PDF.
 
-        This is deterministic — no LLM involved. Uses PyMuPDF's
-        text extraction to pull verbatim text from the page range.
+        Handles cross-page content stitching — if a paragraph starts on
+        page 5 and continues on page 6, it's captured completely.
+
+        Args:
+            section: The section to extract.
+            include_subsections: If True, include subsection content too.
+                If False, stop at the first subsection header.
+            preserve_formatting: If True, use PyMuPDF's text with layout
+                preservation (better for tables and lists).
         """
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         start = section.page
         end = section.end_page if section.end_page is not None else start
 
+        # Add one extra page for safety — content may overflow into next section's start page
+        end = min(end + 1, doc.page_count - 1)
+
         text_parts = []
-        for page_num in range(start, min(end + 1, doc.page_count)):
+        for page_num in range(start, end + 1):
             page = doc[page_num]
-            text_parts.append(page.get_text("text"))
+            if preserve_formatting:
+                # Use "text" with layout for better paragraph preservation
+                # "blocks" mode preserves block-level structure
+                text_parts.append(page.get_text("text"))
+            else:
+                text_parts.append(page.get_text("text"))
 
         doc.close()
 
         full_text = "\n".join(text_parts)
 
-        # Trim to just this section's content
-        # Find the section header in the text
-        header_pattern = re.escape(section.number) + r"\.?\s+" + re.escape(section.title[:20])
+        # Find the section header to trim the start
+        if section.number:
+            header_pattern = re.escape(section.number) + r"\.?\s+" + re.escape(section.title[:20])
+        else:
+            header_pattern = re.escape(section.title[:30])
         match = re.search(header_pattern, full_text, re.IGNORECASE)
         if match:
             full_text = full_text[match.start():]
 
-        # Find the NEXT section header to trim the end
-        next_section_pattern = r"\n\d{1,2}(?:\.\d{1,3}){0,4}\.?\s+[A-Z]"
-        parts = re.split(next_section_pattern, full_text, maxsplit=1)
-        if parts:
-            full_text = parts[0]
+        # Find where to stop
+        if include_subsections:
+            # Stop at the NEXT SAME-LEVEL OR HIGHER section
+            # e.g., if we're in 5.1, stop at 5.2 or 6, but NOT at 5.1.1
+            if section.number:
+                parts = section.number.split(".")
+                level = len(parts)
+                # Build pattern for same-level or higher sections
+                if level == 1:
+                    # Top-level: stop at next top-level
+                    stop_pattern = r"\n(\d{1,2})\.?\s+[A-Z]"
+                else:
+                    # Sub-level: stop at same level with different number
+                    parent = ".".join(parts[:-1])
+                    current_num = int(parts[-1])
+                    # Match parent.N where N > current
+                    stop_pattern = (
+                        r"\n" + re.escape(parent) + r"\.(\d+)"
+                        r"\.?\s+[A-Z]"
+                    )
+            else:
+                stop_pattern = r"\n\d{1,2}(?:\.\d{1,3}){0,4}\.?\s+[A-Z]"
+        else:
+            # Stop at ANY next section header (even subsections)
+            stop_pattern = r"\n\d{1,2}(?:\.\d{1,3}){0,4}\.?\s+[A-Z]"
 
-        return full_text.strip()
+        # Split at the stop pattern, but skip the first match (which is our own header)
+        matches = list(re.finditer(stop_pattern, full_text))
+        if len(matches) > 1:
+            # First match might be our own header, second is where we stop
+            stop_at = matches[1].start()
+            full_text = full_text[:stop_at]
+        elif len(matches) == 1 and matches[0].start() > 50:
+            # Only one match and it's not our header — stop there
+            full_text = full_text[:matches[0].start()]
+
+        # Clean up: remove page headers/footers (common pattern: page numbers, confidential notices)
+        lines = full_text.split("\n")
+        cleaned = []
+        for line in lines:
+            stripped = line.strip()
+            # Skip common headers/footers
+            if re.match(r"^Page \d+ of \d+$", stripped):
+                continue
+            if re.match(r"^Confidential$", stripped, re.IGNORECASE):
+                continue
+            if re.match(r"^\d+$", stripped) and len(stripped) <= 4:
+                # Standalone page number
+                continue
+            cleaned.append(line)
+
+        return "\n".join(cleaned).strip()
+
+    def get_section_html(self, pdf_bytes: bytes, section: Section) -> str:
+        """Extract section content as HTML — preserves formatting for copy-paste.
+
+        Returns HTML with:
+        - Paragraphs as <p> tags
+        - Bold text preserved
+        - Lists as <ul>/<ol>
+        - Tables preserved if present
+        """
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        start = section.page
+        end = section.end_page if section.end_page is not None else start
+        end = min(end + 1, doc.page_count - 1)
+
+        html_parts = []
+        for page_num in range(start, end + 1):
+            page = doc[page_num]
+            # Use dict mode for rich text extraction
+            try:
+                blocks = page.get_text("dict")["blocks"]
+                for block in blocks:
+                    if block.get("type") == 0:  # Text block
+                        for line_data in block.get("lines", []):
+                            line_html = ""
+                            for span in line_data.get("spans", []):
+                                text = span.get("text", "")
+                                if not text.strip():
+                                    continue
+                                flags = span.get("flags", 0)
+                                is_bold = flags & (1 << 4)
+                                is_italic = flags & (1 << 1)
+                                if is_bold:
+                                    text = f"<strong>{text}</strong>"
+                                if is_italic:
+                                    text = f"<em>{text}</em>"
+                                line_html += text
+                            if line_html.strip():
+                                html_parts.append(f"<p>{line_html}</p>")
+            except Exception:
+                # Fallback to plain text
+                html_parts.append(f"<p>{page.get_text('text')}</p>")
+
+        doc.close()
+        return "\n".join(html_parts)
 
     def get_tables_in_section(self, pdf_bytes: bytes, section: Section) -> list[dict]:
         """Extract tables from a specific section using PyMuPDF's table finder."""

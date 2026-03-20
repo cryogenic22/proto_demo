@@ -110,11 +110,21 @@ async def parse_sections(file: UploadFile = File(...)):
 
 
 @app.post("/api/verbatim")
-async def extract_verbatim(file: UploadFile = File(...), instruction: str = ""):
-    """Extract verbatim content from a protocol PDF based on an instruction.
+async def extract_verbatim(
+    file: UploadFile = File(...),
+    instruction: str = "",
+    include_subsections: bool = True,
+    output_format: str = "text",
+):
+    """Extract verbatim content from a protocol PDF/DOCX.
 
-    The LLM locates the content; PyMuPDF extracts the exact text.
+    The LLM locates the content; PyMuPDF/python-docx extracts the exact text.
     Zero hallucination — the output text is never LLM-generated.
+
+    Args:
+        instruction: What to extract (e.g., "Copy Section 5.1")
+        include_subsections: Include subsection content (default True)
+        output_format: "text" (plain), "html" (formatted), "xml" (DOCX equations for MathType)
 
     Example instructions:
     - "Copy Section 5.1"
