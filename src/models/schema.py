@@ -310,7 +310,8 @@ class PipelineConfig(BaseModel):
     max_extraction_passes: int = Field(default=2, ge=1, le=5)
     enable_challenger: bool = True
     enable_round_trip_test: bool = False
-    max_concurrent_llm_calls: int = Field(default=5, ge=1)
+    max_concurrent_llm_calls: int = Field(default=10, ge=1)
+    openai_batch_mode: bool = Field(default=False, description="Use OpenAI Batch API for async processing (cheaper, slower)")
     soa_only: bool = Field(default=True, description="Only extract Schedule of Activities tables")
     anthropic_api_key: str = ""
     openai_api_key: str = ""

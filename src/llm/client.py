@@ -76,6 +76,22 @@ class LLMClient:
         raw = await self.vision_query_multi(images, prompt, **kwargs)
         return _extract_json(raw)
 
+    def create_batch(self, poll_interval: int = 10, timeout: int = 3600) -> OpenAIBatchManager | None:
+        """Create an OpenAI Batch Manager for async batch processing.
+
+        Returns None if provider is not OpenAI or batch mode is disabled.
+        Only works with OpenAI (not Azure or Anthropic).
+        """
+        if self.config.llm_provider != "openai" or not self.config.openai_batch_mode:
+            return None
+        # Need the sync client for file operations
+        from openai import AsyncOpenAI
+        client = AsyncOpenAI(
+            api_key=self.config.openai_api_key or None,
+            timeout=120.0,
+        )
+        return OpenAIBatchManager(client, poll_interval=poll_interval, timeout=timeout)
+
 
 # ---------------------------------------------------------------------------
 # Anthropic Backend
@@ -234,6 +250,125 @@ class _OpenAIBackend:
                 await asyncio.sleep(2 ** attempt + 1)
 
         raise RuntimeError(f"OpenAI: all {max_retries} retries failed: {last_error}") from last_error
+
+
+# ---------------------------------------------------------------------------
+# OpenAI Batch Manager (async file-based batch processing)
+# ---------------------------------------------------------------------------
+
+class OpenAIBatchManager:
+    """Manages OpenAI Batch API for async processing.
+
+    Collects requests, submits as a JSONL batch file, polls for completion,
+    and returns results. 50% cheaper than real-time API calls.
+
+    Usage:
+        batch = OpenAIBatchManager(client)
+        batch.add("req-1", model, messages, max_tokens)
+        batch.add("req-2", model, messages, max_tokens)
+        results = await batch.submit_and_wait()
+        # results = {"req-1": "response text", "req-2": "response text"}
+    """
+
+    def __init__(self, client, poll_interval: int = 10, timeout: int = 3600):
+        self._client = client
+        self._requests: list[dict] = []
+        self._poll_interval = poll_interval
+        self._timeout = timeout
+
+    def add(self, custom_id: str, model: str, messages: list[dict],
+            max_tokens: int = 4096, temperature: float = 0.0):
+        """Add a request to the batch."""
+        self._requests.append({
+            "custom_id": custom_id,
+            "method": "POST",
+            "url": "/v1/chat/completions",
+            "body": {
+                "model": model,
+                "messages": messages,
+                "max_tokens": max_tokens,
+                "temperature": temperature,
+            }
+        })
+
+    @property
+    def size(self) -> int:
+        return len(self._requests)
+
+    async def submit_and_wait(self) -> dict[str, str]:
+        """Submit batch and wait for results.
+
+        Returns dict mapping custom_id → response text.
+        """
+        if not self._requests:
+            return {}
+
+        import io
+        import json as _json
+        import time
+
+        # Create JSONL content
+        jsonl = "\n".join(_json.dumps(r) for r in self._requests)
+        jsonl_bytes = jsonl.encode("utf-8")
+
+        logger.info(f"Submitting OpenAI batch with {len(self._requests)} requests")
+
+        # Upload the batch file
+        file_obj = await self._client.files.create(
+            file=io.BytesIO(jsonl_bytes),
+            purpose="batch",
+        )
+
+        # Create the batch
+        batch = await self._client.batches.create(
+            input_file_id=file_obj.id,
+            endpoint="/v1/chat/completions",
+            completion_window="24h",
+        )
+
+        logger.info(f"Batch created: {batch.id}, status: {batch.status}")
+
+        # Poll for completion
+        start_time = time.time()
+        while True:
+            batch = await self._client.batches.retrieve(batch.id)
+
+            if batch.status == "completed":
+                break
+            elif batch.status in ("failed", "expired", "cancelled"):
+                raise RuntimeError(f"Batch {batch.id} {batch.status}: {batch.errors}")
+
+            elapsed = time.time() - start_time
+            if elapsed > self._timeout:
+                raise RuntimeError(f"Batch {batch.id} timed out after {self._timeout}s")
+
+            logger.debug(f"Batch {batch.id}: {batch.status}, {elapsed:.0f}s elapsed")
+            await asyncio.sleep(self._poll_interval)
+
+        # Download results
+        if not batch.output_file_id:
+            raise RuntimeError(f"Batch completed but no output file")
+
+        output_file = await self._client.files.content(batch.output_file_id)
+        output_text = output_file.text
+
+        # Parse results
+        results: dict[str, str] = {}
+        for line in output_text.strip().split("\n"):
+            if not line.strip():
+                continue
+            entry = _json.loads(line)
+            custom_id = entry.get("custom_id", "")
+            response = entry.get("response", {})
+            body = response.get("body", {})
+            choices = body.get("choices", [])
+            if choices:
+                text = choices[0].get("message", {}).get("content", "")
+                results[custom_id] = text
+
+        logger.info(f"Batch complete: {len(results)}/{len(self._requests)} results")
+        self._requests.clear()
+        return results
 
 
 # ---------------------------------------------------------------------------

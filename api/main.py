@@ -347,7 +347,8 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
             azure_openai_api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview"),
             azure_openai_deployment=os.environ.get("AZURE_OPENAI_DEPLOYMENT", ""),
             render_dpi=150,
-            max_concurrent_llm_calls=5,
+            max_concurrent_llm_calls=int(os.environ.get("MAX_CONCURRENT_LLM_CALLS", "10")),
+            openai_batch_mode=os.environ.get("OPENAI_BATCH_MODE", "").lower() in ("true", "1", "yes"),
             soa_only=True,
         )
         orchestrator = PipelineOrchestrator(config)
