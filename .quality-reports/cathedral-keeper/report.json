@@ -1,0 +1,1858 @@
+{
+  "root": "C:/Users/kapil/Documents/Proto_Demo",
+  "created_at": "2026-03-20T18:28:42.649656",
+  "stats": {
+    "severity_counts": {
+      "high": 1,
+      "low": 64,
+      "medium": 3
+    }
+  },
+  "findings": [
+    {
+      "policy_id": "CK-ARCH-LAYER-DIRECTION",
+      "title": "Layer violation: llm \u2192 models",
+      "severity": "high",
+      "confidence": "high",
+      "why_it_matters": "Layer 'llm' imports from 'models' which is above it in the architecture.  Upward imports collapse layer separation and create hidden coupling.",
+      "evidence": [
+        {
+          "file": "src/llm/client.py",
+          "line": 18,
+          "snippet": "import src.models.schema",
+          "note": "llm (layer 4) \u2192 models (layer 2)"
+        }
+      ],
+      "fix_options": [
+        "Move the shared code to a lower layer or create an interface in 'models'.",
+        "Add an explicit exception in allowed_cross_layer with a documented reason."
+      ],
+      "verification": [
+        "python -m compileall -q src/llm/client.py"
+      ],
+      "metadata": {
+        "src_layer": "llm",
+        "dst_layer": "models",
+        "module": "src.models.schema",
+        "dst_file": "src/models/schema.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: api/__init__.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "api/__init__.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*__init__' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "api/__init__.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: api/main.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*main' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: golden_set/__init__.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "golden_set/__init__.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*__init__' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "golden_set/__init__.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: golden_set/evaluate.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "golden_set/evaluate.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*evaluate' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "golden_set/evaluate.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: golden_set/synthetic/soa_generator.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "golden_set/synthetic/soa_generator.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*soa_generator' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "golden_set/synthetic/soa_generator.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: src/__init__.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "src/__init__.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*__init__' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "src/__init__.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: src/domain/__init__.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "src/domain/__init__.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*__init__' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "src/domain/__init__.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: src/llm/__init__.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "src/llm/__init__.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*__init__' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "src/llm/__init__.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: src/models/__init__.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "src/models/__init__.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*__init__' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "src/models/__init__.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: src/pipeline/__init__.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "src/pipeline/__init__.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*__init__' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "src/pipeline/__init__.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/__init__.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/__init__.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*__init__' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/__init__.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_clinical_domain.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_clinical_domain.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_clinical_domain' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_clinical_domain.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_footnote_resolver.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_footnote_resolver.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_footnote_resolver' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_footnote_resolver.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_models.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_models.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_models' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_models.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_ocr_grounding.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_ocr_grounding.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_ocr_grounding' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_ocr_grounding.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_orchestrator.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_orchestrator.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_orchestrator' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_orchestrator.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_output_validator.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_output_validator.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_output_validator' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_output_validator.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_pdf_ingestion.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_pdf_ingestion.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_pdf_ingestion' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_pdf_ingestion.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_procedure_normalizer.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_procedure_normalizer.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_procedure_normalizer' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_procedure_normalizer.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_reconciler.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_reconciler.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_reconciler' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_reconciler.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_regression_content.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_regression_content.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_regression_content' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_regression_content.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_section_parser_comprehensive.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_section_parser_comprehensive.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_section_parser_comprehensive' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_section_parser_comprehensive.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_table_detection.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_table_detection.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_table_detection' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_table_detection.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_table_stitcher.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_table_stitcher.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_table_stitcher' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_table_stitcher.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEAD-MODULES",
+      "title": "Dead module: tests/test_temporal_extractor.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "This file is never imported by any other module and doesn't match known entry-point patterns.  Dead modules confuse developers, mislead AI tools, and increase maintenance burden.",
+      "evidence": [
+        {
+          "file": "tests/test_temporal_extractor.py",
+          "line": 1,
+          "snippet": "(no incoming imports)",
+          "note": "Not imported by any analysed file"
+        }
+      ],
+      "fix_options": [
+        "Delete the file if it is genuinely unused.",
+        "If it is a legitimate entry point, add its pattern to entry_point_patterns in config."
+      ],
+      "verification": [
+        "grep -r 'import.*test_temporal_extractor' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "tests/test_temporal_extractor.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: FRONTEND_URL in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'FRONTEND_URL' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 46,
+          "snippet": "os.environ/getenv(\"FRONTEND_URL\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'FRONTEND_URL' api/main.py"
+      ],
+      "metadata": {
+        "key": "FRONTEND_URL",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: LLM_PROVIDER in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'LLM_PROVIDER' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 131,
+          "snippet": "os.environ/getenv(\"LLM_PROVIDER\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'LLM_PROVIDER' api/main.py"
+      ],
+      "metadata": {
+        "key": "LLM_PROVIDER",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: ANTHROPIC_API_KEY in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'ANTHROPIC_API_KEY' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 132,
+          "snippet": "os.environ/getenv(\"ANTHROPIC_API_KEY\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'ANTHROPIC_API_KEY' api/main.py"
+      ],
+      "metadata": {
+        "key": "ANTHROPIC_API_KEY",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: OPENAI_API_KEY in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'OPENAI_API_KEY' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 133,
+          "snippet": "os.environ/getenv(\"OPENAI_API_KEY\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'OPENAI_API_KEY' api/main.py"
+      ],
+      "metadata": {
+        "key": "OPENAI_API_KEY",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: LLM_PROVIDER in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'LLM_PROVIDER' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 326,
+          "snippet": "os.environ/getenv(\"LLM_PROVIDER\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'LLM_PROVIDER' api/main.py"
+      ],
+      "metadata": {
+        "key": "LLM_PROVIDER",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: LLM_MODEL in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'LLM_MODEL' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 327,
+          "snippet": "os.environ/getenv(\"LLM_MODEL\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'LLM_MODEL' api/main.py"
+      ],
+      "metadata": {
+        "key": "LLM_MODEL",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: VISION_MODEL in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'VISION_MODEL' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 328,
+          "snippet": "os.environ/getenv(\"VISION_MODEL\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'VISION_MODEL' api/main.py"
+      ],
+      "metadata": {
+        "key": "VISION_MODEL",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: ANTHROPIC_API_KEY in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'ANTHROPIC_API_KEY' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 329,
+          "snippet": "os.environ/getenv(\"ANTHROPIC_API_KEY\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'ANTHROPIC_API_KEY' api/main.py"
+      ],
+      "metadata": {
+        "key": "ANTHROPIC_API_KEY",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: OPENAI_API_KEY in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'OPENAI_API_KEY' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 330,
+          "snippet": "os.environ/getenv(\"OPENAI_API_KEY\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'OPENAI_API_KEY' api/main.py"
+      ],
+      "metadata": {
+        "key": "OPENAI_API_KEY",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-CONFIG-SPRAWL",
+      "title": "Direct env access: PORT in api/main.py",
+      "severity": "low",
+      "confidence": "high",
+      "why_it_matters": "'PORT' is accessed via os.environ/os.getenv directly in application code instead of through a settings class. Scattered env access makes it impossible to know what configuration a service actually needs.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 388,
+          "snippet": "os.environ/getenv(\"PORT\")",
+          "note": "Direct environment variable access outside settings module"
+        }
+      ],
+      "fix_options": [
+        "Move this access into a centralised settings/config module.",
+        "Add the file pattern to allow_direct_env if this is intentional."
+      ],
+      "verification": [
+        "grep -n 'PORT' api/main.py"
+      ],
+      "metadata": {
+        "key": "PORT",
+        "file": "api/main.py"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: api/main.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'api/main.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 1,
+          "snippet": "Expected: test_main.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_main.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_main.py'"
+      ],
+      "metadata": {
+        "source_file": "api/main.py",
+        "module": "main"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: golden_set/evaluate.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'golden_set/evaluate.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "golden_set/evaluate.py",
+          "line": 1,
+          "snippet": "Expected: test_evaluate.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_evaluate.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_evaluate.py'"
+      ],
+      "metadata": {
+        "source_file": "golden_set/evaluate.py",
+        "module": "evaluate"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/domain/procedures.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/domain/procedures.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/domain/procedures.py",
+          "line": 1,
+          "snippet": "Expected: test_procedures.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_procedures.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_procedures.py'"
+      ],
+      "metadata": {
+        "source_file": "src/domain/procedures.py",
+        "module": "procedures"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/domain/sme_corrections.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/domain/sme_corrections.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/domain/sme_corrections.py",
+          "line": 1,
+          "snippet": "Expected: test_sme_corrections.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_sme_corrections.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_sme_corrections.py'"
+      ],
+      "metadata": {
+        "source_file": "src/domain/sme_corrections.py",
+        "module": "sme_corrections"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/llm/client.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/llm/client.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/llm/client.py",
+          "line": 1,
+          "snippet": "Expected: test_client.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_client.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_client.py'"
+      ],
+      "metadata": {
+        "source_file": "src/llm/client.py",
+        "module": "client"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/models/schema.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/models/schema.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/models/schema.py",
+          "line": 1,
+          "snippet": "Expected: test_schema.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_schema.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_schema.py'"
+      ],
+      "metadata": {
+        "source_file": "src/models/schema.py",
+        "module": "schema"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/budget_calculator.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/budget_calculator.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/budget_calculator.py",
+          "line": 1,
+          "snippet": "Expected: test_budget_calculator.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_budget_calculator.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_budget_calculator.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/budget_calculator.py",
+        "module": "budget_calculator"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/cell_extractor.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/cell_extractor.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/cell_extractor.py",
+          "line": 1,
+          "snippet": "Expected: test_cell_extractor.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_cell_extractor.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_cell_extractor.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/cell_extractor.py",
+        "module": "cell_extractor"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/challenger_agent.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/challenger_agent.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/challenger_agent.py",
+          "line": 1,
+          "snippet": "Expected: test_challenger_agent.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_challenger_agent.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_challenger_agent.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/challenger_agent.py",
+        "module": "challenger_agent"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/footnote_extractor.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/footnote_extractor.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/footnote_extractor.py",
+          "line": 1,
+          "snippet": "Expected: test_footnote_extractor.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_footnote_extractor.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_footnote_extractor.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/footnote_extractor.py",
+        "module": "footnote_extractor"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/html_report.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/html_report.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/html_report.py",
+          "line": 1,
+          "snippet": "Expected: test_html_report.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_html_report.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_html_report.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/html_report.py",
+        "module": "html_report"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/protocol_synopsis.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/protocol_synopsis.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/protocol_synopsis.py",
+          "line": 1,
+          "snippet": "Expected: test_protocol_synopsis.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_protocol_synopsis.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_protocol_synopsis.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/protocol_synopsis.py",
+        "module": "protocol_synopsis"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/review_exporter.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/review_exporter.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/review_exporter.py",
+          "line": 1,
+          "snippet": "Expected: test_review_exporter.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_review_exporter.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_review_exporter.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/review_exporter.py",
+        "module": "review_exporter"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/run_comparator.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/run_comparator.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/run_comparator.py",
+          "line": 1,
+          "snippet": "Expected: test_run_comparator.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_run_comparator.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_run_comparator.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/run_comparator.py",
+        "module": "run_comparator"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/section_parser.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/section_parser.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/section_parser.py",
+          "line": 1,
+          "snippet": "Expected: test_section_parser.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_section_parser.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_section_parser.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/section_parser.py",
+        "module": "section_parser"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/structural_analyzer.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/structural_analyzer.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/structural_analyzer.py",
+          "line": 1,
+          "snippet": "Expected: test_structural_analyzer.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_structural_analyzer.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_structural_analyzer.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/structural_analyzer.py",
+        "module": "structural_analyzer"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: src/pipeline/verbatim_extractor.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'src/pipeline/verbatim_extractor.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "src/pipeline/verbatim_extractor.py",
+          "line": 1,
+          "snippet": "Expected: test_verbatim_extractor.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_verbatim_extractor.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_verbatim_extractor.py'"
+      ],
+      "metadata": {
+        "source_file": "src/pipeline/verbatim_extractor.py",
+        "module": "verbatim_extractor"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Missing test file for: golden_set/synthetic/soa_generator.py",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Source module 'golden_set/synthetic/soa_generator.py' has no corresponding test file. Gaps in test architecture tend to cluster at the exact points where bugs are most expensive.",
+      "evidence": [
+        {
+          "file": "golden_set/synthetic/soa_generator.py",
+          "line": 1,
+          "snippet": "Expected: test_soa_generator.py",
+          "note": "No matching test file found in test roots"
+        }
+      ],
+      "fix_options": [
+        "Create a test file: test_soa_generator.py",
+        "If this module is tested indirectly, add it to exclusions."
+      ],
+      "verification": [
+        "find . -name 'test_soa_generator.py'"
+      ],
+      "metadata": {
+        "source_file": "golden_set/synthetic/soa_generator.py",
+        "module": "soa_generator"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Untested boundary interface: src/models/schema.py",
+      "severity": "medium",
+      "confidence": "medium",
+      "why_it_matters": "'src/models/schema.py' is imported by 36 modules across different directories, making it a boundary interface. Boundary modules are higher-risk and should have dedicated test coverage.",
+      "evidence": [
+        {
+          "file": "src/models/schema.py",
+          "line": 1,
+          "snippet": "Imported across 36 directory boundaries",
+          "note": "Boundary interface without test coverage"
+        }
+      ],
+      "fix_options": [
+        "Create test_schema.py with tests for this interface."
+      ],
+      "verification": [
+        "grep -rn 'import.*schema' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "src/models/schema.py",
+        "cross_imports": 36
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Untested boundary interface: src/llm/client.py",
+      "severity": "medium",
+      "confidence": "medium",
+      "why_it_matters": "'src/llm/client.py' is imported by 8 modules across different directories, making it a boundary interface. Boundary modules are higher-risk and should have dedicated test coverage.",
+      "evidence": [
+        {
+          "file": "src/llm/client.py",
+          "line": 1,
+          "snippet": "Imported across 8 directory boundaries",
+          "note": "Boundary interface without test coverage"
+        }
+      ],
+      "fix_options": [
+        "Create test_client.py with tests for this interface."
+      ],
+      "verification": [
+        "grep -rn 'import.*client' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "src/llm/client.py",
+        "cross_imports": 8
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-TEST-ALIGNMENT",
+      "title": "Untested boundary interface: src/pipeline/section_parser.py",
+      "severity": "medium",
+      "confidence": "medium",
+      "why_it_matters": "'src/pipeline/section_parser.py' is imported by 2 modules across different directories, making it a boundary interface. Boundary modules are higher-risk and should have dedicated test coverage.",
+      "evidence": [
+        {
+          "file": "src/pipeline/section_parser.py",
+          "line": 1,
+          "snippet": "Imported across 2 directory boundaries",
+          "note": "Boundary interface without test coverage"
+        }
+      ],
+      "fix_options": [
+        "Create test_section_parser.py with tests for this interface."
+      ],
+      "verification": [
+        "grep -rn 'import.*section_parser' --include='*.py' ."
+      ],
+      "metadata": {
+        "file": "src/pipeline/section_parser.py",
+        "cross_imports": 2
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-ENV-PARITY",
+      "title": "Undocumented env var: FRONTEND_URL",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Environment variable 'FRONTEND_URL' is referenced in code but not found in any env documentation file (.env.example). Undocumented variables are a common source of deployment failures.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 46,
+          "snippet": "FRONTEND_URL = os.environ.get(\"FRONTEND_URL\", \"http://localhost:3000\")",
+          "note": "Referenced in 1 location(s)"
+        }
+      ],
+      "fix_options": [
+        "Add 'FRONTEND_URL' to .env.example with a description and default.",
+        "Add 'FRONTEND_URL' to ignore_keys if it's a system variable."
+      ],
+      "verification": [
+        "grep -rn 'FRONTEND_URL' --include='*.py' ."
+      ],
+      "metadata": {
+        "key": "FRONTEND_URL",
+        "files": [
+          "api/main.py"
+        ]
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-ENV-PARITY",
+      "title": "Undocumented env var: LLM_MODEL",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Environment variable 'LLM_MODEL' is referenced in code but not found in any env documentation file (.env.example). Undocumented variables are a common source of deployment failures.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 327,
+          "snippet": "llm_model=os.environ.get(\"LLM_MODEL\", \"\"),",
+          "note": "Referenced in 1 location(s)"
+        }
+      ],
+      "fix_options": [
+        "Add 'LLM_MODEL' to .env.example with a description and default.",
+        "Add 'LLM_MODEL' to ignore_keys if it's a system variable."
+      ],
+      "verification": [
+        "grep -rn 'LLM_MODEL' --include='*.py' ."
+      ],
+      "metadata": {
+        "key": "LLM_MODEL",
+        "files": [
+          "api/main.py"
+        ]
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-ENV-PARITY",
+      "title": "Undocumented env var: OPENAI_API_KEY",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Environment variable 'OPENAI_API_KEY' is referenced in code but not found in any env documentation file (.env.example). Undocumented variables are a common source of deployment failures.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 133,
+          "snippet": "openai_api_key=os.environ.get(\"OPENAI_API_KEY\", \"\"),",
+          "note": "Referenced in 2 location(s)"
+        }
+      ],
+      "fix_options": [
+        "Add 'OPENAI_API_KEY' to .env.example with a description and default.",
+        "Add 'OPENAI_API_KEY' to ignore_keys if it's a system variable."
+      ],
+      "verification": [
+        "grep -rn 'OPENAI_API_KEY' --include='*.py' ."
+      ],
+      "metadata": {
+        "key": "OPENAI_API_KEY",
+        "files": [
+          "api/main.py"
+        ]
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-ENV-PARITY",
+      "title": "Undocumented env var: PORT",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Environment variable 'PORT' is referenced in code but not found in any env documentation file (.env.example). Undocumented variables are a common source of deployment failures.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 388,
+          "snippet": "port = int(os.environ.get(\"PORT\", 8000))",
+          "note": "Referenced in 1 location(s)"
+        }
+      ],
+      "fix_options": [
+        "Add 'PORT' to .env.example with a description and default.",
+        "Add 'PORT' to ignore_keys if it's a system variable."
+      ],
+      "verification": [
+        "grep -rn 'PORT' --include='*.py' ."
+      ],
+      "metadata": {
+        "key": "PORT",
+        "files": [
+          "api/main.py"
+        ]
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-ENV-PARITY",
+      "title": "Undocumented env var: VISION_MODEL",
+      "severity": "low",
+      "confidence": "medium",
+      "why_it_matters": "Environment variable 'VISION_MODEL' is referenced in code but not found in any env documentation file (.env.example). Undocumented variables are a common source of deployment failures.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 328,
+          "snippet": "vision_model=os.environ.get(\"VISION_MODEL\", \"\"),",
+          "note": "Referenced in 1 location(s)"
+        }
+      ],
+      "fix_options": [
+        "Add 'VISION_MODEL' to .env.example with a description and default.",
+        "Add 'VISION_MODEL' to ignore_keys if it's a system variable."
+      ],
+      "verification": [
+        "grep -rn 'VISION_MODEL' --include='*.py' ."
+      ],
+      "metadata": {
+        "key": "VISION_MODEL",
+        "files": [
+          "api/main.py"
+        ]
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEPENDENCY-HEALTH",
+      "title": "Unused dependency: pymupdf",
+      "severity": "low",
+      "confidence": "low",
+      "why_it_matters": "Package 'pymupdf' is declared in pyproject.toml but never imported in any source file. Unused dependencies increase install time and attack surface.",
+      "evidence": [
+        {
+          "file": "pyproject.toml",
+          "line": 13,
+          "snippet": "pymupdf >=1.24",
+          "note": "Declared but no matching imports found"
+        }
+      ],
+      "fix_options": [
+        "Remove 'pymupdf' from pyproject.toml if genuinely unused.",
+        "If it's a plugin or runtime dependency, add it to skip list."
+      ],
+      "verification": [
+        "grep -rn 'pymupdf' --include='*.py' ."
+      ],
+      "metadata": {
+        "package": "pymupdf",
+        "source_file": "pyproject.toml"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEPENDENCY-HEALTH",
+      "title": "Unused dependency: python-doctr",
+      "severity": "low",
+      "confidence": "low",
+      "why_it_matters": "Package 'python-doctr' is declared in requirements.txt but never imported in any source file. Unused dependencies increase install time and attack surface.",
+      "evidence": [
+        {
+          "file": "requirements.txt",
+          "line": 10,
+          "snippet": "python-doctr",
+          "note": "Declared but no matching imports found"
+        }
+      ],
+      "fix_options": [
+        "Remove 'python-doctr' from requirements.txt if genuinely unused.",
+        "If it's a plugin or runtime dependency, add it to skip list."
+      ],
+      "verification": [
+        "grep -rn 'python_doctr' --include='*.py' ."
+      ],
+      "metadata": {
+        "package": "python-doctr",
+        "source_file": "requirements.txt"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEPENDENCY-HEALTH",
+      "title": "Unused dependency: python-docx",
+      "severity": "low",
+      "confidence": "low",
+      "why_it_matters": "Package 'python-docx' is declared in requirements.txt but never imported in any source file. Unused dependencies increase install time and attack surface.",
+      "evidence": [
+        {
+          "file": "requirements.txt",
+          "line": 11,
+          "snippet": "python-docx >=1.1",
+          "note": "Declared but no matching imports found"
+        }
+      ],
+      "fix_options": [
+        "Remove 'python-docx' from requirements.txt if genuinely unused.",
+        "If it's a plugin or runtime dependency, add it to skip list."
+      ],
+      "verification": [
+        "grep -rn 'python_docx' --include='*.py' ."
+      ],
+      "metadata": {
+        "package": "python-docx",
+        "source_file": "requirements.txt"
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEPENDENCY-HEALTH",
+      "title": "Undeclared dependency: fitz",
+      "severity": "low",
+      "confidence": "low",
+      "why_it_matters": "Module 'fitz' is imported in 3 files but not declared in any dependency file. This likely relies on a transitive dependency, which can break unexpectedly.",
+      "evidence": [
+        {
+          "file": "src/pipeline/pdf_ingestion.py",
+          "line": 0,
+          "snippet": "import fitz",
+          "note": "File 1 of 3"
+        },
+        {
+          "file": "src/pipeline/section_parser.py",
+          "line": 0,
+          "snippet": "import fitz",
+          "note": "File 2 of 3"
+        },
+        {
+          "file": "src/pipeline/verbatim_extractor.py",
+          "line": 0,
+          "snippet": "import fitz",
+          "note": "File 3 of 3"
+        }
+      ],
+      "fix_options": [
+        "Add 'fitz' to requirements.txt or pyproject.toml.",
+        "If 'fitz' is a project module, this can be ignored."
+      ],
+      "verification": [
+        "pip show fitz"
+      ],
+      "metadata": {
+        "module": "fitz",
+        "files": [
+          "src/pipeline/pdf_ingestion.py",
+          "src/pipeline/section_parser.py",
+          "src/pipeline/verbatim_extractor.py"
+        ]
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEPENDENCY-HEALTH",
+      "title": "Undeclared dependency: pytest",
+      "severity": "low",
+      "confidence": "low",
+      "why_it_matters": "Module 'pytest' is imported in 14 files but not declared in any dependency file. This likely relies on a transitive dependency, which can break unexpectedly.",
+      "evidence": [
+        {
+          "file": "tests/test_clinical_domain.py",
+          "line": 0,
+          "snippet": "import pytest",
+          "note": "File 1 of 14"
+        },
+        {
+          "file": "tests/test_footnote_resolver.py",
+          "line": 0,
+          "snippet": "import pytest",
+          "note": "File 2 of 14"
+        },
+        {
+          "file": "tests/test_models.py",
+          "line": 0,
+          "snippet": "import pytest",
+          "note": "File 3 of 14"
+        }
+      ],
+      "fix_options": [
+        "Add 'pytest' to requirements.txt or pyproject.toml.",
+        "If 'pytest' is a project module, this can be ignored."
+      ],
+      "verification": [
+        "pip show pytest"
+      ],
+      "metadata": {
+        "module": "pytest",
+        "files": [
+          "tests/test_clinical_domain.py",
+          "tests/test_footnote_resolver.py",
+          "tests/test_models.py",
+          "tests/test_ocr_grounding.py",
+          "tests/test_orchestrator.py",
+          "tests/test_output_validator.py",
+          "tests/test_pdf_ingestion.py",
+          "tests/test_procedure_normalizer.py",
+          "tests/test_reconciler.py",
+          "tests/test_regression_content.py",
+          "tests/test_section_parser_comprehensive.py",
+          "tests/test_table_detection.py",
+          "tests/test_table_stitcher.py",
+          "tests/test_temporal_extractor.py"
+        ]
+      }
+    },
+    {
+      "policy_id": "CK-ARCH-DEPENDENCY-HEALTH",
+      "title": "Undeclared dependency: src",
+      "severity": "low",
+      "confidence": "low",
+      "why_it_matters": "Module 'src' is imported in 37 files but not declared in any dependency file. This likely relies on a transitive dependency, which can break unexpectedly.",
+      "evidence": [
+        {
+          "file": "api/main.py",
+          "line": 0,
+          "snippet": "import src",
+          "note": "File 1 of 37"
+        },
+        {
+          "file": "golden_set/evaluate.py",
+          "line": 0,
+          "snippet": "import src",
+          "note": "File 2 of 37"
+        },
+        {
+          "file": "src/domain/__init__.py",
+          "line": 0,
+          "snippet": "import src",
+          "note": "File 3 of 37"
+        }
+      ],
+      "fix_options": [
+        "Add 'src' to requirements.txt or pyproject.toml.",
+        "If 'src' is a project module, this can be ignored."
+      ],
+      "verification": [
+        "pip show src"
+      ],
+      "metadata": {
+        "module": "src",
+        "files": [
+          "api/main.py",
+          "golden_set/evaluate.py",
+          "src/domain/__init__.py",
+          "src/llm/client.py",
+          "src/pipeline/budget_calculator.py",
+          "src/pipeline/cell_extractor.py",
+          "src/pipeline/challenger_agent.py",
+          "src/pipeline/footnote_extractor.py",
+          "src/pipeline/footnote_resolver.py",
+          "src/pipeline/html_report.py",
+          "src/pipeline/ocr_grounding.py",
+          "src/pipeline/orchestrator.py",
+          "src/pipeline/output_validator.py",
+          "src/pipeline/pdf_ingestion.py",
+          "src/pipeline/procedure_normalizer.py",
+          "src/pipeline/protocol_synopsis.py",
+          "src/pipeline/reconciler.py",
+          "src/pipeline/review_exporter.py",
+          "src/pipeline/structural_analyzer.py",
+          "src/pipeline/table_detection.py",
+          "src/pipeline/table_stitcher.py",
+          "src/pipeline/temporal_extractor.py",
+          "src/pipeline/verbatim_extractor.py",
+          "tests/test_clinical_domain.py",
+          "tests/test_footnote_resolver.py",
+          "tests/test_models.py",
+          "tests/test_ocr_grounding.py",
+          "tests/test_orchestrator.py",
+          "tests/test_output_validator.py",
+          "tests/test_pdf_ingestion.py",
+          "tests/test_procedure_normalizer.py",
+          "tests/test_reconciler.py",
+          "tests/test_regression_content.py",
+          "tests/test_section_parser_comprehensive.py",
+          "tests/test_table_detection.py",
+          "tests/test_table_stitcher.py",
+          "tests/test_temporal_extractor.py"
+        ]
+      }
+    }
+  ]
+}

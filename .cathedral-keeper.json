@@ -1,0 +1,79 @@
+{
+  "version": "0.1.0",
+  "paths": {
+    "include": [],
+    "exclude": ["**/node_modules/**", "**/venv/**", "**/__pycache__/**", "**/web/**", "**/.next/**"],
+    "extensions": [".py"]
+  },
+  "policies": {
+    "CK-PY-CYCLES": {
+      "enabled": true,
+      "severity": "high"
+    },
+    "CK-ARCH-DEAD-MODULES": {
+      "enabled": true,
+      "severity": "low",
+      "config": {
+        "entry_point_patterns": [
+          "**/api/main.py",
+          "**/golden_set/evaluate.py",
+          "**/golden_set/synthetic/soa_generator.py",
+          "**/ck.py"
+        ]
+      }
+    },
+    "CK-ARCH-LAYER-DIRECTION": {
+      "enabled": true,
+      "severity": "high",
+      "config": {
+        "layers": [
+          {"name": "api", "patterns": ["**/api/**"]},
+          {"name": "pipeline", "patterns": ["**/pipeline/**"]},
+          {"name": "models", "patterns": ["**/models/**"]},
+          {"name": "domain", "patterns": ["**/domain/**"]},
+          {"name": "llm", "patterns": ["**/llm/**"]}
+        ],
+        "direction": "top-down",
+        "allowed_cross_layer": [
+          {"from": "pipeline", "to": "api", "reason": "pipeline modules imported by API"},
+          {"from": "domain", "to": "pipeline", "reason": "domain lib used by pipeline"}
+        ]
+      }
+    },
+    "CK-ARCH-CONFIG-SPRAWL": {
+      "enabled": true,
+      "severity": "medium"
+    },
+    "CK-ARCH-TEST-ALIGNMENT": {
+      "enabled": true,
+      "severity": "low",
+      "config": {
+        "source_root": "src",
+        "test_root": "tests"
+      }
+    },
+    "CK-ARCH-ENV-PARITY": {
+      "enabled": true,
+      "severity": "medium",
+      "config": {
+        "env_files": [".env.example"]
+      }
+    },
+    "CK-ARCH-DEPENDENCY-HEALTH": {
+      "enabled": true,
+      "severity": "low"
+    }
+  },
+  "python_roots": [
+    {"prefix": "src", "path": "src"},
+    {"prefix": "api", "path": "api"},
+    {"prefix": "golden_set", "path": "golden_set"}
+  ],
+  "reporting": {
+    "top_findings": 50,
+    "top_files": 30
+  },
+  "thresholds": {
+    "fail_on_severity_at_or_above": "blocker"
+  }
+}
