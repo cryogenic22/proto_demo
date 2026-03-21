@@ -20,9 +20,44 @@ from src.models.schema import (
     TableRegion,
     TableSchema,
 )
+from src.pipeline.grid_anchor import GridSkeleton
 
 logger = logging.getLogger(__name__)
 
+# Anchored prompt: VLM fills values against a deterministic grid skeleton.
+# Row indices come from PyMuPDF, not VLM inference — eliminates structural
+# non-determinism where the same document produces different row mappings.
+EXTRACTION_PROMPT_ANCHORED = """You are analyzing a clinical trial protocol table image.
+
+{grid_anchor}
+
+INSTRUCTIONS:
+For EACH row listed above and EACH column, report the cell value. Use the EXACT
+row indices provided — do NOT renumber or skip rows.
+
+Return a JSON array where each element is:
+{{
+  "row": <row index from the table above — MUST match exactly>,
+  "col": <0-based column index>,
+  "raw_value": "<exact text in the cell, including any superscript markers>",
+  "data_type": "MARKER" | "TEXT" | "NUMERIC" | "EMPTY" | "CONDITIONAL",
+  "footnote_markers": ["a", "b"],
+  "row_header": "<procedure name from the table above>",
+  "col_header": "<the visit/column label>"
+}}
+
+Rules:
+- MARKER = cells containing X, checkmarks, or similar marks
+- CONDITIONAL = X with a superscript footnote letter (e.g., Xᵃ)
+- EMPTY = cells with no content — report these explicitly
+- TEXT = text content (procedure names, descriptions, volume amounts)
+- NUMERIC = standalone numbers
+- Use the row indices EXACTLY as listed — these are deterministic anchors
+- Be precise — do not invent values not visible in the image
+
+Return ONLY the JSON array."""
+
+# Fallback prompt when no grid anchor is available
 EXTRACTION_PROMPT_V1 = """You are analyzing a clinical trial protocol table image.
 The table has the following structure:
 - Columns: {columns}
@@ -89,6 +124,7 @@ class CellExtractor:
         schema: TableSchema,
         pages: list[PageImage],
         pass_number: int = 1,
+        grid_skeleton: GridSkeleton | None = None,
     ) -> list[ExtractedCell]:
         """
         Extract all cell values from a table.
@@ -98,6 +134,9 @@ class CellExtractor:
             schema: Structural schema from Pass 1.
             pages: All page images.
             pass_number: 1 or 2 — determines which prompt variant to use.
+            grid_skeleton: Deterministic row anchors from PyMuPDF.
+                When provided, row indices are locked to the skeleton
+                instead of being inferred by the VLM.
 
         Returns:
             List of ExtractedCell objects.
@@ -106,6 +145,17 @@ class CellExtractor:
         if not table_images:
             return []
 
+        # Use anchored extraction when grid skeleton is available
+        if grid_skeleton and grid_skeleton.rows:
+            logger.info(
+                f"Using grid-anchored extraction: {grid_skeleton.num_rows} rows, "
+                f"{grid_skeleton.num_cols} cols"
+            )
+            anchor_text = grid_skeleton.to_prompt_anchor()
+            prompt = EXTRACTION_PROMPT_ANCHORED.format(grid_anchor=anchor_text)
+            return await self._extract_chunk(table_images, prompt)
+
+        # Fallback: unanchored extraction (original behavior)
         prompt_template = EXTRACTION_PROMPT_V1 if pass_number == 1 else EXTRACTION_PROMPT_V2
 
         # Build column description from schema

@@ -21,6 +21,7 @@ from src.models.schema import (
     TableType,
 )
 from src.pipeline.cell_extractor import CellExtractor
+from src.pipeline.grid_anchor import GridAnchor
 from src.pipeline.challenger_agent import ChallengerAgent
 from src.pipeline.clinical_domain import (
     ClinicalDomainClassifier,
@@ -63,6 +64,7 @@ class PipelineOrchestrator:
         self.temporal_extractor = TemporalExtractor()
         self.challenger = ChallengerAgent(config, self.llm)
         self.reconciler = Reconciler(config)
+        self.grid_anchor = GridAnchor()
         self.ocr_verifier = OCRGroundingVerifier(config)
         self.validator = OutputValidator()
         self.synopsis_extractor = ProtocolSynopsisExtractor(config, self.llm)
@@ -177,7 +179,7 @@ class PipelineOrchestrator:
             pct = 40 + int(55 * i / max(len(regions), 1))
             _progress(pct, f"Extracting table {i+1}/{len(regions)}: {region.title or region.table_id}...")
             try:
-                table = await self._process_table(region, pages)
+                table = await self._process_table(region, pages, pdf_bytes)
                 tables.append(table)
                 # Save checkpoint after each successful table
                 checkpoint.save_table(table, i + 1, len(regions))
@@ -201,7 +203,7 @@ class PipelineOrchestrator:
             processing_time_seconds=elapsed,
         )
 
-    async def _process_table(self, region, pages) -> ExtractedTable:
+    async def _process_table(self, region, pages, pdf_bytes: bytes = b"") -> ExtractedTable:
         """Process a single table through all extraction stages."""
         table_start = time.time()
 
@@ -209,16 +211,36 @@ class PipelineOrchestrator:
         logger.info(f"  Table {region.table_id}: Structural Analysis")
         schema = await self.structural_analyzer.analyze(region, pages)
 
+        # Stage 4b: Grid Anchoring (deterministic row skeleton from PyMuPDF)
+        grid_skeleton = None
+        if pdf_bytes:
+            try:
+                logger.info(f"  Table {region.table_id}: Grid Anchoring")
+                grid_skeleton = self.grid_anchor.extract_skeleton(
+                    pdf_bytes, region.pages, table_id=region.table_id
+                )
+                # Update schema with anchored row count if it differs
+                if grid_skeleton.num_rows > 0 and grid_skeleton.num_cols > 0:
+                    logger.info(
+                        f"  Grid anchor: {grid_skeleton.num_rows} rows "
+                        f"(schema had {schema.num_rows})"
+                    )
+            except Exception as e:
+                logger.warning(f"  Grid anchoring failed, falling back to VLM: {e}")
+                grid_skeleton = None
+
         # Stage 5: Cell Extraction (Pass 2 — run twice for consistency)
         logger.info(f"  Table {region.table_id}: Cell Extraction")
         pass1_cells = await self.cell_extractor.extract(
-            region, schema, pages, pass_number=1
+            region, schema, pages, pass_number=1,
+            grid_skeleton=grid_skeleton,
         )
 
         pass2_cells = None
         if self.config.max_extraction_passes >= 2:
             pass2_cells = await self.cell_extractor.extract(
-                region, schema, pages, pass_number=2
+                region, schema, pages, pass_number=2,
+                grid_skeleton=grid_skeleton,
             )
 
         # Stage 6: Footnote Extraction + Resolution
