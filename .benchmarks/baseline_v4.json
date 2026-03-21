@@ -1,0 +1,24 @@
+{
+  "protocol_id": "Pfizer BNT162b2 (v4)",
+  "teds_score": 0.9871481028151775,
+  "cell_accuracy": 0.9871481028151775,
+  "cost_weighted_accuracy": 0.9871481028151775,
+  "correct_cells": 1613,
+  "wrong_cells": 21,
+  "total_cells": 1634,
+  "accuracy_by_type": {
+    "TEXT": 0.916,
+    "MARKER": 1.0,
+    "EMPTY": 1.0,
+    "CONDITIONAL": 1.0,
+    "NUMERIC": 1.0
+  },
+  "errors_by_type": {
+    "TEXT": 21,
+    "MARKER": 0,
+    "EMPTY": 0,
+    "CONDITIONAL": 0,
+    "NUMERIC": 0
+  },
+  "footnote_marker_coverage": 1.0
+}

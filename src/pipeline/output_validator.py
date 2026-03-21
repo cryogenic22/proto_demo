@@ -66,7 +66,13 @@ class OutputValidator:
         # 3. Structural consistency
         self._check_structural_consistency(table, result)
 
-        # 4. Duplicate detection
+        # 4. Row consistency (VP2-3)
+        self._check_row_consistency(table, result)
+
+        # 5. Footnote chain validation (VP2-2)
+        self._check_footnote_chain(table, result)
+
+        # 6. Duplicate detection
         self._check_duplicates(table, result)
 
         if result.errors:
@@ -191,6 +197,45 @@ class OutputValidator:
                 f"Table {table.table_id}: {dupes} duplicate cell coordinates found"
             )
 
+    def _check_row_consistency(self, table: ExtractedTable, result: ValidationResult):
+        """Check that each row has the same number of columns (VP2-3)."""
+        if not table.cells:
+            return
+        from collections import Counter
+        row_col_counts = Counter()
+        for cell in table.cells:
+            row_col_counts[cell.row] += 1
+
+        col_counts = list(row_col_counts.values())
+        if len(set(col_counts)) > 1:
+            mode_count = Counter(col_counts).most_common(1)[0][0]
+            anomalous = {r: cnt for r, cnt in row_col_counts.items() if cnt != mode_count}
+            if anomalous:
+                result.warnings.append(
+                    f"Table {table.table_id}: Row consistency issue — "
+                    f"{len(anomalous)} rows have different column counts "
+                    f"(expected {mode_count}, anomalous: {anomalous})"
+                )
+
+    def _check_footnote_chain(self, table: ExtractedTable, result: ValidationResult):
+        """Verify every footnote marker in cells has a definition (VP2-2)."""
+        # Collect all markers referenced in cells
+        cell_markers = set()
+        for cell in table.cells:
+            for m in cell.footnote_markers:
+                cell_markers.add(m)
+
+        # Collect all defined footnotes
+        defined_markers = {fn.marker for fn in table.footnotes}
+
+        # Find orphaned markers (in cells but no definition)
+        orphaned = cell_markers - defined_markers
+        if orphaned:
+            result.warnings.append(
+                f"Table {table.table_id}: Footnote markers {orphaned} found in cells "
+                f"but no definition extracted"
+            )
+
     def _clean_cell(self, cell: ExtractedCell) -> ExtractedCell | None:
         """
         Clean a single cell. Returns None to reject, or cleaned cell.
@@ -204,7 +249,69 @@ class OutputValidator:
             return cell.model_copy(update={
                 "raw_value": "",
                 "data_type": CellDataType.EMPTY,
-                "confidence": min(cell.confidence, 0.3),  # Tank confidence
+                "confidence": min(cell.confidence, 0.3),
             })
 
+        # Clean superscript contamination in procedure names (col 0)
+        if cell.col == 0 and cell.raw_value:
+            cleaned_value, extra_markers = _strip_superscript_contamination(cell.raw_value)
+            if cleaned_value != cell.raw_value:
+                new_markers = list(cell.footnote_markers) + extra_markers
+                return cell.model_copy(update={
+                    "raw_value": cleaned_value,
+                    "row_header": cleaned_value if cell.row_header == cell.raw_value else cell.row_header,
+                    "footnote_markers": new_markers,
+                })
+
         return cell
+
+
+# Superscript contamination cleanup
+_SUPERSCRIPT_MAP = {"ᵃ": "a", "ᵇ": "b", "ᶜ": "c", "ᵈ": "d",
+                     "ᵉ": "e", "ᶠ": "f", "ᵍ": "g", "ʰ": "h"}
+
+_CONTAMINATED_SUFFIXES = {
+    "assessmente": "assessment",
+    "assessmenta": "assessment",
+    "assessmentd": "assessment",
+    "appropriateb": "appropriate",
+    "appropriated": "appropriate",
+    "informationd": "information",
+    "administrationf": "administration",
+    "datesf": "dates",
+    "resultsf": "results",
+    "typingc": "typing",
+    "typinge": "typing",
+    "isolationc": "isolation",
+    "isolatione": "isolation",
+    "swab(s)c": "swab(s)",
+}
+
+
+def _strip_superscript_contamination(value: str) -> tuple[str, list[str]]:
+    """Strip footnote superscripts that contaminate procedure names.
+
+    Returns (cleaned_value, list_of_extracted_markers).
+    """
+    markers = []
+    original = value
+
+    # Strip Unicode superscripts
+    for sup, plain in _SUPERSCRIPT_MAP.items():
+        if value.endswith(sup):
+            value = value[:-1]
+            markers.append(plain)
+            break
+
+    # Check known contaminated endings
+    val_lower = value.lower()
+    for suffix, clean in _CONTAMINATED_SUFFIXES.items():
+        if val_lower.endswith(suffix):
+            idx = len(value) - len(suffix)
+            marker_char = value[idx + len(clean):]
+            value = value[:idx] + clean
+            if marker_char:
+                markers.append(marker_char.lower())
+            break
+
+    return value, markers
