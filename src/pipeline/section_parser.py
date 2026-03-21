@@ -936,7 +936,22 @@ Return ONLY the JSON array."""
                     if y < page_start_y - 2 or y > page_end_y - 2:
                         continue
 
-                    text = "".join(s["text"] for s in spans).strip()
+                    # Join spans with space awareness — some PDFs have
+                    # adjacent spans without whitespace between words
+                    parts = []
+                    for si, s in enumerate(spans):
+                        t = s["text"]
+                        if si > 0 and parts and t and parts[-1]:
+                            # If previous span doesn't end with space and
+                            # this span doesn't start with space, check if
+                            # we need to insert one (word boundary)
+                            prev = parts[-1]
+                            if (not prev.endswith((" ", "-", "/"))
+                                and not t.startswith((" ", ",", ".", ";", ":"))
+                                and prev[-1].isalpha() and t[0].isalpha()):
+                                parts.append(" ")
+                        parts.append(t)
+                    text = "".join(parts).strip()
                     if not text:
                         continue
 
@@ -1125,12 +1140,14 @@ Return ONLY the JSON array."""
                 and len(text) < 80  # Subheadings are short
             )
 
-            # Numbered list items: "1. Male or female..." — NOT bold
+            # Numbered list items: "1. Male or female..."
+            # Can be bold (e.g., "4. Phase 2/3 only:") as long as they're
+            # not classified as section headings above.
             is_numbered_list = bool(
-                numbered_list_re.match(text) and not line["bold"]
+                numbered_list_re.match(text) and not is_section_heading
             )
 
-            # Bullet list items
+            # Bullet list items (• – ○ etc.)
             is_bullet = bool(bullet_re.match(text))
 
             is_list_item = is_numbered_list or is_bullet
@@ -1165,9 +1182,15 @@ Return ONLY the JSON array."""
                     start_new = True
 
             elif line["page"] != current.get("last_page"):
-                # Cross-page: continuation if similar indent and not a new element
+                # Cross-page boundary handling
                 if is_list_item or is_section_heading or is_subheading:
                     start_new = True
+                # Issue B: previous paragraph ends with period/colon AND this
+                # line starts at a bullet-marker X position → new list item,
+                # not continuation. Catches sub-bullets that span pages.
+                elif current and current["text"].rstrip().endswith((".", ":", ";")):
+                    if is_bullet or indent_level >= 2:
+                        start_new = True
                 # Otherwise assume continuation (paragraph wraps across page)
 
             else:
@@ -1215,7 +1238,17 @@ Return ONLY the JSON array."""
                 }
             else:
                 # Merge into current paragraph
-                current["text"] += " " + text
+                # Issue C fix: ensure space at page boundaries and between
+                # merged lines. Check if current text already ends with space
+                # or hyphen (word break).
+                prev_text = current["text"]
+                if prev_text.endswith("-"):
+                    # Hyphenated word break — join without space, remove hyphen
+                    current["text"] = prev_text[:-1] + text
+                elif prev_text.endswith(" ") or text.startswith(" "):
+                    current["text"] += text
+                else:
+                    current["text"] += " " + text
                 current["last_y"] = line["y"]
                 current["last_page"] = line["page"]
                 current["spans_data"].append(line["spans"])
@@ -1296,7 +1329,13 @@ Return ONLY the JSON array."""
         # If we have span data, use it for precise formatting
         if para.get("spans_data"):
             parts = []
-            for spans in para["spans_data"]:
+            for line_idx, spans in enumerate(para["spans_data"]):
+                # Issue C fix: add space between merged lines to prevent
+                # "orfemale" concatenation across line boundaries
+                if line_idx > 0 and parts:
+                    last = parts[-1]
+                    if last and not last.endswith((" ", "-", ">")):
+                        parts.append(" ")
                 for span in spans:
                     text = self._escape_html(span.get("text", ""))
                     if not text.strip():
@@ -1590,6 +1629,13 @@ Return ONLY the JSON array."""
 
         for page_num in range(doc.page_count):
             page = doc[page_num]
+
+            # P-34 fix: skip cover page (page 0) for header scanning.
+            # Cover pages have title fragments that look like bold headings
+            # (e.g., "INVESTIGATE THE EFFICACY AND SAFETY OF") but aren't
+            # document sections. Only start scanning from page 1+.
+            if page_num == 0:
+                continue
 
             # Strategy 1: Regex on plain text with date rejection
             text = page.get_text("text")
