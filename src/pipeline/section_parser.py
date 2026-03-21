@@ -402,16 +402,29 @@ class SectionParser:
 
         doc.close()
 
-        # Pick the best candidate — most sections wins, with quality weighting
+        # Pick the best candidate — TOC-based strategies strongly preferred
         if not candidates:
             logger.warning("No sections found by any strategy")
             return []
 
-        # Score each candidate
-        best_name, best_sections = max(
-            candidates,
-            key=lambda c: self._score_sections(c[1], total_pages),
-        )
+        # Strategy priority: fitz_toc > toc_text > header_scan
+        # TOC-based strategies have correct page numbers — strongly preferred
+        priority_order = ["fitz_toc", "toc_text", "header_scan"]
+        best_name, best_sections = None, []
+
+        for strategy in priority_order:
+            match = [(name, secs) for name, secs in candidates if name == strategy]
+            if match and len(match[0][1]) >= 8:
+                best_name, best_sections = match[0]
+                break
+
+        # If no strategy hit threshold, fall back to scoring
+        if not best_name:
+            strategy_bonus = {"fitz_toc": 500, "toc_text": 300, "header_scan": 0}
+            best_name, best_sections = max(
+                candidates,
+                key=lambda c: self._score_sections(c[1], total_pages) + strategy_bonus.get(c[0], 0),
+            )
 
         best_score = self._score_sections(best_sections, total_pages)
         logger.info(
@@ -801,15 +814,19 @@ Return ONLY the JSON array."""
         """Find and parse the Table of Contents from page text."""
         sections = []
 
-        # Look for TOC in first 15 pages
-        for page_num in range(min(15, doc.page_count)):
+        # Look for TOC — scan up to first 30 pages (some protocols have
+        # long synopses before the TOC)
+        for page_num in range(min(30, doc.page_count)):
             page = doc[page_num]
             text = page.get_text("text")
 
             # Check if this page looks like a TOC
-            if not any(kw in text.upper() for kw in
-                       ["TABLE OF CONTENTS", "CONTENTS", "LIST OF TABLES"]):
-                if page_num > 5:
+            has_toc_header = any(kw in text.upper() for kw in
+                                ["TABLE OF CONTENTS", "CONTENTS", "LIST OF TABLES"])
+            # Also check if this page has dotted TOC lines (continuation pages)
+            has_dotted_lines = text.count("...") > 3 or text.count("…") > 3 or text.count("..") > 5
+            if not has_toc_header and not has_dotted_lines:
+                if page_num > 10:
                     continue
 
             for line in text.split("\n"):
@@ -829,10 +846,51 @@ Return ONLY the JSON array."""
                     sections.append(Section(
                         number=sec_num,
                         title=sec_title,
-                        page=int(sec_page) - 1,
+                        page=int(sec_page) - 1,  # Will be calibrated below
                         page_display=sec_page,
                         level=level,
                     ))
+
+        # Calibrate page offset: the TOC page numbers may not match
+        # PDF physical page numbers (cover pages, roman numeral preface, etc.)
+        if sections:
+            sections = self._calibrate_page_offset(doc, sections)
+
+        return sections
+
+    def _calibrate_page_offset(self, doc: fitz.Document, sections: list[Section]) -> list[Section]:
+        """Calibrate TOC page numbers by finding each section header in actual PDF text.
+
+        The most reliable approach: for each top-level section, scan the PDF
+        to find the page where that header actually appears.
+        """
+        # Build a quick page→text index for the document
+        page_texts: dict[int, str] = {}
+        for i in range(doc.page_count):
+            page_texts[i] = doc[i].get_text("text")
+
+        # First, detect offset from Section 1 (or first numbered section)
+        offset = 0
+        for s in sections:
+            if s.number and re.match(r"^\d$", s.number) and len(s.title) > 3:
+                title_word = re.sub(r"[^A-Za-z]", "", s.title[:15]).strip()[:10]
+                if not title_word:
+                    continue
+                # Search AFTER the TOC pages (skip pages where TOC was found)
+                # TOC is typically in the first 30 pages; start after s.page
+                search_from = max(s.page + 1, 5)  # At least page 5, after TOC
+                for page_num in range(search_from, doc.page_count):
+                    pattern = r"(?:^|\n)\s*" + re.escape(s.number) + r"[\.\s]+" + title_word
+                    if re.search(pattern, page_texts[page_num], re.IGNORECASE):
+                        offset = page_num - s.page
+                        logger.info(f"Page offset: Section {s.number} '{s.title[:20]}' "
+                                    f"TOC={s.page} actual={page_num} offset={offset:+d}")
+                        break
+                break
+
+        if offset != 0:
+            for s in sections:
+                s.page = max(0, s.page + offset)
 
         return sections
 
