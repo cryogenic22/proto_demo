@@ -105,11 +105,11 @@ def _build_cells_tab(wb: Workbook, result: dict):
             ws.cell(row=row_num, column=8, value=cell.get("data_type", ""))
             ws.cell(row=row_num, column=9, value=round(cell.get("confidence", 0), 2))
 
-            # Pre-fill is_correct based on confidence
-            if cell.get("confidence", 0) >= 0.95:
-                ws.cell(row=row_num, column=10, value="Y")
-            else:
-                ws.cell(row=row_num, column=10, value="")
+            # DO NOT pre-fill is_correct — confidence is the model's
+            # self-assessment, not ground truth. Every cell must be verified
+            # by a human against the source PDF. Pre-filling Y creates
+            # false ground truth that undermines the entire evaluation.
+            ws.cell(row=row_num, column=10, value="")
 
             ws.cell(row=row_num, column=11, value="")  # correct_value
             ws.cell(row=row_num, column=12, value=", ".join(cell.get("footnote_markers", [])))
