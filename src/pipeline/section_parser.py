@@ -992,55 +992,78 @@ Return ONLY the JSON array."""
             return "" if output == "html" else b""
 
         # Step 2: Paragraph reconstruction from Y-gaps
-        paragraphs = self._reconstruct_paragraphs(raw_lines)
+        paragraphs = self._reconstruct_paragraphs(raw_lines, section_number=section.number)
 
         # Step 3: Output generation
         if output == "docx":
             return self._paragraphs_to_docx(paragraphs)
         return self._paragraphs_to_html(paragraphs)
 
-    def _reconstruct_paragraphs(self, raw_lines: list[dict]) -> list[dict]:
+    def _reconstruct_paragraphs(self, raw_lines: list[dict], section_number: str = "") -> list[dict]:
         """Group consecutive lines into semantic paragraphs using Y-gaps.
 
-        Y-gap thresholds (derived from clinical protocol PDFs):
-          Within paragraph: 13-15pt line spacing
-          Between paragraphs: 20-28pt gap
-          Before heading: 30-40pt gap
-
-        Also detects lists by indentation and leading markers.
+        Grouping rules (from team review):
+          Y-gap < 16pt AND same indent AND no bold change → same paragraph
+          Y-gap >= 20pt OR indent change OR bold change → new paragraph
+          Starts with "N." where N is digit, NOT bold → numbered list item
+          X-indent >= 126 with bullet marker → nested list item
+          Bold text followed by non-bold at same Y → split heading + body
         """
         if not raw_lines:
             return []
 
-        # Sort by page then Y
         raw_lines.sort(key=lambda l: (l["page"], l["y"]))
 
         paragraphs: list[dict] = []
         current: dict | None = None
 
-        # Detect typical line spacing from the first few lines
-        typical_gap = 14.0  # Default
+        # Detect typical line spacing from same-page consecutive lines
+        typical_gap = 14.0
         gaps = []
-        for i in range(1, min(len(raw_lines), 20)):
-            if raw_lines[i]["page"] == raw_lines[i - 1]["page"]:
+        for i in range(1, min(len(raw_lines), 30)):
+            if raw_lines[i]["page"] == raw_lines[i - 1]["page"] and raw_lines[i].get("text"):
                 gap = raw_lines[i]["y"] - raw_lines[i - 1]["y"]
-                if 5 < gap < 25:
+                if 5 < gap < 20:
                     gaps.append(gap)
         if gaps:
-            typical_gap = sum(gaps) / len(gaps)
+            typical_gap = sorted(gaps)[len(gaps) // 2]  # Median, not mean
 
-        para_gap_threshold = typical_gap * 1.5
+        # Threshold: Y-gap < 16pt = continuation, >= 20pt = new paragraph
+        continuation_threshold = max(typical_gap + 2, 16.0)
+        para_gap_threshold = max(typical_gap * 1.4, 20.0)
 
-        # List item detection patterns
-        list_re = re.compile(
-            r"^(?:[\u2022\u2023\u25E6\u2043•●○]\s|"  # Bullet chars
-            r"\d{1,3}[.)]\s|"                          # 1. or 1)
-            r"[a-z][.)]\s|"                            # a. or a)
-            r"[–—-]\s)"                                # Dash
-        )
+        # List item patterns — match ONLY at start of line
+        numbered_list_re = re.compile(r"^(\d{1,3})[.)]\s")
+        bullet_re = re.compile(r"^[\u2022\u2023\u25E6\u2043•●○–—\-]\s")
 
-        base_x = min(l["x"] for l in raw_lines if l["text"]) if raw_lines else 0
-        indent_threshold = base_x + 20  # 20pt indentation = list item
+        # Compute base X (leftmost text position) for indent detection
+        text_lines = [l for l in raw_lines if l.get("text")]
+        base_x = min(l["x"] for l in text_lines) if text_lines else 0
+
+        # Build set of known section numbers from multi-level headings in the
+        # extracted lines. A line like "5.1. Inclusion Criteria" tells us that
+        # "5" IS a real section. A line "4. Phase 2/3 only..." with no "4.1"
+        # anywhere tells us "4" is NOT a section — it's a list item.
+        known_section_nums: set[str] = set()
+        known_parents: set[str] = set()
+        for l in raw_lines:
+            if l.get("text") and l.get("bold"):
+                m = re.match(r"^(\d{1,2}(?:\.\d{1,2}){1,5})\.?\s+", l["text"])
+                if m:
+                    num = m.group(1)
+                    known_section_nums.add(num)
+                    # The parent of "5.1" is "5" — so "5" is a real section
+                    parts = num.split(".")
+                    if len(parts) >= 2:
+                        known_parents.add(parts[0])
+        known_section_nums |= known_parents
+
+        # Indent levels (from Pfizer protocol analysis):
+        # base_x (~72) = section body
+        # base_x+18 (~90) = numbered criteria
+        # base_x+36 (~108) = continuation / sub-paragraph
+        # base_x+54 (~126) = bullet prefix position
+        # base_x+72 (~144) = sub-bullet body text
 
         for line in raw_lines:
             # Table — always its own block
@@ -1056,32 +1079,109 @@ Return ONLY the JSON array."""
                 continue
 
             text = line["text"]
+            x = line["x"]
+            indent_level = max(0, round((x - base_x) / 18))  # 18pt per indent
 
-            # Classify this line
-            is_section_heading = bool(
-                line["bold"] and re.match(r"^\d{1,2}(?:\.\d{1,2}){0,5}\.?\s+", text)
+            # === CLASSIFY THIS LINE ===
+
+            # Issue 2 fix: Section headings MUST be bold AND the number must
+            # look like a real section number (not a list item like "4. Phase
+            # 2/3 only..."). Heuristics:
+            # - Single digits (1-9) at X > base_x+10 = list items, not sections
+            # - Multi-level numbers (4.2, 5.1.3) = always section headings
+            sec_match = re.match(r"^(\d{1,2}(?:\.\d{1,2}){0,5})\.?\s+[A-Z]", text)
+            is_section_heading = False
+            if line["bold"] and sec_match:
+                candidate_num = sec_match.group(1)
+                if "." in candidate_num:
+                    # Multi-level number (4.2, 5.1.3) = section heading
+                    is_section_heading = True
+                elif section_number:
+                    # We know which section we're extracting. Within Section
+                    # 5.1, a line "4. Phase 2/3..." is a numbered list item,
+                    # NOT section 4. Only the current section number and its
+                    # subsections (5.1, 5.1.1, 5.2) are real headings.
+                    # A single digit is only a heading if it's a known section
+                    # AND it's not the parent of our current section.
+                    # Within Section 5.1, "5." is the parent — not a new heading.
+                    sec_parent = section_number.split(".")[0] if "." in section_number else ""
+                    if candidate_num in known_section_nums and candidate_num != sec_parent:
+                        is_section_heading = True
+                    # else: single digit that's either not a known section or
+                    # is our parent section = numbered list item
+                elif indent_level == 0:
+                    is_section_heading = True
+
+            # Issue 3/6 fix: Subheadings are bold standalone labels like
+            # "Age and Sex:" or "Medical Conditions:". They are short, bold,
+            # often end with ":", and are NOT list items or notes.
+            # "Note: Healthy participants..." is a bold note, not a subheading.
+            is_subheading = (
+                line["bold"]
+                and not is_section_heading
+                and line["size"] >= 11
+                and not numbered_list_re.match(text)
+                and not text.lower().startswith("note")
+                and len(text) < 80  # Subheadings are short
             )
-            is_subheading = line["bold"] and not is_section_heading and line["size"] >= 11
-            is_list_item = bool(list_re.match(text)) or (line["x"] > indent_threshold and len(text) < 150)
 
-            # Decide: continue current paragraph or start new one
+            # Numbered list items: "1. Male or female..." — NOT bold
+            is_numbered_list = bool(
+                numbered_list_re.match(text) and not line["bold"]
+            )
+
+            # Bullet list items
+            is_bullet = bool(bullet_re.match(text))
+
+            is_list_item = is_numbered_list or is_bullet
+
+            # === DECIDE: CONTINUE OR START NEW ===
+
             start_new = False
             if current is None:
                 start_new = True
+
+            # Issue 3/4 fix: Bold change = always new paragraph
+            # "5.1. Inclusion Criteria" (bold) followed by "Participants are
+            # eligible..." (not bold) must be separate paragraphs.
+            elif line["bold"] != current.get("bold") and not (
+                # Exception: don't split mid-line bold fragments like "Note: text"
+                current.get("type") == "BODY" and not line["bold"]
+                and line["page"] == current.get("last_page")
+                and (line["y"] - current.get("last_y", 0)) < continuation_threshold
+            ):
+                start_new = True
+
             elif is_section_heading or is_subheading:
                 start_new = True
-            elif is_list_item and current.get("type") != "LIST_ITEM":
+
+            elif is_list_item and current.get("type") not in ("LIST_ITEM", "LIST_ITEM_L2"):
                 start_new = True
-            elif not is_list_item and current.get("type") == "LIST_ITEM":
-                start_new = True
+
+            elif is_list_item and current.get("type") in ("LIST_ITEM", "LIST_ITEM_L2"):
+                # New list item of same type = new paragraph
+                # But continuation line of same item = merge
+                if is_numbered_list or is_bullet:
+                    start_new = True
+
             elif line["page"] != current.get("last_page"):
-                # Page break — check if continuation or new paragraph
-                start_new = True
+                # Cross-page: continuation if similar indent and not a new element
+                if is_list_item or is_section_heading or is_subheading:
+                    start_new = True
+                # Otherwise assume continuation (paragraph wraps across page)
+
             else:
                 # Same page — check Y gap
                 gap = line["y"] - current.get("last_y", 0)
-                if gap > para_gap_threshold:
+                if gap >= para_gap_threshold:
                     start_new = True
+                elif gap < continuation_threshold:
+                    # Issue 1 fix: small gap + same indent + no bold change +
+                    # no list marker = continuation of current paragraph.
+                    # This merges wrapped lines like:
+                    # "...ages of 18 and 55 years, inclusive, and 65 and"
+                    # "85 years, inclusive (Phase 1)..."
+                    pass  # Will merge below
 
             if start_new:
                 if current:
@@ -1091,6 +1191,9 @@ Return ONLY the JSON array."""
                     ptype = "HEADING"
                 elif is_subheading:
                     ptype = "SUBHEADING"
+                elif is_bullet and indent_level >= 3:
+                    # Issue 5: nested bullet at deeper indent
+                    ptype = "LIST_ITEM_L2"
                 elif is_list_item:
                     ptype = "LIST_ITEM"
                 else:
@@ -1102,13 +1205,16 @@ Return ONLY the JSON array."""
                     "bold": line["bold"],
                     "italic": line["italic"],
                     "size": line["size"],
+                    "x": x,
+                    "indent_level": indent_level,
                     "y": line["y"],
                     "last_y": line["y"],
                     "last_page": line["page"],
                     "spans_data": [line["spans"]],
+                    "is_numbered": is_numbered_list,
                 }
             else:
-                # Continue current paragraph — join with space
+                # Merge into current paragraph
                 current["text"] += " " + text
                 current["last_y"] = line["y"]
                 current["last_page"] = line["page"]
@@ -1122,16 +1228,18 @@ Return ONLY the JSON array."""
     def _paragraphs_to_html(self, paragraphs: list[dict]) -> str:
         """Convert reconstructed paragraphs to semantic HTML."""
         html_parts = []
-        in_list = False
-        list_type = "ul"
+        list_stack: list[str] = []  # Stack of open list tags for nesting
+
+        def _close_lists_to(depth: int):
+            while len(list_stack) > depth:
+                html_parts.append(f"</{list_stack.pop()}>")
 
         for para in paragraphs:
             ptype = para["type"]
 
-            # Close open list if we're not in a list item
-            if ptype != "LIST_ITEM" and in_list:
-                html_parts.append(f"</{list_type}>")
-                in_list = False
+            # Close lists when leaving list context
+            if ptype not in ("LIST_ITEM", "LIST_ITEM_L2"):
+                _close_lists_to(0)
 
             if ptype == "TABLE":
                 table_data = para.get("table_data", [])
@@ -1140,7 +1248,6 @@ Return ONLY the JSON array."""
 
             elif ptype == "HEADING":
                 text = self._escape_html(para["text"])
-                # Determine heading level from section number depth
                 match = re.match(r"^(\d{1,2}(?:\.\d{1,2}){0,5})", para["text"])
                 level = len(match.group(1).split(".")) + 1 if match else 2
                 level = min(level, 6)
@@ -1151,26 +1258,37 @@ Return ONLY the JSON array."""
                 html_parts.append(f"<h4><strong>{text}</strong></h4>")
 
             elif ptype == "LIST_ITEM":
-                if not in_list:
-                    # Detect ordered vs unordered
-                    if re.match(r"^\d+[.)]\s", para["text"]):
-                        list_type = "ol"
-                    else:
-                        list_type = "ul"
-                    html_parts.append(f"<{list_type}>")
-                    in_list = True
-                # Strip the bullet/number prefix
-                item_text = re.sub(r"^(?:[\u2022•●○]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)", "", para["text"])
-                text = self._format_inline_html(para)
+                # Close deeper nesting first
+                _close_lists_to(0)
+                if not list_stack:
+                    lt = "ol" if para.get("is_numbered") else "ul"
+                    html_parts.append(f"<{lt}>")
+                    list_stack.append(lt)
+                item_text = re.sub(
+                    r"^(?:[\u2022•●○]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)",
+                    "", para["text"]
+                )
                 html_parts.append(f"  <li>{self._escape_html(item_text)}</li>")
+
+            elif ptype == "LIST_ITEM_L2":
+                # Ensure L1 list is open, then open L2
+                if not list_stack:
+                    html_parts.append("<ul>")
+                    list_stack.append("ul")
+                if len(list_stack) < 2:
+                    html_parts.append("  <ul>")
+                    list_stack.append("ul")
+                item_text = re.sub(
+                    r"^(?:[\u2022•●○]\s*|[–—-]\s*)",
+                    "", para["text"]
+                )
+                html_parts.append(f"    <li>{self._escape_html(item_text)}</li>")
 
             else:  # BODY
                 text = self._format_inline_html(para)
                 html_parts.append(f"<p>{text}</p>")
 
-        if in_list:
-            html_parts.append(f"</{list_type}>")
-
+        _close_lists_to(0)
         return "\n".join(html_parts)
 
     def _format_inline_html(self, para: dict) -> str:
@@ -1250,7 +1368,15 @@ Return ONLY the JSON array."""
                     r"^(?:[\u2022•●○]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)",
                     "", para["text"]
                 )
-                doc.add_paragraph(item_text, style="List Bullet")
+                style = "List Number" if para.get("is_numbered") else "List Bullet"
+                doc.add_paragraph(item_text, style=style)
+
+            elif ptype == "LIST_ITEM_L2":
+                item_text = re.sub(
+                    r"^(?:[\u2022•●○]\s*|[–—-]\s*)",
+                    "", para["text"]
+                )
+                doc.add_paragraph(item_text, style="List Bullet 2")
 
             else:  # BODY
                 p = doc.add_paragraph()
