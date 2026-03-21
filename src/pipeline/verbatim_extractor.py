@@ -79,6 +79,7 @@ class VerbatimExtractor:
         instruction: str,
         sections: list[Section] | None = None,
         filename: str = "",
+        output_format: str = "text",
     ) -> VerbatimResult:
         """
         Extract verbatim content based on a user instruction.
@@ -88,6 +89,8 @@ class VerbatimExtractor:
             instruction: What to extract (e.g., "Copy Section 5.1 inclusion criteria")
             sections: Pre-parsed sections (optional, will parse if not provided)
         """
+        self._output_format = output_format
+
         # Step 1: Parse sections if not provided
         if sections is None:
             sections = self.section_parser.parse(pdf_bytes, filename=filename)
@@ -186,7 +189,13 @@ class VerbatimExtractor:
 
         for section in matched:
             # Extract verbatim text — NO LLM, pure PyMuPDF
-            text = self.section_parser.get_section_text(pdf_bytes, section)
+            # Use formatted extraction if available, fall back to plain text
+            if hasattr(self, '_output_format') and self._output_format == "html":
+                text = self.section_parser.get_section_formatted(pdf_bytes, section, output="html")
+            elif hasattr(self, '_output_format') and self._output_format == "docx":
+                text = self.section_parser.get_section_formatted(pdf_bytes, section, output="html")
+            else:
+                text = self.section_parser.get_section_text(pdf_bytes, section)
             text_parts.append(text)
 
             # Extract tables if requested

@@ -864,6 +864,413 @@ Return ONLY the JSON array."""
         doc.close()
         return "\n".join(html_parts)
 
+    def get_section_formatted(
+        self,
+        pdf_bytes: bytes,
+        section: Section,
+        output: str = "html",
+        include_subsections: bool = True,
+    ) -> str | bytes:
+        """Extract section content with formatting — no page chrome, just content.
+
+        Reconstructs paragraph boundaries from Y-gaps between lines,
+        detects lists, interleaves tables, and classifies heading levels.
+
+        Args:
+            section: The section to extract.
+            output: "html" for semantic HTML, "docx" for Word document bytes.
+            include_subsections: If True, include subsection content.
+
+        Returns:
+            HTML string or DOCX bytes depending on output parameter.
+        """
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        start = section.page
+        end = section.end_page if section.end_page is not None else start
+        end = min(end + 2, doc.page_count - 1)
+
+        # Y-coordinate bounds
+        start_y = section.start_y
+        if start_y == 0.0:
+            start_y = self._find_heading_y(doc, start, section.number, section.title)
+
+        if not include_subsections and section.children:
+            first_child = section.children[0]
+            end = first_child.page
+            end_y = self._find_heading_y(doc, end, first_child.number, first_child.title)
+            if end_y == 0.0:
+                end_y = 99999.0
+        else:
+            end_y = self._find_next_heading_y(
+                doc, end, section.number,
+                after_y=start_y if end == start else 0.0,
+            )
+
+        # Header/footer patterns to strip
+        hf_patterns = [
+            re.compile(r"^Page \d+", re.IGNORECASE),
+            re.compile(r"^Confidential$", re.IGNORECASE),
+            re.compile(r"^\d{1,4}$"),
+            re.compile(r"^PF-\d+", re.IGNORECASE),
+            re.compile(r"^Protocol [A-Z]", re.IGNORECASE),
+            re.compile(r"^Final Protocol", re.IGNORECASE),
+            re.compile(r"^PFIZER CONFIDENTIAL$", re.IGNORECASE),
+        ]
+
+        # Step 1: Extract all lines with full metadata
+        raw_lines: list[dict] = []
+        for page_num in range(start, end + 1):
+            page = doc[page_num]
+            page_start_y = start_y if page_num == start else 0.0
+            page_end_y = end_y if page_num == end else 99999.0
+
+            blocks = page.get_text("dict")["blocks"]
+            for block in blocks:
+                if "lines" not in block:
+                    continue
+                for line in block["lines"]:
+                    spans = line.get("spans", [])
+                    if not spans:
+                        continue
+                    y = spans[0]["origin"][1]
+                    if y < page_start_y - 2 or y > page_end_y - 2:
+                        continue
+
+                    text = "".join(s["text"] for s in spans).strip()
+                    if not text:
+                        continue
+
+                    # Skip headers/footers
+                    if any(p.match(text) for p in hf_patterns):
+                        continue
+                    if "Continued on table" in text:
+                        continue
+
+                    x = spans[0]["origin"][0]
+                    font_size = max(s["size"] for s in spans)
+                    is_bold = any(
+                        "Bold" in s.get("font", "") or s["flags"] & 16
+                        for s in spans if s["text"].strip()
+                    )
+                    is_italic = any(
+                        "Italic" in s.get("font", "") or s["flags"] & 2
+                        for s in spans if s["text"].strip()
+                    )
+
+                    raw_lines.append({
+                        "text": text,
+                        "y": y, "x": x,
+                        "page": page_num,
+                        "size": font_size,
+                        "bold": is_bold,
+                        "italic": is_italic,
+                        "spans": spans,
+                    })
+
+            # Collect tables on this page within Y range
+            try:
+                found_tables = page.find_tables()
+                for t in found_tables.tables:
+                    if hasattr(t, "bbox"):
+                        table_y = t.bbox[1]
+                        if table_y < page_start_y - 10 or table_y > page_end_y + 10:
+                            continue
+                    raw_lines.append({
+                        "text": None,
+                        "y": t.bbox[1] if hasattr(t, "bbox") else y,
+                        "x": 0, "page": page_num,
+                        "size": 0, "bold": False, "italic": False,
+                        "spans": [],
+                        "table_data": t.extract(),
+                    })
+            except (AttributeError, Exception):
+                pass
+
+        doc.close()
+
+        if not raw_lines:
+            return "" if output == "html" else b""
+
+        # Step 2: Paragraph reconstruction from Y-gaps
+        paragraphs = self._reconstruct_paragraphs(raw_lines)
+
+        # Step 3: Output generation
+        if output == "docx":
+            return self._paragraphs_to_docx(paragraphs)
+        return self._paragraphs_to_html(paragraphs)
+
+    def _reconstruct_paragraphs(self, raw_lines: list[dict]) -> list[dict]:
+        """Group consecutive lines into semantic paragraphs using Y-gaps.
+
+        Y-gap thresholds (derived from clinical protocol PDFs):
+          Within paragraph: 13-15pt line spacing
+          Between paragraphs: 20-28pt gap
+          Before heading: 30-40pt gap
+
+        Also detects lists by indentation and leading markers.
+        """
+        if not raw_lines:
+            return []
+
+        # Sort by page then Y
+        raw_lines.sort(key=lambda l: (l["page"], l["y"]))
+
+        paragraphs: list[dict] = []
+        current: dict | None = None
+
+        # Detect typical line spacing from the first few lines
+        typical_gap = 14.0  # Default
+        gaps = []
+        for i in range(1, min(len(raw_lines), 20)):
+            if raw_lines[i]["page"] == raw_lines[i - 1]["page"]:
+                gap = raw_lines[i]["y"] - raw_lines[i - 1]["y"]
+                if 5 < gap < 25:
+                    gaps.append(gap)
+        if gaps:
+            typical_gap = sum(gaps) / len(gaps)
+
+        para_gap_threshold = typical_gap * 1.5
+
+        # List item detection patterns
+        list_re = re.compile(
+            r"^(?:[\u2022\u2023\u25E6\u2043•●○]\s|"  # Bullet chars
+            r"\d{1,3}[.)]\s|"                          # 1. or 1)
+            r"[a-z][.)]\s|"                            # a. or a)
+            r"[–—-]\s)"                                # Dash
+        )
+
+        base_x = min(l["x"] for l in raw_lines if l["text"]) if raw_lines else 0
+        indent_threshold = base_x + 20  # 20pt indentation = list item
+
+        for line in raw_lines:
+            # Table — always its own block
+            if line.get("table_data") is not None:
+                if current:
+                    paragraphs.append(current)
+                    current = None
+                paragraphs.append({
+                    "type": "TABLE",
+                    "table_data": line["table_data"],
+                    "y": line["y"],
+                })
+                continue
+
+            text = line["text"]
+
+            # Classify this line
+            is_section_heading = bool(
+                line["bold"] and re.match(r"^\d{1,2}(?:\.\d{1,2}){0,5}\.?\s+", text)
+            )
+            is_subheading = line["bold"] and not is_section_heading and line["size"] >= 11
+            is_list_item = bool(list_re.match(text)) or (line["x"] > indent_threshold and len(text) < 150)
+
+            # Decide: continue current paragraph or start new one
+            start_new = False
+            if current is None:
+                start_new = True
+            elif is_section_heading or is_subheading:
+                start_new = True
+            elif is_list_item and current.get("type") != "LIST_ITEM":
+                start_new = True
+            elif not is_list_item and current.get("type") == "LIST_ITEM":
+                start_new = True
+            elif line["page"] != current.get("last_page"):
+                # Page break — check if continuation or new paragraph
+                start_new = True
+            else:
+                # Same page — check Y gap
+                gap = line["y"] - current.get("last_y", 0)
+                if gap > para_gap_threshold:
+                    start_new = True
+
+            if start_new:
+                if current:
+                    paragraphs.append(current)
+
+                if is_section_heading:
+                    ptype = "HEADING"
+                elif is_subheading:
+                    ptype = "SUBHEADING"
+                elif is_list_item:
+                    ptype = "LIST_ITEM"
+                else:
+                    ptype = "BODY"
+
+                current = {
+                    "type": ptype,
+                    "text": text,
+                    "bold": line["bold"],
+                    "italic": line["italic"],
+                    "size": line["size"],
+                    "y": line["y"],
+                    "last_y": line["y"],
+                    "last_page": line["page"],
+                    "spans_data": [line["spans"]],
+                }
+            else:
+                # Continue current paragraph — join with space
+                current["text"] += " " + text
+                current["last_y"] = line["y"]
+                current["last_page"] = line["page"]
+                current["spans_data"].append(line["spans"])
+
+        if current:
+            paragraphs.append(current)
+
+        return paragraphs
+
+    def _paragraphs_to_html(self, paragraphs: list[dict]) -> str:
+        """Convert reconstructed paragraphs to semantic HTML."""
+        html_parts = []
+        in_list = False
+        list_type = "ul"
+
+        for para in paragraphs:
+            ptype = para["type"]
+
+            # Close open list if we're not in a list item
+            if ptype != "LIST_ITEM" and in_list:
+                html_parts.append(f"</{list_type}>")
+                in_list = False
+
+            if ptype == "TABLE":
+                table_data = para.get("table_data", [])
+                if table_data:
+                    html_parts.append(self._table_to_html(table_data))
+
+            elif ptype == "HEADING":
+                text = self._escape_html(para["text"])
+                # Determine heading level from section number depth
+                match = re.match(r"^(\d{1,2}(?:\.\d{1,2}){0,5})", para["text"])
+                level = len(match.group(1).split(".")) + 1 if match else 2
+                level = min(level, 6)
+                html_parts.append(f"<h{level}>{text}</h{level}>")
+
+            elif ptype == "SUBHEADING":
+                text = self._escape_html(para["text"])
+                html_parts.append(f"<h4><strong>{text}</strong></h4>")
+
+            elif ptype == "LIST_ITEM":
+                if not in_list:
+                    # Detect ordered vs unordered
+                    if re.match(r"^\d+[.)]\s", para["text"]):
+                        list_type = "ol"
+                    else:
+                        list_type = "ul"
+                    html_parts.append(f"<{list_type}>")
+                    in_list = True
+                # Strip the bullet/number prefix
+                item_text = re.sub(r"^(?:[\u2022•●○]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)", "", para["text"])
+                text = self._format_inline_html(para)
+                html_parts.append(f"  <li>{self._escape_html(item_text)}</li>")
+
+            else:  # BODY
+                text = self._format_inline_html(para)
+                html_parts.append(f"<p>{text}</p>")
+
+        if in_list:
+            html_parts.append(f"</{list_type}>")
+
+        return "\n".join(html_parts)
+
+    def _format_inline_html(self, para: dict) -> str:
+        """Format paragraph text with inline bold/italic from span data."""
+        # If we have span data, use it for precise formatting
+        if para.get("spans_data"):
+            parts = []
+            for spans in para["spans_data"]:
+                for span in spans:
+                    text = self._escape_html(span.get("text", ""))
+                    if not text.strip():
+                        continue
+                    flags = span.get("flags", 0)
+                    is_bold = flags & 16 or "Bold" in span.get("font", "")
+                    is_italic = flags & 2 or "Italic" in span.get("font", "")
+                    if is_bold:
+                        text = f"<strong>{text}</strong>"
+                    if is_italic:
+                        text = f"<em>{text}</em>"
+                    parts.append(text)
+            return "".join(parts)
+        return self._escape_html(para["text"])
+
+    @staticmethod
+    def _escape_html(text: str) -> str:
+        return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+    @staticmethod
+    def _table_to_html(table_data: list[list]) -> str:
+        """Convert table data to HTML table."""
+        rows = []
+        for i, row in enumerate(table_data):
+            tag = "th" if i == 0 else "td"
+            cells = "".join(
+                f"<{tag}>{str(cell or '').replace('<','&lt;')}</{tag}>"
+                for cell in row
+            )
+            rows.append(f"  <tr>{cells}</tr>")
+        return "<table>\n" + "\n".join(rows) + "\n</table>"
+
+    def _paragraphs_to_docx(self, paragraphs: list[dict]) -> bytes:
+        """Convert reconstructed paragraphs to DOCX bytes."""
+        from docx import Document
+        from docx.shared import Pt
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        import io
+
+        doc = Document()
+
+        for para in paragraphs:
+            ptype = para["type"]
+
+            if ptype == "TABLE":
+                table_data = para.get("table_data", [])
+                if table_data and table_data[0]:
+                    rows = len(table_data)
+                    cols = max(len(r) for r in table_data)
+                    tbl = doc.add_table(rows=rows, cols=cols, style="Table Grid")
+                    for i, row in enumerate(table_data):
+                        for j, cell in enumerate(row):
+                            if j < cols:
+                                tbl.cell(i, j).text = str(cell or "")
+
+            elif ptype == "HEADING":
+                match = re.match(r"^(\d{1,2}(?:\.\d{1,2}){0,5})", para["text"])
+                level = len(match.group(1).split(".")) if match else 1
+                level = min(level, 4)
+                doc.add_heading(para["text"], level=level)
+
+            elif ptype == "SUBHEADING":
+                p = doc.add_paragraph()
+                run = p.add_run(para["text"])
+                run.bold = True
+
+            elif ptype == "LIST_ITEM":
+                item_text = re.sub(
+                    r"^(?:[\u2022•●○]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)",
+                    "", para["text"]
+                )
+                doc.add_paragraph(item_text, style="List Bullet")
+
+            else:  # BODY
+                p = doc.add_paragraph()
+                if para.get("spans_data"):
+                    for spans in para["spans_data"]:
+                        for span in spans:
+                            text = span.get("text", "")
+                            if not text:
+                                continue
+                            run = p.add_run(text)
+                            flags = span.get("flags", 0)
+                            run.bold = bool(flags & 16 or "Bold" in span.get("font", ""))
+                            run.italic = bool(flags & 2 or "Italic" in span.get("font", ""))
+                else:
+                    p.add_run(para["text"])
+
+        buf = io.BytesIO()
+        doc.save(buf)
+        return buf.getvalue()
+
     def get_tables_in_section(self, pdf_bytes: bytes, section: Section) -> list[dict]:
         """Extract tables from a specific section using PyMuPDF's table finder."""
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")

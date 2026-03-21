@@ -202,7 +202,8 @@ async def extract_verbatim(
     Args:
         instruction: What to extract (e.g., "Copy Section 5.1")
         include_subsections: Include subsection content (default True)
-        output_format: "text" (plain), "html" (formatted), "xml" (DOCX equations for MathType)
+        output_format: "text" (plain), "html" (semantic HTML with paragraphs, lists, tables),
+            "docx" (Word document download)
 
     Example instructions:
     - "Copy Section 5.1"
@@ -217,7 +218,28 @@ async def extract_verbatim(
     file_bytes = await file.read()
     config = _build_config()
     extractor = VerbatimExtractor(config)
-    result = await extractor.extract(file_bytes, instruction, filename=file.filename or "")
+    result = await extractor.extract(
+        file_bytes, instruction, filename=file.filename or "",
+        output_format=output_format,
+    )
+
+    # DOCX output: return as downloadable file
+    if output_format == "docx" and result.sections_found:
+        from fastapi.responses import Response
+        section = extractor.section_parser.find(
+            extractor.section_parser.parse(file_bytes, filename=file.filename or ""),
+            result.sections_found[0],
+        )
+        if section:
+            docx_bytes = extractor.section_parser.get_section_formatted(
+                file_bytes, section, output="docx"
+            )
+            return Response(
+                content=docx_bytes,
+                media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                headers={"Content-Disposition": f'attachment; filename="section_{result.sections_found[0]}.docx"'},
+            )
+
     return {
         "instruction": result.instruction,
         "sections_found": result.sections_found,
