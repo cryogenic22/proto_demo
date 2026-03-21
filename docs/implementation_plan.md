@@ -32,18 +32,18 @@ test_teds_empty_vs_populated → TEDS = 0.0
 **Deliverable:** `src/eval/teds.py` with the Zhang-Shasha tree edit distance
 algorithm adapted for our `ExtractedTable` schema.
 
-### 0.2 Create 5 Gold-Standard Annotations
+### 0.2 Create Gold-Standard Annotations
 
-**Spec:** Manually annotate one protocol per complexity tier with cell-level
-ground truth in OmniDocBench-compatible JSON format.
+**Start with ONE protocol — Pfizer BNT162.** Annotate it fully. Compute actual
+TEDS. That single real number anchors everything else. Then add 2 more.
 
-| Tier | Protocol | Why |
-|---|---|---|
-| 1 (Simple) | P-01 Brivaracetam | Single-page SoA, few footnotes |
-| 2 (Moderate) | P-27 Bimekizumab | Multi-page, moderate footnotes |
-| 3 (Complex) | P-08 Etrasimod UC | Multiple SoA sections, 20+ footnotes |
-| 4 (Very High) | P-13 Pfizer BNT162 | Multi-phase, 18+ footnotes, wide tables |
-| 5 (Extreme) | P-18 DIAN-TU Alzheimer | Adaptive platform, deeply nested |
+Three fully annotated protocols are more valuable than five partial ones.
+
+| Priority | Protocol | Why | Estimated Effort |
+|---|---|---|---|
+| **First** | P-13 Pfizer BNT162 | Best understood, most data, anchors all baselines | 12-16 hours |
+| **Second** | P-08 Etrasimod UC | Multiple SoA sections, tests multi-table handling | 8-10 hours |
+| **Third** | P-01 Brivaracetam | Simple protocol, establishes easy-case ceiling | 4-6 hours |
 
 **Format per table:**
 ```json
@@ -72,7 +72,28 @@ ground truth in OmniDocBench-compatible JSON format.
 
 **Deliverable:** `golden_set/annotations/P-01.json` through `P-18.json`
 
-### 0.3 Baseline Benchmark Run
+### 0.3 Implement Cost-Weighted Accuracy Metric
+
+**Spec:** A metric that weights cell errors by their financial impact on the
+site budget — not all errors are equal.
+
+**Test first:**
+```
+test_high_cost_error_weighted_heavily → PET scan wrong = high penalty
+test_low_cost_error_weighted_lightly → Vital signs wrong = low penalty
+test_perfect_extraction → cost_weighted_accuracy = 1.0
+test_all_high_cost_wrong → cost_weighted_accuracy < 0.5
+```
+
+**Formula:**
+```
+Weighted Cell Error = Σ (cell_error × visit_frequency × cost_tier_weight)
+where cost_tier_weight = {LOW: 1, MEDIUM: 3, HIGH: 10, VERY_HIGH: 25}
+```
+
+**Deliverable:** `src/eval/cost_weighted.py`
+
+### 0.4 Baseline Benchmark Run
 
 **Spec:** Run the current pipeline (v4) on all 5 annotated protocols, compute
 TEDS, cell accuracy, footnote coverage, and section accuracy. Save as the
@@ -252,11 +273,30 @@ Patterns to detect:
 - Partial SoA tables (fewer rows than schema expects)
 - Multiple SoA sections with different visit counts
 
-### 3.2 Eval Gate
+### 3.2 Adversarial Test Set
+
+**Spec:** 3-5 deliberately unusual protocols that test graceful degradation.
+No full annotations needed — just confirm the pipeline doesn't silently
+produce wrong output with high confidence.
+
+| Protocol | Why It's Adversarial |
+|---|---|
+| Landscape SoA table | Non-standard orientation breaks column detection |
+| Phase I FIH with single-row visits | Minimal SoA, tests edge case of too-few-cells |
+| Amendment with footnote-only SoA change | No table to extract, only text modifications |
+| Non-English protocol (German/Japanese) | Tests cross-language robustness |
+| Scanned protocol with no text layer | Tests pure vision-only extraction |
+
+**Critical check:** Does confidence correlate with actual accuracy? A cell
+marked 95% confident that's actually wrong is more dangerous than a cell
+marked 50% that's wrong.
+
+### 3.3 Eval Gate
 
 - [ ] P-03 correctly flagged as amendment bundle
 - [ ] Pfizer protocol amendments 1-15 detected in version history
 - [ ] No false positives on clean protocols (P-27, P-32)
+- [ ] Adversarial protocols degrade gracefully (low confidence, not wrong with high confidence)
 
 ---
 
@@ -363,12 +403,12 @@ TEDS regresses.
 
 | Phase | New Metric Added | Target | How Measured |
 |---|---|---|---|
-| 0 | TEDS baseline | Establish number | 5 annotated protocols |
+| 0 | TEDS baseline + cost-weighted accuracy | Real numbers from real ground truth | 3 fully annotated protocols (Pfizer first) |
 | 1 | ICH match score | ≥80% on standard protocols | Section parser vs ICH template |
-| 2 | Correction acceptance rate | ≥70% of corrections accepted | Directed re-extraction results |
-| 3 | Amendment detection precision | ≥90% precision, ≥80% recall | Known amendment protocols |
-| 4 | TEDS improvement (Path B) | ≥5% on complex protocols | Before/after comparison |
-| 5 | Continuous TEDS tracking | No regression across releases | CI automated eval |
+| 2 | Correction acceptance rate | ≥70% accepted, 0% regression | Directed re-extraction on flagged cells only |
+| 3 | Amendment detection + adversarial degradation | ≥90% precision, graceful degradation | Known amendments + adversarial set |
+| 4 | TEDS improvement (Path B) | ≥5% on complex, 0% regression on simple | Before/after comparison on all 3 annotated protocols |
+| 5 | Continuous tracking + confidence calibration | No regression, confidence correlates with accuracy | CI automated eval + adversarial verification |
 
 ## Tracking Progress
 

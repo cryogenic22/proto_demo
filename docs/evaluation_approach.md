@@ -18,11 +18,11 @@ multi-metric evaluation across text, tables, formulas, and layout.
 
 | OmniDocBench Metric | What It Measures | Our Application |
 |---|---|---|
-| **TEDS** (Tree Edit Distance Similarity) | Structural + content accuracy of table extraction | Compare our extracted cell grid against ground truth SoA tables |
+| **TEDS** (Tree Edit Distance Similarity) | Structural + content accuracy of table extraction | Compare our extracted cell grid against ground truth SoA tables. **Caveat:** TEDS weights all errors equally — see Cost-Weighted Accuracy below |
 | **TEDS-S** | Structure-only accuracy (ignoring cell values) | Measure whether we get the right number of rows/columns/merged cells |
 | **Normalized Edit Distance** | Text-level accuracy per cell | Compare each cell's extracted value against ground truth |
 | **CDM** (Cross-modal Distance Metric) | Formula extraction accuracy | Measure LaTeX/equation extraction quality in statistical sections |
-| **BLEU / METEOR** | Text generation quality | Measure verbatim extraction accuracy against source text |
+| **Character-level edit distance** | Verbatim text fidelity | More appropriate than BLEU/METEOR for exact text extraction (see note below) |
 
 ### Key Evaluation Approach: Attribute-Based Subsetting
 
@@ -97,7 +97,28 @@ No existing benchmark measures this. We define our own:
 | **Hierarchy accuracy** | (correct level / total sections) × 100 | ≥ 90% |
 | **Verbatim fidelity** | 1 - edit_distance(extracted, source) | ≥ 0.95 |
 
-### Level 5: Repeatability (Our Unique Metric)
+### Level 5: Cost-Weighted Accuracy (Our Unique Metric)
+
+TEDS treats all cell errors equally. But for site budgeting, getting "PK Sampling"
+wrong in a high-frequency visit column is catastrophically more expensive than
+getting "Optional questionnaire" wrong in a single screening column.
+
+```
+Weighted Cell Error = Σ (cell_error × visit_frequency × procedure_cost_weight)
+```
+
+| Metric | Formula | Target |
+|---|---|---|
+| **Cost-weighted accuracy** | 1 - (weighted errors / total weighted cells) | ≥ 0.95 |
+| **High-cost procedure accuracy** | Correct cells for $$$/$$$$  procedures | ≥ 0.98 |
+| **Frequency accuracy** | Correct visit count per procedure | ≥ 0.95 |
+
+We already have the cost weights (procedure cost tiers) and frequency data
+(visit counts from the budget calculator). This metric is uniquely ours — no
+benchmark has it, but it's the most clinically meaningful number in the entire
+evaluation suite.
+
+### Level 6: Repeatability (Our Unique Metric)
 
 | Metric | Formula | Target |
 |---|---|---|
@@ -111,13 +132,26 @@ No existing benchmark measures this. We define our own:
 
 ### Approach 1: Manual Annotation (Highest Quality, Highest Cost)
 
-For 5 protocols (one per complexity tier), manually annotate:
+**Annotate fewer protocols but annotate them completely.** Three fully
+annotated protocols of different complexity tiers are more valuable than
+five partially annotated ones. A systematic error (e.g., all footnote
+type "c" cells consistently wrong) is invisible in a random 20% sample
+but obvious in a complete annotation.
+
+**Start with ONE protocol — Pfizer BNT162.** This is our best-understood
+document. Annotate it fully, compute actual TEDS against real ground truth,
+and anchor everything else to that real number. Estimated baselines from
+confidence scores are NOT baselines — they're the model's self-assessment.
+
+For each annotated protocol:
 - Every cell in every SoA table (value, type, footnote markers)
 - Every footnote with its cell bindings
 - Every section with its page number
 - Every procedure with its correct canonical name and CPT code
 
-**Cost:** ~4 hours per protocol × 5 = 20 hours of expert time.
+**Cost:** ~12-16 hours per complex protocol (not 4 hours — the Pfizer
+BNT162 SoA has 1,634 cells, 27 footnotes, and 8 tables to verify
+cell-by-cell at publishable quality). Budget realistically.
 
 **Use OmniDocBench annotation format:**
 ```json
@@ -269,6 +303,46 @@ OmniDocBench evaluation framework
 3. **Build protocol-specific annotation format** extending OmniDocBench JSON
 4. **Create 5 gold-standard protocol annotations** using their format
 5. **Run attribute-stratified evaluation** on every pipeline version
+
+---
+
+---
+
+## Part 7: Adversarial Test Set
+
+The golden set tests performance on representative protocols. But production
+failures come from UNREPRESENTATIVE cases. Build a small adversarial set of
+3-5 deliberately unusual protocols:
+
+- Protocol with SoA in non-standard orientation (landscape table)
+- Phase I FIH protocol with single-row visit structure
+- Amendment that replaces a table with a footnote-only modification
+- Protocol in a non-standard language (German, Japanese)
+- Scanned/image-only protocol with no text layer
+
+This set doesn't need full ground truth annotations. Run it regularly to
+confirm the pipeline **degrades gracefully** rather than silently producing
+wrong output with high confidence.
+
+**The critical check:** Does confidence correlate with actual accuracy? A cell
+marked 95% confident that's actually wrong is more dangerous than a cell marked
+50% confident that's wrong. You can only verify this correlation with real
+ground truth.
+
+---
+
+## Note: Why Not BLEU/METEOR for Verbatim Extraction
+
+BLEU and METEOR were designed for machine translation — they reward n-gram
+overlap and penalise word order changes. For verbatim protocol text:
+- "200 mg administered orally twice daily" vs "200 mg orally BID" would score
+  badly on BLEU but is arguably correct
+- What matters is: exact phrase preservation AND numerical value + unit accuracy
+
+Use **character-level normalized edit distance** instead, plus a separate
+**numerical value preservation check**: any text containing a number should be
+verified digit-by-digit, not n-gram-wise. A wrong dosage number is a patient
+safety issue; a paraphrased sentence is a style issue.
 
 ---
 
