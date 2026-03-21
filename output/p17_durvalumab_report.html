@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProtoExtract Report — P17_durvalumab.pdf</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #1e293b; background: #f8fafc; line-height: 1.5; }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+h1 { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+h2 { font-size: 17px; font-weight: 600; color: #0f172a; margin: 32px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+h3 { font-size: 14px; font-weight: 600; color: #334155; margin: 20px 0 8px; }
+.subtitle { font-size: 13px; color: #64748b; margin-bottom: 24px; }
+.meta { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: #64748b; margin-bottom: 24px; }
+.meta span { background: #f1f5f9; padding: 4px 10px; border-radius: 6px; }
+
+/* KPI Cards */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.kpi { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; }
+.kpi-value { font-size: 28px; font-weight: 700; }
+.kpi-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+.kpi-good { color: #059669; }
+.kpi-warn { color: #d97706; }
+.kpi-bad { color: #dc2626; }
+.kpi-info { color: #0284c7; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; font-size: 11px; margin: 8px 0 20px; }
+.data-table th { background: #f1f5f9; color: #475569; font-weight: 600; text-align: left; padding: 8px 10px; border: 1px solid #e2e8f0; white-space: nowrap; }
+.data-table td { padding: 6px 10px; border: 1px solid #e2e8f0; vertical-align: top; }
+.data-table tr:hover { background: #f8fafc; }
+.data-table .sticky { position: sticky; left: 0; background: white; z-index: 1; font-weight: 500; }
+
+/* Cell confidence coloring */
+.conf-high { background: #ecfdf5; }
+.conf-mid { background: #fefce8; }
+.conf-low { background: #fef2f2; }
+.flagged { outline: 2px solid #f59e0b; outline-offset: -2px; }
+
+/* Badges */
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+.badge-soa { background: #dbeafe; color: #1d4ed8; }
+.badge-cond { background: #fef3c7; color: #92400e; }
+.badge-exc { background: #fecaca; color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+.badge-clar { background: #e2e8f0; color: #475569; }
+.badge-cost-low { background: #f1f5f9; color: #64748b; }
+.badge-cost-med { background: #e0f2fe; color: #0369a1; }
+.badge-cost-high { background: #fef3c7; color: #92400e; }
+.badge-cost-vhigh { background: #fecaca; color: #991b1b; }
+
+/* Table section */
+.table-section { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+.table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.table-meta { font-size: 12px; color: #64748b; }
+.conf-bar { display: inline-block; width: 60px; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; vertical-align: middle; }
+.conf-fill { height: 100%; border-radius: 4px; }
+.grid-scroll { overflow-x: auto; margin: 0 -20px; padding: 0 20px; }
+
+/* Procedure mapping */
+.proc-table td:nth-child(3) { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 10px; }
+
+/* Review queue */
+.review-item { display: flex; gap: 12px; padding: 10px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; margin-bottom: 8px; font-size: 12px; }
+.review-icon { width: 28px; height: 28px; background: #fef3c7; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Narrative */
+.narrative { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.narrative h2 { margin-top: 0; }
+.narrative-section { margin-bottom: 16px; }
+.narrative-section h3 { color: #0f172a; font-size: 13px; margin-bottom: 6px; }
+.narrative-section p { font-size: 12px; color: #475569; line-height: 1.6; }
+.finding { display: flex; gap: 10px; padding: 8px 12px; border-radius: 6px; margin-bottom: 6px; font-size: 12px; }
+.finding-good { background: #ecfdf5; color: #065f46; }
+.finding-warn { background: #fffbeb; color: #92400e; }
+.finding-bad { background: #fef2f2; color: #991b1b; }
+.finding-info { background: #eff6ff; color: #1e40af; }
+.finding-icon { font-size: 14px; flex-shrink: 0; }
+
+/* Print */
+@media print {
+  body { background: white; }
+  .container { max-width: 100%; padding: 12px; }
+  .table-section { break-inside: avoid; }
+  .grid-scroll { overflow: visible; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<h1>Protocol Table Extraction Report</h1>
+<p class="subtitle">P17_durvalumab.pdf</p>
+<div class="meta">
+  <span>149 pages</span>
+  <span>4 SOA tables</span>
+  <span>628s processing</span>
+  <span>Pipeline v0.1.0</span>
+  <span>2026-03-21 16:48 UTC</span>
+</div>
+
+<!-- KPIs -->
+<div class="kpis">
+  <div class="kpi">
+    <div class="kpi-value kpi-info">4</div>
+    <div class="kpi-label">SOA Tables</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-info">581</div>
+    <div class="kpi-label">Cells Extracted</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-warn">85%</div>
+    <div class="kpi-label">Avg Confidence</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-info">16</div>
+    <div class="kpi-label">Footnotes Resolved</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-warn">203</div>
+    <div class="kpi-label">Cells for Review</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-info">75</div>
+    <div class="kpi-label">Procedures Mapped</div>
+  </div>
+</div>
+
+
+
+<!-- Narrative Analysis -->
+<div class="narrative">
+<h2>Extraction Analysis</h2>
+<div class="narrative-section"><p>This report contains the extraction results for <strong>P17_durvalumab.pdf</strong> (149 pages). The pipeline identified <strong>4 SOA (Schedule of Activities) table(s)</strong> and extracted <strong>581 cells</strong> with an average confidence of <strong>85%</strong>. Each cell was extracted twice using different prompts, cross-checked by an adversarial validation agent, and verified against OCR output where available. Cells highlighted in <span style="background:#fef2f2;padding:2px 4px;border-radius:3px;">red</span> have low confidence; cells with <span style="outline:2px solid #f59e0b;padding:2px 4px;border-radius:3px;">orange outlines</span> are flagged for human review.</p></div>
+<div class="narrative-section"><h3>Key Findings</h3>
+<div class="finding finding-warn"><span class="finding-icon">&#9888;</span><div><strong>Moderate extraction confidence.</strong> Average confidence is 85%. Some cells showed disagreement between extraction passes, indicating potential ambiguity in the source document.</div></div>
+<div class="finding finding-warn"><span class="finding-icon">&#9888;</span><div><strong>203 cells (35%) require human review.</strong> These cells either showed disagreement between extraction passes, were flagged by the adversarial challenger, or fell below confidence thresholds. The table with the most flagged cells is "Table 2 Schedule of assessments for patients who have completed or discontinued treatment" (73 flagged).</div></div>
+<div class="finding finding-good"><span class="finding-icon">&#10003;</span><div><strong>16 footnotes extracted and classified.</strong> Types found: 13 clarification, 2 conditional, 1 exception. Footnotes are anchored to specific cells and displayed as superscripts in the grid view.</div></div>
+<div class="finding finding-warn"><span class="finding-icon">&#9888;</span><div><strong>42 of 75 procedures could not be mapped</strong> to the canonical vocabulary. These are shown as their raw extracted names in the procedure mapping tables below. 17 procedures have CPT codes. Unmapped procedures may be protocol-specific assessments or novel procedures not yet in the mapping database.</div></div>
+<div class="finding finding-info"><span class="finding-icon">&#9432;</span><div><strong>1 table(s) span multiple pages.</strong> These were automatically stitched from continuation pages. Multi-page tables are more prone to extraction errors at page boundaries — pay special attention to rows near page breaks.</div></div>
+</div>
+<div class="narrative-section"><h3>Reviewer Guidance</h3><p>When reviewing this extraction:</p><ul style="font-size:12px;color:#475569;margin:6px 0 0 20px;line-height:1.8;"><li><strong>Flagged cells (orange outline)</strong> — These require verification against the source PDF. The pipeline was not confident in the extracted value.</li><li><strong>Red-background cells</strong> — Low confidence (&lt;70%). The two extraction passes disagreed, or the adversarial checker found a potential error.</li><li><strong>Procedure mapping</strong> — Verify that raw procedure names are correctly mapped to canonical names. "Unknown" category procedures need manual mapping.</li><li><strong>Footnotes</strong> — Verify that footnote markers (superscripts) are anchored to the correct cells and that the footnote text matches the source document.</li><li><strong>Visit windows</strong> — Confirm that Day/Week/Month calculations and window ranges match the protocol.</li></ul></div>
+</div>
+
+<!-- Comparison with Previous Run -->
+
+<div style="background:white;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin-bottom:24px;">
+  <h2 style="margin-top:0;border:none;">Comparison with Previous Run</h2>
+  <p style="font-size:12px;color:#64748b;">Previous: p17_durvalumab_extraction.json</p>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
+    <div style="background:#f8fafc;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:24px;font-weight:700;color:#0284c7;">4 → 4</div>
+      <div style="font-size:11px;color:#64748b;">Tables</div>
+    </div>
+    <div style="background:#f8fafc;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:24px;font-weight:700;color:#0284c7;">581 → 581</div>
+      <div style="font-size:11px;color:#64748b;">Cells</div>
+    </div>
+    <div style="background:#f8fafc;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:24px;font-weight:700;color:#64748b;">&#8212; 0.0%</div>
+      <div style="font-size:11px;color:#64748b;">Confidence Delta</div>
+    </div>
+    <div style="background:#f8fafc;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:24px;font-weight:700;color:#059669;">100%</div>
+      <div style="font-size:11px;color:#64748b;">Cell Stability</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0;">
+    <div style="background:#ecfdf5;border-radius:6px;padding:8px;text-align:center;font-size:12px;">
+      <strong>581</strong> unchanged
+    </div>
+    <div style="background:#fefce8;border-radius:6px;padding:8px;text-align:center;font-size:12px;">
+      <strong>0</strong> changed
+    </div>
+    <div style="background:#eff6ff;border-radius:6px;padding:8px;text-align:center;font-size:12px;">
+      <strong>0</strong> new
+    </div>
+    <div style="background:#fef2f2;border-radius:6px;padding:8px;text-align:center;font-size:12px;">
+      <strong>0</strong> removed
+    </div>
+  </div>
+
+  <div style="font-size:12px;color:#64748b;margin-top:12px;">
+    <strong>Footnotes:</strong> 16 → 16
+    (0)
+  </div></div>
+
+<!-- Tables -->
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">Schedule of assessments for durvalumab/placebo ± chemoradiation therapy screening and treatment and retreatment periods (up to total of 24 doses)</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 16 &middot;
+        176 cells &middot;
+        46 flagged &middot;
+        0 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#059669;">89%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:89%;background:#059669;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <table class="data-table">
+<thead><tr><th class="sticky">Procedure</th>
+<th></th>
+<th>Screening</th>
+<th>C1a</th>
+<th>C2a</th>
+<th>C3a</th>
+<th>C4a</th>
+<th>C5 to PD/C24a</th>
+<th>For details, se</th>
+</tr></thead><tbody>
+<tr><td class="sticky">Week</td>
+<td class="conf-high" title="Confidence: 95%">Week</td>
+<td class="conf-high" title="Confidence: 95%">-4 to -1</td>
+<td class="conf-high" title="Confidence: 95%">0</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">For details, se</td>
+</tr>
+<tr><td class="sticky">Day</td>
+<td class="conf-high" title="Confidence: 95%">Day</td>
+<td class="conf-high" title="Confidence: 95%">-28 to -1</td>
+<td class="conf-high" title="Confidence: 95%">1</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-low flagged" title="Confidence: 40%">For details, se</td>
+</tr>
+<tr><td class="sticky">Informed consent</td>
+<td class="conf-high" title="Confidence: 95%">Informed consen</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Informed consent: study proced</td>
+<td class="conf-high" title="Confidence: 95%">Informed consen<sup style="color:#0284c7">b</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">5.1</td>
+</tr>
+<tr><td class="sticky">Consent: genetic sample and an</td>
+<td class="conf-high" title="Confidence: 95%">Consent: geneti</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">5.1</td>
+</tr>
+<tr><td class="sticky">Study procedures</td>
+<td class="conf-high" title="Confidence: 95%">Study procedure</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Physical exam (full)</td>
+<td class="conf-high" title="Confidence: 95%">Physical exam (</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.2.1</td>
+</tr>
+<tr><td class="sticky">Targeted physical exam c</td>
+<td class="conf-high" title="Confidence: 95%">Targeted physic<sup style="color:#0284c7">c</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 81%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">8.2.1</td>
+</tr>
+<tr><td class="sticky">Vital signsd</td>
+<td class="conf-high" title="Confidence: 95%">Vital signsd<sup style="color:#0284c7">d</sup></td>
+<td class="conf-mid flagged" title="Confidence: 71%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">8.2.2</td>
+</tr>
+<tr><td class="sticky">ECGe</td>
+<td class="conf-high" title="Confidence: 95%">ECGe<sup style="color:#0284c7">e</sup></td>
+<td class="conf-high" title="Confidence: 95%">Xf<sup style="color:#0284c7">f</sup></td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-high" title="Confidence: 95%">8.2.3</td>
+</tr>
+<tr><td class="sticky">Concomitant medications</td>
+<td class="conf-high" title="Confidence: 95%">Concomitant med</td>
+<td class="conf-high" title="Confidence: 95%">&lt;--------------</td>
+<td class="conf-low flagged" title="Confidence: 50%"></td>
+<td class="conf-low flagged" title="Confidence: 50%"></td>
+<td class="conf-low flagged" title="Confidence: 50%"></td>
+<td class="conf-low flagged" title="Confidence: 50%"></td>
+<td class="conf-low flagged" title="Confidence: 50%"></td>
+<td class="conf-high" title="Confidence: 95%">6.4</td>
+</tr>
+<tr><td class="sticky">Demography, including baseline</td>
+<td class="conf-high" title="Confidence: 95%">Demography, inc</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">5.1</td>
+</tr>
+<tr><td class="sticky">Eligibility criteria</td>
+<td class="conf-high" title="Confidence: 95%">Eligibility cri</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">5.1, 5.2</td>
+</tr>
+<tr><td class="sticky">Radiation plan collection</td>
+<td class="conf-high" title="Confidence: 95%">Radiation plan </td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">Appendix G</td>
+</tr>
+<tr><td class="sticky">Laboratory assessments</td>
+<td class="conf-high" title="Confidence: 95%">Laboratory asse</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Clinical chemistryg</td>
+<td class="conf-high" title="Confidence: 95%">Clinical chemis<sup style="color:#0284c7">g</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">Xh<sup style="color:#0284c7">h</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Table 9</td>
+</tr>
+<tr><td class="sticky">Hematologyh</td>
+<td class="conf-high" title="Confidence: 95%">Hematologyh<sup style="color:#0284c7">h</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 90%">Xh<sup style="color:#0284c7">h</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Table 10</td>
+</tr>
+<tr><td class="sticky">TSHi (reflex free T3 or free T</td>
+<td class="conf-high" title="Confidence: 95%">TSHi (reflex fr<sup style="color:#0284c7">i,j</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Table 9</td>
+</tr>
+<tr><td class="sticky">Urinalysis</td>
+<td class="conf-high" title="Confidence: 95%">Urinalysis</td>
+<td class="conf-mid" title="Confidence: 86%">X</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Table 11</td>
+</tr>
+<tr><td class="sticky">Hepatitis B and C and HIV</td>
+<td class="conf-high" title="Confidence: 95%">Hepatitis B and</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.2.4</td>
+</tr>
+<tr><td class="sticky">Pregnancy testk</td>
+<td class="conf-high" title="Confidence: 95%">Pregnancy testk<sup style="color:#0284c7">k</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">8.2.4</td>
+</tr>
+<tr><td class="sticky">HPV genotype, if available</td>
+<td class="conf-high" title="Confidence: 95%">HPV genotype, i</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.2.4</td>
+</tr>
+</tbody></table>
+  </div>
+
+  <h3>Procedure Mapping</h3>
+<table class="data-table proc-table">
+<thead><tr><th>Raw Name</th><th>Canonical Name</th><th>CPT Code</th><th>Category</th><th>Cost</th></tr></thead><tbody>
+<tr><td>Clinical chemistryg</td><td><strong>Clinical chemistryg</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Concomitant medications</td><td><strong>Concomitant Medications Review</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Consent: genetic sample and analysis (op</td><td><strong>Informed Consent</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Day</td><td><strong>Day</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Demography, including baseline character</td><td><strong>Demography, including baseline character</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>ECGe</td><td><strong>ECGe</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Eligibility criteria</td><td><strong>Eligibility Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>HPV genotype, if available</td><td><strong>HPV genotype, if available</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Hematologyh</td><td><strong>Hematologyh</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Hepatitis B and C and HIV</td><td><strong>Hepatitis Panel</strong></td><td>86709 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Informed consent</td><td><strong>Informed Consent</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Informed consent: study proceduresb</td><td><strong>Informed Consent</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Laboratory assessments</td><td><strong>Laboratory assessments</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Physical exam (full)</td><td><strong>Physical Examination</strong></td><td>99213 (CPT)</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Pregnancy testk</td><td><strong>Pregnancy Test</strong></td><td>81025 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Radiation plan collection</td><td><strong>Radiation plan collection</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Study procedures</td><td><strong>Study procedures</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>TSHi (reflex free T3 or free T4)j</td><td><strong>Thyroid Function Tests</strong></td><td>84443 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Targeted physical exam c</td><td><strong>Physical Examination</strong></td><td>99213 (CPT)</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Urinalysis</td><td><strong>Urinalysis</strong></td><td>81003 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Vital signsd</td><td><strong>Vital Signs</strong></td><td>99000 (CPT)</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Week</td><td><strong>Week</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+</tbody></table>
+  
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td></td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Screening</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C1a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C2a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C3a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C4a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C5 to PD/C24a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>For details, see Section</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 7</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>For details, see Section</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 7</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;For details, see Section&#x27; vs &#x27;&#x27;. Confidence 0.40 below thres</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>For details, see Section</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 1</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 7</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 7, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.81 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 8, Col 1</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.71 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 9, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>As clinically indicated</code></div></div></div>
+<p style="font-size:12px;color:#94a3b8;">... and 26 more items</p>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">p17_soa</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 17 &middot;
+        129 cells &middot;
+        47 flagged &middot;
+        8 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#059669;">86%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:86%;background:#059669;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <table class="data-table">
+<thead><tr><th class="sticky">Procedure</th>
+<th></th>
+<th>Screening</th>
+<th>C1a</th>
+<th>C2a</th>
+<th>C3a</th>
+<th>C4a</th>
+<th>C5 to PD/C24a</th>
+<th>For details, se</th>
+</tr></thead><tbody>
+<tr><td class="sticky">Week</td>
+<td class="conf-high" title="Confidence: 95%">Week</td>
+<td class="conf-high" title="Confidence: 95%">-4 to -1</td>
+<td class="conf-high" title="Confidence: 95%">0</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">For details, se</td>
+</tr>
+<tr><td class="sticky">Day</td>
+<td class="conf-high" title="Confidence: 95%">Day</td>
+<td class="conf-high" title="Confidence: 95%">-28 to -1</td>
+<td class="conf-high" title="Confidence: 95%">1</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-low flagged" title="Confidence: 40%">For details, se</td>
+</tr>
+<tr><td class="sticky">PK sample (serum)</td>
+<td class="conf-low flagged" title="Confidence: 50%">PK sample (seru</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 50%
+PK sample at C1D1 pre-dose and end of infusion">X¹<sup style="color:#0284c7">l</sup></td>
+<td class="conf-low flagged" title="Confidence: 50%
+Pre-dose only">Xm<sup style="color:#0284c7">m</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 50%
+Pre-dose only">Xm<sup style="color:#0284c7">m</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 50%">8.5</td>
+</tr>
+<tr><td class="sticky">PK sample (serum)</td>
+<td class="conf-mid flagged" title="Confidence: 70%">PK sample (seru</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">Xl<sup style="color:#0284c7">l</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%">Xm<sup style="color:#0284c7">m</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">Xm<sup style="color:#0284c7">m</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">8.5</td>
+</tr>
+<tr><td class="sticky">Monitoring</td>
+<td class="conf-high" title="Confidence: 95%">Monitoring</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">WHO/ECOG performance status</td>
+<td class="conf-high" title="Confidence: 95%
+WHO/ECOG performance status">WHO/ECOG perfor<sup style="color:#0284c7">n</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">8.2.5</td>
+</tr>
+<tr><td class="sticky">AE/SAE assessment</td>
+<td class="conf-high" title="Confidence: 95%
+AE/SAE assessment is continuous throughout the study">AE/SAE assessme<sup style="color:#0284c7">o</sup></td>
+<td class="conf-high" title="Confidence: 95%">&lt;--------------</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.3</td>
+</tr>
+<tr><td class="sticky">Patient follow-up contact/Pati</td>
+<td class="conf-high" title="Confidence: 95%">Patient follow-</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">Days 14 (±24 ho</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.2.6</td>
+</tr>
+<tr><td class="sticky">IP administration</td>
+<td class="conf-high" title="Confidence: 95%">IP administrati</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+</tr>
+<tr><td class="sticky">Durvalumab/placebop,q</td>
+<td class="conf-high" title="Confidence: 95%
+Durvalumab/placebo administered on Day 1 of each cycle
+Patients randomized to placebo will receive placebo on Day 1 of each cycle">Durvalumab/plac<sup style="color:#0284c7">p,q</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%
+Durvalumab/placebo administered on Day 1 of each cycle">Xp<sup style="color:#0284c7">p</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">6.1.1.1, 6.1.2.</td>
+</tr>
+<tr><td class="sticky">SoC cisplatin chemotherapy</td>
+<td class="conf-high" title="Confidence: 95%">SoC cisplatin c</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%
+Weekly for 5 weeks except cycle 1">Weekly for 5 we<sup style="color:#0284c7">t</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">6.1.1.2, 6.1.2.</td>
+</tr>
+<tr><td class="sticky">SoC radiation therapy</td>
+<td class="conf-high" title="Confidence: 95%">SoC radiation t</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">Refer to Append</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">6.1.1.2, 6.1.2.</td>
+</tr>
+<tr><td class="sticky">Other assessments and assays</td>
+<td class="conf-high" title="Confidence: 95%">Other assessmen</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Immunogenicity assessment (ADA</td>
+<td class="conf-high" title="Confidence: 95%">Immunogenicity </td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%
+Pre-dose only">Xm<sup style="color:#0284c7">m</sup></td>
+<td class="conf-high" title="Confidence: 95%
+Pre-dose only">Xm<sup style="color:#0284c7">m</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%
+Pre-dose only">Xm<sup style="color:#0284c7">m</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.5.1.1</td>
+</tr>
+<tr><td class="sticky">Whole blood for gene expressio</td>
+<td class="conf-high" title="Confidence: 95%">Whole blood for</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.8.2</td>
+</tr>
+<tr><td class="sticky">ctDNA (plasma)</td>
+<td class="conf-high" title="Confidence: 95%">ctDNA (plasma)</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%
+ctDNA at C2D1 pre-dose">X s<sup style="color:#0284c7">s</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-mid flagged" title="Confidence: 76%">(at 6 months an</td>
+<td class="conf-high" title="Confidence: 95%">8.8.2</td>
+</tr>
+<tr><td class="sticky">EORTC QLQ-C30 and CX24, PGIS, </td>
+<td class="conf-high" title="Confidence: 95%
+Weekly for 5 weeks except cycle 1">EORTC QLQ-C30 a<sup style="color:#0284c7">t</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">0 (C1D1), 2 (mi</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-high" title="Confidence: 95%">8.1.3</td>
+</tr>
+</tbody></table>
+  </div>
+
+  <h3>Procedure Mapping</h3>
+<table class="data-table proc-table">
+<thead><tr><th>Raw Name</th><th>Canonical Name</th><th>CPT Code</th><th>Category</th><th>Cost</th></tr></thead><tbody>
+<tr><td>AE/SAE assessment</td><td><strong>AE/SAE assessment</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>AE/SAE assessmento</td><td><strong>AE/SAE assessmento</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Day</td><td><strong>Day</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Durvalumab/placebop,q</td><td><strong>Durvalumab/placebop,q</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>EORTC QLQ-C30 and CX24, PGIS, EQ-5Dt</td><td><strong>EORTC QLQ-C30 and CX24, PGIS, EQ-5Dt</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>IP administration</td><td><strong>Study Drug Administration</strong></td><td>—</td><td>Treatment</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>Immunogenicity assessment (ADA sampling </td><td><strong>Immunogenicity Sample</strong></td><td>—</td><td>PK</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Monitoring</td><td><strong>Monitoring</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Other assessments and assays</td><td><strong>Other assessments and assays</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>PK sample (serum)</td><td><strong>PK Sample</strong></td><td>—</td><td>PK</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Patient follow-up contact/Patient review</td><td><strong>Patient follow-up contact/Patient review</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>SoC cisplatin chemotherapy</td><td><strong>SoC cisplatin chemotherapy</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>SoC radiation therapy</td><td><strong>SoC radiation therapy</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>WHO/ECOG performance status</td><td><strong>ECOG Performance Status</strong></td><td>—</td><td>Efficacy</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>WHO/ECOG performance statusn</td><td><strong>ECOG Performance Status</strong></td><td>—</td><td>Efficacy</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Week</td><td><strong>Week</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Whole blood for gene expression (PAXgene</td><td><strong>Whole blood for gene expression (PAXgene</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>ctDNA (plasma)</td><td><strong>ctDNA</strong></td><td>—</td><td>Laboratory</td><td><span class="badge badge-cost-high">$$$</span></td></tr>
+</tbody></table>
+  <h3>Footnotes</h3>
+<table class="data-table">
+<thead><tr><th style="width:40px">Marker</th><th>Text</th><th>Type</th><th>Cells</th></tr></thead><tbody>
+<tr><td><strong style="color:#0284c7;font-size:14px;">l</strong></td><td>PK sample at C1D1 pre-dose and end of infusion</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">m</strong></td><td>Pre-dose only</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>5</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">n</strong></td><td>WHO/ECOG performance status</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">o</strong></td><td>AE/SAE assessment is continuous throughout the study</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">p</strong></td><td>Durvalumab/placebo administered on Day 1 of each cycle</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>2</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">q</strong></td><td>Patients randomized to placebo will receive placebo on Day 1 of each cycle</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">s</strong></td><td>ctDNA at C2D1 pre-dose</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">t</strong></td><td>Weekly for 5 weeks except cycle 1</td><td><span class="badge badge-exc">EXCEPTION</span></td><td>2</td></tr>
+</tbody></table>
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td></td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Screening</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C1a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C2a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C3a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C4a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C5 to PD/C24a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>For details, see Section</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 15, Col 6</strong> <span class="badge badge-cost-high">$$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.95</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>(at 6 months and PD)</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 7</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>For details, see Section</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 7</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;For details, see Section&#x27; vs &#x27;&#x27;. Confidence 0.40 below thres</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>For details, see Section</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;PK sample (serum)&#x27; vs &#x27;Pharmacokinetics&#x27;. Confidence 0.50 be</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>PK sample (serum)</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;X¹&#x27; vs &#x27;&#x27;. Confidence 0.50 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X¹</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;Xm&#x27; vs &#x27;&#x27;. Confidence 0.50 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Xm</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;Xm&#x27; vs &#x27;&#x27;. Confidence 0.50 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Xm</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 7</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;8.5&#x27; vs &#x27;&#x27;. Confidence 0.50 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>8.5</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 3, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>PK sample (serum)</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 3, Col 1</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 3, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Xl</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 3, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Xm</code></div></div></div>
+<p style="font-size:12px;color:#94a3b8;">... and 27 more items</p>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">p18_soa</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 18 &middot;
+        80 cells &middot;
+        37 flagged &middot;
+        0 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#d97706;">84%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:84%;background:#d97706;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <table class="data-table">
+<thead><tr><th class="sticky">Procedure</th>
+<th></th>
+<th>Screening</th>
+<th>C1a</th>
+<th>C2a</th>
+<th>C3a</th>
+<th>C4a</th>
+<th>C5 to PD/C24a</th>
+<th>For details, se</th>
+</tr></thead><tbody>
+<tr><td class="sticky">Week</td>
+<td class="conf-high" title="Confidence: 95%">Week</td>
+<td class="conf-high" title="Confidence: 95%">-4 to -1</td>
+<td class="conf-high" title="Confidence: 95%">0</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q4w ±3 days unl</td>
+<td class="conf-mid flagged" title="Confidence: 76%">For details, se</td>
+</tr>
+<tr><td class="sticky">Day</td>
+<td class="conf-high" title="Confidence: 95%">Day</td>
+<td class="conf-high" title="Confidence: 95%">-28 to -1</td>
+<td class="conf-high" title="Confidence: 95%">1</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-mid flagged" title="Confidence: 76%">q28d ±3 days un</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">PRO-CTCAE</td>
+<td class="conf-high" title="Confidence: 95%">PRO-CTCAE</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as other P</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as other P</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as other P</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as other P</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as other P</td>
+<td class="conf-high" title="Confidence: 95%">8.1.3</td>
+</tr>
+<tr><td class="sticky">PGICt</td>
+<td class="conf-low flagged" title="Confidence: 66%">PGICt<sup style="color:#0284c7">t</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as PRO-CTC</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as PRO-CTC</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as PRO-CTC</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as PRO-CTC</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Same as PRO-CTC</td>
+<td class="conf-high" title="Confidence: 95%">8.1.3</td>
+</tr>
+<tr><td class="sticky">Healthcare resource use (HOSPA</td>
+<td class="conf-high" title="Confidence: 95%">Healthcare reso<sup style="color:#0284c7">u</sup></td>
+<td class="conf-low flagged" title="Confidence: 40%">To be completed</td>
+<td class="conf-mid flagged" title="Confidence: 76%">To be completed</td>
+<td class="conf-mid flagged" title="Confidence: 76%">To be completed</td>
+<td class="conf-mid flagged" title="Confidence: 76%">To be completed</td>
+<td class="conf-mid flagged" title="Confidence: 76%">To be completed</td>
+<td class="conf-mid flagged" title="Confidence: 76%">To be completed</td>
+<td class="conf-high" title="Confidence: 95%">8.1.3</td>
+</tr>
+<tr><td class="sticky">FFPE tumor sample (mandatory; </td>
+<td class="conf-high" title="Confidence: 95%">FFPE tumor samp<sup style="color:#0284c7">v</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.8</td>
+</tr>
+<tr><td class="sticky">Optional newly acquired tumor </td>
+<td class="conf-mid flagged" title="Confidence: 81%">Optional newly <sup style="color:#0284c7">v</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">X (at PD only, </td>
+<td class="conf-mid flagged" title="Confidence: 76%">X (at PD only, </td>
+<td class="conf-mid flagged" title="Confidence: 76%">X (at PD only, </td>
+<td class="conf-mid flagged" title="Confidence: 76%">X (at PD only, </td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Genetics research sample (opti</td>
+<td class="conf-high" title="Confidence: 95%">Genetics resear<sup style="color:#0284c7">w</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.7</td>
+</tr>
+<tr><td class="sticky">Efficacy evaluations</td>
+<td class="conf-high" title="Confidence: 95%">Efficacy evalua</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Tumor radiological assessments</td>
+<td class="conf-high" title="Confidence: 95%">Tumor radiologi<sup style="color:#0284c7">y</sup></td>
+<td class="conf-low flagged" title="Confidence: 57%">Xs<sup style="color:#0284c7">s</sup></td>
+<td class="conf-mid flagged" title="Confidence: 76%">On-study tumor <sup style="color:#0284c7">z,aa</sup></td>
+<td class="conf-low flagged" title="Confidence: 40%">On-study tumor <sup style="color:#0284c7">z,aa</sup></td>
+<td class="conf-low flagged" title="Confidence: 40%">On-study tumor <sup style="color:#0284c7">z,aa</sup></td>
+<td class="conf-low flagged" title="Confidence: 40%">On-study tumor <sup style="color:#0284c7">z,aa</sup></td>
+<td class="conf-low flagged" title="Confidence: 40%">On-study tumor <sup style="color:#0284c7">z,aa</sup></td>
+<td class="conf-high" title="Confidence: 95%">8.1</td>
+</tr>
+</tbody></table>
+  </div>
+
+  <h3>Procedure Mapping</h3>
+<table class="data-table proc-table">
+<thead><tr><th>Raw Name</th><th>Canonical Name</th><th>CPT Code</th><th>Category</th><th>Cost</th></tr></thead><tbody>
+<tr><td>Day</td><td><strong>Day</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Efficacy evaluations</td><td><strong>Efficacy evaluations</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>FFPE tumor sample (mandatory; a newly ac</td><td><strong>FFPE tumor sample (mandatory; a newly ac</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Genetics research sample (optional DNA e</td><td><strong>Genetics research sample (optional DNA e</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Healthcare resource use (HOSPAD)u</td><td><strong>Healthcare resource use (HOSPAD)u</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Optional newly acquired tumor biopsy col</td><td><strong>Tumor Biopsy</strong></td><td>20206 (CPT)</td><td>Procedure</td><td><span class="badge badge-cost-vhigh">$$$$</span></td></tr>
+<tr><td>PGICt</td><td><strong>PGICt</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>PRO-CTCAE</td><td><strong>PRO-CTCAE</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Tumor radiological assessments (RECIST 1</td><td><strong>Physical Examination</strong></td><td>99213 (CPT)</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Week</td><td><strong>Week</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+</tbody></table>
+  
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td></td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Screening</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C1a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C2a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C3a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C4a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>C5 to PD/C24a</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>For details, see Section</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 0</strong> <span class="badge badge-cost-vhigh">$$$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.81 below threshold 0.95</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Optional newly acquired tumor </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 3</strong> <span class="badge badge-cost-vhigh">$$$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.95</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X (at PD only, strongly encour</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 4</strong> <span class="badge badge-cost-vhigh">$$$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.95</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X (at PD only, strongly encour</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 5</strong> <span class="badge badge-cost-vhigh">$$$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.95</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X (at PD only, strongly encour</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 6</strong> <span class="badge badge-cost-vhigh">$$$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.95</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X (at PD only, strongly encour</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q4w ±3 days unless dosing need</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 7</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>For details, see Section</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>q28d ±3 days unless dosing nee</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Same as other PROs, but will e</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Same as other PROs, but will e</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Same as other PROs, but will e</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Same as other PROs, but will e</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Same as other PROs, but will e</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 3, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.66 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>PGICt</code></div></div></div>
+<p style="font-size:12px;color:#94a3b8;">... and 17 more items</p>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">Table 2 Schedule of assessments for patients who have completed or discontinued treatment</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 21, 22 &middot;
+        196 cells &middot;
+        73 flagged &middot;
+        8 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#d97706;">81%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:81%;background:#d97706;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <table class="data-table">
+<thead><tr><th class="sticky">Procedure</th>
+<th>Col 0</th>
+<th>Col 1</th>
+<th>Col 2</th>
+<th>Col 3</th>
+<th>Col 4</th>
+<th>Col 5</th>
+<th>Col 6</th>
+<th>Col 7</th>
+<th>Col 8</th>
+<th>Col 9</th>
+</tr></thead><tbody>
+<tr><td class="sticky">Physical examination (full)</td>
+<td class="conf-high" title="Confidence: 95%">Physical examin</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.2.1</td>
+</tr>
+<tr><td class="sticky">Vital signs (temperature, resp</td>
+<td class="conf-high" title="Confidence: 95%">Vital signs (te</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.2.2</td>
+</tr>
+<tr><td class="sticky">Weight</td>
+<td class="conf-high" title="Confidence: 95%">Weight</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.2.2</td>
+</tr>
+<tr><td class="sticky">Weight</td>
+<td class="conf-high" title="Confidence: 95%">Weight</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.2.2</td>
+</tr>
+<tr><td class="sticky">Pregnancy test</td>
+<td class="conf-high" title="Confidence: 95%
+For women of childbearing potential only. A urine or serum pregnancy test is acceptable.">Pregnancy testa<sup style="color:#0284c7">a</sup></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-high" title="Confidence: 95%">8.2.4</td>
+</tr>
+<tr><td class="sticky">AE/SAE assessment</td>
+<td class="conf-high" title="Confidence: 95%">AE/SAE assessme</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.3</td>
+</tr>
+<tr><td class="sticky">WHO/ECOG performance status</td>
+<td class="conf-high" title="Confidence: 95%">WHO/ECOG perfor</td>
+<td class="conf-mid flagged" title="Confidence: 76%
+WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.">At timepoints c<sup style="color:#0284c7">b</sup></td>
+<td class="conf-mid flagged" title="Confidence: 76%
+WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.">At timepoints c<sup style="color:#0284c7">b</sup></td>
+<td class="conf-mid flagged" title="Confidence: 76%
+WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.">At timepoints c<sup style="color:#0284c7">b</sup></td>
+<td class="conf-mid flagged" title="Confidence: 76%
+WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.">At timepoints c<sup style="color:#0284c7">b</sup></td>
+<td class="conf-mid flagged" title="Confidence: 76%
+WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.">At timepoints c<sup style="color:#0284c7">b</sup></td>
+<td class="conf-mid flagged" title="Confidence: 76%
+WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.">At timepoints c<sup style="color:#0284c7">b</sup></td>
+<td class="conf-mid flagged" title="Confidence: 76%
+WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.">At timepoints c<sup style="color:#0284c7">b</sup></td>
+<td class="conf-mid flagged" title="Confidence: 76%
+WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.">At timepoints c<sup style="color:#0284c7">b</sup></td>
+<td class="conf-high" title="Confidence: 95%">8.2.5</td>
+</tr>
+<tr><td class="sticky">Subsequent anticancer therapy</td>
+<td class="conf-high" title="Confidence: 95%
+Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF. At minimum, collect the start date and description of the subsequent anticancer therapy.
+For patients who discontinue their assigned IP following confirmed progression, available readings of CT/MRI from local practice will be collected from patients&#x27; medical charts while information on subsequent anticancer treatment is collected.">Subsequent anti<sup style="color:#0284c7">c,d</sup></td>
+<td class="conf-low flagged" title="Confidence: 50%">&lt;--------------</td>
+<td class="conf-low flagged" title="Confidence: 50%">&lt;--------------</td>
+<td class="conf-low flagged" title="Confidence: 50%">&lt;--------------</td>
+<td class="conf-high" title="Confidence: 95%">&gt;</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">8.1</td>
+</tr>
+<tr><td class="sticky">Survival status</td>
+<td class="conf-low flagged" title="Confidence: 50%
+Patients may be contacted in the week following data cutoffs to confirm survival status. Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF.">Survival status<sup style="color:#0284c7">e</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">8.1</td>
+</tr>
+<tr><td class="sticky">Hematology</td>
+<td class="conf-high" title="Confidence: 95%">Hematology</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">Table 10</td>
+</tr>
+<tr><td class="sticky">Clinical chemistry</td>
+<td class="conf-high" title="Confidence: 95%">Clinical chemis</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">Table 9</td>
+</tr>
+<tr><td class="sticky">Urinalysis</td>
+<td class="conf-high" title="Confidence: 95%">Urinalysis</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">As clinically i</td>
+<td class="conf-mid flagged" title="Confidence: 76%">Table 11</td>
+</tr>
+<tr><td class="sticky">Hematology</td>
+<td class="conf-low flagged" title="Confidence: 50%">Hematology</td>
+<td class="conf-low flagged" title="Confidence: 50%">X</td>
+<td class="conf-low flagged" title="Confidence: 50%">X</td>
+<td class="conf-low flagged" title="Confidence: 50%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 40%">Table 10</td>
+</tr>
+<tr><td class="sticky">Clinical chemistry</td>
+<td class="conf-low flagged" title="Confidence: 50%">Clinical chemis</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-mid flagged" title="Confidence: 76%">Table 9</td>
+</tr>
+<tr><td class="sticky">Urinalysis</td>
+<td class="conf-low flagged" title="Confidence: 50%">Urinalysis</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">As clinically i</td>
+<td class="conf-low flagged" title="Confidence: 40%">Table 11</td>
+</tr>
+<tr><td class="sticky">TSH (reflex free T3 or free T4</td>
+<td class="conf-low flagged" title="Confidence: 50%
+Free T3 or free T4 will only be measured if TSH is abnormal or if there is clinical suspicion of an AE related to the endocrine system.">TSH (reflex fre<sup style="color:#0284c7">f</sup></td>
+<td class="conf-low flagged" title="Confidence: 50%">X</td>
+<td class="conf-low flagged" title="Confidence: 50%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-low flagged" title="Confidence: 50%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 40%">Table 9</td>
+</tr>
+<tr><td class="sticky">PK assessmentg</td>
+<td class="conf-low flagged" title="Confidence: 50%
+PK and immunogenicity samples are collected 90 days (3 months) (±7 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (±7 days) after study treatment ends.">PK assessmentg<sup style="color:#0284c7">g</sup></td>
+<td class="conf-low flagged" title="Confidence: 50%"></td>
+<td class="conf-low flagged" title="Confidence: 50%"></td>
+<td class="conf-low flagged" title="Confidence: 50%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 50%">8.5</td>
+</tr>
+<tr><td class="sticky">EORTC QLQ-C30 and CX24, PGIS, </td>
+<td class="conf-high" title="Confidence: 95%
+Will be administered using a site-based, ePRO device. The PRO questionnaires must be administered and completed at the clinic prior to treatment administration performed at the site and ideally before any discussions of health status to avoid biasing the participant&#x27;s responses to the questions. As feasible, site staff should also">EORTC QLQ-C30 a<sup style="color:#0284c7">i</sup></td>
+<td class="conf-low flagged" title="Confidence: 40%">0 (C1D1), 2 (mi</td>
+<td class="conf-mid flagged" title="Confidence: 70%">0 (C1D1), 2 (mi</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-high" title="Confidence: 95%">8.1.3</td>
+</tr>
+<tr><td class="sticky">PRO-CTCAE</td>
+<td class="conf-high" title="Confidence: 95%">PRO-CTCAE</td>
+<td class="conf-low flagged" title="Confidence: 40%">Same as other P</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Same as other P</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td class="conf-high" title="Confidence: 95%">8.1.3</td>
+</tr>
+<tr><td class="sticky">PGIC</td>
+<td class="conf-high" title="Confidence: 95%">PGICj<sup style="color:#0284c7">j</sup></td>
+<td class="conf-low flagged" title="Confidence: 40%">Same as PRO-CTC</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Same as PRO-CTC</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td class="conf-high" title="Confidence: 95%">8.1.3</td>
+</tr>
+<tr><td class="sticky">Healthcare resource use (HOSPA</td>
+<td class="conf-high" title="Confidence: 95%">Healthcare reso<sup style="color:#0284c7">j</sup></td>
+<td class="conf-low flagged" title="Confidence: 40%">To be completed</td>
+<td class="conf-mid flagged" title="Confidence: 70%">To be completed</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td class="conf-high" title="Confidence: 95%">8.1.3</td>
+</tr>
+<tr><td class="sticky">Tumor radiological assessment </td>
+<td class="conf-high" title="Confidence: 95%">Tumor radiologi<sup style="color:#0284c7">k</sup></td>
+<td class="conf-low flagged" title="Confidence: 40%">On-study tumor <sup style="color:#0284c7">l,m</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%">On-study tumor <sup style="color:#0284c7">l,m</sup></td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td style="color:#cbd5e1">—</td>
+<td class="conf-high" title="Confidence: 95%">8.1</td>
+</tr>
+</tbody></table>
+  </div>
+
+  <h3>Procedure Mapping</h3>
+<table class="data-table proc-table">
+<thead><tr><th>Raw Name</th><th>Canonical Name</th><th>CPT Code</th><th>Category</th><th>Cost</th></tr></thead><tbody>
+<tr><td>AE/SAE assessment</td><td><strong>AE/SAE assessment</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Clinical chemistry</td><td><strong>Clinical chemistry</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>EORTC QLQ-C30 and CX24, PGIS, EQ-5D</td><td><strong>Quality of Life Questionnaire</strong></td><td>—</td><td>PRO</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>EORTC QLQ-C30 and CX24, PGIS, EQ-5Di</td><td><strong>EORTC QLQ-C30 and CX24, PGIS, EQ-5Di</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Healthcare resource use (HOSPAD)</td><td><strong>Healthcare resource use (HOSPAD)</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Healthcare resource use (HOSPAD)j</td><td><strong>Healthcare resource use (HOSPAD)j</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Hematology</td><td><strong>Hematology</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>PGIC</td><td><strong>PGIC</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>PGICj</td><td><strong>PGICj</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>PK assessmentg</td><td><strong>PK assessmentg</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>PRO-CTCAE</td><td><strong>PRO-CTCAE</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Physical examination (full)</td><td><strong>Physical Examination</strong></td><td>99213 (CPT)</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Pregnancy test</td><td><strong>Pregnancy Test</strong></td><td>81025 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Pregnancy testa</td><td><strong>Pregnancy Test</strong></td><td>81025 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Subsequent anticancer therapy</td><td><strong>Subsequent anticancer therapy</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Subsequent anticancer therapyc,d</td><td><strong>Subsequent anticancer therapyc,d</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Survival status</td><td><strong>Survival Follow-up</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Survival status^e</td><td><strong>Survival Follow-up</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>TSH (reflex free T3 or free T4f)</td><td><strong>Thyroid Function Tests</strong></td><td>84443 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Tumor radiological assessment (RECIST 1.</td><td><strong>Physical Examination</strong></td><td>99213 (CPT)</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Tumor radiological assessment (RECIST 1.</td><td><strong>Physical Examination</strong></td><td>99213 (CPT)</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Urinalysis</td><td><strong>Urinalysis</strong></td><td>81003 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Vital signs (temperature, respiratory ra</td><td><strong>Vital Signs</strong></td><td>99000 (CPT)</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>WHO/ECOG performance status</td><td><strong>ECOG Performance Status</strong></td><td>—</td><td>Efficacy</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Weight</td><td><strong>Body Weight</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+</tbody></table>
+  <h3>Footnotes</h3>
+<table class="data-table">
+<thead><tr><th style="width:40px">Marker</th><th>Text</th><th>Type</th><th>Cells</th></tr></thead><tbody>
+<tr><td><strong style="color:#0284c7;font-size:14px;">a</strong></td><td>For women of childbearing potential only. A urine or serum pregnancy test is acceptable.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">b</strong></td><td>WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>8</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">c</strong></td><td>Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF. At minimum, collect the start date and description of the subsequent anticancer therapy.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">d</strong></td><td>For patients who discontinue their assigned IP following confirmed progression, available readings of CT/MRI from local practice will be collected from patients&#x27; medical charts while information on subsequent anticancer treatment is collected.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">e</strong></td><td>Patients may be contacted in the week following data cutoffs to confirm survival status. Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">f</strong></td><td>Free T3 or free T4 will only be measured if TSH is abnormal or if there is clinical suspicion of an AE related to the endocrine system.</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">g</strong></td><td>PK and immunogenicity samples are collected 90 days (3 months) (±7 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (±7 days) after study treatment ends.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">i</strong></td><td>Will be administered using a site-based, ePRO device. The PRO questionnaires must be administered and completed at the clinic prior to treatment administration performed at the site and ideally before any discussions of health status to avoid biasing the participant&#x27;s responses to the questions. As feasible, site staff should also</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+</tbody></table>
+  
+  <h3>Review Queue</h3>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>As clinically indicated</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;As clinically indicated&#x27; vs &#x27;&#x27;. Confidence 0.40 below thresh</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>As clinically indicated</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;As clinically indicated&#x27; vs &#x27;&#x27;. Confidence 0.40 below thresh</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>As clinically indicated</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;As clinically indicated&#x27; vs &#x27;&#x27;. Confidence 0.40 below thresh</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>As clinically indicated</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;As clinically indicated&#x27; vs &#x27;&#x27;. Confidence 0.40 below thresh</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>As clinically indicated</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 7</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;As clinically indicated&#x27; vs &#x27;&#x27;. Confidence 0.40 below thresh</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>As clinically indicated</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 8</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;As clinically indicated&#x27; vs &#x27;&#x27;. Confidence 0.40 below thresh</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>As clinically indicated</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 1</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>At timepoints consistent with </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>At timepoints consistent with </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>At timepoints consistent with </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>At timepoints consistent with </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>At timepoints consistent with </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 6</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>At timepoints consistent with </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 7</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>At timepoints consistent with </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 8</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>At timepoints consistent with </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 7, Col 1</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;&lt;-----------------------------------------------------------</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>&lt;-----------------------------</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 7, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;&lt;-----------------------------------------------------------</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>&lt;-----------------------------</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 7, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;&lt;-----------------------------------------------------------</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>&lt;-----------------------------</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 8, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;Survival status^e&#x27; vs &#x27;Survival statusᵉ&#x27;. Confidence 0.50 be</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Survival status^e</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 9, Col 9</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Table 10</code></div></div></div>
+<p style="font-size:12px;color:#94a3b8;">... and 53 more items</p>
+</div>
+
+</div>
+</body>
+</html>
