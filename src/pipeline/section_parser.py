@@ -399,7 +399,18 @@ class SectionParser:
         # Strategy 3: Scan all pages for section headers (with font detection)
         sections = self._scan_headers(doc)
         if sections:
-            candidates.append(("header_scan", sections))
+            # Sanity check: real protocols have 15-80 sections. If header_scan
+            # returns 200+, it caught cover page noise (P-34 Roche format).
+            # Demote to low priority instead of blocking entirely — it may be
+            # the only candidate for non-ICH documents.
+            if len(sections) > 200:
+                logger.warning(
+                    f"Strategy 3 produced {len(sections)} sections — likely "
+                    f"cover page noise. Demoting to last resort."
+                )
+                candidates.append(("header_scan_noisy", sections))
+            else:
+                candidates.append(("header_scan", sections))
             logger.info(f"Strategy 3 (header scan): {len(sections)} sections")
 
         doc.close()
@@ -409,9 +420,10 @@ class SectionParser:
             logger.warning("No sections found by any strategy")
             return []
 
-        # Strategy priority: fitz_toc > toc_text > header_scan
+        # Strategy priority: fitz_toc > toc_text > header_scan > header_scan_noisy
         # TOC-based strategies have correct page numbers — strongly preferred
-        priority_order = ["fitz_toc", "toc_text", "header_scan"]
+        # Noisy header_scan is dead last — only used if nothing else works
+        priority_order = ["fitz_toc", "toc_text", "header_scan", "header_scan_noisy"]
         best_name, best_sections = None, []
 
         for strategy in priority_order:
@@ -1629,13 +1641,6 @@ Return ONLY the JSON array."""
 
         for page_num in range(doc.page_count):
             page = doc[page_num]
-
-            # P-34 fix: skip cover page (page 0) for header scanning.
-            # Cover pages have title fragments that look like bold headings
-            # (e.g., "INVESTIGATE THE EFFICACY AND SAFETY OF") but aren't
-            # document sections. Only start scanning from page 1+.
-            if page_num == 0:
-                continue
 
             # Strategy 1: Regex on plain text with date rejection
             text = page.get_text("text")
