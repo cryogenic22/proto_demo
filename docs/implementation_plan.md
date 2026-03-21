@@ -423,16 +423,35 @@ No phase is complete until the eval gate criteria are all checked.
 
 ---
 
-## Timeline
+## Escalation Policy for Human Review
 
-| Week | Phase | Key Deliverable |
+The directed correction loop may produce a high disagreement rate. If the
+challenger flags 15 cells and the re-reader disagrees on 8, that's 8 cells
+in human review per table — at scale that becomes human-as-the-loop, not
+human-in-the-loop.
+
+**Policy:** If >20% of a table's cells require human review after the correction
+loop, escalate the entire table to Path C rather than doing cell-by-cell review.
+This prevents the review queue from becoming unmanageable.
+
+---
+
+## Timeline (Revised — Annotation Parallel, Not Sequential)
+
+The critical insight: annotation must run IN PARALLEL with Sprint 1, not after
+the development roadmap. Without a real TEDS baseline from real ground truth,
+there is no way to measure whether improvements actually work.
+
+| Week | Track A (Development) | Track B (Evaluation) |
 |---|---|---|
-| 1 | Phase 0: Baseline | TEDS metric + 5 annotations + baseline_v4.json |
-| 2 | Phase 1: ICH Router | ICH validator + complexity scorer + routing logic |
-| 3 | Phase 2: Directed Correction | Challenger corrections + targeted re-extraction |
-| 4 | Phase 3: Amendments | Amendment detection + partial SoA flagging |
-| 5-6 | Phase 4: Docling Path B | Structural pre-parse + iterative refinement |
-| 7 | Phase 5: Dashboard | TEDS in benchmark + CI integration + trend tracking |
+| 1 | Phase 1: ICH structure validator as router | Pfizer BNT162 ground truth annotation (full, not spot-check) |
+| 2 | Phase 1: Complexity scorer + routing logic | Continue annotation (12-16 hours total) |
+| 3 | Phase 2: Directed challenger correction loop | TEDS computation against completed annotation — FIRST REAL BASELINE |
+| 4 | Phase 3: Amendment detection + adversarial set | Measure correction loop improvement against real baseline |
+| 5-6 | Phase 4: Docling integration for Path B | P-08 annotation + second TEDS measurement |
+| 7 | Phase 5: Dashboard + CI integration | P-01 annotation + full attribute-stratified report |
 
-**Total: 7 weeks to go from current state to fully evaluated, complexity-adaptive,
-self-measuring pipeline.**
+**The constraint:** No improvement claim is valid until Sprint 3 delivers
+the first real TEDS measurement. Everything before that is eyeballing.
+
+**Total: 7 weeks, but real measurement starts at Week 3 — not Week 7.**
