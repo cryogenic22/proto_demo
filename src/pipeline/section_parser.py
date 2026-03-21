@@ -620,29 +620,61 @@ Return ONLY the JSON array."""
         start = section.page
         end = section.end_page if section.end_page is not None else start
 
-        # Add one extra page for safety — content may overflow into next section's start page
-        end = min(end + 1, doc.page_count - 1)
+        # Add extra pages for safety — content may overflow, or start page may be
+        # an image-only page (SoA tables rendered as images)
+        end = min(end + 2, doc.page_count - 1)
+
+        # If the start page is empty (image-only), scan forward to find text
+        # Count empty pages to detect image-based sections (SoA tables)
+        empty_pages = 0
+        actual_start = start
+        for p in range(start, min(start + 10, doc.page_count)):
+            page_text = doc[p].get_text("text").strip()
+            if len(page_text) > 50:
+                actual_start = p
+                break
+            empty_pages += 1
+
+        # If 2+ consecutive empty pages, this section contains images (likely SoA table)
+        if empty_pages >= 2:
+            doc.close()
+            return (
+                f"[This section (pages {start+1}-{start+empty_pages}) contains "
+                f"image-based content (likely a Schedule of Activities table) that "
+                f"cannot be extracted as text. Use the SoA extraction pipeline "
+                f"(POST /api/extract) to extract table data from these pages.]"
+            )
 
         text_parts = []
-        for page_num in range(start, end + 1):
+        for page_num in range(actual_start, end + 1):
             page = doc[page_num]
-            if preserve_formatting:
-                # Use "text" with layout for better paragraph preservation
-                # "blocks" mode preserves block-level structure
-                text_parts.append(page.get_text("text"))
-            else:
-                text_parts.append(page.get_text("text"))
+            page_text = page.get_text("text")
+            if page_text.strip():  # Skip empty/image pages
+                text_parts.append(page_text)
 
         doc.close()
 
         full_text = "\n".join(text_parts)
 
         # Find the section header to trim the start
+        # Try multiple patterns — section headers vary in formatting
+        match = None
         if section.number:
-            header_pattern = re.escape(section.number) + r"\.?\s+" + re.escape(section.title[:20])
-        else:
-            header_pattern = re.escape(section.title[:30])
-        match = re.search(header_pattern, full_text, re.IGNORECASE)
+            title_words = section.title.split()[:3]
+            title_start = " ".join(title_words) if title_words else section.title[:15]
+            patterns = [
+                re.escape(section.number) + r"\.?\s+" + re.escape(title_start),
+                re.escape(section.number) + r"[\.\s]+" + re.escape(title_words[0]) if title_words else None,
+                re.escape(section.number) + r"\s+" + section.title[:10].upper().replace(" ", r"\s+"),
+            ]
+            for pat in patterns:
+                if pat:
+                    match = re.search(pat, full_text, re.IGNORECASE)
+                    if match:
+                        break
+        if not match:
+            header_pattern = re.escape(section.title[:20])
+            match = re.search(header_pattern, full_text, re.IGNORECASE)
         if match:
             full_text = full_text[match.start():]
 
