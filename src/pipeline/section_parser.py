@@ -116,6 +116,7 @@ class Section:
     page_display: str    # Display page number from TOC (may differ from 0-indexed)
     level: int           # Nesting depth: 1, 2, 3, 4
     end_page: int | None = None  # Last page of this section
+    start_y: float = 0.0  # Y-coordinate of heading on start page (for precise clipping)
     children: list[Section] = field(default_factory=list)
 
     @property
@@ -130,6 +131,7 @@ class Section:
             "page_display": self.page_display,
             "level": self.level,
             "end_page": self.end_page,
+            "start_y": self.start_y,
             "children": [c.to_dict() for c in self.children],
         }
 
@@ -597,6 +599,90 @@ Return ONLY the JSON array."""
         query = title_query.lower()
         return [s for s in self._flatten(sections) if query in s.title.lower()]
 
+    def _find_heading_y(
+        self, doc: fitz.Document, page_0indexed: int,
+        section_number: str, title: str,
+    ) -> float:
+        """Find the exact Y-coordinate of a section heading on a page.
+
+        Uses bold-font detection to pinpoint where a section starts,
+        enabling precise Y-coordinate clipping instead of regex splitting.
+        """
+        if page_0indexed < 0 or page_0indexed >= doc.page_count:
+            return 0.0
+
+        page = doc[page_0indexed]
+        blocks = page.get_text("dict")["blocks"]
+
+        heading_prefix = f"{section_number}."
+        heading_prefix_alt = f"{section_number} "
+
+        for block in blocks:
+            if "lines" not in block:
+                continue
+            for line in block["lines"]:
+                line_text = "".join(s["text"] for s in line["spans"]).strip()
+                if line_text.startswith(heading_prefix) or line_text.startswith(heading_prefix_alt):
+                    is_bold = any(
+                        "Bold" in s.get("font", "") or s["flags"] & 16
+                        for s in line["spans"] if s["text"].strip()
+                    )
+                    if is_bold:
+                        return line["spans"][0]["origin"][1]
+
+            # Fallback: search by title fragment
+            if title:
+                for line in block.get("lines", []):
+                    line_text = "".join(s["text"] for s in line["spans"]).strip()
+                    if title[:30] in line_text:
+                        is_bold = any(
+                            "Bold" in s.get("font", "") or s["flags"] & 16
+                            for s in line["spans"] if s["text"].strip()
+                        )
+                        if is_bold:
+                            return line["spans"][0]["origin"][1]
+
+        return 0.0
+
+    def _find_next_heading_y(
+        self, doc: fitz.Document, page_0indexed: int,
+        current_section_number: str, after_y: float = 0.0,
+    ) -> float:
+        """Find the Y-coordinate of the next section heading on a page.
+
+        Only considers headings BELOW after_y. Returns 99999.0 if no
+        next heading found on this page.
+        """
+        if page_0indexed < 0 or page_0indexed >= doc.page_count:
+            return 99999.0
+
+        page = doc[page_0indexed]
+        blocks = page.get_text("dict")["blocks"]
+        section_re = re.compile(r"^(\d{1,2}(?:\.\d{1,2}){0,5})\.?\s+")
+
+        candidates = []
+        for block in blocks:
+            if "lines" not in block:
+                continue
+            for line in block["lines"]:
+                line_text = "".join(s["text"] for s in line["spans"]).strip()
+                match = section_re.match(line_text)
+                if not match:
+                    continue
+                found_num = match.group(1)
+                if found_num == current_section_number:
+                    continue
+                is_bold = any(
+                    "Bold" in s.get("font", "") or s["flags"] & 16
+                    for s in line["spans"] if s["text"].strip()
+                )
+                if is_bold:
+                    y = line["spans"][0]["origin"][1]
+                    if y > after_y + 5:
+                        candidates.append(y)
+
+        return min(candidates) if candidates else 99999.0
+
     def get_section_text(
         self,
         pdf_bytes: bytes,
@@ -606,8 +692,10 @@ Return ONLY the JSON array."""
     ) -> str:
         """Extract the EXACT text of a section from the PDF.
 
-        Handles cross-page content stitching — if a paragraph starts on
-        page 5 and continues on page 6, it's captured completely.
+        Uses Y-coordinate clipping for precise extraction — on the start
+        page, skips all content above the section heading. On the end page,
+        stops at the next section's heading. This eliminates regex-based
+        splitting bugs on shared pages.
 
         Args:
             section: The section to extract.
@@ -620,12 +708,10 @@ Return ONLY the JSON array."""
         start = section.page
         end = section.end_page if section.end_page is not None else start
 
-        # Add extra pages for safety — content may overflow, or start page may be
-        # an image-only page (SoA tables rendered as images)
+        # Add extra pages for safety — content may overflow
         end = min(end + 2, doc.page_count - 1)
 
-        # If the start page is empty (image-only), scan forward to find text
-        # Count empty pages to detect image-based sections (SoA tables)
+        # Detect image-based sections (SoA tables rendered as images)
         empty_pages = 0
         actual_start = start
         for p in range(start, min(start + 10, doc.page_count)):
@@ -635,7 +721,6 @@ Return ONLY the JSON array."""
                 break
             empty_pages += 1
 
-        # If 2+ consecutive empty pages, this section contains images (likely SoA table)
         if empty_pages >= 2:
             doc.close()
             return (
@@ -645,99 +730,85 @@ Return ONLY the JSON array."""
                 f"(POST /api/extract) to extract table data from these pages.]"
             )
 
-        text_parts = []
+        # Find precise Y-coordinates for clipping
+        start_y = section.start_y
+        if start_y == 0.0:
+            start_y = self._find_heading_y(doc, actual_start, section.number, section.title)
+
+        # Determine end page and end Y based on subsection handling
+        if not include_subsections and section.children:
+            first_child = section.children[0]
+            end = first_child.page
+            end_y = self._find_heading_y(doc, end, first_child.number, first_child.title)
+            if end_y == 0.0:
+                end_y = 99999.0
+        else:
+            # Find next same-or-higher level section heading on end page
+            end_y = self._find_next_heading_y(
+                doc, end, section.number,
+                after_y=start_y if end == actual_start else 0.0,
+            )
+
+        # Extract text with Y-coordinate clipping per page
+        lines = []
+        header_footer_re = [
+            re.compile(r"^Page \d+", re.IGNORECASE),
+            re.compile(r"^Confidential$", re.IGNORECASE),
+            re.compile(r"^\d{1,4}$"),  # Standalone page numbers
+        ]
+
         for page_num in range(actual_start, end + 1):
             page = doc[page_num]
-            page_text = page.get_text("text")
-            if page_text.strip():  # Skip empty/image pages
-                text_parts.append(page_text)
+            blocks = page.get_text("dict")["blocks"]
+
+            page_start_y = start_y if page_num == actual_start else 0.0
+            page_end_y = end_y if page_num == end else 99999.0
+
+            for block in blocks:
+                if "lines" not in block:
+                    continue
+                for line in block["lines"]:
+                    spans = line.get("spans", [])
+                    if not spans:
+                        continue
+
+                    y = spans[0]["origin"][1]
+
+                    # Y-coordinate clipping
+                    if y < page_start_y - 2:
+                        continue
+                    if y > page_end_y - 2:
+                        continue
+
+                    line_text = "".join(s["text"] for s in spans).strip()
+                    if not line_text:
+                        continue
+
+                    # Skip headers/footers
+                    skip = False
+                    for pat in header_footer_re:
+                        if pat.match(line_text):
+                            skip = True
+                            break
+                    if skip:
+                        continue
+
+                    if "Continued on table" in line_text:
+                        continue
+
+                    lines.append(line_text)
 
         doc.close()
-
-        full_text = "\n".join(text_parts)
-
-        # Find the section header to trim the start
-        # Try multiple patterns — section headers vary in formatting
-        match = None
-        if section.number:
-            title_words = section.title.split()[:3]
-            title_start = " ".join(title_words) if title_words else section.title[:15]
-            patterns = [
-                re.escape(section.number) + r"\.?\s+" + re.escape(title_start),
-                re.escape(section.number) + r"[\.\s]+" + re.escape(title_words[0]) if title_words else None,
-                re.escape(section.number) + r"\s+" + section.title[:10].upper().replace(" ", r"\s+"),
-            ]
-            for pat in patterns:
-                if pat:
-                    match = re.search(pat, full_text, re.IGNORECASE)
-                    if match:
-                        break
-        if not match:
-            header_pattern = re.escape(section.title[:20])
-            match = re.search(header_pattern, full_text, re.IGNORECASE)
-        if match:
-            full_text = full_text[match.start():]
-
-        # Find where to stop
-        if include_subsections:
-            # Stop at the NEXT SAME-LEVEL OR HIGHER section
-            # e.g., if we're in 5.1, stop at 5.2 or 6, but NOT at 5.1.1
-            if section.number:
-                parts = section.number.split(".")
-                level = len(parts)
-                # Build pattern for same-level or higher sections
-                if level == 1:
-                    # Top-level: stop at next top-level
-                    stop_pattern = r"\n(\d{1,2})\.?\s+[A-Z]"
-                else:
-                    # Sub-level: stop at same level with different number
-                    parent = ".".join(parts[:-1])
-                    current_num = int(parts[-1])
-                    # Match parent.N where N > current
-                    stop_pattern = (
-                        r"\n" + re.escape(parent) + r"\.(\d+)"
-                        r"\.?\s+[A-Z]"
-                    )
-            else:
-                stop_pattern = r"\n\d{1,2}(?:\.\d{1,3}){0,4}\.?\s+[A-Z]"
-        else:
-            # Stop at ANY next section header (even subsections)
-            stop_pattern = r"\n\d{1,2}(?:\.\d{1,3}){0,4}\.?\s+[A-Z]"
-
-        # Split at the stop pattern, but skip the first match (which is our own header)
-        matches = list(re.finditer(stop_pattern, full_text))
-        if len(matches) > 1:
-            # First match might be our own header, second is where we stop
-            stop_at = matches[1].start()
-            full_text = full_text[:stop_at]
-        elif len(matches) == 1 and matches[0].start() > 50:
-            # Only one match and it's not our header — stop there
-            full_text = full_text[:matches[0].start()]
-
-        # Clean up: remove page headers/footers (common pattern: page numbers, confidential notices)
-        lines = full_text.split("\n")
-        cleaned = []
-        for line in lines:
-            stripped = line.strip()
-            # Skip common headers/footers
-            if re.match(r"^Page \d+ of \d+$", stripped):
-                continue
-            if re.match(r"^Confidential$", stripped, re.IGNORECASE):
-                continue
-            if re.match(r"^\d+$", stripped) and len(stripped) <= 4:
-                # Standalone page number
-                continue
-            cleaned.append(line)
-
-        return "\n".join(cleaned).strip()
+        return "\n".join(lines).strip()
 
     def get_section_html(self, pdf_bytes: bytes, section: Section) -> str:
         """Extract section content as HTML — preserves formatting for copy-paste.
 
+        Uses Y-coordinate clipping for precise extraction.
+
         Returns HTML with:
         - Paragraphs as <p> tags
         - Bold text preserved
-        - Lists as <ul>/<ol>
         - Tables preserved if present
         """
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
@@ -745,17 +816,35 @@ Return ONLY the JSON array."""
         end = section.end_page if section.end_page is not None else start
         end = min(end + 1, doc.page_count - 1)
 
+        # Find precise Y-coordinates
+        start_y = section.start_y
+        if start_y == 0.0:
+            start_y = self._find_heading_y(doc, start, section.number, section.title)
+        end_y = self._find_next_heading_y(
+            doc, end, section.number,
+            after_y=start_y if end == start else 0.0,
+        )
+
         html_parts = []
         for page_num in range(start, end + 1):
             page = doc[page_num]
-            # Use dict mode for rich text extraction
+            page_start_y = start_y if page_num == start else 0.0
+            page_end_y = end_y if page_num == end else 99999.0
+
             try:
                 blocks = page.get_text("dict")["blocks"]
                 for block in blocks:
                     if block.get("type") == 0:  # Text block
                         for line_data in block.get("lines", []):
+                            spans = line_data.get("spans", [])
+                            if not spans:
+                                continue
+                            y = spans[0]["origin"][1]
+                            if y < page_start_y - 2 or y > page_end_y - 2:
+                                continue
+
                             line_html = ""
-                            for span in line_data.get("spans", []):
+                            for span in spans:
                                 text = span.get("text", "")
                                 if not text.strip():
                                     continue
@@ -770,7 +859,6 @@ Return ONLY the JSON array."""
                             if line_html.strip():
                                 html_parts.append(f"<p>{line_html}</p>")
             except Exception:
-                # Fallback to plain text
                 html_parts.append(f"<p>{page.get_text('text')}</p>")
 
         doc.close()
