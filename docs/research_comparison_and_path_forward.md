@@ -20,7 +20,7 @@ where we stand on each.
 long contexts. Naive full-document injection is architecturally broken for
 150-300 page protocols.
 
-**Our status: SOLVED.**
+**Our status: MITIGATED (not fully solved).**
 We never inject the full document into an LLM context. Our pipeline:
 - Renders pages as images (isolated page context)
 - SOA pre-screening processes one page at a time
@@ -28,7 +28,14 @@ We never inject the full document into an LLM context. Our pipeline:
 - Cell extraction works on one table chunk at a time
 - No stage ever sees more than 5-6 pages of context
 
-**Gap:** None. Our architecture avoids this problem by design.
+**Remaining risk:** Page-level isolation solves context window degradation
+but creates a different problem: **long-range semantic dependencies**. A
+footnote on page 47 may reference a term defined in Section 3 on page 12.
+A conditional eligibility criterion in the SoA may only make sense if
+you've read the inclusion/exclusion section. The synopsis reading the
+first 12 pages is a heuristic — it will break on protocols where the
+design rationale is buried in amendment addenda. "Mitigated for the
+common case" keeps us honest about the remaining failure modes.
 
 ### 2. Multi-Level Heading Hierarchies
 
@@ -189,18 +196,45 @@ document complexity FIRST, then choose the appropriate extraction strategy.
 
 ### Document Complexity Assessment (New Stage 0)
 
-Before any extraction, classify the document on four dimensions:
+Before any extraction, classify the document on five dimensions. The scoring
+should be **table-specific, not document-level** — a protocol can have a high
+image ratio from diagrams and flowcharts while having a perfectly clean text-based
+SoA. The pre-screening pass already touches every page — use it to derive
+SoA-specific complexity.
 
 ```
-Complexity Score = f(page_count, table_type, image_ratio, heading_quality)
+Complexity Score = f(page_count, soa_complexity, heading_quality, amendment_state, structure_match)
 ```
 
 | Dimension | Low (1) | Medium (2) | High (3) |
 |---|---|---|---|
 | **Page count** | <50 | 50-150 | 150+ |
-| **SoA table type** | Single-page, text-based | Multi-page, text-based | Multi-page, image-rendered |
-| **Image ratio** | <5% pages are images | 5-20% | >20% |
+| **SoA complexity** | Single-page, <10 columns, <5 footnotes | Multi-page, 10-20 cols, 5-15 footnotes | Multi-page, 20+ cols, image-rendered, 15+ footnotes |
 | **Heading quality** | PDF TOC metadata present | TOC in text, parseable | No TOC, bold-only headings |
+| **Amendment state** | Original protocol, no amendments | 1-2 amendments, full SoA reproduced | 3+ amendments, partial SoA diffs |
+| **ICH structure match** | Section numbers match ICH standard | Section numbers present but non-standard | No section numbers or anomalous structure |
+
+### ICH Structure Validation (Route to Correct Path)
+
+ICH E6 / TransCelerate defines a standard section structure:
+- Section 1: Protocol Summary / Synopsis
+- Section 2: Introduction / Background
+- Section 3: Objectives / Endpoints
+- Section 4: Study Design
+- Section 5: Study Population
+- Section 6: Study Intervention
+- Section 7: Discontinuation
+- Section 8: Assessments / Procedures (contains SoA)
+- Section 9: Statistical Considerations
+- Section 10: Supporting Documentation
+- Section 11: References
+
+**Use this as a ROUTER, not just a validator.** If the section parser labels
+something "Section 3: DOSING DELAYS" and the ICH validator knows Section 3
+should be OBJECTIVES, that's a bright red flag: the protocol structure is
+unusual and should be routed to Path B or C, not Path A. Discovering structural
+problems BEFORE extraction is architecturally more powerful than discovering
+them during extraction and trying to fix downstream.
 
 Composite score determines which extraction path to take:
 
@@ -248,16 +282,37 @@ any VLM extraction. This is the research frontier approach.
 
 **Expected gain:** Targets 95%+ accuracy but at 3-5x cost and time.
 
-### Implementation Priority
+### Missing Failure Mode: Amended SoA Tables
+
+Protocol amendments that modify specific cells without reproducing the full table
+are a critical gap not addressed in our pipeline or in the research. Amendment 3
+might say "Visit 6 PK sampling is now optional — see updated SoA" and include
+only a partial table or a diff-style change table.
+
+This breaks:
+- The stitcher (partial table doesn't match the base table format)
+- The footnote resolver (amended footnotes may reference the original table)
+- The budget output (frequency changes from amendments not captured)
+
+**Worst case:** Confidence scores on the amendment section may look fine because
+the partial table IS correctly extracted — it's just missing the context that
+it's a DIFF, not a complete table.
+
+**Mitigation:** Detect amendment patterns ("Amendment N", "Protocol Version X.Y",
+"Summary of Changes") and flag the SoA as potentially incomplete. Route to human
+review when amendment indicators are found near SoA tables.
+
+### Implementation Priority (Revised)
 
 | Phase | What to Build | Effort | Impact |
 |---|---|---|---|
-| **Now** | Complexity assessment (auto-classify documents) | 1 week | Enables adaptive routing |
+| **Now** | ICH structure validation as complexity ROUTER | 1 week | Catches anomalies before extraction, routes to correct path |
+| **Now** | Directed challenger correction loop | 1 week | Highest-leverage accuracy improvement for existing pipeline |
+| **Next** | Complexity assessment (auto-classify) | 1 week | Enables adaptive routing to Path A/B/C |
 | **Next** | Docling integration as pre-parse for Path B | 2 weeks | 5-10% on complex tables |
-| **Next** | Iterative critique-refinement (2-3 VLM cycles) | 1 week | Catches structural errors the single challenger misses |
+| **Next** | Amendment detection and flagging | 1 week | Prevents silent failures on amended protocols |
 | **Later** | TATR/TABLET integration for Path C | 3 weeks | Cell-level precision for hardest cases |
 | **Later** | MinerU integration for formula extraction | 2 weeks | Unblocks formula-heavy sections |
-| **Ongoing** | ICH structure validator | 1 week | Catches section mislabeling |
 
 ---
 
@@ -285,9 +340,20 @@ Critique (1 pass) → final output.
 just lowers confidence. The critique-refinement approach feeds errors BACK to
 the extractor with specific corrections. This closes the loop.
 
-**Implementation:** Modify the challenger to produce specific corrections,
-then feed those corrections into a third extraction pass that focuses ONLY
-on the flagged cells.
+**Critical implementation detail:** The correction loop must be DIRECTED —
+specific cells, not full re-extraction. When the challenger says "cell R14/C7
+appears incorrect," the corrector re-examines that specific cell without
+disturbing the 300 other cells it already got right. Undirected re-extraction
+risks regressing correct cells while fixing incorrect ones. The research
+critique-refinement loop works because it passes specific structural errors
+as a structured list to the refiner.
+
+**Implementation:**
+1. Challenger produces a list of `{cell_ref, error_type, suggested_value}`
+2. A targeted re-extraction pass crops ONLY the flagged cell regions from the image
+3. VLM re-reads each flagged cell at higher resolution with the error context
+4. Reconciler accepts the correction ONLY if the re-read agrees with the suggestion
+   (if it disagrees, the cell goes to human review)
 
 ### 2. DocAgent-Style Hierarchical Navigation (Already Partially Built)
 
@@ -365,3 +431,10 @@ stages that activate based on document complexity.
 
 The complexity-adaptive architecture is the key insight: **don't run the expensive
 path on simple documents, and don't run the simple path on complex ones.**
+
+The risk isn't that the architecture is wrong — it's that "production-grade for
+the common case" gets shipped as "production-grade," and the hard cases arrive
+when the client least expects them. The ICH validator as a router, the directed
+challenger correction loop, and amendment detection are the three changes that
+close the gap between "works on standard protocols" and "works on real-world
+protocols with all their messiness."
