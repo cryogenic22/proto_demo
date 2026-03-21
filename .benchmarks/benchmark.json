@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "updated": "2026-03-20T23:26:56.907601+00:00",
-  "protocol_count": 2,
+  "updated": "2026-03-21T19:15:55.128662+00:00",
+  "protocol_count": 4,
   "protocols": [
     {
       "protocol_id": "PFIZER-BNT162",
@@ -52,6 +52,74 @@
       "errors": [],
       "status": "success",
       "timestamp": "2026-03-20T23:26:56.906659+00:00"
+    },
+    {
+      "protocol_id": "fba476edebfd",
+      "protocol_name": "Prot_0001 1.pdf",
+      "therapeutic_area": "",
+      "phase": "",
+      "pages": 252,
+      "sections_found": 0,
+      "section_method": "",
+      "tables_found": 0,
+      "total_cells": 0,
+      "footnotes_resolved": 0,
+      "procedures_mapped": 0,
+      "procedures_unmapped": 0,
+      "avg_confidence": 0,
+      "cells_flagged": 0,
+      "cells_flagged_pct": 0.0,
+      "budget_lines": 0,
+      "cpt_codes_mapped": 0,
+      "processing_time_s": 293.1,
+      "estimated_cost_usd": 0.59,
+      "warnings": 8,
+      "errors": [
+        "Table p41_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p48_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p51_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p53_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p56_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p59_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p60_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p62_soa failed: 'CellExtractor' object has no attribute '_get_table_images'"
+      ],
+      "status": "failed",
+      "timestamp": "2026-03-21T18:56:06.968684+00:00"
+    },
+    {
+      "protocol_id": "f27d80ff3786",
+      "protocol_name": "Prot_0001 1.pdf",
+      "therapeutic_area": "",
+      "phase": "",
+      "pages": 252,
+      "sections_found": 0,
+      "section_method": "",
+      "tables_found": 0,
+      "total_cells": 0,
+      "footnotes_resolved": 0,
+      "procedures_mapped": 0,
+      "procedures_unmapped": 0,
+      "avg_confidence": 0,
+      "cells_flagged": 0,
+      "cells_flagged_pct": 0.0,
+      "budget_lines": 0,
+      "cpt_codes_mapped": 0,
+      "processing_time_s": 366.3,
+      "estimated_cost_usd": 0.73,
+      "warnings": 8,
+      "errors": [
+        "Table p41_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p48_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p51_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p53_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p56_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p59_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p60_soa failed: 'CellExtractor' object has no attribute '_get_table_images'",
+        "Table p62_soa failed: 'CellExtractor' object has no attribute '_get_table_images'"
+      ],
+      "status": "failed",
+      "timestamp": "2026-03-21T19:15:55.128145+00:00"
     }
   ]
 }

@@ -1,0 +1,77 @@
+{
+  "v2": {
+    "cell_accuracy": 0.9872068230277186,
+    "teds": 0.7166,
+    "teds_s": 0.9168,
+    "correct": 1389,
+    "wrong": 18,
+    "missing": 227,
+    "extra": 230,
+    "pred_nodes": 685,
+    "gt_nodes": 628,
+    "accuracy_by_type": {
+      "MARKER": 1.0,
+      "TEXT": 0.9150943396226415,
+      "EMPTY": 1.0,
+      "CONDITIONAL": 1.0,
+      "NUMERIC": 1.0
+    },
+    "errors_by_type": {
+      "MARKER": 0,
+      "TEXT": 18,
+      "EMPTY": 0,
+      "CONDITIONAL": 0,
+      "NUMERIC": 0
+    }
+  },
+  "v3": {
+    "cell_accuracy": 0.986784140969163,
+    "teds": 0.8158,
+    "teds_s": 0.9697,
+    "correct": 1568,
+    "wrong": 21,
+    "missing": 45,
+    "extra": 142,
+    "pred_nodes": 609,
+    "gt_nodes": 628,
+    "accuracy_by_type": {
+      "MARKER": 1.0,
+      "TEXT": 0.9142857142857143,
+      "EMPTY": 1.0,
+      "CONDITIONAL": 1.0,
+      "NUMERIC": 1.0
+    },
+    "errors_by_type": {
+      "MARKER": 0,
+      "TEXT": 21,
+      "EMPTY": 0,
+      "CONDITIONAL": 0,
+      "NUMERIC": 0
+    }
+  },
+  "v4": {
+    "cell_accuracy": 0.9871481028151775,
+    "teds": 0.9999,
+    "teds_s": 1.0,
+    "correct": 1613,
+    "wrong": 21,
+    "missing": 0,
+    "extra": 0,
+    "pred_nodes": 628,
+    "gt_nodes": 628,
+    "accuracy_by_type": {
+      "MARKER": 1.0,
+      "TEXT": 0.916,
+      "EMPTY": 1.0,
+      "CONDITIONAL": 1.0,
+      "NUMERIC": 1.0
+    },
+    "errors_by_type": {
+      "MARKER": 0,
+      "TEXT": 21,
+      "EMPTY": 0,
+      "CONDITIONAL": 0,
+      "NUMERIC": 0
+    }
+  }
+}

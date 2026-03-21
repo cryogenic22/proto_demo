@@ -195,16 +195,6 @@ class CellExtractor:
             confidence=1.0,
         )
 
-
-def _safe_int(value, default: int = 0) -> int:
-    """Safely convert LLM output to int — handles float, str, None."""
-    if value is None:
-        return default
-    try:
-        return int(value)
-    except (ValueError, TypeError):
-        return default
-
     @staticmethod
     def _get_table_images(
         region: TableRegion, pages: list[PageImage]
@@ -215,3 +205,13 @@ def _safe_int(value, default: int = 0) -> int:
             for pn in region.pages
             if pn in page_map
         ]
+
+
+def _safe_int(value, default: int = 0) -> int:
+    """Safely convert LLM output to int — handles float, str, None."""
+    if value is None:
+        return default
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return default

@@ -1,0 +1,229 @@
+{
+  "protocols": [
+    {
+      "file": "P-01_annotation",
+      "total": 3389,
+      "Y": 0,
+      "N": 0,
+      "blank": 3389,
+      "avg_conf": 0.8337562702862201,
+      "types": {
+        "TEXT": 2142,
+        "EMPTY": 1152,
+        "MARKER": 81,
+        "CONDITIONAL": 13,
+        "NUMERIC": 1
+      },
+      "footnotes": 8,
+      "procedures": 526,
+      "sections": 84
+    },
+    {
+      "file": "P-03_annotation",
+      "total": 5916,
+      "Y": 0,
+      "N": 0,
+      "blank": 5916,
+      "avg_conf": 0.8580037187288708,
+      "types": {
+        "TEXT": 3097,
+        "EMPTY": 2341,
+        "MARKER": 476,
+        "NUMERIC": 2
+      },
+      "footnotes": 12,
+      "procedures": 604,
+      "sections": 17
+    },
+    {
+      "file": "P-05_annotation",
+      "total": 808,
+      "Y": 0,
+      "N": 0,
+      "blank": 808,
+      "avg_conf": 0.8768564356435643,
+      "types": {
+        "TEXT": 629,
+        "EMPTY": 177,
+        "MARKER": 2
+      },
+      "footnotes": 1,
+      "procedures": 494,
+      "sections": 96
+    },
+    {
+      "file": "P-09_annotation",
+      "total": 1789,
+      "Y": 0,
+      "N": 0,
+      "blank": 1789,
+      "avg_conf": 0.8815259921743991,
+      "types": {
+        "EMPTY": 817,
+        "TEXT": 668,
+        "MARKER": 304
+      },
+      "footnotes": 1,
+      "procedures": 518,
+      "sections": 109
+    },
+    {
+      "file": "P-14_annotation",
+      "total": 4159,
+      "Y": 0,
+      "N": 0,
+      "blank": 4159,
+      "avg_conf": 0.86074777590767,
+      "types": {
+        "EMPTY": 2204,
+        "TEXT": 1830,
+        "MARKER": 124,
+        "NUMERIC": 1
+      },
+      "footnotes": 11,
+      "procedures": 692,
+      "sections": 129
+    },
+    {
+      "file": "P-24_annotation",
+      "total": 0,
+      "Y": 0,
+      "N": 0,
+      "blank": 0,
+      "avg_conf": 0,
+      "types": {},
+      "footnotes": 0,
+      "procedures": 0,
+      "sections": 35
+    },
+    {
+      "file": "P-27_annotation",
+      "total": 2592,
+      "Y": 0,
+      "N": 0,
+      "blank": 2592,
+      "avg_conf": 0.8832947530864198,
+      "types": {
+        "EMPTY": 1559,
+        "TEXT": 576,
+        "MARKER": 455,
+        "CONDITIONAL": 2
+      },
+      "footnotes": 11,
+      "procedures": 424,
+      "sections": 136
+    },
+    {
+      "file": "P-32_annotation",
+      "total": 290,
+      "Y": 0,
+      "N": 0,
+      "blank": 290,
+      "avg_conf": 0.9,
+      "types": {
+        "TEXT": 290
+      },
+      "footnotes": 2,
+      "procedures": 286,
+      "sections": 78
+    },
+    {
+      "file": "P-33_annotation",
+      "total": 0,
+      "Y": 0,
+      "N": 0,
+      "blank": 0,
+      "avg_conf": 0,
+      "types": {},
+      "footnotes": 0,
+      "procedures": 0,
+      "sections": 68
+    },
+    {
+      "file": "P-34_annotation",
+      "total": 1445,
+      "Y": 0,
+      "N": 0,
+      "blank": 1445,
+      "avg_conf": 0.8773010380622838,
+      "types": {
+        "TEXT": 814,
+        "EMPTY": 614,
+        "MARKER": 17
+      },
+      "footnotes": 12,
+      "procedures": 582,
+      "sections": 14
+    },
+    {
+      "file": "p17_durvalumab_annotation",
+      "total": 581,
+      "Y": 379,
+      "N": 0,
+      "blank": 202,
+      "avg_conf": 0.8467297762478485,
+      "types": {
+        "EMPTY": 216,
+        "TEXT": 157,
+        "MARKER": 94,
+        "CONDITIONAL": 71,
+        "NUMERIC": 43
+      },
+      "footnotes": 16,
+      "procedures": 67,
+      "sections": 1
+    },
+    {
+      "file": "pfizer_bnt162_annotation",
+      "total": 1634,
+      "Y": 1502,
+      "N": 0,
+      "blank": 132,
+      "avg_conf": 0.8948041615667074,
+      "types": {
+        "EMPTY": 927,
+        "MARKER": 418,
+        "TEXT": 250,
+        "CONDITIONAL": 38,
+        "NUMERIC": 1
+      },
+      "footnotes": 27,
+      "procedures": 75,
+      "sections": 1
+    },
+    {
+      "file": "Prot_0001-1_annotation",
+      "total": 5230,
+      "Y": 0,
+      "N": 0,
+      "blank": 5230,
+      "avg_conf": 0.8790917782026769,
+      "types": {
+        "EMPTY": 3935,
+        "TEXT": 1111,
+        "MARKER": 160,
+        "NUMERIC": 20,
+        "CONDITIONAL": 4
+      },
+      "footnotes": 27,
+      "procedures": 380,
+      "sections": 230
+    }
+  ],
+  "totals": {
+    "cells": 27833,
+    "Y": 1881,
+    "N": 0,
+    "blank": 25952,
+    "fn": 128,
+    "procs": 4648,
+    "secs": 998
+  },
+  "type_distribution": {
+    "TEXT": 11564,
+    "EMPTY": 13942,
+    "MARKER": 2131,
+    "CONDITIONAL": 128,
+    "NUMERIC": 68
+  }
+}

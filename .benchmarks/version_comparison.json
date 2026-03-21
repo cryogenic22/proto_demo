@@ -1,0 +1,74 @@
+{
+  "v2": {
+    "teds_score": 0.9872068230277186,
+    "cell_accuracy": 0.9872068230277186,
+    "correct_cells": 1389,
+    "wrong_cells": 18,
+    "total_cells": 1634,
+    "missing_cells": 227,
+    "extra_cells": 230,
+    "accuracy_by_type": {
+      "MARKER": 1.0,
+      "TEXT": 0.9150943396226415,
+      "EMPTY": 1.0,
+      "CONDITIONAL": 1.0,
+      "NUMERIC": 1.0
+    },
+    "errors_by_type": {
+      "MARKER": 0,
+      "TEXT": 18,
+      "EMPTY": 0,
+      "CONDITIONAL": 0,
+      "NUMERIC": 0
+    },
+    "footnote_coverage": 1.0
+  },
+  "v3": {
+    "teds_score": 0.986784140969163,
+    "cell_accuracy": 0.986784140969163,
+    "correct_cells": 1568,
+    "wrong_cells": 21,
+    "total_cells": 1634,
+    "missing_cells": 45,
+    "extra_cells": 142,
+    "accuracy_by_type": {
+      "MARKER": 1.0,
+      "TEXT": 0.9142857142857143,
+      "EMPTY": 1.0,
+      "CONDITIONAL": 1.0,
+      "NUMERIC": 1.0
+    },
+    "errors_by_type": {
+      "MARKER": 0,
+      "TEXT": 21,
+      "EMPTY": 0,
+      "CONDITIONAL": 0,
+      "NUMERIC": 0
+    },
+    "footnote_coverage": 1.0
+  },
+  "v4": {
+    "teds_score": 0.9871481028151775,
+    "cell_accuracy": 0.9871481028151775,
+    "correct_cells": 1613,
+    "wrong_cells": 21,
+    "total_cells": 1634,
+    "missing_cells": 0,
+    "extra_cells": 0,
+    "accuracy_by_type": {
+      "MARKER": 1.0,
+      "TEXT": 0.916,
+      "EMPTY": 1.0,
+      "CONDITIONAL": 1.0,
+      "NUMERIC": 1.0
+    },
+    "errors_by_type": {
+      "MARKER": 0,
+      "TEXT": 21,
+      "EMPTY": 0,
+      "CONDITIONAL": 0,
+      "NUMERIC": 0
+    },
+    "footnote_coverage": 1.0
+  }
+}
