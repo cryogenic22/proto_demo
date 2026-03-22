@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 # non-determinism where the same document produces different row mappings.
 EXTRACTION_PROMPT_ANCHORED = """You are analyzing a clinical trial protocol table image.
 
-{grid_anchor}
+{page_break_markers}{grid_anchor}
 
 INSTRUCTIONS:
 For EACH row listed above and EACH column, report the cell value. Use the EXACT
@@ -59,7 +59,7 @@ Return ONLY the JSON array."""
 
 # Fallback prompt when no grid anchor is available
 EXTRACTION_PROMPT_V1 = """You are analyzing a clinical trial protocol table image.
-The table has the following structure:
+{page_break_markers}The table has the following structure:
 - Columns: {columns}
 - This section covers rows: {row_range}
 - Row group: {row_group}
@@ -87,7 +87,7 @@ Rules:
 Return ONLY the JSON array."""
 
 EXTRACTION_PROMPT_V2 = """Look at this clinical trial protocol table image carefully.
-Table structure: {columns} columns.
+{page_break_markers}Table structure: {columns} columns.
 Focus area: rows {row_range}, section "{row_group}".
 
 List every single cell in this table section as a JSON array. Each cell:
@@ -145,6 +145,20 @@ class CellExtractor:
         if not table_images:
             return []
 
+        num_pages = len(table_images)
+
+        # Build page break marker text for multi-page prompts
+        page_break_text = self._build_page_break_markers(
+            num_pages, region, grid_skeleton
+        )
+
+        # For tables >5 pages, switch to per-page extraction with column
+        # headers repeated in each prompt for better accuracy.
+        if num_pages > 5:
+            return await self._extract_per_page(
+                table_images, region, schema, grid_skeleton, pass_number
+            )
+
         # Use anchored extraction when grid skeleton is available
         if grid_skeleton and grid_skeleton.rows:
             logger.info(
@@ -152,7 +166,10 @@ class CellExtractor:
                 f"{grid_skeleton.num_cols} cols"
             )
             anchor_text = grid_skeleton.to_prompt_anchor()
-            prompt = EXTRACTION_PROMPT_ANCHORED.format(grid_anchor=anchor_text)
+            prompt = EXTRACTION_PROMPT_ANCHORED.format(
+                grid_anchor=anchor_text,
+                page_break_markers=page_break_text,
+            )
             return await self._extract_chunk(table_images, prompt)
 
         # Fallback: unanchored extraction (original behavior)
@@ -175,6 +192,7 @@ class CellExtractor:
                         columns=col_desc,
                         row_range=f"{group.start_row}-{group.end_row}",
                         row_group=group.name,
+                        page_break_markers=page_break_text,
                     )
                     return await self._extract_chunk(table_images, prompt)
 
@@ -195,8 +213,186 @@ class CellExtractor:
                 columns=col_desc,
                 row_range=f"0-{schema.num_rows - 1}",
                 row_group="Full table",
+                page_break_markers=page_break_text,
             )
             return await self._extract_chunk(table_images, prompt)
+
+    async def _extract_per_page(
+        self,
+        table_images: list[bytes],
+        region: TableRegion,
+        schema: TableSchema,
+        grid_skeleton: GridSkeleton | None,
+        pass_number: int,
+    ) -> list[ExtractedCell]:
+        """Per-page extraction for tables spanning >5 pages.
+
+        Repeats column headers in each prompt so the VLM has full context
+        without needing to reference earlier images.
+        """
+        import asyncio
+
+        logger.info(
+            f"Per-page extraction for {len(table_images)}-page table "
+            f"(region {region.table_id})"
+        )
+
+        col_desc = ", ".join(
+            f"{h.text} (col {h.col_index})"
+            for h in schema.column_headers
+        ) or f"{schema.num_cols} columns"
+
+        # Build per-page row ranges from grid_skeleton when available
+        page_row_ranges = self._get_per_page_row_ranges(region, grid_skeleton)
+
+        semaphore = asyncio.Semaphore(self.config.max_concurrent_llm_calls)
+
+        async def extract_single_page(page_idx: int, image: bytes) -> list[ExtractedCell]:
+            async with semaphore:
+                page_num = region.pages[page_idx] if page_idx < len(region.pages) else page_idx
+                total = len(table_images)
+                marker = f"--- PAGE {page_idx + 1} OF {total} ---\n"
+
+                row_range_str = page_row_ranges.get(page_idx, "unknown")
+
+                if grid_skeleton and grid_skeleton.rows:
+                    # Filter skeleton rows for this page
+                    page_rows = [
+                        r for r in grid_skeleton.rows
+                        if r.page_number == page_num or r.page_number == page_num + 1
+                    ]
+                    if page_rows:
+                        anchor_lines = [
+                            "TABLE STRUCTURE (deterministic — DO NOT change row indices):",
+                            f"Total rows: {grid_skeleton.num_rows}, Total columns: {grid_skeleton.num_cols}",
+                        ]
+                        if grid_skeleton.column_headers:
+                            cols_display = [
+                                f"col {i}: {h}"
+                                for i, h in enumerate(grid_skeleton.column_headers)
+                            ]
+                            anchor_lines.append(f"Columns: {'; '.join(cols_display)}")
+                        anchor_lines.append("")
+                        anchor_lines.append("ROW INDEX | PROCEDURE NAME")
+                        anchor_lines.append("-" * 60)
+                        for row in page_rows:
+                            if not row.is_header:
+                                anchor_lines.append(
+                                    f"  {row.row_index:>3}      | {row.procedure_name}"
+                                )
+                        anchor_text = "\n".join(anchor_lines)
+                        prompt = EXTRACTION_PROMPT_ANCHORED.format(
+                            grid_anchor=anchor_text,
+                            page_break_markers=marker,
+                        )
+                    else:
+                        prompt_template = (
+                            EXTRACTION_PROMPT_V1 if pass_number == 1
+                            else EXTRACTION_PROMPT_V2
+                        )
+                        prompt = prompt_template.format(
+                            columns=col_desc,
+                            row_range=row_range_str,
+                            row_group=f"Page {page_idx + 1} of {total}",
+                            page_break_markers=marker,
+                        )
+                else:
+                    prompt_template = (
+                        EXTRACTION_PROMPT_V1 if pass_number == 1
+                        else EXTRACTION_PROMPT_V2
+                    )
+                    prompt = prompt_template.format(
+                        columns=col_desc,
+                        row_range=row_range_str,
+                        row_group=f"Page {page_idx + 1} of {total}",
+                        page_break_markers=marker,
+                    )
+
+                return await self._extract_chunk([image], prompt)
+
+        results = await asyncio.gather(
+            *(extract_single_page(i, img) for i, img in enumerate(table_images)),
+            return_exceptions=True,
+        )
+
+        all_cells: list[ExtractedCell] = []
+        for i, res in enumerate(results):
+            if isinstance(res, Exception):
+                logger.error(f"Per-page extraction failed on page {i}: {res}")
+            else:
+                all_cells.extend(res)
+        return all_cells
+
+    @staticmethod
+    def _build_page_break_markers(
+        num_pages: int,
+        region: TableRegion,
+        grid_skeleton: GridSkeleton | None,
+    ) -> str:
+        """Build page break marker text for multi-page prompts.
+
+        Produces lines like:
+            --- PAGE 1 OF 3 (rows 0-12) ---
+            --- PAGE 2 OF 3 (rows 13-25) ---
+            --- PAGE 3 OF 3 (rows 26-38) ---
+
+        Returns empty string for single-page tables.
+        """
+        if num_pages <= 1:
+            return ""
+
+        lines = ["The following images span multiple pages of the same table:\n"]
+
+        # Build per-page row ranges from grid skeleton if available
+        page_row_map: dict[int, tuple[int, int]] = {}
+        if grid_skeleton and grid_skeleton.rows:
+            for row in grid_skeleton.rows:
+                pg = row.page_number
+                if pg not in page_row_map:
+                    page_row_map[pg] = (row.row_index, row.row_index)
+                else:
+                    lo, hi = page_row_map[pg]
+                    page_row_map[pg] = (min(lo, row.row_index), max(hi, row.row_index))
+
+        for i in range(num_pages):
+            page_num = region.pages[i] if i < len(region.pages) else i
+            row_info = ""
+            if page_num in page_row_map:
+                lo, hi = page_row_map[page_num]
+                row_info = f" (rows {lo}-{hi})"
+            elif (page_num + 1) in page_row_map:
+                # grid_skeleton uses 1-indexed pages sometimes
+                lo, hi = page_row_map[page_num + 1]
+                row_info = f" (rows {lo}-{hi})"
+            lines.append(f"  --- PAGE {i + 1} OF {num_pages}{row_info} ---")
+
+        lines.append("")
+        return "\n".join(lines) + "\n"
+
+    @staticmethod
+    def _get_per_page_row_ranges(
+        region: TableRegion,
+        grid_skeleton: GridSkeleton | None,
+    ) -> dict[int, str]:
+        """Return mapping of page_index → row range string for per-page extraction."""
+        result: dict[int, str] = {}
+        if not grid_skeleton or not grid_skeleton.rows:
+            return result
+
+        page_rows: dict[int, list[int]] = {}
+        for row in grid_skeleton.rows:
+            pg = row.page_number
+            page_rows.setdefault(pg, []).append(row.row_index)
+
+        for i, page_num in enumerate(region.pages):
+            # Try both 0-indexed and 1-indexed page numbers
+            rows = page_rows.get(page_num, page_rows.get(page_num + 1, []))
+            if rows:
+                result[i] = f"{min(rows)}-{max(rows)}"
+            else:
+                result[i] = "unknown"
+
+        return result
 
     async def _extract_chunk(
         self, images: list[bytes], prompt: str

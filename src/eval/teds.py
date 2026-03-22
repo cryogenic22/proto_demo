@@ -5,6 +5,8 @@ Computes cell-level accuracy between extracted and ground truth tables.
 Adapted from OmniDocBench methodology.
 
 Also computes:
+- True TEDS via tree-edit-distance on HTML table trees (from teds_tree.py)
+- TEDS-S (structure-only variant)
 - Cost-weighted accuracy (errors weighted by procedure cost tier)
 - Footnote binding accuracy
 - Per-data-type accuracy breakdown
@@ -16,6 +18,8 @@ import json
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from src.eval.teds_tree import CellData, grid_to_html, TEDSEvaluator
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +36,8 @@ class TEDSResult:
 
     # Core metrics
     cell_accuracy: float = 0.0           # correct / total
-    teds_score: float = 0.0              # 1 - (edit_distance / max_size)
+    teds_score: float = 0.0              # True TEDS via tree-edit-distance
+    teds_struct_score: float = 0.0       # TEDS-S (structure-only)
     cost_weighted_accuracy: float = 0.0  # weighted by procedure cost
 
     # Per-data-type breakdown
@@ -154,8 +159,27 @@ def compute_teds(
     # Compute metrics
     total_compared = result.correct_cells + result.wrong_cells
     result.cell_accuracy = result.correct_cells / max(total_compared, 1)
-    result.teds_score = result.cell_accuracy  # Simplified TEDS = cell accuracy
     result.cost_weighted_accuracy = total_weighted_correct / max(total_weighted, 1)
+
+    # ── True TEDS via tree-edit-distance ──────────────────────────────
+    # Convert both extraction and ground truth cell grids to HTML, then
+    # use TEDSEvaluator.evaluate_full() for TEDS and TEDS-S scores.
+    try:
+        ex_html = _cells_to_html(ex_tables)
+        gt_html = _cells_to_html(gt_tables, ground_truth=True)
+        evaluator = TEDSEvaluator()
+        teds_result = evaluator.evaluate_full(ex_html, gt_html)
+        result.teds_score = teds_result.teds
+        result.teds_struct_score = teds_result.teds_s
+        logger.info(
+            f"True TEDS={teds_result.teds:.4f}, TEDS-S={teds_result.teds_s:.4f} "
+            f"(pred_nodes={teds_result.pred_nodes}, gt_nodes={teds_result.gt_nodes})"
+        )
+    except Exception as e:
+        # Fall back to cell_accuracy if HTML conversion or TEDS computation fails
+        logger.warning(f"True TEDS computation failed, falling back to cell_accuracy: {e}")
+        result.teds_score = result.cell_accuracy
+        result.teds_struct_score = 0.0
 
     # Per-type accuracy
     for dt in type_total:
@@ -251,10 +275,78 @@ def _values_match(extracted: str, expected: str) -> bool:
     return False
 
 
+def _cells_to_html(tables: list, *, ground_truth: bool = False) -> str:
+    """Convert a list of table dicts (extraction or GT format) to HTML for TEDS.
+
+    Handles both extraction format (``cells`` key with ``raw_value``) and
+    ground-truth format (``ground_truth_cells`` key with ``value``).
+    """
+    all_cell_data: list[CellData] = []
+    global_row_offset = 0
+
+    for table in tables:
+        cell_key = "ground_truth_cells" if ground_truth else "cells"
+        cells = table.get(cell_key, [])
+        if not cells and ground_truth:
+            # Fallback: some GT files use "cells" key
+            cells = table.get("cells", [])
+
+        max_row = 0
+        max_col = 0
+        for c in cells:
+            row = c.get("row", 0)
+            col = c.get("col", 0)
+            if ground_truth:
+                text = str(c.get("value", c.get("extracted_value", c.get("correct_value", "")))).strip()
+            else:
+                text = str(c.get("raw_value", "")).strip()
+            is_header = (row == 0)
+
+            all_cell_data.append(CellData(
+                text=text,
+                row=row + global_row_offset,
+                col=col,
+                is_header=is_header,
+            ))
+            max_row = max(max_row, row)
+            max_col = max(max_col, col)
+
+        global_row_offset += max_row + 1
+
+    if not all_cell_data:
+        return "<table><tr><td></td></tr></table>"
+
+    total_rows = max(cd.row for cd in all_cell_data) + 1
+    total_cols = max(cd.col for cd in all_cell_data) + 1
+    return grid_to_html(all_cell_data, total_rows, total_cols)
+
+
+# Lazy-loaded procedure normalizer for cost tier lookup
+_procedure_normalizer = None
+
+
 def _get_cost_tier(cell: dict) -> str:
-    """Get cost tier for a cell (from procedure data if available)."""
-    # Default to LOW — in production this would look up from procedure normalizer
-    return "LOW"
+    """Get cost tier for a cell using the procedure normalizer's vocabulary.
+
+    Looks up the row_header (procedure name) against the procedure mapping
+    CSV.  Falls back to LOW when the normalizer is unavailable or the
+    procedure is unmapped.
+    """
+    global _procedure_normalizer
+
+    row_header = str(cell.get("row_header", "")).strip()
+    if not row_header:
+        return "LOW"
+
+    try:
+        if _procedure_normalizer is None:
+            from src.pipeline.procedure_normalizer import ProcedureNormalizer
+            _procedure_normalizer = ProcedureNormalizer()
+
+        result = _procedure_normalizer.normalize(row_header)
+        return result.estimated_cost_tier.value
+    except Exception:
+        return "LOW"
 
 
 def print_teds_report(result: TEDSResult):
@@ -264,6 +356,7 @@ def print_teds_report(result: TEDSResult):
     print(f"{'='*60}")
     print(f"  Cell Accuracy:           {result.cell_accuracy:.1%} ({result.correct_cells}/{result.total_cells})")
     print(f"  TEDS Score:              {result.teds_score:.3f}")
+    print(f"  TEDS-S (structure):      {result.teds_struct_score:.3f}")
     print(f"  Cost-Weighted Accuracy:  {result.cost_weighted_accuracy:.1%}")
     print(f"  Wrong cells:             {result.wrong_cells}")
     print(f"  Missing cells:           {result.missing_cells}")

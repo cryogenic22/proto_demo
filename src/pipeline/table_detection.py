@@ -91,31 +91,92 @@ def _deterministic_soa_prescreen(pdf_bytes: bytes) -> dict[int, str]:
             except Exception:
                 pass
 
-    # Text-position fallback: when find_tables() returns 0 but the page has
-    # substantial text with 8+ X-position clusters, it's likely a text-layout
-    # table that PyMuPDF can't detect structurally (common in Roche/Moderna).
-    # Only check pages near known SoA pages (within ±15).
-    for page_idx in range(doc.page_count):
+    # ── Adaptive text-layout detection ──────────────────────────────────
+    # Instead of a hardcoded 8-cluster threshold, calibrate from known SoA
+    # pages (title_match) and use an adaptive threshold.  Also expand the
+    # search window and add Y-band similarity scoring.
+
+    # Step 1: Compute X-cluster statistics on known SoA pages
+    title_match_pages = [p for p, t in soa_pages.items() if t == "title_match"]
+    _x_cluster_counts: list[int] = []
+    _soa_y_bands: dict[int, set[int]] = {}  # page → set of Y-band buckets
+
+    for sp in soa_pages:
+        page = doc[sp]
+        blocks = page.get_text("dict")["blocks"]
+        x_pos = set()
+        y_bands = set()
+        for b in blocks:
+            if "lines" not in b:
+                continue
+            for ln in b["lines"]:
+                for s in ln.get("spans", []):
+                    x_pos.add(round(s["origin"][0] / 20) * 20)
+                    y_bands.add(round(s["origin"][1] / 15) * 15)
+        if sp in title_match_pages or soa_pages[sp] in ("title_match",):
+            _x_cluster_counts.append(len(x_pos))
+        _soa_y_bands[sp] = y_bands
+
+    # Adaptive threshold: mean - 1σ of cluster count on title-match pages,
+    # floored at 5 to avoid overly aggressive detection.  Falls back to 8
+    # when there are no title_match pages to calibrate from.
+    if _x_cluster_counts:
+        _mean = sum(_x_cluster_counts) / len(_x_cluster_counts)
+        _var = sum((c - _mean) ** 2 for c in _x_cluster_counts) / max(len(_x_cluster_counts), 1)
+        _std = _var ** 0.5
+        adaptive_x_threshold = max(5, int(_mean - _std))
+    else:
+        adaptive_x_threshold = 8  # original default
+
+    # Step 2: Determine expanded search range — span between first and last
+    # known SoA page + 20-page buffer on each side.
+    if soa_pages:
+        search_start = max(0, min(soa_pages) - 20)
+        search_end = min(doc.page_count - 1, max(soa_pages) + 20)
+    else:
+        search_start, search_end = 0, doc.page_count - 1
+
+    # Aggregate Y-bands from all known SoA pages for similarity scoring
+    all_soa_y_bands: set[int] = set()
+    for yb in _soa_y_bands.values():
+        all_soa_y_bands |= yb
+
+    for page_idx in range(search_start, search_end + 1):
         if page_idx in soa_pages:
             continue
         page = doc[page_idx]
         text = page.get_text("text").strip()
         if len(text) < 500:
             continue
-        near_soa = any(abs(page_idx - sp) <= 15 for sp in soa_pages)
-        if not near_soa:
-            continue
-        # Count unique X-position clusters — text-layout tables have many columns
+
+        # Count unique X-position clusters
         blocks = page.get_text("dict")["blocks"]
         x_positions = set()
+        y_bands_page = set()
         for b in blocks:
             if "lines" not in b:
                 continue
-            for l in b["lines"]:
-                for s in l.get("spans", []):
+            for ln in b["lines"]:
+                for s in ln.get("spans", []):
                     x_positions.add(round(s["origin"][0] / 20) * 20)
-        if len(x_positions) >= 8:
-            soa_pages[page_idx] = "text_grid_fallback"
+                    y_bands_page.add(round(s["origin"][1] / 15) * 15)
+
+        x_cluster_hit = len(x_positions) >= adaptive_x_threshold
+
+        # Y-band similarity: flag page if >60% of its Y-bands overlap
+        # with known SoA pages (catches continuation pages with matching
+        # row spacing even when X-cluster count is borderline).
+        y_band_hit = False
+        if all_soa_y_bands and y_bands_page:
+            overlap = len(y_bands_page & all_soa_y_bands)
+            y_band_ratio = overlap / len(y_bands_page)
+            y_band_hit = y_band_ratio > 0.60
+
+        if x_cluster_hit or (y_band_hit and len(x_positions) >= max(4, adaptive_x_threshold - 2)):
+            detection_reason = "text_grid_adaptive"
+            if y_band_hit and not x_cluster_hit:
+                detection_reason = "y_band_similarity"
+            soa_pages[page_idx] = detection_reason
 
     # Expand: if page N is SoA, nearby pages with tables are likely continuations.
     # Range ±10 pages to catch long multi-page SoA tables.
