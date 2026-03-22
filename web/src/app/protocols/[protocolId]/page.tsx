@@ -355,12 +355,17 @@ export default function ProtocolWorkspacePage() {
 
   // If a table is expanded, show the SoA Review Assistant
   if (expandedTable) {
+    const tableIdx = protocol.tables.indexOf(expandedTable);
     return (
       <div className="h-screen">
         <SoAReviewAssistant
           table={expandedTable}
           protocolId={protocolId}
           onClose={() => setExpandedTable(null)}
+          tableIndex={tableIdx}
+          totalTables={protocol.tables.length}
+          onPrevTable={tableIdx > 0 ? () => setExpandedTable(protocol.tables[tableIdx - 1]) : undefined}
+          onNextTable={tableIdx < protocol.tables.length - 1 ? () => setExpandedTable(protocol.tables[tableIdx + 1]) : undefined}
         />
       </div>
     );

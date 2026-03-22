@@ -126,16 +126,26 @@ export function SoAReviewAssistant({
   table,
   protocolId,
   onClose,
+  onNextTable,
+  onPrevTable,
+  tableIndex,
+  totalTables,
 }: {
   table: ExtractedTable;
   protocolId: string;
   onClose: () => void;
+  onNextTable?: () => void;
+  onPrevTable?: () => void;
+  tableIndex?: number;
+  totalTables?: number;
 }) {
   const [layer, setLayer] = useState<Layer>("overview");
   const [filter, setFilter] = useState<FilterType>("all");
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
   const [cellActions, setCellActions] = useState<Map<string, string>>(new Map());
+  const [cellCorrections, setCellCorrections] = useState<Map<string, string>>(new Map());
+  const [auditLog, setAuditLog] = useState<{ time: string; cell: string; action: string; oldValue?: string; newValue?: string }[]>([]);
 
   const cells = table.cells || [];
   const footnotes = table.footnotes || [];
@@ -172,9 +182,23 @@ export function SoAReviewAssistant({
   const maxCol = cells.reduce((m, c) => Math.max(m, c.col), 0);
   const confidence = table.overall_confidence || 0;
 
-  const handleCellAction = useCallback((row: number, col: number, action: string) => {
-    setCellActions((prev) => new Map(prev).set(`${row}-${col}`, action));
-  }, []);
+  const handleCellAction = useCallback((row: number, col: number, action: string, correctedValue?: string) => {
+    const key = `${row}-${col}`;
+    const cell = cellMap.get(key);
+    setCellActions((prev) => new Map(prev).set(key, action));
+    if (action === "corrected" && correctedValue !== undefined) {
+      setCellCorrections((prev) => new Map(prev).set(key, correctedValue));
+    }
+    if (action) {
+      setAuditLog((prev) => [...prev, {
+        time: new Date().toISOString(),
+        cell: `${cell?.row_header || row}:${cell?.col_header || col}`,
+        action,
+        oldValue: cell?.raw_value,
+        newValue: action === "corrected" ? correctedValue : undefined,
+      }]);
+    }
+  }, [cellMap]);
 
   const toggleGroup = useCallback((name: string) => {
     setCollapsedGroups((prev) => {
@@ -210,8 +234,30 @@ export function SoAReviewAssistant({
           <button onClick={() => { setLayer("grid"); setSelectedCell(null); }} className={cn("px-2 py-1 rounded", layer === "grid" ? "bg-brand-primary text-white" : "text-neutral-500 hover:bg-neutral-100")}>Grid</button>
         </div>
         <div className="flex items-center gap-2 shrink-0">
+          {/* Human Reviewed badge */}
+          {reviewed > 0 && reviewed >= cells.length && (
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 flex items-center gap-1">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+              Human Reviewed
+            </span>
+          )}
+          {reviewed > 0 && reviewed < cells.length && (
+            <span className="text-[10px] font-medium text-neutral-500">{reviewed}/{cells.length}</span>
+          )}
           <Badge variant={table.table_type === "SOA" ? "brand" : "neutral"}>{table.table_type}</Badge>
           <span className={cn("text-xs font-semibold px-2 py-0.5 rounded", confColor(confidence))}>{(confidence * 100).toFixed(0)}%</span>
+          {/* Table navigation */}
+          {totalTables && totalTables > 1 && (
+            <div className="flex items-center gap-0.5 ml-1">
+              <button onClick={onPrevTable} disabled={!onPrevTable || tableIndex === 0} className="p-1 rounded hover:bg-neutral-100 disabled:opacity-30 text-neutral-500">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+              </button>
+              <span className="text-[10px] text-neutral-400 font-mono">{(tableIndex || 0) + 1}/{totalTables}</span>
+              <button onClick={onNextTable} disabled={!onNextTable || tableIndex === (totalTables || 0) - 1} className="p-1 rounded hover:bg-neutral-100 disabled:opacity-30 text-neutral-500">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -232,10 +278,17 @@ export function SoAReviewAssistant({
             <SmartGrid
               cells={cells} schema={schema} visitWindows={visitWindows}
               cellMap={cellMap} flaggedSet={flaggedSet} cellFootnotes={cellFootnotes}
-              procedures={procedures} filter={filter} collapsedGroups={collapsedGroups}
+              procedures={procedures} footnotes={footnotes}
+              filter={filter} collapsedGroups={collapsedGroups}
               cellActions={cellActions} maxRow={maxRow} maxCol={maxCol}
               onFilterChange={setFilter} onCellClick={setSelectedCell}
-              onToggleGroup={toggleGroup} reviewed={reviewed} totalFlagged={totalFlagged}
+              onToggleGroup={toggleGroup}
+              onCollapseAll={() => {
+                const allGroups = new Set((schema?.row_groups || []).map((g) => g.name));
+                setCollapsedGroups(allGroups);
+              }}
+              onExpandAll={() => setCollapsedGroups(new Set())}
+              reviewed={reviewed} totalFlagged={totalFlagged}
             />
           )}
         </div>
@@ -250,8 +303,9 @@ export function SoAReviewAssistant({
             action={cellActions.get(`${selectedCell.row}-${selectedCell.col}`)}
             protocolId={protocolId}
             sourcePages={table.source_pages || []}
+            correctedValue={cellCorrections.get(`${selectedCell.row}-${selectedCell.col}`)}
             onClose={() => setSelectedCell(null)}
-            onAction={(a) => handleCellAction(selectedCell.row, selectedCell.col, a)}
+            onAction={(a, corrected) => handleCellAction(selectedCell.row, selectedCell.col, a, corrected)}
           />
         )}
       </div>
@@ -382,12 +436,14 @@ function MetricCard({ label, value, color }: { label: string; value: number; col
 
 function SmartGrid({
   cells, schema, visitWindows, cellMap, flaggedSet, cellFootnotes, procedures,
-  filter, collapsedGroups, cellActions, maxRow, maxCol,
-  onFilterChange, onCellClick, onToggleGroup, reviewed, totalFlagged,
+  footnotes, filter, collapsedGroups, cellActions, maxRow, maxCol,
+  onFilterChange, onCellClick, onToggleGroup, onCollapseAll, onExpandAll,
+  reviewed, totalFlagged,
 }: {
   cells: ExtractedCell[];
   schema: ExtractedTable["schema_info"];
   visitWindows: ExtractedTable["visit_windows"];
+  footnotes: ResolvedFootnote[];
   cellMap: Map<string, ExtractedCell>;
   flaggedSet: Set<string>;
   cellFootnotes: Map<string, ResolvedFootnote[]>;
@@ -399,6 +455,8 @@ function SmartGrid({
   onFilterChange: (f: FilterType) => void;
   onCellClick: (c: { row: number; col: number }) => void;
   onToggleGroup: (name: string) => void;
+  onCollapseAll: () => void;
+  onExpandAll: () => void;
   reviewed: number; totalFlagged: number;
 }) {
   const colHeaders = schema?.column_headers || [];
@@ -476,9 +534,11 @@ function SmartGrid({
             {f.label}
           </button>
         ))}
-        <div className="ml-auto text-[11px] text-neutral-400">
+        <div className="ml-auto flex items-center gap-2 text-[11px] text-neutral-400">
+          <button onClick={onCollapseAll} className="px-1.5 py-0.5 rounded hover:bg-neutral-100 text-neutral-500">Collapse all</button>
+          <button onClick={onExpandAll} className="px-1.5 py-0.5 rounded hover:bg-neutral-100 text-neutral-500">Expand all</button>
           {reviewed > 0 && <span className="text-emerald-600 font-medium">{reviewed} reviewed</span>}
-          {totalFlagged > 0 && <span className="ml-2">{totalFlagged} flagged</span>}
+          {totalFlagged > 0 && <span className="ml-1">{totalFlagged} flagged</span>}
         </div>
       </div>
 
@@ -575,6 +635,24 @@ function SmartGrid({
             })}
           </tbody>
         </table>
+
+        {/* Footnotes below grid */}
+        {footnotes.length > 0 && (
+          <div className="px-4 py-3 border-t border-neutral-200 bg-neutral-50">
+            <h4 className="text-[10px] font-semibold text-neutral-600 uppercase tracking-wide mb-2">Footnotes</h4>
+            <div className="space-y-1">
+              {footnotes.map((fn, i) => (
+                <div key={i} className="flex gap-2 text-[11px]">
+                  <sup className="text-brand-primary font-bold shrink-0">{fn.marker}</sup>
+                  <span className="text-neutral-600">{fn.text}</span>
+                  <Badge variant={fn.footnote_type === "CONDITIONAL" ? "warning" : "neutral"} className="shrink-0 self-start">
+                    {fn.footnote_type}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -586,7 +664,7 @@ import React from "react";
 
 function CellDetailPanel({
   cell, footnotes, reviewItem, isFlagged, action, protocolId,
-  sourcePages, onClose, onAction,
+  sourcePages, correctedValue, onClose, onAction,
 }: {
   cell: ExtractedCell | null;
   footnotes: ResolvedFootnote[];
@@ -595,14 +673,17 @@ function CellDetailPanel({
   action?: string;
   protocolId: string;
   sourcePages: number[];
+  correctedValue?: string;
   onClose: () => void;
-  onAction: (action: string) => void;
+  onAction: (action: string, correctedValue?: string) => void;
 }) {
   const [showSource, setShowSource] = useState(false);
   const [pdfError, setPdfError] = useState(false);
   const [zoomed, setZoomed] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editValue, setEditValue] = useState("");
 
-  // Source page navigation — start at the table's source page
+  // Source page navigation
   const initialPage = reviewItem?.source_page || sourcePages[0] || 1;
   const [currentPage, setCurrentPage] = useState(initialPage);
 
@@ -781,7 +862,32 @@ function CellDetailPanel({
 
       {/* Actions */}
       <div className="px-4 py-3 border-t border-neutral-100 bg-neutral-50/50 shrink-0">
-        {action ? (
+        {editMode ? (
+          <div className="space-y-2">
+            <label className="text-[11px] font-medium text-neutral-600">Correct value:</label>
+            <input
+              type="text"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              className="w-full px-3 py-1.5 text-sm border border-neutral-200 rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+              autoFocus
+            />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => { onAction("corrected", editValue); setEditMode(false); }}
+                className="flex-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-primary text-white hover:bg-brand-french transition-colors"
+              >
+                Save Correction
+              </button>
+              <button
+                onClick={() => setEditMode(false)}
+                className="px-3 py-1.5 text-xs text-neutral-500 hover:text-neutral-700"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : action ? (
           <div className="flex items-center gap-2 text-sm">
             <span className={cn("px-3 py-1.5 rounded-lg font-medium",
               action === "accepted" ? "bg-emerald-100 text-emerald-700" :
@@ -790,13 +896,22 @@ function CellDetailPanel({
             )}>
               {action === "accepted" ? "Accepted" : action === "flagged" ? "Flagged" : "Corrected"}
             </span>
-            <button onClick={() => onAction("")} className="text-xs text-neutral-400 hover:text-neutral-600 underline">Undo</button>
+            {action === "corrected" && correctedValue && (
+              <span className="text-xs text-neutral-500 font-mono truncate">{correctedValue}</span>
+            )}
+            <button onClick={() => { onAction(""); setEditMode(false); }} className="text-xs text-neutral-400 hover:text-neutral-600 underline ml-auto">Undo</button>
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <button onClick={() => onAction("accepted")} className="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">Accept</button>
-            <button onClick={() => onAction("corrected")} className="flex-1 px-3 py-2 text-xs font-medium rounded-lg border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition-colors">Correct</button>
-            <button onClick={() => onAction("flagged")} className="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors">Flag</button>
+            <button onClick={() => onAction("accepted")} className="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">
+              Accept
+            </button>
+            <button onClick={() => { setEditValue(cell?.raw_value || ""); setEditMode(true); }} className="flex-1 px-3 py-2 text-xs font-medium rounded-lg border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition-colors">
+              Correct
+            </button>
+            <button onClick={() => onAction("flagged")} className="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors">
+              Flag
+            </button>
           </div>
         )}
       </div>
