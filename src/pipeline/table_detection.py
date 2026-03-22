@@ -91,12 +91,22 @@ def _deterministic_soa_prescreen(pdf_bytes: bytes) -> dict[int, str]:
             except Exception:
                 pass
 
-    # Expand: if page N is SoA, pages N±1 to N±3 that have tables are likely continuations
-    expansion = {}
-    for page_idx in list(soa_pages.keys()):
-        for offset in range(-2, 4):
-            neighbor = page_idx + offset
-            if neighbor not in soa_pages and 0 <= neighbor < doc.page_count:
+    # Expand: if page N is SoA, nearby pages with tables are likely continuations.
+    # Range ±10 pages to catch long multi-page SoA tables (P-14 soa_1 spans
+    # 21 pages, P-09 soa_2 spans 7 pages). Run iteratively — each newly found
+    # page extends the search frontier.
+    max_expansion_range = 10
+    changed = True
+    while changed:
+        changed = False
+        expansion = {}
+        for page_idx in list(soa_pages.keys()):
+            for offset in range(-max_expansion_range, max_expansion_range + 1):
+                neighbor = page_idx + offset
+                if neighbor in soa_pages or neighbor in expansion:
+                    continue
+                if neighbor < 0 or neighbor >= doc.page_count:
+                    continue
                 try:
                     page = doc[neighbor]
                     tables = page.find_tables()
@@ -106,7 +116,9 @@ def _deterministic_soa_prescreen(pdf_bytes: bytes) -> dict[int, str]:
                         expansion[neighbor] = "neighbor_expansion"
                 except Exception:
                     pass
-    soa_pages.update(expansion)
+        if expansion:
+            soa_pages.update(expansion)
+            changed = True  # Re-expand from newly found pages
 
     doc.close()
     return soa_pages
