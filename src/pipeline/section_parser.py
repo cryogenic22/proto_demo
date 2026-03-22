@@ -720,10 +720,10 @@ Return ONLY the JSON array."""
         """
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         start = section.page
-        end = section.end_page if section.end_page is not None else start
+        declared_end = section.end_page if section.end_page is not None else start
 
-        # Add extra pages for safety — content may overflow
-        end = min(end + 2, doc.page_count - 1)
+        # Buffer: look up to 2 pages beyond declared end for boundary
+        end = min(declared_end + 2, doc.page_count - 1)
 
         # Detect image-based sections (SoA tables rendered as images)
         empty_pages = 0
@@ -757,11 +757,18 @@ Return ONLY the JSON array."""
             if end_y == 0.0:
                 end_y = 99999.0
         else:
-            # Find next same-or-higher level section heading on end page
-            end_y = self._find_next_heading_y(
-                doc, end, section.number,
-                after_y=start_y if end == actual_start else 0.0,
-            )
+            # Scan each page from declared_end for the next heading to
+            # prevent bleeding into the following section.
+            end_y = 99999.0
+            for scan_page in range(declared_end, end + 1):
+                after = start_y if scan_page == actual_start else 0.0
+                found_y = self._find_next_heading_y(
+                    doc, scan_page, section.number, after_y=after,
+                )
+                if found_y < 99999.0:
+                    end = scan_page
+                    end_y = found_y
+                    break
 
         # Extract text with Y-coordinate clipping per page
         lines = []
@@ -900,8 +907,9 @@ Return ONLY the JSON array."""
         """
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         start = section.page
-        end = section.end_page if section.end_page is not None else start
-        end = min(end + 2, doc.page_count - 1)
+        declared_end = section.end_page if section.end_page is not None else start
+        # Buffer: look up to 2 pages beyond declared end for boundary
+        end = min(declared_end + 2, doc.page_count - 1)
 
         # Y-coordinate bounds
         start_y = section.start_y
@@ -915,10 +923,19 @@ Return ONLY the JSON array."""
             if end_y == 0.0:
                 end_y = 99999.0
         else:
-            end_y = self._find_next_heading_y(
-                doc, end, section.number,
-                after_y=start_y if end == start else 0.0,
-            )
+            # Scan EACH page from declared_end onward for the next heading.
+            # This prevents bleed: if the next section starts on end_page+1,
+            # we clip there instead of capturing the full +2 buffer.
+            end_y = 99999.0
+            for scan_page in range(declared_end, end + 1):
+                after = start_y if scan_page == start else 0.0
+                found_y = self._find_next_heading_y(
+                    doc, scan_page, section.number, after_y=after,
+                )
+                if found_y < 99999.0:
+                    end = scan_page
+                    end_y = found_y
+                    break
 
         # Header/footer patterns to strip (static)
         hf_patterns = [
