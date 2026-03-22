@@ -178,3 +178,210 @@ export async function checkHealth(): Promise<boolean> {
     return false;
   }
 }
+
+// ─── Verification & Review Types ─────────────────────────────────────────────
+
+export interface VerificationStep {
+  method: 'DUAL_PASS' | 'OCR_GROUNDING' | 'VISION_SPATIAL' | 'CHALLENGER_CLEAR' | 'TEXT_MATCH' | 'FORMAT_CHECK';
+  status: 'PASS' | 'FAIL' | 'SKIPPED';
+  detail: string;
+}
+
+export interface ChallengeIssue {
+  challenge_type: string;
+  description: string;
+  suggested_value: string | null;
+  severity: number;
+}
+
+export interface CellReviewAction {
+  protocol_id: string;
+  table_id: string;
+  row: number;
+  col: number;
+  action: 'accept' | 'correct' | 'flag';
+  correct_value?: string;
+  flag_reason?: string;
+}
+
+export interface AssistantMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  sources?: { section: string; page: number }[];
+}
+
+export interface ProcedureEntry {
+  canonical_name: string;
+  cpt_code: string | null;
+  code_system: string | null;
+  category: string;
+  cost_tier: string;
+  aliases: string[];
+  used_in_protocols: number;
+}
+
+// ─── Protocol Types ──────────────────────────────────────────────────────────
+
+export interface ProtocolSummary {
+  protocol_id: string;
+  document_name: string;
+  metadata: ProtocolMetadata;
+  created_at: string;
+  total_pages: number;
+}
+
+export interface ProtocolMetadata {
+  title: string;
+  short_title: string;
+  protocol_number: string;
+  nct_number: string;
+  sponsor: string;
+  phase: string;
+  therapeutic_area: string;
+  indication: string;
+  study_type: string;
+  arms: string[];
+  amendment_number: string;
+  version: string;
+}
+
+export interface SectionNode {
+  number: string;
+  title: string;
+  page: number;
+  end_page: number | null;
+  level: number;
+  ke_type: string;
+  content_html: string;
+  children: SectionNode[];
+  quality_score: number | null;
+}
+
+export interface ProtocolFull {
+  protocol_id: string;
+  document_name: string;
+  document_hash: string;
+  total_pages: number;
+  metadata: ProtocolMetadata;
+  sections: SectionNode[];
+  tables: ExtractedTable[];
+  procedures: NormalizedProcedure[];
+  budget_lines: BudgetLine[];
+  quality_summary: Record<string, unknown>;
+  knowledge_elements: KnowledgeElement[];
+  created_at: string;
+  pipeline_version: string;
+}
+
+export interface BudgetLine {
+  procedure: string;
+  canonical_name: string;
+  cpt_code: string;
+  category: string;
+  cost_tier: string;
+  visits_required: string[];
+  total_occurrences: number;
+  estimated_unit_cost: number;
+  avg_confidence: number;
+  notes: string;
+}
+
+export interface KnowledgeElement {
+  ke_id: string;
+  ke_type: string;
+  title: string;
+  content: string;
+  source_pages: number[];
+  status: string;
+  version: string;
+  metadata: Record<string, unknown>;
+  children: string[];
+  relationships: KERelationship[];
+}
+
+export interface KERelationship {
+  rel_type: string;
+  target_ke_id: string;
+  properties: Record<string, unknown>;
+}
+
+// ─── Protocol API Functions ──────────────────────────────────────────────────
+
+export async function listProtocols(): Promise<ProtocolSummary[]> {
+  const res = await fetch(`${API_BASE}/api/protocols`);
+  if (!res.ok) throw new Error("Failed to list protocols");
+  return res.json();
+}
+
+export async function getProtocol(protocolId: string): Promise<ProtocolFull> {
+  const res = await fetch(`${API_BASE}/api/protocols/${protocolId}`);
+  if (!res.ok) throw new Error("Failed to fetch protocol");
+  return res.json();
+}
+
+export async function getProtocolSections(protocolId: string): Promise<SectionNode[]> {
+  const res = await fetch(`${API_BASE}/api/protocols/${protocolId}/sections`);
+  if (!res.ok) throw new Error("Failed to fetch sections");
+  return res.json();
+}
+
+export async function getSectionContent(protocolId: string, sectionNumber: string): Promise<SectionNode> {
+  const res = await fetch(`${API_BASE}/api/protocols/${protocolId}/sections/${sectionNumber}`);
+  if (!res.ok) throw new Error("Failed to fetch section content");
+  return res.json();
+}
+
+export async function getProtocolBudget(protocolId: string): Promise<BudgetLine[]> {
+  const res = await fetch(`${API_BASE}/api/protocols/${protocolId}/budget`);
+  if (!res.ok) throw new Error("Failed to fetch budget");
+  return res.json();
+}
+
+export async function getKnowledgeElements(protocolId: string, keType?: string): Promise<KnowledgeElement[]> {
+  const url = keType
+    ? `${API_BASE}/api/protocols/${protocolId}/knowledge-elements?ke_type=${keType}`
+    : `${API_BASE}/api/protocols/${protocolId}/knowledge-elements`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch knowledge elements");
+  return res.json();
+}
+
+// ─── Review & Assistant API Functions ────────────────────────────────────────
+
+export async function askProtocol(protocolId: string, question: string, sectionContext?: string): Promise<AssistantMessage> {
+  const res = await fetch(`${API_BASE}/api/protocols/${protocolId}/ask`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, section_context: sectionContext }),
+  });
+  if (!res.ok) throw new Error('Failed to get answer');
+  return res.json();
+}
+
+export async function submitCellReview(action: CellReviewAction): Promise<{ success: boolean }> {
+  const res = await fetch(`${API_BASE}/api/protocols/${action.protocol_id}/review`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(action),
+  });
+  if (!res.ok) throw new Error('Failed to submit review');
+  return res.json();
+}
+
+// ─── Procedure Library API Functions ─────────────────────────────────────────
+
+export async function listProcedures(): Promise<ProcedureEntry[]> {
+  const res = await fetch(`${API_BASE}/api/procedures/library`);
+  if (!res.ok) throw new Error('Failed to list procedures');
+  return res.json();
+}
+
+export async function updateProcedure(canonicalName: string, updates: Partial<ProcedureEntry>): Promise<ProcedureEntry> {
+  const res = await fetch(`${API_BASE}/api/procedures/${encodeURIComponent(canonicalName)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates),
+  });
+  if (!res.ok) throw new Error('Failed to update procedure');
+  return res.json();
+}

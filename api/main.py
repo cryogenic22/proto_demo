@@ -29,9 +29,10 @@ except ImportError:
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from src.models.schema import PipelineConfig, PipelineOutput
+from src.persistence.ke_store import create_ke_store
 from src.pipeline.orchestrator import PipelineOrchestrator
 
 logging.basicConfig(level=logging.INFO)
@@ -80,6 +81,61 @@ class JobStatus(BaseModel):
     error: str | None = None
     created_at: float
     completed_at: float | None = None
+
+
+# ---------------------------------------------------------------------------
+# Protocol workspace request/response models
+# ---------------------------------------------------------------------------
+
+
+class AskRequest(BaseModel):
+    """Request body for protocol Q&A."""
+
+    question: str
+    section_context: str | None = None
+
+
+class AskSource(BaseModel):
+    """Source citation in an assistant answer."""
+
+    section: str = ""
+    page: int = 0
+
+
+class AskResponse(BaseModel):
+    """Response from protocol Q&A."""
+
+    role: str = "assistant"
+    content: str = ""
+    sources: list[AskSource] = Field(default_factory=list)
+
+
+class ReviewRequest(BaseModel):
+    """Request body for cell review actions."""
+
+    table_id: str
+    row: int
+    col: int
+    action: str  # "accept", "correct", "flag"
+    correct_value: str | None = None
+    flag_reason: str | None = None
+
+
+class ReviewResponse(BaseModel):
+    """Response from cell review."""
+
+    success: bool = True
+
+
+class ProcedureLibraryEntry(BaseModel):
+    """A single procedure in the canonical library."""
+
+    canonical_name: str
+    cpt_code: str = ""
+    code_system: str = ""
+    category: str = ""
+    cost_tier: str = ""
+    aliases: str = ""
 
 
 def _build_config(**overrides) -> PipelineConfig:
@@ -469,6 +525,19 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["result"] = result_json
         jobs[job_id]["completed_at"] = time.time()
 
+        # Persist protocol to the knowledge-element store
+        try:
+            from src.persistence.protocol_bridge import (
+                pipeline_output_to_protocol,
+            )
+
+            protocol = pipeline_output_to_protocol(result_json, filename)
+            store = create_ke_store()
+            store.save_protocol(protocol)
+            logger.info("Saved protocol %s to store", protocol.protocol_id)
+        except Exception as bridge_err:
+            logger.warning("Protocol persistence failed: %s", bridge_err)
+
         # Auto-record benchmark
         try:
             from src.pipeline.benchmark import from_pipeline_output, add_benchmark
@@ -508,6 +577,178 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
     finally:
         import gc
         gc.collect()
+
+
+# ---------------------------------------------------------------------------
+# Protocol workspace endpoints (ask, review, procedure library)
+# ---------------------------------------------------------------------------
+
+
+@app.post("/api/protocols/{protocol_id}/ask", response_model=AskResponse)
+async def ask_protocol_endpoint(protocol_id: str, body: AskRequest):
+    """Ask a question about a stored protocol."""
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if protocol is None:
+        raise HTTPException(status_code=404, detail="Protocol not found")
+
+    return AskResponse(
+        role="assistant",
+        content=(
+            "LLM-based Q&A is not yet configured. "
+            f"Protocol '{protocol.document_name}' has "
+            f"{len(protocol.tables)} table(s) and "
+            f"{protocol.total_pages} page(s)."
+        ),
+        sources=[AskSource(section="metadata", page=0)],
+    )
+
+
+@app.post("/api/protocols/{protocol_id}/review", response_model=ReviewResponse)
+async def review_protocol_cell(protocol_id: str, body: ReviewRequest):
+    """Accept, correct, or flag a cell in a stored protocol."""
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if protocol is None:
+        raise HTTPException(status_code=404, detail="Protocol not found")
+
+    table = next(
+        (t for t in protocol.tables if t.get("table_id") == body.table_id),
+        None,
+    )
+    if table is None:
+        raise HTTPException(status_code=404, detail="Table not found")
+
+    cells = table.get("cells", [])
+    cell = next(
+        (c for c in cells if c.get("row") == body.row and c.get("col") == body.col),
+        None,
+    )
+
+    if body.action == "accept" and cell is not None:
+        cell["confidence"] = 1.0
+    elif body.action == "correct" and cell is not None:
+        cell["raw_value"] = body.correct_value or ""
+    elif body.action == "flag":
+        review_items = table.setdefault("review_items", [])
+        review_items.append({
+            "row": body.row,
+            "col": body.col,
+            "reason": body.flag_reason or "",
+            "action": "flag",
+        })
+    else:
+        raise HTTPException(
+            status_code=400, detail="Invalid action or cell not found"
+        )
+
+    store.save_protocol(protocol)
+    return ReviewResponse(success=True)
+
+
+@app.get("/api/procedures/library", response_model=list[ProcedureLibraryEntry])
+async def get_procedures_library():
+    """Return the full canonical procedure library with CPT codes."""
+    from src.pipeline.procedure_normalizer import ProcedureNormalizer
+
+    normalizer = ProcedureNormalizer()
+    rows = normalizer.get_mapping_table()
+    return [
+        ProcedureLibraryEntry(
+            canonical_name=r["canonical_name"],
+            cpt_code=r.get("cpt_code", ""),
+            code_system=r.get("code_system", ""),
+            category=r.get("category", ""),
+            cost_tier=r.get("cost_tier", ""),
+            aliases=r.get("aliases", ""),
+        )
+        for r in rows
+    ]
+
+
+# ---------------------------------------------------------------------------
+# Protocol & Knowledge Element endpoints
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/protocols")
+async def list_protocols():
+    """List all stored protocols."""
+    store = create_ke_store()
+    return store.list_protocols()
+
+
+@app.get("/api/protocols/{protocol_id}")
+async def get_protocol(protocol_id: str):
+    """Get full protocol data."""
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(
+            status_code=404, detail=f"Protocol {protocol_id} not found"
+        )
+    return protocol.model_dump(mode="json")
+
+
+@app.get("/api/protocols/{protocol_id}/sections")
+async def get_protocol_sections(protocol_id: str):
+    """Get the section tree for a protocol."""
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(
+            status_code=404, detail=f"Protocol {protocol_id} not found"
+        )
+    return [s.model_dump() for s in protocol.sections]
+
+
+@app.get("/api/protocols/{protocol_id}/sections/{section_number:path}")
+async def get_section_content(protocol_id: str, section_number: str):
+    """Get content for a specific section."""
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(
+            status_code=404, detail=f"Protocol {protocol_id} not found"
+        )
+
+    def find_section(sections, number):
+        for s in sections:
+            if s.number == number:
+                return s
+            found = find_section(s.children, number)
+            if found:
+                return found
+        return None
+
+    section = find_section(protocol.sections, section_number)
+    if not section:
+        raise HTTPException(
+            status_code=404, detail=f"Section {section_number} not found"
+        )
+    return section.model_dump()
+
+
+@app.get("/api/protocols/{protocol_id}/budget")
+async def get_protocol_budget(protocol_id: str):
+    """Get budget line items for a protocol."""
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(
+            status_code=404, detail=f"Protocol {protocol_id} not found"
+        )
+    return protocol.budget_lines
+
+
+@app.get("/api/protocols/{protocol_id}/knowledge-elements")
+async def get_knowledge_elements(
+    protocol_id: str, ke_type: str | None = None
+):
+    """Get knowledge elements, optionally filtered by type."""
+    store = create_ke_store()
+    kes = store.get_knowledge_elements(protocol_id, ke_type)
+    return [ke.model_dump() for ke in kes]
 
 
 if __name__ == "__main__":
