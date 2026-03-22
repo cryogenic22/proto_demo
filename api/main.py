@@ -680,10 +680,17 @@ async def review_protocol_cell(protocol_id: str, body: ReviewRequest):
         None,
     )
 
+    old_value = cell.get("raw_value", "") if cell else ""
+    old_confidence = cell.get("confidence", 0) if cell else 0
+
     if body.action == "accept" and cell is not None:
         cell["confidence"] = 1.0
+        cell["human_reviewed"] = True
     elif body.action == "correct" and cell is not None:
         cell["raw_value"] = body.correct_value or ""
+        cell["confidence"] = 1.0
+        cell["human_reviewed"] = True
+        cell["original_value"] = old_value
     elif body.action == "flag":
         review_items = table.setdefault("review_items", [])
         review_items.append({
@@ -692,13 +699,77 @@ async def review_protocol_cell(protocol_id: str, body: ReviewRequest):
             "reason": body.flag_reason or "",
             "action": "flag",
         })
+        if cell is not None:
+            cell["human_reviewed"] = True
     else:
         raise HTTPException(
             status_code=400, detail="Invalid action or cell not found"
         )
 
     store.save_protocol(protocol)
+
+    # Append to ground truth annotations log
+    _log_annotation(
+        protocol_id=protocol_id,
+        table_id=body.table_id,
+        row=body.row,
+        col=body.col,
+        action=body.action,
+        old_value=old_value,
+        new_value=body.correct_value if body.action == "correct" else old_value,
+        old_confidence=old_confidence,
+        row_header=cell.get("row_header", "") if cell else "",
+        col_header=cell.get("col_header", "") if cell else "",
+    )
+
     return ReviewResponse(success=True)
+
+
+def _log_annotation(
+    protocol_id: str,
+    table_id: str,
+    row: int,
+    col: int,
+    action: str,
+    old_value: str,
+    new_value: str,
+    old_confidence: float,
+    row_header: str = "",
+    col_header: str = "",
+) -> None:
+    """Append human review annotation to ground truth log.
+
+    Each annotation enriches the ground truth for future pipeline
+    evaluation. Corrections become the authoritative cell value.
+    """
+    import csv
+    from datetime import datetime, timezone
+
+    gt_dir = Path("data/annotations")
+    gt_dir.mkdir(parents=True, exist_ok=True)
+    gt_file = gt_dir / f"{protocol_id}_annotations.csv"
+
+    is_new = not gt_file.exists()
+    with open(gt_file, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if is_new:
+            writer.writerow([
+                "timestamp", "protocol_id", "table_id",
+                "row", "col", "row_header", "col_header",
+                "action", "old_value", "new_value",
+                "old_confidence", "new_confidence",
+            ])
+        writer.writerow([
+            datetime.now(timezone.utc).isoformat(),
+            protocol_id, table_id,
+            row, col, row_header, col_header,
+            action, old_value, new_value,
+            f"{old_confidence:.4f}", "1.0000",
+        ])
+    logger.info(
+        f"Annotation logged: {protocol_id}/{table_id} "
+        f"({row},{col}) {action}"
+    )
 
 
 @app.get("/api/procedures/library", response_model=list[ProcedureLibraryEntry])

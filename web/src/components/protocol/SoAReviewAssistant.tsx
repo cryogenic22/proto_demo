@@ -182,9 +182,11 @@ export function SoAReviewAssistant({
   const maxCol = cells.reduce((m, c) => Math.max(m, c.col), 0);
   const confidence = table.overall_confidence || 0;
 
-  const handleCellAction = useCallback((row: number, col: number, action: string, correctedValue?: string) => {
+  const handleCellAction = useCallback(async (row: number, col: number, action: string, correctedValue?: string) => {
     const key = `${row}-${col}`;
     const cell = cellMap.get(key);
+
+    // Update local state
     setCellActions((prev) => new Map(prev).set(key, action));
     if (action === "corrected" && correctedValue !== undefined) {
       setCellCorrections((prev) => new Map(prev).set(key, correctedValue));
@@ -197,8 +199,24 @@ export function SoAReviewAssistant({
         oldValue: cell?.raw_value,
         newValue: action === "corrected" ? correctedValue : undefined,
       }]);
+
+      // Persist to backend — updates protocol JSON + ground truth log
+      try {
+        const { submitCellReview } = await import("@/lib/api");
+        await submitCellReview({
+          protocol_id: protocolId,
+          table_id: table.table_id,
+          row,
+          col,
+          action: action === "accepted" ? "accept" : action === "corrected" ? "correct" : "flag",
+          correct_value: action === "corrected" ? correctedValue : undefined,
+          flag_reason: action === "flagged" ? "Flagged during review" : undefined,
+        });
+      } catch (e) {
+        console.error("Failed to persist review action:", e);
+      }
     }
-  }, [cellMap]);
+  }, [cellMap, protocolId, table.table_id]);
 
   const toggleGroup = useCallback((name: string) => {
     setCollapsedGroups((prev) => {
