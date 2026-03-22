@@ -13,6 +13,10 @@ import logging
 import uuid
 from typing import Any
 
+import re
+
+import fitz
+
 from src.llm.client import LLMClient
 from src.models.schema import (
     BoundingBox,
@@ -23,6 +27,89 @@ from src.models.schema import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+# Deterministic SoA page detection patterns — catches pages without LLM cost
+_SOA_TEXT_PATTERNS = [
+    re.compile(r"schedule of (?:activities|assessments|events|study)", re.IGNORECASE),
+    re.compile(r"schedule of study (?:activities|procedures|assessments)", re.IGNORECASE),
+    re.compile(r"study\s+(?:activities|procedures)\s+(?:schedule|table)", re.IGNORECASE),
+    re.compile(r"table\s+\w*\.?\d*\.?\s*(?:schedule of|study activities)", re.IGNORECASE),
+]
+
+# Patterns for table continuation pages (no title but table-like content)
+_CONTINUATION_PATTERNS = [
+    re.compile(r"(?:continued|cont['']?d)", re.IGNORECASE),
+    re.compile(r"table\s+\w*\.?\d+\s*\(cont", re.IGNORECASE),
+]
+
+
+def _deterministic_soa_prescreen(pdf_bytes: bytes) -> dict[int, str]:
+    """Scan PDF text for SoA pages without any LLM calls.
+
+    Returns dict of {page_number: detection_type} where detection_type
+    is 'title_match', 'continuation', or 'table_dense'.
+    """
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+    soa_pages: dict[int, str] = {}
+
+    for page_idx in range(doc.page_count):
+        page = doc[page_idx]
+        text = page.get_text("text")
+
+        # Check for SoA title patterns
+        for pattern in _SOA_TEXT_PATTERNS:
+            if pattern.search(text):
+                soa_pages[page_idx] = "title_match"
+                break
+
+        # Check for table continuation markers
+        if page_idx not in soa_pages:
+            for pattern in _CONTINUATION_PATTERNS:
+                if pattern.search(text):
+                    soa_pages[page_idx] = "continuation"
+                    break
+
+        # Check for table-dense pages using PyMuPDF table detection
+        if page_idx not in soa_pages:
+            try:
+                tables = page.find_tables()
+                if tables.tables:
+                    for t in tables.tables:
+                        extracted = t.extract()
+                        if extracted and len(extracted) >= 5:
+                            # Table with 5+ rows — likely an SoA
+                            # Check if rows have X marks or procedure-like names
+                            x_count = sum(
+                                1 for row in extracted
+                                for cell in row
+                                if cell and str(cell).strip() in ("X", "x", "✓", "✔")
+                            )
+                            if x_count >= 3:
+                                soa_pages[page_idx] = "table_dense"
+                                break
+            except Exception:
+                pass
+
+    # Expand: if page N is SoA, pages N±1 to N±3 that have tables are likely continuations
+    expansion = {}
+    for page_idx in list(soa_pages.keys()):
+        for offset in range(-2, 4):
+            neighbor = page_idx + offset
+            if neighbor not in soa_pages and 0 <= neighbor < doc.page_count:
+                try:
+                    page = doc[neighbor]
+                    tables = page.find_tables()
+                    if tables.tables and any(
+                        len(t.extract()) >= 3 for t in tables.tables
+                    ):
+                        expansion[neighbor] = "neighbor_expansion"
+                except Exception:
+                    pass
+    soa_pages.update(expansion)
+
+    doc.close()
+    return soa_pages
 
 # Fast pre-screening prompt — just asks "is there an SOA table on this page?"
 SOA_PRESCREEN_PROMPT = """Look at this page from a clinical trial protocol.
@@ -90,27 +177,43 @@ class TableDetector:
         self.config = config
         self.llm = llm_client or LLMClient(config)
 
-    async def detect(self, pages: list[PageImage]) -> list[TableRegion]:
+    async def detect(self, pages: list[PageImage], pdf_bytes: bytes = b"") -> list[TableRegion]:
         """Detect table regions across all pages."""
         if not pages:
             return []
 
         if self.config.soa_only:
-            return await self._detect_soa_only(pages)
+            return await self._detect_soa_only(pages, pdf_bytes)
         else:
             return await self._detect_all_tables(pages)
 
-    async def _detect_soa_only(self, pages: list[PageImage]) -> list[TableRegion]:
-        """Two-phase SOA detection: fast pre-screen → detailed extraction.
+    async def _detect_soa_only(self, pages: list[PageImage], pdf_bytes: bytes = b"") -> list[TableRegion]:
+        """Three-phase SOA detection: deterministic pre-screen → LLM pre-screen → detailed extraction.
 
-        Phase 1: Quick pre-screen every page (~cheap, small prompt)
-        Phase 2: Detailed extraction only on pages that have SOA tables
+        Phase 0: Deterministic text/table scan (FREE — no LLM cost)
+        Phase 1: LLM pre-screen on remaining uncertain pages
+        Phase 2: Detailed extraction on confirmed SOA pages
         """
         concurrency = self.config.max_concurrent_llm_calls
         semaphore = asyncio.Semaphore(concurrency)
 
-        # Phase 1: Pre-screen all pages in parallel
-        logger.info(f"SOA detection Phase 1: Pre-screening {len(pages)} pages")
+        # Phase 0: Deterministic pre-screen (FREE)
+        deterministic_pages: dict[int, str] = {}
+        if pdf_bytes:
+            deterministic_pages = _deterministic_soa_prescreen(pdf_bytes)
+            if deterministic_pages:
+                logger.info(
+                    f"SOA detection Phase 0 (deterministic): {len(deterministic_pages)} "
+                    f"candidate pages found (FREE — no LLM cost)"
+                )
+
+        # Phase 1: LLM pre-screen only on pages NOT already identified
+        already_found = set(deterministic_pages.keys())
+        pages_to_llm_screen = [p for p in pages if p.page_number not in already_found]
+        logger.info(
+            f"SOA detection Phase 1: LLM pre-screening {len(pages_to_llm_screen)} pages "
+            f"({len(already_found)} already identified by deterministic scan)"
+        )
 
         async def prescreen_one(page: PageImage) -> tuple[int, bool, bool, str | None]:
             """Returns (page_num, has_soa, is_continuation, title)."""
@@ -135,12 +238,22 @@ class TableDetector:
                     return (page.page_number, False, False, None)
 
         results = await asyncio.gather(
-            *(prescreen_one(p) for p in pages),
+            *(prescreen_one(p) for p in pages_to_llm_screen),
             return_exceptions=False,
         )
 
-        # Identify SOA pages
-        soa_pages = [(pn, is_cont, title) for pn, has_soa, is_cont, title in results if has_soa or is_cont]
+        # Merge: deterministic pages + LLM-detected pages
+        soa_pages = []
+        # Add deterministic detections first
+        for page_num, det_type in deterministic_pages.items():
+            is_cont = det_type in ("continuation", "neighbor_expansion")
+            soa_pages.append((page_num, is_cont, f"deterministic:{det_type}"))
+
+        # Add LLM detections (avoiding duplicates)
+        for pn, has_soa, is_cont, title in results:
+            if (has_soa or is_cont) and pn not in deterministic_pages:
+                soa_pages.append((pn, is_cont, title))
+
         non_soa_count = len(pages) - len(soa_pages)
         logger.info(
             f"SOA pre-screen: {len(soa_pages)} SOA pages found, "

@@ -138,7 +138,7 @@ class PipelineOrchestrator:
         _progress(20, f"Detecting {mode} across {total_pages} pages...")
         logger.info(f"Stage 2: Table Detection ({mode})")
         try:
-            regions = await self.detector.detect(pages)
+            regions = await self.detector.detect(pages, pdf_bytes=pdf_bytes)
         except Exception as e:
             logger.error(f"Table detection failed: {e}")
             regions = []
