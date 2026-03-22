@@ -42,6 +42,7 @@ export function ProcessingStatus({ jobId, fileName, fileSize }: ProcessingStatus
 
   useEffect(() => {
     let cancelled = false;
+    let retries = 0;
 
     const poll = async () => {
       try {
@@ -57,8 +58,21 @@ export function ProcessingStatus({ jobId, fileName, fileSize }: ProcessingStatus
             setTimeout(poll, 1500);
           }
         }
-      } catch {
-        if (!cancelled) setTimeout(poll, 3000);
+      } catch (err: unknown) {
+        // Stop polling if job no longer exists (404)
+        const is404 =
+          err instanceof Error && err.message.includes("Failed to fetch job");
+        if (is404 || cancelled) {
+          localStorage.removeItem("active_job");
+          return;
+        }
+        // Transient error — retry with backoff (max 5 retries)
+        retries++;
+        if (retries < 5 && !cancelled) {
+          setTimeout(poll, 3000 * retries);
+        } else {
+          localStorage.removeItem("active_job");
+        }
       }
     };
 

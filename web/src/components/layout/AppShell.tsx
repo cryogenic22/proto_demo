@@ -34,6 +34,8 @@ function ActiveJobBanner() {
           setJob(null);
         }
       } catch {
+        // Job not found (404) or network error — clear stale job
+        localStorage.removeItem("active_job");
         if (!cancelled) setJob(null);
       }
     };
