@@ -274,19 +274,33 @@ class Neo4jKEStore(KEStore):
 
 
 # ---------------------------------------------------------------------------
-# Factory
+# Singleton factory
 # ---------------------------------------------------------------------------
 
+_store_instance: KEStore | None = None
+
+
 def create_ke_store() -> KEStore:
-    """Factory: returns Neo4j store if configured, else JSON fallback."""
+    """Return cached singleton. Neo4j if configured, else JSON fallback."""
+    global _store_instance
+    if _store_instance is not None:
+        return _store_instance
     neo4j_uri = os.environ.get("NEO4J_URI")
     if neo4j_uri:
         user = os.environ.get("NEO4J_USER", "neo4j")
         password = os.environ.get("NEO4J_PASSWORD", "")
         try:
-            return Neo4jKEStore(neo4j_uri, user, password)
+            _store_instance = Neo4jKEStore(neo4j_uri, user, password)
+            return _store_instance
         except Exception as e:
             logger.warning(
                 "Neo4j connection failed (%s), falling back to JSON store", e
             )
-    return JsonKEStore()
+    _store_instance = JsonKEStore()
+    return _store_instance
+
+
+def reset_ke_store() -> None:
+    """Clear the cached singleton (used in tests)."""
+    global _store_instance
+    _store_instance = None

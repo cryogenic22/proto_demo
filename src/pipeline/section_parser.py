@@ -76,8 +76,10 @@ def _looks_like_equation(text: str) -> bool:
     import re as _re
     pattern_matches = sum(1 for p in equation_patterns if _re.search(p, text))
 
-    # If 2+ math indicators, it's likely an equation
-    return math_count >= 2 or pattern_matches >= 2
+    # Require stronger signal: 3+ math characters OR 3+ pattern matches.
+    # Previous threshold (2) triggered on common clinical text like
+    # "≥12 years (Phase 2/3)" or "n = 636 patients".
+    return math_count >= 3 or pattern_matches >= 3
 
 # Matches section headers:
 # Numbered: "1.", "1.1", "1.1.1", "4.2.3.1"
@@ -936,6 +938,17 @@ Return ONLY the JSON array."""
             page_start_y = start_y if page_num == start else 0.0
             page_end_y = end_y if page_num == end else 99999.0
 
+            # Fix 2: Collect table bounding boxes to avoid duplicating
+            # table content as flattened paragraphs
+            table_bboxes = []
+            try:
+                found_tables = page.find_tables()
+                for t in found_tables.tables:
+                    if hasattr(t, "bbox"):
+                        table_bboxes.append(t.bbox)  # (x0, y0, x1, y1)
+            except (AttributeError, Exception):
+                pass
+
             blocks = page.get_text("dict")["blocks"]
             for block in blocks:
                 if "lines" not in block:
@@ -947,6 +960,17 @@ Return ONLY the JSON array."""
                     y = spans[0]["origin"][1]
                     if y < page_start_y - 2 or y > page_end_y - 2:
                         continue
+
+                    # Skip text inside table bounding boxes — tables are
+                    # extracted separately via find_tables() as structured data
+                    if table_bboxes:
+                        in_table = False
+                        for bbox in table_bboxes:
+                            if bbox[1] - 5 <= y <= bbox[3] + 5:
+                                in_table = True
+                                break
+                        if in_table:
+                            continue
 
                     # Join spans with space awareness — some PDFs have
                     # adjacent spans without whitespace between words
@@ -1303,12 +1327,15 @@ Return ONLY the JSON array."""
                 html_parts.append(f"<h4><strong>{text}</strong></h4>")
 
             elif ptype == "LIST_ITEM":
-                # Close deeper nesting first
-                _close_lists_to(0)
+                # Close nested lists but keep L1 open if same type
+                _close_lists_to(1)  # Close L2 nesting if any
+                desired_type = "ol" if para.get("is_numbered") else "ul"
+                if list_stack and list_stack[0] != desired_type:
+                    # List type changed (ol→ul or ul→ol) — close and reopen
+                    _close_lists_to(0)
                 if not list_stack:
-                    lt = "ol" if para.get("is_numbered") else "ul"
-                    html_parts.append(f"<{lt}>")
-                    list_stack.append(lt)
+                    html_parts.append(f"<{desired_type}>")
+                    list_stack.append(desired_type)
                 item_text = re.sub(
                     r"^(?:[\u2022•●○]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)",
                     "", para["text"]

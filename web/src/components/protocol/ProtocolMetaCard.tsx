@@ -1,20 +1,11 @@
 import type { ProtocolMetadata } from "@/lib/api";
 import { Card, CardHeader, CardBody } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { cn } from "@/lib/utils";
+import { cn, phaseVariant } from "@/lib/utils";
 
 interface ProtocolMetaCardProps {
   metadata: ProtocolMetadata;
   className?: string;
-}
-
-function phaseVariant(phase: string): "brand" | "success" | "warning" | "danger" | "neutral" | "info" {
-  const p = phase.toLowerCase();
-  if (p.includes("1")) return "info";
-  if (p.includes("2")) return "brand";
-  if (p.includes("3")) return "success";
-  if (p.includes("4")) return "warning";
-  return "neutral";
 }
 
 interface FieldRowProps {

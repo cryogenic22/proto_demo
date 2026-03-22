@@ -50,3 +50,30 @@ export function costTierColor(tier: string): string {
     default: return "bg-neutral-100 text-neutral-600";
   }
 }
+
+export function phaseVariant(phase: string): "brand" | "success" | "warning" | "danger" | "neutral" | "info" {
+  const p = phase.toLowerCase();
+  if (p.includes("1")) return "info";
+  if (p.includes("2")) return "brand";
+  if (p.includes("3")) return "success";
+  if (p.includes("4")) return "warning";
+  return "neutral";
+}
+
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+}
+
+export function formatDate(iso: string): string {
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    return d.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  } catch {
+    return iso;
+  }
+}

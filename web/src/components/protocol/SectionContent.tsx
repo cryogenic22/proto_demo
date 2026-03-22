@@ -1,4 +1,5 @@
 import type { SectionNode } from "@/lib/api";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 interface SectionContentProps {
   section: SectionNode | null;
@@ -42,7 +43,7 @@ export function SectionContent({ section }: SectionContentProps) {
       {section.content_html ? (
         <div
           className="section-content prose prose-sm max-w-none"
-          dangerouslySetInnerHTML={{ __html: section.content_html }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(section.content_html) }}
         />
       ) : (
         <p className="text-sm text-neutral-400 italic">No content available for this section.</p>
