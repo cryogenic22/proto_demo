@@ -1127,6 +1127,7 @@ Return ONLY the JSON array."""
         bullet_re = re.compile(
             r"^[\u2022\u2023\u25E6\u2043\u25AA\u25AB\u25CF\u25CB"
             r"\u2013\u2014\u2015\u2212\u25A0\u25A1\u25B8\u25B9"
+            r"\uf0b7\uf0a7\uf0d8"  # Wingdings bullets from Word/PDF
             r"•●○◦◆◇■□▪▸►–—\-]\s"
         )
 
@@ -1394,7 +1395,7 @@ Return ONLY the JSON array."""
                     html_parts.append(f"<{desired_type}>")
                     list_stack.append(desired_type)
                 item_text = re.sub(
-                    r"^(?:[\u2022•●○]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)",
+                    r"^(?:[\u2022•●○\uf0b7\uf0a7]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)",
                     "", para["text"]
                 )
                 html_parts.append(f"  <li>{self._escape_html(item_text)}</li>")
@@ -1408,7 +1409,7 @@ Return ONLY the JSON array."""
                     html_parts.append("  <ul>")
                     list_stack.append("ul")
                 item_text = re.sub(
-                    r"^(?:[\u2022•●○]\s*|[–—-]\s*)",
+                    r"^(?:[\u2022•●○\uf0b7\uf0a7]\s*|[–—-]\s*)",
                     "", para["text"]
                 )
                 html_parts.append(f"    <li>{self._escape_html(item_text)}</li>")

@@ -55,7 +55,19 @@ export default function ProcedureLibraryPage() {
   // Load procedures from API
   useEffect(() => {
     listProcedures()
-      .then(setProcedures)
+      .then((data) => {
+        // Normalize aliases: backend may return string, frontend expects array
+        const normalized = data.map((p) => {
+          const raw = p.aliases as unknown;
+          const aliases = Array.isArray(raw)
+            ? raw
+            : typeof raw === "string" && raw
+              ? (raw as string).split(",").map((a) => a.trim()).filter(Boolean)
+              : [];
+          return { ...p, aliases };
+        });
+        setProcedures(normalized);
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
