@@ -91,10 +91,35 @@ def _deterministic_soa_prescreen(pdf_bytes: bytes) -> dict[int, str]:
             except Exception:
                 pass
 
+    # Text-position fallback: when find_tables() returns 0 but the page has
+    # substantial text with 8+ X-position clusters, it's likely a text-layout
+    # table that PyMuPDF can't detect structurally (common in Roche/Moderna).
+    # Only check pages near known SoA pages (within ±15).
+    for page_idx in range(doc.page_count):
+        if page_idx in soa_pages:
+            continue
+        page = doc[page_idx]
+        text = page.get_text("text").strip()
+        if len(text) < 500:
+            continue
+        near_soa = any(abs(page_idx - sp) <= 15 for sp in soa_pages)
+        if not near_soa:
+            continue
+        # Count unique X-position clusters — text-layout tables have many columns
+        blocks = page.get_text("dict")["blocks"]
+        x_positions = set()
+        for b in blocks:
+            if "lines" not in b:
+                continue
+            for l in b["lines"]:
+                for s in l.get("spans", []):
+                    x_positions.add(round(s["origin"][0] / 20) * 20)
+        if len(x_positions) >= 8:
+            soa_pages[page_idx] = "text_grid_fallback"
+
     # Expand: if page N is SoA, nearby pages with tables are likely continuations.
-    # Range ±10 pages to catch long multi-page SoA tables (P-14 soa_1 spans
-    # 21 pages, P-09 soa_2 spans 7 pages). Run iteratively — each newly found
-    # page extends the search frontier.
+    # Range ±10 pages to catch long multi-page SoA tables.
+    # Run iteratively — each newly found page extends the search frontier.
     max_expansion_range = 10
     changed = True
     while changed:
