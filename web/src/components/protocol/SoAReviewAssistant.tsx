@@ -565,11 +565,12 @@ function SmartGrid({
         <table className="text-xs border-collapse min-w-full">
           <thead className="sticky top-0 z-10">
             <tr className="bg-neutral-100">
-              <th className="px-3 py-2 text-left font-semibold text-neutral-600 border border-neutral-200 bg-neutral-100 sticky left-0 z-20 min-w-[160px]">
+              <th className="px-3 py-2 text-left font-semibold text-neutral-600 border border-neutral-200 bg-neutral-100 sticky left-0 z-20 min-w-[180px] max-w-[240px]">
                 Procedure
               </th>
-              {colHeaders.map((ch, i) => (
-                <th key={i} className="px-2 py-1.5 text-center font-semibold text-neutral-600 border border-neutral-200 bg-neutral-100 min-w-[60px]">
+              {/* Skip col 0 (procedure name) — already shown as sticky column */}
+              {colHeaders.slice(1).map((ch, i) => (
+                <th key={i + 1} className="px-2 py-1.5 text-center font-semibold text-neutral-600 border border-neutral-200 bg-neutral-100 min-w-[55px] whitespace-nowrap">
                   <div className="text-[10px] leading-tight">{ch.text}</div>
                   {visitLabels.get(ch.col_index) && (
                     <div className="text-[9px] text-neutral-400 font-normal">{visitLabels.get(ch.col_index)}</div>
@@ -594,7 +595,7 @@ function SmartGrid({
                   {isGroupStart && (
                     <tr className="bg-neutral-100">
                       <td
-                        colSpan={colHeaders.length + 1}
+                        colSpan={colHeaders.length}
                         className="px-3 py-1.5 font-semibold text-neutral-700 text-[11px] uppercase tracking-wide cursor-pointer hover:bg-neutral-200"
                         onClick={() => group && onToggleGroup(group.name)}
                       >
@@ -611,11 +612,15 @@ function SmartGrid({
                   {/* Data row */}
                   {!isCollapsed && (
                     <tr className="hover:bg-neutral-50/50">
-                      <td className="px-3 py-1.5 font-medium text-neutral-700 border border-neutral-200 bg-white sticky left-0 z-10 whitespace-nowrap text-[11px]">
-                        {cellMap.get(`${row}-0`)?.row_header || `Row ${row}`}
+                      <td className="px-3 py-1.5 font-medium text-neutral-700 border border-neutral-200 bg-white sticky left-0 z-10 text-[11px] max-w-[240px]">
+                        <div className="truncate" title={cellMap.get(`${row}-0`)?.row_header || ""}>
+                          {cellMap.get(`${row}-0`)?.row_header || `Row ${row}`}
+                        </div>
                       </td>
-                      {colHeaders.map((_, ci) => {
-                        const key = `${row}-${ci}`;
+                      {/* Skip col 0 — render from col 1 onward */}
+                      {colHeaders.slice(1).map((_, ci) => {
+                        const colIdx = ci + 1;
+                        const key = `${row}-${colIdx}`;
                         const cell = cellMap.get(key);
                         const isFlagged = flaggedSet.has(key);
                         const fns = cellFootnotes.get(key);
@@ -623,8 +628,8 @@ function SmartGrid({
 
                         return (
                           <td
-                            key={ci}
-                            onClick={() => cell && onCellClick({ row, col: ci })}
+                            key={colIdx}
+                            onClick={() => cell && onCellClick({ row, col: colIdx })}
                             className={cn(
                               "px-1.5 py-1 text-center border border-neutral-200 font-mono text-[11px] cursor-pointer transition-colors relative",
                               cell ? confBg(cell.confidence) : "",
