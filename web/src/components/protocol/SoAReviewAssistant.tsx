@@ -811,32 +811,41 @@ function CellDetailPanel({
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {/* Extracted value */}
-        <div className="px-3 py-2 bg-neutral-50 rounded-lg border border-neutral-200">
-          <div className="text-[10px] uppercase tracking-wider text-neutral-400 mb-0.5">Extracted Value</div>
-          <div className="text-sm font-mono font-semibold text-neutral-800">
-            {cell.raw_value || <span className="text-neutral-300 italic">empty</span>}
+        {/* Smart review prompt — the main question */}
+        <SmartReviewPrompt
+          cell={cell}
+          reviewItem={reviewItem}
+          isFlagged={isFlagged}
+          footnotes={footnotes}
+          onViewSource={() => { setShowSource(true); setPdfError(false); }}
+          sourcePage={currentPage}
+        />
+
+        {/* Expandable technical details */}
+        <ExpandableSection title="Cell Details" defaultOpen={false}>
+          <div className="space-y-2 text-xs">
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Extracted value</span>
+              <span className="font-mono text-neutral-800">{cell.raw_value || "(empty)"}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Data type</span>
+              <Badge variant="neutral">{cell.data_type}</Badge>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Confidence</span>
+              <span className={cn("font-medium px-1.5 py-0.5 rounded text-[10px]", confColor(cell.confidence))}>{(cell.confidence * 100).toFixed(0)}%</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Position</span>
+              <span className="text-neutral-700">Row {cell.row}, Col {cell.col}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-3 mt-1 text-[10px] text-neutral-400">
-            <span>Type: <Badge variant="neutral">{cell.data_type}</Badge></span>
-            <span className={cn("font-medium px-1.5 py-0.5 rounded", confColor(cell.confidence))}>
-              {(cell.confidence * 100).toFixed(0)}%
-            </span>
-            {currentPage > 0 && (
-              <button
-                onClick={() => { setShowSource(true); setPdfError(false); }}
-                className="text-brand-primary hover:underline"
-              >
-                p.{currentPage}
-              </button>
-            )}
-          </div>
-        </div>
+        </ExpandableSection>
 
         {/* Footnotes */}
         {footnotes.length > 0 && (
-          <div>
-            <h4 className="text-[11px] font-semibold text-neutral-800 uppercase tracking-wide mb-2">Footnotes</h4>
+          <ExpandableSection title={`Footnotes (${footnotes.length})`} defaultOpen={footnotes.some(f => f.footnote_type === "CONDITIONAL")}>
             <div className="space-y-2">
               {footnotes.map((fn, i) => (
                 <div key={i} className={cn("p-2.5 rounded-lg border text-xs", fn.footnote_type === "CONDITIONAL" ? "bg-amber-50 border-amber-200" : "bg-neutral-50 border-neutral-200")}>
@@ -847,39 +856,34 @@ function CellDetailPanel({
                     </Badge>
                   </div>
                   <p className="text-neutral-700 leading-relaxed">{fn.text}</p>
-                  {fn.footnote_type === "CONDITIONAL" && (
-                    <p className="text-[10px] text-amber-600 mt-1 font-medium">
-                      This footnote affects visit frequency and budget calculations
-                    </p>
-                  )}
                 </div>
               ))}
             </div>
-          </div>
+          </ExpandableSection>
         )}
 
-        {/* Review item */}
-        {(isFlagged || reviewItem) && (
-          <div>
-            <h4 className="text-[11px] font-semibold text-neutral-800 uppercase tracking-wide mb-2">Review Notes</h4>
-            {reviewItem && (
-              <div className="p-2.5 bg-amber-50 rounded-lg border border-amber-100 text-xs">
-                <Badge variant="warning">{reviewItem.review_type}</Badge>
-                <p className="text-neutral-700 mt-1">{reviewItem.reason}</p>
-                {reviewItem.extracted_value && (
-                  <p className="text-neutral-500 mt-1 font-mono">Value: {reviewItem.extracted_value}</p>
-                )}
-                {reviewItem.source_page > 0 && (
-                  <button
-                    onClick={() => { setShowSource(true); setPdfError(false); }}
-                    className="text-brand-primary text-[10px] hover:underline mt-1"
-                  >
-                    View source page {reviewItem.source_page}
-                  </button>
-                )}
+        {/* Technical review details */}
+        {reviewItem && (
+          <ExpandableSection title="Pipeline Details" defaultOpen={false}>
+            <div className="p-2.5 bg-neutral-50 rounded-lg border border-neutral-100 text-xs space-y-1.5">
+              <div className="flex justify-between">
+                <span className="text-neutral-500">Review type</span>
+                <Badge variant="neutral">{reviewItem.review_type}</Badge>
               </div>
-            )}
-          </div>
+              <p className="text-neutral-600">{reviewItem.reason}</p>
+              {reviewItem.extracted_value && (
+                <div className="flex justify-between">
+                  <span className="text-neutral-500">Extracted</span>
+                  <span className="font-mono text-neutral-700">{reviewItem.extracted_value}</span>
+                </div>
+              )}
+              {reviewItem.source_page > 0 && (
+                <button onClick={() => { setShowSource(true); setPdfError(false); }} className="text-brand-primary text-[10px] hover:underline">
+                  View source page {reviewItem.source_page}
+                </button>
+              )}
+            </div>
+          </ExpandableSection>
         )}
       </div>
 
@@ -938,6 +942,105 @@ function CellDetailPanel({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+// ─── Smart Review Prompt ─────────────────────────────────────────────────
+
+function SmartReviewPrompt({
+  cell, reviewItem, isFlagged, footnotes, onViewSource, sourcePage,
+}: {
+  cell: ExtractedCell;
+  reviewItem?: ReviewItem;
+  isFlagged: boolean;
+  footnotes: ResolvedFootnote[];
+  onViewSource: () => void;
+  sourcePage: number;
+}) {
+  const conf = Math.round(cell.confidence * 100);
+  const hasDisagreement = reviewItem?.reason?.includes("Pass disagreement");
+  const conditionalFn = footnotes.find((f) => f.footnote_type === "CONDITIONAL");
+
+  let passValue1 = "";
+  let passValue2 = "";
+  if (hasDisagreement && reviewItem) {
+    const m = reviewItem.reason.match(/'([^']*)'\s*vs\s*'([^']*)'/);
+    if (m) { passValue1 = m[1]; passValue2 = m[2]; }
+  }
+
+  let question = "";
+  let context = "";
+  let severity: "high" | "medium" | "low" = "low";
+
+  if (hasDisagreement && passValue1 && passValue2) {
+    question = `Is the correct value "${passValue1}" or "${passValue2}"?`;
+    context = `Two extraction passes disagreed. Please check the source to confirm.`;
+    severity = "high";
+  } else if (conf < 50) {
+    question = `We're unsure about this value. Is "${cell.raw_value || "(empty)"}" correct?`;
+    context = `Very low confidence (${conf}%). The extraction may have misread this cell.`;
+    severity = "high";
+  } else if (conf < 70) {
+    question = `Please verify: is "${cell.raw_value}" correct for ${cell.row_header} at ${cell.col_header}?`;
+    context = `Low confidence (${conf}%). Verification recommended.`;
+    severity = "high";
+  } else if (conf < 85) {
+    question = `Does ${cell.row_header} have "${cell.raw_value}" at ${cell.col_header}?`;
+    context = `Moderate confidence (${conf}%). Quick check recommended.`;
+    severity = "medium";
+  } else if (conditionalFn) {
+    question = `"${cell.raw_value}" is conditional — does footnote ${conditionalFn.marker} apply here?`;
+    context = `${conditionalFn.text.slice(0, 120)}${conditionalFn.text.length > 120 ? "..." : ""}`;
+    severity = "medium";
+  } else if (cell.data_type === "EMPTY" && isFlagged) {
+    question = `This cell is empty. Should ${cell.row_header} be performed at ${cell.col_header}?`;
+    context = `No value found — may be a missed extraction.`;
+    severity = "medium";
+  } else if (conf >= 95) {
+    question = `"${cell.raw_value}" — high confidence extraction`;
+    context = `${conf}% confident. Accept if correct.`;
+    severity = "low";
+  } else {
+    question = `Is "${cell.raw_value}" correct for ${cell.row_header}?`;
+    context = `${conf}% confidence.`;
+    severity = "low";
+  }
+
+  const bg = severity === "high" ? "bg-red-50 border-red-200" : severity === "medium" ? "bg-amber-50 border-amber-200" : "bg-emerald-50 border-emerald-200";
+  const ic = severity === "high" ? "text-red-500" : severity === "medium" ? "text-amber-500" : "text-emerald-500";
+
+  return (
+    <div className={cn("p-3 rounded-lg border", bg)}>
+      <div className="flex gap-2.5">
+        <span className={cn("mt-0.5 shrink-0 text-sm", ic)}>
+          {severity === "high" ? "\u26A0" : severity === "medium" ? "\u2753" : "\u2713"}
+        </span>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-neutral-800 leading-snug">{question}</p>
+          <p className="text-xs text-neutral-500 mt-1">{context}</p>
+          {sourcePage > 0 && (
+            <button onClick={onViewSource} className="text-[11px] text-brand-primary hover:underline mt-1.5">
+              Check source document (page {sourcePage})
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ExpandableSection({ title, defaultOpen, children }: { title: string; defaultOpen: boolean; children: React.ReactNode }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div>
+      <button onClick={() => setOpen(!open)} className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-500 uppercase tracking-wide hover:text-neutral-700 w-full">
+        <svg className={cn("w-3 h-3 transition-transform", open && "rotate-90")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+        {title}
+      </button>
+      {open && <div className="mt-2">{children}</div>}
     </div>
   );
 }
