@@ -167,6 +167,16 @@ body {
   font-style: italic;
 }
 
+/*
+ * Fix Unicode bullet characters from Word/PDF exports.
+ * \uf0b7 (Wingdings bullet) appears in content as a standalone <p> tag.
+ * We hide it and use CSS counters or just let the content flow naturally.
+ * Also add a general "paragraph that starts with bullet" indent.
+ */
+.section-content p {
+  text-indent: 0;
+}
+
 /* Drag-drop zone animation */
 @keyframes pulse-border {
   0%, 100% { border-color: var(--color-brand-primary); }

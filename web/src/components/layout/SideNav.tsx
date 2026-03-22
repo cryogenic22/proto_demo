@@ -14,6 +14,13 @@ const NAV_ITEMS = [
     ],
   },
   {
+    label: "Tools",
+    items: [
+      { name: "Section Explorer", href: "/tools/sections", icon: "document" },
+      { name: "Verbatim Extract", href: "/tools/verbatim", icon: "clipboard" },
+    ],
+  },
+  {
     label: "Extract",
     items: [
       { name: "Extraction Jobs", href: "/history", icon: "clock" },
@@ -23,7 +30,6 @@ const NAV_ITEMS = [
     label: "Evaluate",
     items: [
       { name: "Quality Dashboard", href: "/quality", icon: "chart" },
-      { name: "Golden Set", href: "/golden-set", icon: "star" },
     ],
   },
   {
@@ -63,6 +69,16 @@ const icons: Record<string, React.ReactNode> = {
   star: (
     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+    </svg>
+  ),
+  document: (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+    </svg>
+  ),
+  clipboard: (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H6M15.75 18.75h-6A2.25 2.25 0 017.5 16.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M12 2.25c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m0-3.75h3.75m-3.75 0H8.25" />
     </svg>
   ),
   database: (

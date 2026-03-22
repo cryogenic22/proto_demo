@@ -385,3 +385,65 @@ export async function updateProcedure(canonicalName: string, updates: Partial<Pr
   if (!res.ok) throw new Error('Failed to update procedure');
   return res.json();
 }
+
+// ─── Section Parser & Verbatim API Functions ─────────────────────────────────
+
+export interface ParsedSection {
+  number: string;
+  title: string;
+  page: number;
+  end_page: number | null;
+  level: number;
+  children: ParsedSection[];
+}
+
+export interface SectionParseResult {
+  sections: ParsedSection[];
+  total: number;
+  outline: string;
+  method: string;
+}
+
+export async function parseSections(file: File, useLlm?: boolean): Promise<SectionParseResult> {
+  const formData = new FormData();
+  formData.append("file", file);
+  const url = useLlm
+    ? `${API_BASE}/api/sections?use_llm=true`
+    : `${API_BASE}/api/sections`;
+  const res = await fetch(url, { method: "POST", body: formData });
+  if (!res.ok) throw new Error("Failed to parse sections");
+  return res.json();
+}
+
+export interface VerbatimResult {
+  instruction: string;
+  sections_found: string[];
+  content_type: string;
+  text: string;
+  tables: unknown[];
+  source_pages: number[];
+  explanation: string;
+  is_verbatim: boolean;
+}
+
+export async function extractVerbatim(
+  file: File,
+  instruction: string,
+  outputFormat: "text" | "html" = "html",
+): Promise<VerbatimResult> {
+  const formData = new FormData();
+  formData.append("file", file);
+  const params = new URLSearchParams({
+    instruction,
+    output_format: outputFormat,
+  });
+  const res = await fetch(`${API_BASE}/api/verbatim?${params}`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: "Extraction failed" }));
+    throw new Error(err.detail || "Verbatim extraction failed");
+  }
+  return res.json();
+}
