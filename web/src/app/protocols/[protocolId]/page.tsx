@@ -8,8 +8,10 @@ import {
   getKnowledgeElements,
   type ProtocolFull,
   type SectionNode,
+  type ExtractedTable,
   type KnowledgeElement,
 } from "@/lib/api";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { TopBar } from "@/components/layout/TopBar";
 import { Card, CardHeader, CardBody } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -17,10 +19,8 @@ import { Tabs } from "@/components/ui/Tabs";
 import { SectionTree } from "@/components/protocol/SectionTree";
 import { SectionContent } from "@/components/protocol/SectionContent";
 import { ProtocolMetaCard } from "@/components/protocol/ProtocolMetaCard";
-import { ProcedureTable } from "@/components/protocol/ProcedureTable";
 import { KEBadge } from "@/components/protocol/KEBadge";
 import { AssistantPanel, type AssistantMode } from "@/components/protocol/AssistantPanel";
-import { ReviewFilter, type ReviewFilterType } from "@/components/protocol/ReviewFilter";
 import { cn } from "@/lib/utils";
 
 function findSection(sections: SectionNode[], number: string): SectionNode | null {
@@ -33,12 +33,232 @@ function findSection(sections: SectionNode[], number: string): SectionNode | nul
 }
 
 function countSections(sections: SectionNode[]): number {
-  let count = sections.length;
-  for (const s of sections) {
-    count += countSections(s.children);
-  }
-  return count;
+  return sections.reduce((sum, s) => sum + 1 + countSections(s.children), 0);
 }
+
+function confidenceColor(c: number): string {
+  if (c >= 0.95) return "bg-emerald-100 text-emerald-800";
+  if (c >= 0.85) return "bg-sky-100 text-sky-800";
+  if (c >= 0.70) return "bg-amber-100 text-amber-800";
+  return "bg-red-100 text-red-800";
+}
+
+function confidenceBg(c: number): string {
+  if (c >= 0.95) return "bg-emerald-50";
+  if (c >= 0.85) return "bg-sky-50";
+  if (c >= 0.70) return "bg-amber-50";
+  return "bg-red-50";
+}
+
+// ─── Table Detail View ────────────────────────────────────────────────────
+
+function TableDetailView({ table, onClose }: { table: ExtractedTable; onClose: () => void }) {
+  const [activeView, setActiveView] = useState<"grid" | "footnotes" | "procedures" | "review">("grid");
+  const cells = table.cells || [];
+  const footnotes = table.footnotes || [];
+  const procedures = table.procedures || [];
+  const reviewItems = table.review_items || [];
+
+  // Build grid from cells
+  const maxRow = cells.reduce((m, c) => Math.max(m, c.row), 0);
+  const maxCol = cells.reduce((m, c) => Math.max(m, c.col), 0);
+  const grid: (typeof cells[0] | null)[][] = [];
+  for (let r = 0; r <= maxRow; r++) {
+    grid[r] = [];
+    for (let c = 0; c <= maxCol; c++) {
+      grid[r][c] = cells.find((cell) => cell.row === r && cell.col === c) || null;
+    }
+  }
+
+  // Column headers from schema_info or first row
+  const colHeaders = table.schema_info?.column_headers?.map((h) => h.text) || [];
+
+  return (
+    <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-neutral-200 flex items-center justify-between shrink-0 bg-white">
+        <div>
+          <h3 className="text-sm font-semibold text-neutral-800">
+            {table.title || `Table ${table.table_id}`}
+          </h3>
+          <p className="text-xs text-neutral-400 mt-0.5">
+            Pages {(table.source_pages || []).join(", ")} ·{" "}
+            {table.schema_info?.num_rows || maxRow + 1} rows × {table.schema_info?.num_cols || maxCol + 1} cols ·{" "}
+            {cells.length} cells
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant={table.table_type === "SOA" ? "brand" : "neutral"}>{table.table_type}</Badge>
+          <span className={cn("text-xs font-medium px-2 py-0.5 rounded", confidenceColor(table.overall_confidence))}>
+            {(table.overall_confidence * 100).toFixed(0)}%
+          </span>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-md hover:bg-neutral-100 text-neutral-400 hover:text-neutral-600 transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <path d="M4 4L12 12M12 4L4 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Sub-tabs */}
+      <div className="px-4 pt-2 border-b border-neutral-100 bg-white shrink-0 flex gap-1">
+        {[
+          { key: "grid" as const, label: "Grid View", count: cells.length },
+          { key: "footnotes" as const, label: "Footnotes", count: footnotes.length },
+          { key: "procedures" as const, label: "Procedures", count: procedures.length },
+          { key: "review" as const, label: "Review Queue", count: reviewItems.length },
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveView(tab.key)}
+            className={cn(
+              "px-3 py-2 text-xs font-medium border-b-2 -mb-px transition-colors",
+              activeView === tab.key
+                ? "border-brand-primary text-brand-primary"
+                : "border-transparent text-neutral-400 hover:text-neutral-600"
+            )}
+          >
+            {tab.label}
+            {tab.count > 0 && (
+              <span className="ml-1.5 text-[10px] bg-neutral-100 text-neutral-500 rounded-full px-1.5 py-0.5">
+                {tab.count}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-auto">
+        {activeView === "grid" && (
+          <div className="overflow-auto">
+            <table className="text-xs border-collapse">
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-neutral-100">
+                  <th className="px-3 py-2 text-left font-semibold text-neutral-600 border border-neutral-200 bg-neutral-100 sticky left-0 z-20 min-w-[140px]">
+                    Procedure
+                  </th>
+                  {colHeaders.length > 0
+                    ? colHeaders.map((h, i) => (
+                        <th key={i} className="px-3 py-2 text-center font-semibold text-neutral-600 border border-neutral-200 bg-neutral-100 whitespace-nowrap min-w-[70px]">
+                          {h}
+                        </th>
+                      ))
+                    : Array.from({ length: maxCol + 1 }, (_, i) => (
+                        <th key={i} className="px-3 py-2 text-center font-semibold text-neutral-600 border border-neutral-200 bg-neutral-100 min-w-[70px]">
+                          Col {i}
+                        </th>
+                      ))}
+                </tr>
+              </thead>
+              <tbody>
+                {grid.map((row, ri) => (
+                  <tr key={ri} className="hover:bg-neutral-50/50">
+                    <td className="px-3 py-1.5 font-medium text-neutral-700 border border-neutral-200 bg-white sticky left-0 z-10 whitespace-nowrap">
+                      {row[0]?.row_header || `Row ${ri}`}
+                    </td>
+                    {row.slice(colHeaders.length > 0 ? 0 : 0).map((cell, ci) => {
+                      if (ci === 0 && colHeaders.length === 0) return null;
+                      const c = cell || grid[ri]?.[ci];
+                      return (
+                        <td
+                          key={ci}
+                          className={cn(
+                            "px-2 py-1.5 text-center border border-neutral-200 font-mono",
+                            c ? confidenceBg(c.confidence) : ""
+                          )}
+                          title={c ? `Confidence: ${(c.confidence * 100).toFixed(0)}%\nType: ${c.data_type}` : ""}
+                        >
+                          {c?.raw_value || ""}
+                          {c?.footnote_markers && c.footnote_markers.length > 0 && (
+                            <sup className="text-brand-primary text-[9px] ml-0.5">
+                              {c.footnote_markers.join(",")}
+                            </sup>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {activeView === "footnotes" && (
+          <div className="p-4 space-y-2">
+            {footnotes.length === 0 ? (
+              <p className="text-sm text-neutral-400 italic py-8 text-center">No footnotes</p>
+            ) : (
+              footnotes.map((fn, i) => (
+                <div key={i} className="flex gap-3 py-2 border-b border-neutral-100 last:border-0">
+                  <sup className="text-brand-primary font-bold text-sm shrink-0">{fn.marker}</sup>
+                  <div>
+                    <p className="text-xs text-neutral-700">{fn.text}</p>
+                    <Badge variant="neutral" className="mt-1">{fn.footnote_type}</Badge>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {activeView === "procedures" && (
+          <div className="overflow-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="bg-neutral-50">
+                  <th className="px-3 py-2 text-left font-medium text-neutral-500 border-b">Raw Name</th>
+                  <th className="px-3 py-2 text-left font-medium text-neutral-500 border-b">Canonical</th>
+                  <th className="px-3 py-2 text-left font-medium text-neutral-500 border-b">CPT</th>
+                  <th className="px-3 py-2 text-left font-medium text-neutral-500 border-b">Category</th>
+                  <th className="px-3 py-2 text-center font-medium text-neutral-500 border-b">Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {procedures.map((p, i) => (
+                  <tr key={i} className="hover:bg-neutral-50/50">
+                    <td className="px-3 py-2 text-neutral-600 border-b border-neutral-100">{p.raw_name}</td>
+                    <td className="px-3 py-2 text-neutral-800 font-medium border-b border-neutral-100">{p.canonical_name}</td>
+                    <td className="px-3 py-2 text-neutral-500 font-mono border-b border-neutral-100">{p.code || "—"}</td>
+                    <td className="px-3 py-2 border-b border-neutral-100"><Badge variant="neutral">{p.category}</Badge></td>
+                    <td className="px-3 py-2 text-center border-b border-neutral-100">{p.estimated_cost_tier}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {activeView === "review" && (
+          <div className="p-4 space-y-2">
+            {reviewItems.length === 0 ? (
+              <p className="text-sm text-neutral-400 italic py-8 text-center">No items flagged for review</p>
+            ) : (
+              reviewItems.map((item, i) => (
+                <div key={i} className="p-3 bg-amber-50/60 rounded-lg border border-amber-100">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Badge variant="warning">{item.review_type}</Badge>
+                    <span className="text-[10px] text-neutral-400">
+                      Cell ({item.cell_ref?.row}, {item.cell_ref?.col}) · Page {item.source_page}
+                    </span>
+                  </div>
+                  <p className="text-xs text-neutral-700">{item.reason}</p>
+                  <p className="text-xs text-neutral-500 mt-1 font-mono">Value: {item.extracted_value}</p>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────
 
 export default function ProtocolWorkspacePage() {
   const params = useParams();
@@ -52,13 +272,12 @@ export default function ProtocolWorkspacePage() {
   const [knowledgeElements, setKnowledgeElements] = useState<KnowledgeElement[]>([]);
   const [keLoading, setKeLoading] = useState(false);
   const [assistantMode, setAssistantMode] = useState<AssistantMode>({ kind: "closed" });
-  const [reviewFilter, setReviewFilter] = useState<ReviewFilterType>("all");
+  const [expandedTable, setExpandedTable] = useState<ExtractedTable | null>(null);
 
   useEffect(() => {
     getProtocol(protocolId)
       .then((data) => {
         setProtocol(data);
-        // Select first section by default
         if (data.sections.length > 0) {
           setSelectedSection(data.sections[0].number);
         }
@@ -76,23 +295,11 @@ export default function ProtocolWorkspacePage() {
       .finally(() => setKeLoading(false));
   }, [protocolId, keLoading, knowledgeElements.length]);
 
-  // Load KEs when that tab is activated
   useEffect(() => {
     if (activeTab === "ke") loadKEs();
   }, [activeTab, loadKEs]);
 
   const currentSection = protocol ? findSection(protocol.sections, selectedSection) : null;
-
-  const cellStats = useMemo(() => {
-    if (!protocol) return { totalCells: 0, verifiedCells: 0, flaggedCells: 0, lowConfidenceCells: 0 };
-    const allCells = protocol.tables.flatMap(t => t.cells);
-    return {
-      totalCells: allCells.length,
-      verifiedCells: allCells.filter(c => c.confidence >= 0.95).length,
-      flaggedCells: protocol.tables.reduce((sum, t) => sum + t.flagged_cells.length, 0),
-      lowConfidenceCells: allCells.filter(c => c.confidence < 0.7).length,
-    };
-  }, [protocol]);
 
   const handleAskAboutSection = useCallback((section: SectionNode) => {
     setAssistantMode({
@@ -124,17 +331,9 @@ export default function ProtocolWorkspacePage() {
         <div className="p-6">
           <Card>
             <CardBody className="p-8 text-center">
-              <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-3">
-                <svg className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                </svg>
-              </div>
               <p className="text-sm font-medium text-neutral-700">Failed to load protocol</p>
               <p className="text-xs text-neutral-400 mt-1">{error}</p>
-              <Link
-                href="/protocols"
-                className="inline-flex items-center gap-1 text-sm text-brand-primary hover:underline mt-4"
-              >
+              <Link href="/protocols" className="inline-flex items-center gap-1 text-sm text-brand-primary hover:underline mt-4">
                 &larr; Back to library
               </Link>
             </CardBody>
@@ -153,6 +352,21 @@ export default function ProtocolWorkspacePage() {
 
   const totalSections = countSections(protocol.sections);
 
+  // If a table is expanded, show it full-width
+  if (expandedTable) {
+    return (
+      <div>
+        <TopBar
+          title={protocol.metadata.short_title || protocol.metadata.title || protocol.document_name}
+          subtitle={expandedTable.title || `Table ${expandedTable.table_id}`}
+        />
+        <div className="h-[calc(100vh-3.5rem)]">
+          <TableDetailView table={expandedTable} onClose={() => setExpandedTable(null)} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <TopBar
@@ -165,99 +379,124 @@ export default function ProtocolWorkspacePage() {
         {/* Left panel — Section Navigator */}
         <div className="w-[260px] shrink-0 bg-neutral-50 border-r border-neutral-200 flex flex-col overflow-hidden">
           <div className="px-4 py-3 border-b border-neutral-200">
-            <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wide">
-              Sections
-            </h3>
+            <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wide">Sections</h3>
             <p className="text-[11px] text-neutral-400 mt-0.5">{totalSections} sections</p>
           </div>
           <div className="flex-1 overflow-y-auto py-1">
             {protocol.sections.length > 0 ? (
-              <SectionTree
-                sections={protocol.sections}
-                selectedNumber={selectedSection}
-                onSelect={setSelectedSection}
-              />
+              <SectionTree sections={protocol.sections} selectedNumber={selectedSection} onSelect={setSelectedSection} />
             ) : (
-              <div className="p-4 text-xs text-neutral-400 text-center">
-                No sections available
-              </div>
+              <div className="p-4 text-xs text-neutral-400 text-center">No sections available</div>
             )}
           </div>
         </div>
 
         {/* Center panel — Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden bg-white min-w-0">
-          {/* Tab bar */}
           <div className="px-4 pt-3 border-b border-neutral-200 bg-white">
             <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} className="border-b-0" />
           </div>
 
-          {/* Review filter for tables tab */}
-          {activeTab === "tables" && protocol.tables.length > 0 && (
-            <ReviewFilter
-              totalCells={cellStats.totalCells}
-              verifiedCells={cellStats.verifiedCells}
-              flaggedCells={cellStats.flaggedCells}
-              lowConfidenceCells={cellStats.lowConfidenceCells}
-              activeFilter={reviewFilter}
-              onFilterChange={setReviewFilter}
-            />
-          )}
-
-          {/* Tab content */}
           <div className="flex-1 overflow-y-auto">
             {activeTab === "content" && (
               <SectionContent section={currentSection} onAsk={handleAskAboutSection} />
             )}
 
             {activeTab === "tables" && (
-              <div className="p-6">
+              <div className="p-4">
                 {protocol.tables.length === 0 ? (
-                  <EmptyState
-                    icon={
-                      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 0v.375" />
-                      </svg>
-                    }
-                    title="No tables extracted"
-                    description="No tables were found in this protocol."
-                  />
+                  <div className="text-center py-12">
+                    <p className="text-sm font-medium text-neutral-700">No tables extracted</p>
+                    <p className="text-xs text-neutral-400 mt-1">No tables were found in this protocol.</p>
+                  </div>
                 ) : (
-                  <div className="space-y-4">
-                    {protocol.tables.map((table) => (
-                      <Card key={table.table_id}>
-                        <CardHeader>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h3 className="text-sm font-semibold text-neutral-800">
-                                {table.title || `Table ${table.table_id}`}
-                              </h3>
-                              <p className="text-xs text-neutral-400 mt-0.5">
-                                Pages {table.source_pages.join(", ")} · {table.schema_info.num_rows} rows × {table.schema_info.num_cols} cols
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Badge variant={table.table_type === "SOA" ? "brand" : "neutral"}>
-                                {table.table_type}
-                              </Badge>
-                              <span className="text-xs font-medium text-neutral-600">
-                                {(table.overall_confidence * 100).toFixed(0)}%
-                              </span>
-                            </div>
-                          </div>
-                        </CardHeader>
-                        <CardBody className="text-xs text-neutral-500">
-                          {table.cells.length} cells · {table.footnotes.length} footnotes · {table.procedures.length} procedures
-                        </CardBody>
-                      </Card>
-                    ))}
+                  <div className="space-y-3">
+                    {protocol.tables.map((table) => {
+                      const cells = table.cells || [];
+                      const footnotes = table.footnotes || [];
+                      const procedures = table.procedures || [];
+                      const flagged = table.flagged_cells || [];
+                      const confidence = table.overall_confidence || 0;
+                      return (
+                        <button
+                          key={table.table_id}
+                          onClick={() => setExpandedTable(table)}
+                          className="w-full text-left"
+                        >
+                          <Card className="hover:shadow-md hover:border-brand-primary/30 transition-all cursor-pointer">
+                            <CardBody className="p-4">
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <Badge variant={table.table_type === "SOA" ? "brand" : "neutral"}>
+                                    {table.table_type}
+                                  </Badge>
+                                  <h3 className="text-sm font-semibold text-neutral-800">
+                                    {table.title || `Table ${table.table_id}`}
+                                  </h3>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className={cn("text-xs font-medium px-2 py-0.5 rounded", confidenceColor(confidence))}>
+                                    {(confidence * 100).toFixed(0)}%
+                                  </span>
+                                  <svg className="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-4 text-xs text-neutral-500">
+                                <span>Pages {(table.source_pages || []).join(", ")}</span>
+                                <span>{table.schema_info?.num_rows || "?"} rows × {table.schema_info?.num_cols || "?"} cols</span>
+                                <span>{cells.length} cells</span>
+                                {footnotes.length > 0 && <span>{footnotes.length} footnotes</span>}
+                                {procedures.length > 0 && <span>{procedures.length} procedures</span>}
+                                {flagged.length > 0 && (
+                                  <span className="text-amber-600 font-medium">{flagged.length} flagged</span>
+                                )}
+                              </div>
+                            </CardBody>
+                          </Card>
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
               </div>
             )}
 
             {activeTab === "procedures" && (
-              <ProcedureTable procedures={protocol.procedures} />
+              <div className="p-4">
+                {protocol.procedures.length === 0 ? (
+                  <div className="text-center py-12">
+                    <p className="text-sm font-medium text-neutral-700">No procedures</p>
+                    <p className="text-xs text-neutral-400 mt-1">No procedures were normalized for this protocol.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-auto">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="bg-neutral-50">
+                          <th className="px-3 py-2 text-left font-medium text-neutral-500 border-b">Raw Name</th>
+                          <th className="px-3 py-2 text-left font-medium text-neutral-500 border-b">Canonical</th>
+                          <th className="px-3 py-2 text-left font-medium text-neutral-500 border-b">CPT Code</th>
+                          <th className="px-3 py-2 text-left font-medium text-neutral-500 border-b">Category</th>
+                          <th className="px-3 py-2 text-center font-medium text-neutral-500 border-b">Cost Tier</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {protocol.procedures.map((p, i) => (
+                          <tr key={i} className={cn("hover:bg-neutral-50/50", i % 2 === 1 && "bg-neutral-50/30")}>
+                            <td className="px-3 py-2 text-neutral-600 border-b border-neutral-100">{p.raw_name}</td>
+                            <td className="px-3 py-2 text-neutral-800 font-medium border-b border-neutral-100">{p.canonical_name}</td>
+                            <td className="px-3 py-2 text-neutral-500 font-mono border-b border-neutral-100">{p.code ? `${p.code} (${p.code_system})` : "—"}</td>
+                            <td className="px-3 py-2 border-b border-neutral-100"><Badge variant="neutral">{p.category}</Badge></td>
+                            <td className="px-3 py-2 text-center border-b border-neutral-100">{p.estimated_cost_tier}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             )}
 
             {activeTab === "ke" && (
@@ -267,15 +506,10 @@ export default function ProtocolWorkspacePage() {
                     <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
                   </div>
                 ) : knowledgeElements.length === 0 ? (
-                  <EmptyState
-                    icon={
-                      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-                      </svg>
-                    }
-                    title="No knowledge elements"
-                    description="No knowledge elements have been extracted for this protocol."
-                  />
+                  <div className="text-center py-12">
+                    <p className="text-sm font-medium text-neutral-700">No knowledge elements</p>
+                    <p className="text-xs text-neutral-400 mt-1">No knowledge elements have been extracted.</p>
+                  </div>
                 ) : (
                   <div className="space-y-3">
                     {knowledgeElements.map((ke) => (
@@ -288,16 +522,7 @@ export default function ProtocolWorkspacePage() {
                             </div>
                             <KEBadge status={ke.status} />
                           </div>
-                          <p className="text-xs text-neutral-600 leading-relaxed line-clamp-3">
-                            {ke.content}
-                          </p>
-                          <div className="flex items-center gap-3 mt-2 text-[11px] text-neutral-400">
-                            <span>Pages: {ke.source_pages.join(", ")}</span>
-                            <span>v{ke.version}</span>
-                            {ke.relationships.length > 0 && (
-                              <span>{ke.relationships.length} relationship{ke.relationships.length !== 1 ? "s" : ""}</span>
-                            )}
-                          </div>
+                          <p className="text-xs text-neutral-600 leading-relaxed line-clamp-3">{ke.content}</p>
                         </CardBody>
                       </Card>
                     ))}
@@ -309,57 +534,40 @@ export default function ProtocolWorkspacePage() {
         </div>
 
         {/* Right panel — Context */}
-        <div className="w-[300px] shrink-0 bg-neutral-50 border-l border-neutral-200 overflow-y-auto">
+        <div className="w-[280px] shrink-0 bg-neutral-50 border-l border-neutral-200 overflow-y-auto">
           <div className="p-4 space-y-4">
-            {/* Protocol metadata */}
             <ProtocolMetaCard metadata={protocol.metadata} />
 
-            {/* Quick Stats */}
             <Card>
               <CardHeader>
-                <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wide">
-                  Quick Stats
-                </h3>
+                <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wide">Quick Stats</h3>
               </CardHeader>
               <CardBody className="py-2">
                 <div className="space-y-2">
                   <StatRow label="Sections" value={String(totalSections)} />
                   <StatRow label="Tables" value={String(protocol.tables.length)} />
                   <StatRow label="Procedures" value={String(protocol.procedures.length)} />
-                  <StatRow
-                    label="Footnotes"
-                    value={String(
-                      protocol.tables.reduce((sum, t) => sum + t.footnotes.length, 0)
-                    )}
-                  />
+                  <StatRow label="Footnotes" value={String(protocol.tables.reduce((sum, t) => sum + (t.footnotes?.length || 0), 0))} />
                   <StatRow label="Budget Lines" value={String(protocol.budget_lines.length)} />
                 </div>
               </CardBody>
             </Card>
 
-            {/* Quality Summary */}
             {protocol.quality_summary && Object.keys(protocol.quality_summary).length > 0 && (
               <Card>
                 <CardHeader>
-                  <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wide">
-                    Quality Summary
-                  </h3>
+                  <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wide">Quality</h3>
                 </CardHeader>
                 <CardBody className="py-2">
                   <div className="space-y-2">
                     {Object.entries(protocol.quality_summary).map(([key, value]) => (
-                      <StatRow
-                        key={key}
-                        label={key.replace(/_/g, " ")}
-                        value={typeof value === "number" ? String(value) : String(value)}
-                      />
+                      <StatRow key={key} label={key.replace(/_/g, " ")} value={String(value)} />
                     ))}
                   </div>
                 </CardBody>
               </Card>
             )}
 
-            {/* Budget link */}
             {protocol.budget_lines.length > 0 && (
               <Link href={`/protocols/${protocolId}/budget`}>
                 <Card className="hover:shadow-md hover:border-brand-primary/30 transition-all cursor-pointer mt-4">
@@ -370,10 +578,8 @@ export default function ProtocolWorkspacePage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-neutral-800">Budget Preview</h4>
-                      <p className="text-xs text-neutral-400">
-                        {protocol.budget_lines.length} line items
-                      </p>
+                      <h4 className="text-sm font-medium text-neutral-800">Site Budget</h4>
+                      <p className="text-xs text-neutral-400">{protocol.budget_lines.length} line items</p>
                     </div>
                     <svg className="w-4 h-4 text-neutral-400 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -383,13 +589,9 @@ export default function ProtocolWorkspacePage() {
               </Link>
             )}
 
-            {/* Pipeline info */}
             <div className="text-[11px] text-neutral-400 pt-2 border-t border-neutral-200">
               <p>Pipeline: {protocol.pipeline_version}</p>
               <p>Created: {new Date(protocol.created_at).toLocaleString()}</p>
-              <p className="font-mono mt-1 truncate" title={protocol.document_hash}>
-                Hash: {protocol.document_hash}
-              </p>
             </div>
           </div>
         </div>
@@ -399,9 +601,6 @@ export default function ProtocolWorkspacePage() {
         mode={assistantMode}
         protocolId={protocolId}
         onClose={() => setAssistantMode({ kind: "closed" })}
-        onAcceptCell={(row, col) => { /* TODO: call submitCellReview */ }}
-        onCorrectCell={(row, col, value) => { /* TODO: call submitCellReview */ }}
-        onFlagCell={(row, col, reason) => { /* TODO: call submitCellReview */ }}
       />
     </div>
   );
@@ -412,24 +611,6 @@ function StatRow({ label, value }: { label: string; value: string }) {
     <div className="flex items-center justify-between py-1.5">
       <span className="text-[11px] text-neutral-500 capitalize">{label}</span>
       <span className="text-xs font-semibold text-neutral-800 font-mono">{value}</span>
-    </div>
-  );
-}
-
-function EmptyState({
-  icon,
-  title,
-  description,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="text-center py-12">
-      <div className="text-neutral-300 flex justify-center mb-3">{icon}</div>
-      <p className="text-sm font-medium text-neutral-700">{title}</p>
-      <p className="text-xs text-neutral-400 mt-1">{description}</p>
     </div>
   );
 }
