@@ -1,0 +1,2323 @@
+{
+  "protocol_id": "p17_durvalumab",
+  "document_name": "P17_durvalumab.pdf",
+  "document_hash": "def456",
+  "total_pages": 179,
+  "metadata": {
+    "title": "A Phase III Study of Durvalumab With or Without Tremelimumab in Patients With Unresectable Stage III NSCLC",
+    "short_title": "PACIFIC-2 Durvalumab",
+    "protocol_number": "D4191C00003",
+    "nct_number": "NCT03519971",
+    "sponsor": "AstraZeneca",
+    "phase": "Phase III",
+    "therapeutic_area": "Oncology",
+    "indication": "Non-Small Cell Lung Cancer (NSCLC)",
+    "study_type": "Interventional",
+    "arms": [
+      "Durvalumab + Tremelimumab",
+      "Durvalumab",
+      "Placebo"
+    ],
+    "amendment_number": "5",
+    "version": "5"
+  },
+  "sections": [],
+  "tables": [
+    {
+      "table_id": "p16_soa",
+      "table_type": "SOA",
+      "title": "Schedule of assessments for durvalumab/placebo \u00b1 chemoradiation therapy screening and treatment and retreatment periods (up to total of 24 doses)",
+      "source_pages": [
+        16
+      ],
+      "schema_info": {
+        "table_id": "p16_soa",
+        "column_headers": [
+          {
+            "col_index": 0,
+            "text": "",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 1,
+            "text": "Screening",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 2,
+            "text": "C1a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 3,
+            "text": "C2a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 4,
+            "text": "C3a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 5,
+            "text": "C4a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 6,
+            "text": "C5 to PD/C24a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 7,
+            "text": "For details, see Section",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          }
+        ],
+        "row_groups": [
+          {
+            "name": "Week / Day header rows",
+            "start_row": 0,
+            "end_row": 1,
+            "category": "Header"
+          },
+          {
+            "name": "Informed consent",
+            "start_row": 2,
+            "end_row": 4,
+            "category": "Informed Consent"
+          },
+          {
+            "name": "Study procedures",
+            "start_row": 5,
+            "end_row": 13,
+            "category": "Study Procedures"
+          },
+          {
+            "name": "Laboratory assessments",
+            "start_row": 14,
+            "end_row": 22,
+            "category": "Laboratory"
+          }
+        ],
+        "merged_regions": [
+          {
+            "start_row": 0,
+            "end_row": 0,
+            "start_col": 3,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 1,
+            "end_row": 1,
+            "start_col": 3,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 0,
+            "end_row": 1,
+            "start_col": 7,
+            "end_col": 7,
+            "value": ""
+          },
+          {
+            "start_row": 7,
+            "end_row": 7,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 8,
+            "end_row": 8,
+            "start_col": 1,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 18,
+            "end_row": 18,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          }
+        ],
+        "footnote_markers": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "k"
+        ],
+        "num_rows": 23,
+        "num_cols": 8
+      },
+      "cells": [
+        {
+          "row": 0,
+          "col": 0,
+          "raw_value": "Clinical Study Protocol - 4.0",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.475,
+          "source": null,
+          "row_header": "Clinical Study Protocol - 4.0",
+          "col_header": ""
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "raw_value": "Durvalumab",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.475,
+          "source": null,
+          "row_header": "Durvalumab",
+          "col_header": ""
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "raw_value": "Schedule of activities",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.475,
+          "source": null,
+          "row_header": "Schedule of activities",
+          "col_header": ""
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "raw_value": "(Table 2).",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "(Table 2).",
+          "col_header": ""
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "raw_value": "Whenever vital signs and blood draws are scheduled for the same nominal time, the",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Whenever vital signs and blood draws are scheduled for the same nominal time, the",
+          "col_header": ""
+        },
+        {
+          "row": 5,
+          "col": 0,
+          "raw_value": "Pharmacokinetics [PK] blood sample) to occur at the timepoints indicated in the schedule of",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Pharmacokinetics [PK] blood sample) to occur at the timepoints indicated in the schedule of",
+          "col_header": ""
+        },
+        {
+          "row": 6,
+          "col": 0,
+          "raw_value": "ECG, vital signs, and then blood draws. The timing of the first 2 assessments should be such",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "ECG, vital signs, and then blood draws. The timing of the first 2 assessments should be such",
+          "col_header": ""
+        },
+        {
+          "row": 7,
+          "col": 0,
+          "raw_value": "SoAs.",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "SoAs.",
+          "col_header": ""
+        },
+        {
+          "row": 8,
+          "col": 0,
+          "raw_value": "For durvalumab/placebo + standard of care chemoradiation therapy combination arms",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "For durvalumab/placebo + standard of care chemoradiation therapy combination arms",
+          "col_header": ""
+        },
+        {
+          "row": 9,
+          "col": 0,
+          "raw_value": "Patients may delay dosing under certain circumstances.",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Patients may delay dosing under certain circumstances.",
+          "col_header": ""
+        },
+        {
+          "row": 10,
+          "col": 0,
+          "raw_value": "Dosing may be delayed per the Dosing Modification and Toxicity",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Dosing may be delayed per the Dosing Modification and Toxicity",
+          "col_header": ""
+        },
+        {
+          "row": 11,
+          "col": 0,
+          "raw_value": "Management Guidelines, due to either an immune or a non-immune-",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Management Guidelines, due to either an immune or a non-immune-",
+          "col_header": ""
+        },
+        {
+          "row": 12,
+          "col": 0,
+          "raw_value": "related adverse events (AE).",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "related adverse events (AE).",
+          "col_header": ""
+        },
+        {
+          "row": 13,
+          "col": 0,
+          "raw_value": "If dosing must be delayed for reasons other than treatment-related",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "If dosing must be delayed for reasons other than treatment-related",
+          "col_header": ""
+        },
+        {
+          "row": 14,
+          "col": 0,
+          "raw_value": "Dosing intervals of subsequent cycles may be shortened as clinically",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Dosing intervals of subsequent cycles may be shortened as clinically",
+          "col_header": ""
+        },
+        {
+          "row": 15,
+          "col": 0,
+          "raw_value": "[RECIST 1.1]) and patient-reported outcome (PRO) assessments.",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "[RECIST 1.1]) and patient-reported outcome (PRO) assessments.",
+          "col_header": ""
+        },
+        {
+          "row": 16,
+          "col": 0,
+          "raw_value": "Subsequent time between 2 consecutive doses cannot be less than 21",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Subsequent time between 2 consecutive doses cannot be less than 21",
+          "col_header": ""
+        },
+        {
+          "row": 17,
+          "col": 0,
+          "raw_value": "Brochure [IB] for durvalumab).",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Brochure [IB] for durvalumab).",
+          "col_header": ""
+        }
+      ],
+      "footnotes": [],
+      "procedures": [
+        {
+          "raw_name": "(Table 2).",
+          "canonical_name": "(Table 2).",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Brochure [IB] for durvalumab).",
+          "canonical_name": "Brochure [IB] for durvalumab).",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Clinical Study Protocol - 4.0",
+          "canonical_name": "Clinical Study Protocol - 4.0",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Dosing intervals of subsequent cycles may be shortened as clinically",
+          "canonical_name": "Study Drug Administration",
+          "code": null,
+          "code_system": null,
+          "category": "Treatment",
+          "estimated_cost_tier": "MEDIUM"
+        },
+        {
+          "raw_name": "Dosing may be delayed per the Dosing Modification and Toxicity",
+          "canonical_name": "Study Drug Administration",
+          "code": null,
+          "code_system": null,
+          "category": "Treatment",
+          "estimated_cost_tier": "MEDIUM"
+        },
+        {
+          "raw_name": "Durvalumab",
+          "canonical_name": "Durvalumab",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "ECG, vital signs, and then blood draws. The timing of the first 2 assessments should be such",
+          "canonical_name": "Vital Signs",
+          "code": "99000",
+          "code_system": "CPT",
+          "category": "General",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "For durvalumab/placebo + standard of care chemoradiation therapy combination arms",
+          "canonical_name": "For durvalumab/placebo + standard of care chemoradiation therapy combination arms",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "If dosing must be delayed for reasons other than treatment-related",
+          "canonical_name": "Study Drug Administration",
+          "code": null,
+          "code_system": null,
+          "category": "Treatment",
+          "estimated_cost_tier": "MEDIUM"
+        },
+        {
+          "raw_name": "Management Guidelines, due to either an immune or a non-immune-",
+          "canonical_name": "Management Guidelines, due to either an immune or a non-immune-",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Patients may delay dosing under certain circumstances.",
+          "canonical_name": "Study Drug Administration",
+          "code": null,
+          "code_system": null,
+          "category": "Treatment",
+          "estimated_cost_tier": "MEDIUM"
+        },
+        {
+          "raw_name": "Pharmacokinetics [PK] blood sample) to occur at the timepoints indicated in the schedule of",
+          "canonical_name": "Blood Draw/Phlebotomy",
+          "code": null,
+          "code_system": null,
+          "category": "Laboratory",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Schedule of activities",
+          "canonical_name": "Schedule of activities",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "SoAs.",
+          "canonical_name": "SoAs.",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Subsequent time between 2 consecutive doses cannot be less than 21",
+          "canonical_name": "Subsequent time between 2 consecutive doses cannot be less than 21",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Whenever vital signs and blood draws are scheduled for the same nominal time, the",
+          "canonical_name": "Vital Signs",
+          "code": "99000",
+          "code_system": "CPT",
+          "category": "General",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "[RECIST 1.1]) and patient-reported outcome (PRO) assessments.",
+          "canonical_name": "RECIST Assessment",
+          "code": null,
+          "code_system": null,
+          "category": "Efficacy",
+          "estimated_cost_tier": "MEDIUM"
+        },
+        {
+          "raw_name": "related adverse events (AE).",
+          "canonical_name": "Adverse Event Assessment",
+          "code": null,
+          "code_system": null,
+          "category": "General",
+          "estimated_cost_tier": "LOW"
+        }
+      ],
+      "visit_windows": [
+        {
+          "visit_name": "",
+          "col_index": 0,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "Screening",
+          "col_index": 1,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C1a",
+          "col_index": 2,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C2a",
+          "col_index": 3,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C3a",
+          "col_index": 4,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C4a",
+          "col_index": 5,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C5 to PD/C24a",
+          "col_index": 6,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "For details, see Section",
+          "col_index": 7,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": true,
+          "cycle": null
+        }
+      ],
+      "overall_confidence": 0.8708333333333332,
+      "flagged_cells": [
+        {
+          "row": 0,
+          "col": 0
+        },
+        {
+          "row": 1,
+          "col": 0
+        },
+        {
+          "row": 2,
+          "col": 0
+        }
+      ],
+      "review_items": [
+        {
+          "cell_ref": {
+            "row": 0,
+            "col": 0
+          },
+          "review_type": "LOCAL_RESOLUTION",
+          "reason": "Confidence 0.47 below threshold 0.85",
+          "extracted_value": "Clinical Study Protocol - 4.0",
+          "source_page": 0,
+          "cost_tier": "LOW"
+        },
+        {
+          "cell_ref": {
+            "row": 1,
+            "col": 0
+          },
+          "review_type": "LOCAL_RESOLUTION",
+          "reason": "Confidence 0.47 below threshold 0.85",
+          "extracted_value": "Durvalumab",
+          "source_page": 0,
+          "cost_tier": "LOW"
+        },
+        {
+          "cell_ref": {
+            "row": 2,
+            "col": 0
+          },
+          "review_type": "LOCAL_RESOLUTION",
+          "reason": "Confidence 0.47 below threshold 0.85",
+          "extracted_value": "Schedule of activities",
+          "source_page": 0,
+          "cost_tier": "LOW"
+        }
+      ],
+      "extraction_metadata": {
+        "passes_run": 2,
+        "challenger_issues_found": 14,
+        "reconciliation_conflicts": 0,
+        "processing_time_seconds": 80.5361258983612,
+        "timestamp": "2026-03-22T00:25:01.189293Z",
+        "model_used": ""
+      }
+    },
+    {
+      "table_id": "p17_soa",
+      "table_type": "SOA",
+      "title": "",
+      "source_pages": [
+        17,
+        18
+      ],
+      "schema_info": {
+        "table_id": "p17_soa",
+        "column_headers": [
+          {
+            "col_index": 0,
+            "text": "Assessment",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 1,
+            "text": "Screening",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 2,
+            "text": "C1a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 3,
+            "text": "C2a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 4,
+            "text": "C3a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 5,
+            "text": "C4a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 6,
+            "text": "C5 to PD/C24a",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          },
+          {
+            "col_index": 7,
+            "text": "For details, see Section",
+            "span": 1,
+            "level": 0,
+            "parent_col": null
+          }
+        ],
+        "row_groups": [
+          {
+            "name": "Week / Day header rows",
+            "start_row": 0,
+            "end_row": 1,
+            "category": "Header"
+          },
+          {
+            "name": "Pharmacokinetics",
+            "start_row": 2,
+            "end_row": 3,
+            "category": "Pharmacokinetics"
+          },
+          {
+            "name": "Monitoring",
+            "start_row": 4,
+            "end_row": 7,
+            "category": "Safety"
+          },
+          {
+            "name": "IP administration",
+            "start_row": 8,
+            "end_row": 11,
+            "category": "Treatment"
+          },
+          {
+            "name": "Other assessments and assays",
+            "start_row": 12,
+            "end_row": 18,
+            "category": "Biomarker/Other"
+          },
+          {
+            "name": "PRO-CTCAE",
+            "start_row": 19,
+            "end_row": 19,
+            "category": "Patient Reported Outcomes"
+          },
+          {
+            "name": "PGIC",
+            "start_row": 20,
+            "end_row": 20,
+            "category": "Patient Reported Outcomes"
+          },
+          {
+            "name": "Healthcare resource use (HOSPAD)",
+            "start_row": 21,
+            "end_row": 21,
+            "category": "Resource Use"
+          },
+          {
+            "name": "FFPE tumor sample",
+            "start_row": 22,
+            "end_row": 22,
+            "category": "Biomarker/Tissue"
+          },
+          {
+            "name": "Optional newly acquired tumor biopsy",
+            "start_row": 23,
+            "end_row": 23,
+            "category": "Biomarker/Tissue"
+          },
+          {
+            "name": "Genetics research sample",
+            "start_row": 24,
+            "end_row": 24,
+            "category": "Biomarker/Genetics"
+          },
+          {
+            "name": "Efficacy evaluations",
+            "start_row": 25,
+            "end_row": 26,
+            "category": "Efficacy"
+          }
+        ],
+        "merged_regions": [
+          {
+            "start_row": 0,
+            "end_row": 0,
+            "start_col": 3,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 1,
+            "end_row": 1,
+            "start_col": 3,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 0,
+            "end_row": 1,
+            "start_col": 7,
+            "end_col": 7,
+            "value": ""
+          },
+          {
+            "start_row": 6,
+            "end_row": 6,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 7,
+            "end_row": 7,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 10,
+            "end_row": 10,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 11,
+            "end_row": 11,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 18,
+            "end_row": 18,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 19,
+            "end_row": 19,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 20,
+            "end_row": 20,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 21,
+            "end_row": 21,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 23,
+            "end_row": 23,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          },
+          {
+            "start_row": 25,
+            "end_row": 26,
+            "start_col": 2,
+            "end_col": 6,
+            "value": ""
+          }
+        ],
+        "footnote_markers": [
+          "a",
+          "b",
+          "h",
+          "l",
+          "m",
+          "n",
+          "o",
+          "p",
+          "q",
+          "r",
+          "s",
+          "t",
+          "u",
+          "v",
+          "w",
+          "x",
+          "y",
+          "z",
+          "aa"
+        ],
+        "num_rows": 27,
+        "num_cols": 8
+      },
+      "cells": [],
+      "footnotes": [],
+      "procedures": [],
+      "visit_windows": [
+        {
+          "visit_name": "Assessment",
+          "col_index": 0,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "Screening",
+          "col_index": 1,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C1a",
+          "col_index": 2,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C2a",
+          "col_index": 3,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C3a",
+          "col_index": 4,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C4a",
+          "col_index": 5,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "C5 to PD/C24a",
+          "col_index": 6,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": false,
+          "cycle": null
+        },
+        {
+          "visit_name": "For details, see Section",
+          "col_index": 7,
+          "target_day": null,
+          "window_minus": 0,
+          "window_plus": 0,
+          "window_unit": "DAYS",
+          "relative_to": "randomization",
+          "is_unscheduled": true,
+          "cycle": null
+        }
+      ],
+      "overall_confidence": 0.0,
+      "flagged_cells": [],
+      "review_items": [],
+      "extraction_metadata": {
+        "passes_run": 2,
+        "challenger_issues_found": 0,
+        "reconciliation_conflicts": 0,
+        "processing_time_seconds": 222.61409544944763,
+        "timestamp": "2026-03-22T00:28:43.805994Z",
+        "model_used": ""
+      }
+    },
+    {
+      "table_id": "p21_soa",
+      "table_type": "SOA",
+      "title": "Table 2 Schedule of assessments for patients who have completed or discontinued treatment",
+      "source_pages": [
+        21,
+        22
+      ],
+      "schema_info": {
+        "table_id": "p21_soa",
+        "column_headers": [],
+        "row_groups": [
+          {
+            "name": "Physical and Vital Assessments",
+            "start_row": 0,
+            "end_row": 2,
+            "category": "Safety"
+          },
+          {
+            "name": "Clinical Assessments",
+            "start_row": 3,
+            "end_row": 7,
+            "category": "Safety"
+          },
+          {
+            "name": "Survival and Anticancer Therapy",
+            "start_row": 8,
+            "end_row": 9,
+            "category": "Efficacy"
+          },
+          {
+            "name": "Laboratory Assessments",
+            "start_row": 10,
+            "end_row": 14,
+            "category": "Safety"
+          },
+          {
+            "name": "Biomarker and Pharmacology",
+            "start_row": 15,
+            "end_row": 19,
+            "category": "Biomarker"
+          },
+          {
+            "name": "Patient Reported Outcomes",
+            "start_row": 20,
+            "end_row": 23,
+            "category": "PRO"
+          },
+          {
+            "name": "Tumor Assessment",
+            "start_row": 24,
+            "end_row": 24,
+            "category": "Efficacy"
+          }
+        ],
+        "merged_regions": [
+          {
+            "start_row": 0,
+            "end_row": 0,
+            "start_col": 1,
+            "end_col": 9,
+            "value": ""
+          },
+          {
+            "start_row": 1,
+            "end_row": 1,
+            "start_col": 2,
+            "end_col": 8,
+            "value": ""
+          },
+          {
+            "start_row": 1,
+            "end_row": 2,
+            "start_col": 8,
+            "end_col": 8,
+            "value": ""
+          },
+          {
+            "start_row": 5,
+            "end_row": 5,
+            "start_col": 1,
+            "end_col": 8,
+            "value": ""
+          },
+          {
+            "start_row": 6,
+            "end_row": 6,
+            "start_col": 1,
+            "end_col": 8,
+            "value": ""
+          },
+          {
+            "start_row": 10,
+            "end_row": 10,
+            "start_col": 1,
+            "end_col": 8,
+            "value": ""
+          },
+          {
+            "start_row": 13,
+            "end_row": 13,
+            "start_col": 1,
+            "end_col": 8,
+            "value": ""
+          },
+          {
+            "start_row": 3,
+            "end_row": 3,
+            "start_col": 2,
+            "end_col": 8,
+            "value": ""
+          }
+        ],
+        "footnote_markers": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "k",
+          "l",
+          "m"
+        ],
+        "num_rows": 25,
+        "num_cols": 10
+      },
+      "cells": [
+        {
+          "row": 0,
+          "col": 0,
+          "raw_value": "Clinical Study Protocol - 4.0",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Clinical Study Protocol - 4.0",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "raw_value": "Durvalumab",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Durvalumab",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "raw_value": "World Health Organization.",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "World Health Organization.",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "raw_value": "Evaluation",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Evaluation",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "raw_value": "X at Day 30",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.5,
+          "source": null,
+          "row_header": "Physical examination (full)",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 5,
+          "col": 0,
+          "raw_value": "X at Day 30",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.5,
+          "source": null,
+          "row_header": "Vital signs (temperature, respiratory rate, blood pressure, and pulse)",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 6,
+          "col": 0,
+          "raw_value": "X at Day 30, X at Month 2, X at Month 3",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Weight",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 7,
+          "col": 0,
+          "raw_value": "X at Day 30; As clinically indicated",
+          "normalized_value": null,
+          "data_type": "CONDITIONAL",
+          "footnote_markers": [
+            "a"
+          ],
+          "resolved_footnotes": [
+            "For women of childbearing potential only. A urine or serum pregnancy test is acceptable."
+          ],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Pregnancy testa",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 8,
+          "col": 0,
+          "raw_value": "X at Day 30, X at Month 2, X at Month 3",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "AE/SAE assessment",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 9,
+          "col": 0,
+          "raw_value": "X at Day 30, X at Month 2, X at Month 3",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Concomitant medications",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 10,
+          "col": 0,
+          "raw_value": "At timepoints consistent with tumor assessments; at 30, 60, and 90 days; and then at initiation of subsequent anticancer therapyb",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [
+            "b"
+          ],
+          "resolved_footnotes": [
+            "WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible."
+          ],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "WHO/ECOG performance status",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 11,
+          "col": 0,
+          "raw_value": "<------------------------------------------------------------------------------------------------------------------------------>",
+          "normalized_value": null,
+          "data_type": "TEXT",
+          "footnote_markers": [
+            "c",
+            "d"
+          ],
+          "resolved_footnotes": [
+            "Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF. At minimum, collect the start date and description of the subsequent anticancer therapy.",
+            "For patients who discontinue their assigned IP following confirmed progression, available readings of CT/MRI from local practice will be collected from patients' medical charts while information on subsequent anticancer treatment is collected."
+          ],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Subsequent anticancer therapyc,d",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 12,
+          "col": 0,
+          "raw_value": "X at Month 3, X at Month 6, X at Month 9, X at Month 12, X at Month 15, X at 21 months and every 6 months",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [
+            "e"
+          ],
+          "resolved_footnotes": [
+            "Patients may be contacted in the week following data cutoffs to confirm survival status. Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF."
+          ],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Survival statuse",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 13,
+          "col": 0,
+          "raw_value": "X at Day 30, X at Month 2, X at Month 3",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Hematology",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 14,
+          "col": 0,
+          "raw_value": "X at Day 30, X at Month 2, X at Month 3",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Clinical chemistry",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 15,
+          "col": 0,
+          "raw_value": "As clinically indicated",
+          "normalized_value": null,
+          "data_type": "CONDITIONAL",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Urinalysis",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 16,
+          "col": 0,
+          "raw_value": "X at Day 30, X at Month 2, X at Month 3",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [
+            "f"
+          ],
+          "resolved_footnotes": [
+            "Free T3 or free T4 will only be measured if TSH is abnormal or if there is clinical suspicion of an AE related to the endocrine system."
+          ],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "TSH (reflex free T3 or free T4f)",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 17,
+          "col": 0,
+          "raw_value": "X at Month 3",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [
+            "g"
+          ],
+          "resolved_footnotes": [
+            "PK and immunogenicity samples are collected 90 days (3 months) (\u00b17 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (\u00b17 days) after study treatment ends."
+          ],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "PK assessmentg",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 18,
+          "col": 0,
+          "raw_value": "X at Month 3, Xh at Month 6",
+          "normalized_value": null,
+          "data_type": "CONDITIONAL",
+          "footnote_markers": [
+            "g",
+            "h"
+          ],
+          "resolved_footnotes": [
+            "PK and immunogenicity samples are collected 90 days (3 months) (\u00b17 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (\u00b17 days) after study treatment ends.",
+            "Immunogenicity sample and ctDNA sample should be obtained at a scheduled study tumor assessments visit"
+          ],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Immunogenicity assessment (ADA sampling) to identify ADA responsesg",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 19,
+          "col": 0,
+          "raw_value": "X at Day 30, X at Month 2",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "Whole blood for gene expression (PaxGene-RNA tubes)",
+          "col_header": "Time since last dose of IP"
+        },
+        {
+          "row": 20,
+          "col": 0,
+          "raw_value": "X at Day 30, X at Month 2, X at Month 6",
+          "normalized_value": null,
+          "data_type": "MARKER",
+          "footnote_markers": [],
+          "resolved_footnotes": [],
+          "confidence": 0.95,
+          "source": null,
+          "row_header": "ctDNA (plasma)",
+          "col_header": "Time since last dose of IP"
+        }
+      ],
+      "footnotes": [
+        {
+          "marker": "a",
+          "text": "For women of childbearing potential only. A urine or serum pregnancy test is acceptable.",
+          "applies_to": [
+            {
+              "row": 7,
+              "col": 0
+            }
+          ],
+          "footnote_type": "CLARIFICATION"
+        },
+        {
+          "marker": "b",
+          "text": "WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible.",
+          "applies_to": [
+            {
+              "row": 10,
+              "col": 0
+            }
+          ],
+          "footnote_type": "CONDITIONAL"
+        },
+        {
+          "marker": "c",
+          "text": "Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF. At minimum, collect the start date and description of the subsequent anticancer therapy.",
+          "applies_to": [
+            {
+              "row": 11,
+              "col": 0
+            }
+          ],
+          "footnote_type": "CLARIFICATION"
+        },
+        {
+          "marker": "d",
+          "text": "For patients who discontinue their assigned IP following confirmed progression, available readings of CT/MRI from local practice will be collected from patients' medical charts while information on subsequent anticancer treatment is collected.",
+          "applies_to": [
+            {
+              "row": 11,
+              "col": 0
+            }
+          ],
+          "footnote_type": "CLARIFICATION"
+        },
+        {
+          "marker": "e",
+          "text": "Patients may be contacted in the week following data cutoffs to confirm survival status. Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF.",
+          "applies_to": [
+            {
+              "row": 12,
+              "col": 0
+            }
+          ],
+          "footnote_type": "CLARIFICATION"
+        },
+        {
+          "marker": "f",
+          "text": "Free T3 or free T4 will only be measured if TSH is abnormal or if there is clinical suspicion of an AE related to the endocrine system.",
+          "applies_to": [
+            {
+              "row": 16,
+              "col": 0
+            }
+          ],
+          "footnote_type": "CONDITIONAL"
+        },
+        {
+          "marker": "g",
+          "text": "PK and immunogenicity samples are collected 90 days (3 months) (\u00b17 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (\u00b17 days) after study treatment ends.",
+          "applies_to": [
+            {
+              "row": 17,
+              "col": 0
+            },
+            {
+              "row": 18,
+              "col": 0
+            }
+          ],
+          "footnote_type": "CLARIFICATION"
+        },
+        {
+          "marker": "h",
+          "text": "Immunogenicity sample and ctDNA sample should be obtained at a scheduled study tumor assessments visit",
+          "applies_to": [
+            {
+              "row": 18,
+              "col": 0
+            }
+          ],
+          "footnote_type": "CLARIFICATION"
+        }
+      ],
+      "procedures": [
+        {
+          "raw_name": "<------------------------------------------------------------------------------------------------------------------------------>",
+          "canonical_name": "<------------------------------------------------------------------------------------------------------------------------------>",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "AE/SAE assessment",
+          "canonical_name": "AE/SAE assessment",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "As clinically indicated",
+          "canonical_name": "As clinically indicated",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "At timepoints consistent with tumor assessments; at 30, 60, and 90 days; and then at initiation of subsequent anticancer therapyb",
+          "canonical_name": "At timepoints consistent with tumor assessments; at 30, 60, and 90 days; and then at initiation of subsequent anticancer therapyb",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Clinical Study Protocol - 4.0",
+          "canonical_name": "Clinical Study Protocol - 4.0",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Clinical chemistry",
+          "canonical_name": "Clinical chemistry",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Concomitant medications",
+          "canonical_name": "Concomitant Medications Review",
+          "code": null,
+          "code_system": null,
+          "category": "General",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Durvalumab",
+          "canonical_name": "Durvalumab",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Evaluation",
+          "canonical_name": "Evaluation",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Hematology",
+          "canonical_name": "Hematology",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Immunogenicity assessment (ADA sampling) to identify ADA responsesg",
+          "canonical_name": "Immunogenicity sampling",
+          "code": null,
+          "code_system": null,
+          "category": "Immunology",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "PK assessmentg",
+          "canonical_name": "PK assessmentg",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Physical examination (full)",
+          "canonical_name": "Physical Examination",
+          "code": "99213",
+          "code_system": "CPT",
+          "category": "General",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Pregnancy testa",
+          "canonical_name": "Pregnancy Test",
+          "code": "81025",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Subsequent anticancer therapyc,d",
+          "canonical_name": "Subsequent anticancer therapyc,d",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Survival statuse",
+          "canonical_name": "Survival Follow-up",
+          "code": null,
+          "code_system": "General",
+          "category": "General",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "TSH (reflex free T3 or free T4f)",
+          "canonical_name": "Thyroid Function Tests",
+          "code": "84443",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Urinalysis",
+          "canonical_name": "Urinalysis",
+          "code": "81003",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Vital signs (temperature, respiratory rate, blood pressure, and pulse)",
+          "canonical_name": "Vital Signs",
+          "code": "99000",
+          "code_system": "CPT",
+          "category": "General",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "WHO/ECOG performance status",
+          "canonical_name": "ECOG Performance Status",
+          "code": null,
+          "code_system": null,
+          "category": "Efficacy",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Weight",
+          "canonical_name": "Body Weight",
+          "code": null,
+          "code_system": "General",
+          "category": "General",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Whole blood for gene expression (PaxGene-RNA tubes)",
+          "canonical_name": "Whole blood for gene expression (PaxGene-RNA tubes)",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "World Health Organization.",
+          "canonical_name": "World Health Organization.",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "X at Day 30",
+          "canonical_name": "X at Day 30",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "X at Day 30, X at Month 2",
+          "canonical_name": "X at Day 30, X at Month 2",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "X at Day 30, X at Month 2, X at Month 3",
+          "canonical_name": "X at Day 30, X at Month 2, X at Month 3",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "X at Day 30, X at Month 2, X at Month 6",
+          "canonical_name": "X at Day 30, X at Month 2, X at Month 6",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "X at Day 30; As clinically indicated",
+          "canonical_name": "X at Day 30; As clinically indicated",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "X at Month 3",
+          "canonical_name": "X at Month 3",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "X at Month 3, X at Month 6, X at Month 9, X at Month 12, X at Month 15, X at 21 months and every 6 months",
+          "canonical_name": "X at Month 3, X at Month 6, X at Month 9, X at Month 12, X at Month 15, X at 21 months and every 6 months",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "X at Month 3, Xh at Month 6",
+          "canonical_name": "X at Month 3, Xh at Month 6",
+          "code": null,
+          "code_system": null,
+          "category": "Unknown",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "ctDNA (plasma)",
+          "canonical_name": "ctDNA",
+          "code": null,
+          "code_system": null,
+          "category": "Laboratory",
+          "estimated_cost_tier": "HIGH"
+        }
+      ],
+      "visit_windows": [],
+      "overall_confidence": 0.9071428571428571,
+      "flagged_cells": [
+        {
+          "row": 4,
+          "col": 0
+        },
+        {
+          "row": 5,
+          "col": 0
+        }
+      ],
+      "review_items": [
+        {
+          "cell_ref": {
+            "row": 4,
+            "col": 0
+          },
+          "review_type": "LOCAL_RESOLUTION",
+          "reason": "Pass disagreement: 'X at Day 30' vs 'X'. Confidence 0.50 below threshold 0.85",
+          "extracted_value": "X at Day 30",
+          "source_page": 0,
+          "cost_tier": "LOW"
+        },
+        {
+          "cell_ref": {
+            "row": 5,
+            "col": 0
+          },
+          "review_type": "LOCAL_RESOLUTION",
+          "reason": "Pass disagreement: 'X at Day 30' vs 'X'. Confidence 0.50 below threshold 0.85",
+          "extracted_value": "X at Day 30",
+          "source_page": 0,
+          "cost_tier": "LOW"
+        }
+      ],
+      "extraction_metadata": {
+        "passes_run": 2,
+        "challenger_issues_found": 0,
+        "reconciliation_conflicts": 2,
+        "processing_time_seconds": 122.12190580368042,
+        "timestamp": "2026-03-22T00:30:45.930788Z",
+        "model_used": ""
+      }
+    }
+  ],
+  "procedures": [
+    {
+      "raw_name": "(Table 2).",
+      "canonical_name": "(Table 2).",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Brochure [IB] for durvalumab).",
+      "canonical_name": "Brochure [IB] for durvalumab).",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Clinical Study Protocol - 4.0",
+      "canonical_name": "Clinical Study Protocol - 4.0",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Dosing intervals of subsequent cycles may be shortened as clinically",
+      "canonical_name": "Study Drug Administration",
+      "code": null,
+      "code_system": null,
+      "category": "Treatment",
+      "estimated_cost_tier": "MEDIUM"
+    },
+    {
+      "raw_name": "Dosing may be delayed per the Dosing Modification and Toxicity",
+      "canonical_name": "Study Drug Administration",
+      "code": null,
+      "code_system": null,
+      "category": "Treatment",
+      "estimated_cost_tier": "MEDIUM"
+    },
+    {
+      "raw_name": "Durvalumab",
+      "canonical_name": "Durvalumab",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "ECG, vital signs, and then blood draws. The timing of the first 2 assessments should be such",
+      "canonical_name": "Vital Signs",
+      "code": "99000",
+      "code_system": "CPT",
+      "category": "General",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "For durvalumab/placebo + standard of care chemoradiation therapy combination arms",
+      "canonical_name": "For durvalumab/placebo + standard of care chemoradiation therapy combination arms",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "If dosing must be delayed for reasons other than treatment-related",
+      "canonical_name": "Study Drug Administration",
+      "code": null,
+      "code_system": null,
+      "category": "Treatment",
+      "estimated_cost_tier": "MEDIUM"
+    },
+    {
+      "raw_name": "Management Guidelines, due to either an immune or a non-immune-",
+      "canonical_name": "Management Guidelines, due to either an immune or a non-immune-",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Patients may delay dosing under certain circumstances.",
+      "canonical_name": "Study Drug Administration",
+      "code": null,
+      "code_system": null,
+      "category": "Treatment",
+      "estimated_cost_tier": "MEDIUM"
+    },
+    {
+      "raw_name": "Pharmacokinetics [PK] blood sample) to occur at the timepoints indicated in the schedule of",
+      "canonical_name": "Blood Draw/Phlebotomy",
+      "code": null,
+      "code_system": null,
+      "category": "Laboratory",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Schedule of activities",
+      "canonical_name": "Schedule of activities",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "SoAs.",
+      "canonical_name": "SoAs.",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Subsequent time between 2 consecutive doses cannot be less than 21",
+      "canonical_name": "Subsequent time between 2 consecutive doses cannot be less than 21",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Whenever vital signs and blood draws are scheduled for the same nominal time, the",
+      "canonical_name": "Vital Signs",
+      "code": "99000",
+      "code_system": "CPT",
+      "category": "General",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "[RECIST 1.1]) and patient-reported outcome (PRO) assessments.",
+      "canonical_name": "RECIST Assessment",
+      "code": null,
+      "code_system": null,
+      "category": "Efficacy",
+      "estimated_cost_tier": "MEDIUM"
+    },
+    {
+      "raw_name": "related adverse events (AE).",
+      "canonical_name": "Adverse Event Assessment",
+      "code": null,
+      "code_system": null,
+      "category": "General",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "<------------------------------------------------------------------------------------------------------------------------------>",
+      "canonical_name": "<------------------------------------------------------------------------------------------------------------------------------>",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "AE/SAE assessment",
+      "canonical_name": "AE/SAE assessment",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "As clinically indicated",
+      "canonical_name": "As clinically indicated",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "At timepoints consistent with tumor assessments; at 30, 60, and 90 days; and then at initiation of subsequent anticancer therapyb",
+      "canonical_name": "At timepoints consistent with tumor assessments; at 30, 60, and 90 days; and then at initiation of subsequent anticancer therapyb",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Clinical Study Protocol - 4.0",
+      "canonical_name": "Clinical Study Protocol - 4.0",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Clinical chemistry",
+      "canonical_name": "Clinical chemistry",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Concomitant medications",
+      "canonical_name": "Concomitant Medications Review",
+      "code": null,
+      "code_system": null,
+      "category": "General",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Durvalumab",
+      "canonical_name": "Durvalumab",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Evaluation",
+      "canonical_name": "Evaluation",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Hematology",
+      "canonical_name": "Hematology",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Immunogenicity assessment (ADA sampling) to identify ADA responsesg",
+      "canonical_name": "Immunogenicity sampling",
+      "code": null,
+      "code_system": null,
+      "category": "Immunology",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "PK assessmentg",
+      "canonical_name": "PK assessmentg",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Physical examination (full)",
+      "canonical_name": "Physical Examination",
+      "code": "99213",
+      "code_system": "CPT",
+      "category": "General",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Pregnancy testa",
+      "canonical_name": "Pregnancy Test",
+      "code": "81025",
+      "code_system": "CPT",
+      "category": "Laboratory",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Subsequent anticancer therapyc,d",
+      "canonical_name": "Subsequent anticancer therapyc,d",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Survival statuse",
+      "canonical_name": "Survival Follow-up",
+      "code": null,
+      "code_system": "General",
+      "category": "General",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "TSH (reflex free T3 or free T4f)",
+      "canonical_name": "Thyroid Function Tests",
+      "code": "84443",
+      "code_system": "CPT",
+      "category": "Laboratory",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Urinalysis",
+      "canonical_name": "Urinalysis",
+      "code": "81003",
+      "code_system": "CPT",
+      "category": "Laboratory",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Vital signs (temperature, respiratory rate, blood pressure, and pulse)",
+      "canonical_name": "Vital Signs",
+      "code": "99000",
+      "code_system": "CPT",
+      "category": "General",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "WHO/ECOG performance status",
+      "canonical_name": "ECOG Performance Status",
+      "code": null,
+      "code_system": null,
+      "category": "Efficacy",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Weight",
+      "canonical_name": "Body Weight",
+      "code": null,
+      "code_system": "General",
+      "category": "General",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "Whole blood for gene expression (PaxGene-RNA tubes)",
+      "canonical_name": "Whole blood for gene expression (PaxGene-RNA tubes)",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "World Health Organization.",
+      "canonical_name": "World Health Organization.",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "X at Day 30",
+      "canonical_name": "X at Day 30",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "X at Day 30, X at Month 2",
+      "canonical_name": "X at Day 30, X at Month 2",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "X at Day 30, X at Month 2, X at Month 3",
+      "canonical_name": "X at Day 30, X at Month 2, X at Month 3",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "X at Day 30, X at Month 2, X at Month 6",
+      "canonical_name": "X at Day 30, X at Month 2, X at Month 6",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "X at Day 30; As clinically indicated",
+      "canonical_name": "X at Day 30; As clinically indicated",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "X at Month 3",
+      "canonical_name": "X at Month 3",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "X at Month 3, X at Month 6, X at Month 9, X at Month 12, X at Month 15, X at 21 months and every 6 months",
+      "canonical_name": "X at Month 3, X at Month 6, X at Month 9, X at Month 12, X at Month 15, X at 21 months and every 6 months",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "X at Month 3, Xh at Month 6",
+      "canonical_name": "X at Month 3, Xh at Month 6",
+      "code": null,
+      "code_system": null,
+      "category": "Unknown",
+      "estimated_cost_tier": "LOW"
+    },
+    {
+      "raw_name": "ctDNA (plasma)",
+      "canonical_name": "ctDNA",
+      "code": null,
+      "code_system": null,
+      "category": "Laboratory",
+      "estimated_cost_tier": "HIGH"
+    }
+  ],
+  "budget_lines": [],
+  "quality_summary": {
+    "total_tables": 3,
+    "total_cells": 39,
+    "avg_confidence": 0.5927,
+    "pipeline_version": "0.1.0"
+  },
+  "knowledge_elements": [],
+  "created_at": "2026-03-22T00:30:00Z",
+  "pipeline_version": "0.6.0"
+}
