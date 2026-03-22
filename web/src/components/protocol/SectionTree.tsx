@@ -33,18 +33,26 @@ interface SectionTreeItemProps {
   depth: number;
 }
 
+function confidenceBadge(score: number | null) {
+  if (score === null || score === undefined) return null;
+  const pct = (score * 100).toFixed(0);
+  const color =
+    score >= 0.95 ? "bg-emerald-100 text-emerald-700" :
+    score >= 0.85 ? "bg-sky-100 text-sky-700" :
+    score >= 0.70 ? "bg-amber-100 text-amber-700" :
+    "bg-red-100 text-red-700";
+  return (
+    <span className={cn("text-[9px] font-medium px-1 py-0.5 rounded-full shrink-0", color)}>
+      {pct}%
+    </span>
+  );
+}
+
 function SectionTreeItem({ section, selectedNumber, onSelect, depth }: SectionTreeItemProps) {
-  const [expanded, setExpanded] = useState(depth < 1);
+  // All levels expanded by default — full hierarchy visible
+  const [expanded, setExpanded] = useState(true);
   const hasChildren = section.children && section.children.length > 0;
   const isSelected = section.number === selectedNumber;
-
-  function qualityDot(score: number | null) {
-    if (score === null) return null;
-    let color = "bg-emerald-500";
-    if (score < 0.7) color = "bg-red-500";
-    else if (score < 0.85) color = "bg-amber-500";
-    return <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", color)} />;
-  }
 
   return (
     <div>
@@ -54,16 +62,15 @@ function SectionTreeItem({ section, selectedNumber, onSelect, depth }: SectionTr
           if (hasChildren) setExpanded(!expanded);
         }}
         className={cn(
-          "w-full flex items-center gap-2 py-1.5 px-3 text-left transition-colors group hover:bg-neutral-100",
-          isSelected && "bg-brand-primary-light"
+          "w-full flex items-center gap-1.5 py-1.5 px-2 text-left transition-colors hover:bg-neutral-50",
+          isSelected && "bg-brand-primary-light border-r-2 border-brand-primary"
         )}
-        style={{ paddingLeft: `${12 + depth * 16}px` }}
+        style={{ paddingLeft: `${8 + depth * 14}px` }}
       >
-        {/* Expand/collapse indicator */}
         {hasChildren ? (
           <svg
             className={cn(
-              "w-3.5 h-3.5 text-neutral-400 shrink-0 transition-transform",
+              "w-3 h-3 text-neutral-400 shrink-0 transition-transform",
               expanded && "rotate-90"
             )}
             fill="none"
@@ -74,40 +81,36 @@ function SectionTreeItem({ section, selectedNumber, onSelect, depth }: SectionTr
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
           </svg>
         ) : (
-          <span className="w-3.5 shrink-0" />
+          <span className="w-3 shrink-0" />
         )}
 
-        {/* Section number */}
         <span className={cn(
-          "font-mono text-[11px] shrink-0",
-          isSelected ? "text-brand-primary font-medium" : "text-neutral-400"
+          "font-mono text-[10px] shrink-0",
+          isSelected ? "text-brand-primary font-semibold" : "text-neutral-400"
         )}>
           {section.number}
         </span>
 
-        {/* Section title */}
         <span className={cn(
-          "truncate text-xs",
-          isSelected ? "text-brand-primary font-medium" : "text-neutral-700 group-hover:text-neutral-900"
+          "truncate text-[11px] leading-tight",
+          isSelected ? "text-brand-primary font-medium" : "text-neutral-700"
         )}>
           {section.title}
         </span>
 
-        {/* Quality dot */}
-        {qualityDot(section.quality_score)}
-
-        {/* Page number */}
-        <span className="ml-auto text-[10px] text-neutral-400 shrink-0 font-mono">
-          p.{section.page}
-        </span>
+        <div className="ml-auto flex items-center gap-1 shrink-0">
+          {confidenceBadge(section.quality_score)}
+          <span className="text-[9px] text-neutral-400 font-mono">
+            {section.page}
+          </span>
+        </div>
       </button>
 
-      {/* Children */}
       {hasChildren && expanded && (
         <div>
           {section.children.map((child) => (
             <SectionTreeItem
-              key={child.number}
+              key={child.number || child.title}
               section={child}
               selectedNumber={selectedNumber}
               onSelect={onSelect}
