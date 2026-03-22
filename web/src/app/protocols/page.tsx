@@ -6,27 +6,7 @@ import { listProtocols, type ProtocolSummary } from "@/lib/api";
 import { TopBar } from "@/components/layout/TopBar";
 import { Card, CardBody } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-
-function phaseVariant(phase: string): "brand" | "success" | "warning" | "danger" | "neutral" | "info" {
-  const p = phase.toLowerCase();
-  if (p.includes("1")) return "info";
-  if (p.includes("2")) return "brand";
-  if (p.includes("3")) return "success";
-  if (p.includes("4")) return "warning";
-  return "neutral";
-}
-
-function formatDate(iso: string): string {
-  try {
-    return new Date(iso).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  } catch {
-    return iso;
-  }
-}
+import { phaseVariant, formatDate } from "@/lib/utils";
 
 export default function ProtocolLibraryPage() {
   const [protocols, setProtocols] = useState<ProtocolSummary[]>([]);

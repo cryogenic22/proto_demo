@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { CellEvidence } from "./CellEvidence";
 import type {
   VerificationStep,
@@ -253,7 +254,7 @@ function MessageBubble({ message }: { message: AssistantMessage }) {
         {/* Simple markdown bold support */}
         <div
           dangerouslySetInnerHTML={{
-            __html: message.content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>"),
+            __html: sanitizeHtml(message.content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")),
           }}
         />
         {/* Source citations */}

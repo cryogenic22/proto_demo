@@ -7,10 +7,7 @@ import { getProtocol, type ProtocolFull } from "@/lib/api";
 import { TopBar } from "@/components/layout/TopBar";
 import { Card, CardBody } from "@/components/ui/Card";
 import { BudgetTable } from "@/components/protocol/BudgetTable";
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
-}
+import { formatCurrency } from "@/lib/utils";
 
 export default function BudgetPage() {
   const params = useParams();

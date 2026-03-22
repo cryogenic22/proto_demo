@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { listProtocols, getProtocol, type ProtocolSummary, type ProtocolFull } from "@/lib/api";
 import { TopBar } from "@/components/layout/TopBar";
@@ -19,6 +20,7 @@ interface ProtocolQualityRow {
 }
 
 export default function QualityDashboardPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rows, setRows] = useState<ProtocolQualityRow[]>([]);
@@ -230,7 +232,7 @@ export default function QualityDashboardPage() {
                             i % 2 === 1 && "bg-neutral-50/30"
                           )}
                           onClick={() => {
-                            window.location.href = `/protocols/${row.protocol_id}`;
+                            router.push(`/protocols/${row.protocol_id}`);
                           }}
                         >
                           <td className="px-4 py-2.5 text-neutral-800 font-medium border-b border-neutral-100 max-w-xs truncate">

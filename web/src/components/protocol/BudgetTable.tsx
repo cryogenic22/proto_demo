@@ -1,7 +1,7 @@
 "use client";
 
 import type { BudgetLine } from "@/lib/api";
-import { cn, costTierColor, costTierLabel } from "@/lib/utils";
+import { cn, costTierColor, costTierLabel, formatCurrency } from "@/lib/utils";
 
 interface BudgetTableProps {
   lines: BudgetLine[];
@@ -12,10 +12,6 @@ function confidenceDot(confidence: number) {
   if (confidence < 0.7) color = "bg-red-500";
   else if (confidence < 0.85) color = "bg-amber-500";
   return <span className={cn("inline-block w-2 h-2 rounded-full", color)} title={`${(confidence * 100).toFixed(0)}%`} />;
-}
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
 }
 
 export function BudgetTable({ lines }: BudgetTableProps) {
