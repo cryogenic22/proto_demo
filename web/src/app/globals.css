@@ -48,37 +48,44 @@ body {
   background: var(--color-neutral-400);
 }
 
-/* Section content typography */
+/*
+ * Section content typography
+ * Uses !important sparingly to override Tailwind preflight resets.
+ * Content comes from parsed PDFs and may contain:
+ *   - Standard HTML lists (<ul><li>)
+ *   - Unicode bullet chars (\uf0b7) in <p> tags (from Word/PDF exports)
+ *   - Inline tables
+ */
 .section-content h2 {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
   color: var(--color-neutral-800);
-  margin: 1.5rem 0 0.75rem;
+  margin: 1.5rem 0 0.75rem !important;
   line-height: 1.4;
 }
 .section-content h3 {
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
   color: var(--color-brand-french);
-  margin: 1.25rem 0 0.5rem;
+  margin: 1.25rem 0 0.5rem !important;
   line-height: 1.4;
 }
 .section-content h4 {
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
   color: var(--color-neutral-700);
-  margin: 1rem 0 0.5rem;
+  margin: 1rem 0 0.5rem !important;
 }
 .section-content p {
   font-size: 0.8125rem;
   line-height: 1.65;
   color: var(--color-neutral-700);
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.75rem !important;
 }
 .section-content ul,
 .section-content ol {
-  padding-left: 1.5rem;
-  margin: 0.5rem 0;
+  padding-left: 1.5rem !important;
+  margin: 0.5rem 0 !important;
 }
 .section-content li {
   font-size: 0.8125rem;
@@ -86,8 +93,19 @@ body {
   color: var(--color-neutral-700);
   margin: 0.25rem 0;
 }
-.section-content ul { list-style-type: disc; }
-.section-content ol { list-style-type: decimal; }
+.section-content ul {
+  list-style-type: disc !important;
+}
+.section-content ol {
+  list-style-type: decimal !important;
+}
+.section-content ul ul {
+  list-style-type: circle !important;
+  margin: 0.25rem 0 !important;
+}
+.section-content ul ul ul {
+  list-style-type: square !important;
+}
 .section-content table {
   width: 100%;
   border-collapse: collapse;
@@ -97,13 +115,20 @@ body {
 .section-content th,
 .section-content td {
   border: 1px solid var(--color-neutral-200);
-  padding: 0.375rem 0.5rem;
+  padding: 0.5rem 0.625rem;
   text-align: left;
+  vertical-align: top;
 }
 .section-content th {
   background: var(--color-neutral-50);
   font-weight: 600;
   color: var(--color-neutral-600);
+}
+.section-content td {
+  color: var(--color-neutral-700);
+}
+.section-content tr:hover td {
+  background: var(--color-neutral-50);
 }
 .section-content code {
   font-family: var(--font-mono);
@@ -131,6 +156,14 @@ body {
   padding-left: 1rem;
   margin: 1rem 0;
   color: var(--color-neutral-600);
+  font-style: italic;
+}
+/* em/strong inside content */
+.section-content strong {
+  font-weight: 600;
+  color: var(--color-neutral-800);
+}
+.section-content em {
   font-style: italic;
 }
 

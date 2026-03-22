@@ -54,7 +54,7 @@ export function SectionContent({ section, onAsk }: SectionContentProps) {
       {/* HTML content */}
       {section.content_html ? (
         <div
-          className="section-content prose prose-sm max-w-none"
+          className="section-content max-w-none"
           dangerouslySetInnerHTML={{ __html: sanitizeHtml(section.content_html) }}
         />
       ) : (
