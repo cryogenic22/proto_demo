@@ -1,0 +1,5148 @@
+{
+  "protocol_id": "p17_durvalumab",
+  "protocol_name": "P-17 Durvalumab",
+  "total_sections": 514,
+  "max_depth": 5,
+  "sections": [
+    {
+      "number": "",
+      "title": "A Phase III, Randomized, Multi-Center, Double-Blind, Global Study to",
+      "page": 0,
+      "page_display": "1",
+      "level": 1,
+      "end_page": 0,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Determine the Efficacy and Safety of Durvalumab in Combination With and",
+      "page": 0,
+      "page_display": "1",
+      "level": 1,
+      "end_page": 0,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Treatment in Women With Locally Advanced Cervical Cancer (CALLA)",
+      "page": 0,
+      "page_display": "1",
+      "level": 1,
+      "end_page": 0,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Sponsor:",
+      "page": 0,
+      "page_display": "1",
+      "level": 1,
+      "end_page": 0,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Regulatory Agency Identifying Number(s):",
+      "page": 0,
+      "page_display": "1",
+      "level": 1,
+      "end_page": 0,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "A",
+      "title": "Phase III, Randomized, Multi-Center, Double-Blind, Global Study to",
+      "page": 0,
+      "page_display": "1",
+      "level": 1,
+      "end_page": 1,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 1.1 Schedule of activities, Section 5.2 Exclusion Criteria",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 6.1.1.2 Standard of care",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 1.2 Synopsis, Section 3 Objectives and Endpoints, Section 6.1.1 Investigational",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Overall survival in PD-L1 positive patients, Section 9.5.1 Efficacy analyses",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "China cohort",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 8.4.5.1 Specific toxicity management and dose modification information –",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 9.2 Sample size determination",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 1.1. Schedule of activities, Appendix A7 Study and Site start and closure,",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix B2 Definitions of serious adverse event, Appendix E Actions Required in",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Cases of Increases in Liver Biochemistry and Evaluation of Hy’s law, Appendix G12.1",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "General Principals",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 3,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 2.2.4 Treatment of cervical cancer",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 1 Schedule of assessments for durvalumab/placebo ± chemoradiation therapy",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Overall Design, Section 7.1.1 Procedures for discontinuation of study treatment,",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 8.1 Efficacy assessments",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Treatment regimen",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 4.2.4 Rationale of administering durvalumab concurrent with CCRT",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 4.2.5 Rationale for treatment duration",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 4.2.6 Rationale for stratification factors",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 5.1 Inclusion criteria 5.0 & multiple sections",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 5.2 Exclusion criteria",
+      "page": 5,
+      "page_display": "6",
+      "level": 1,
+      "end_page": 5,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 6.1.1.1 Durvalumab (MEDI4736), Section 6.1.1.3 Placebo",
+      "page": 5,
+      "page_display": "6",
+      "level": 1,
+      "end_page": 5,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 6.1.3 Duration of treatment and criteria for treatment through progression",
+      "page": 5,
+      "page_display": "6",
+      "level": 1,
+      "end_page": 5,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 7 Prohibited concomitant medications",
+      "page": 5,
+      "page_display": "6",
+      "level": 1,
+      "end_page": 5,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 8.1.3.6 Administration of patient reported outcome questionnaires",
+      "page": 5,
+      "page_display": "6",
+      "level": 1,
+      "end_page": 5,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 8.1.4.1 Administration of health care resource assessment",
+      "page": 5,
+      "page_display": "6",
+      "level": 1,
+      "end_page": 5,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 8.8.1.1 Tumor sample collection",
+      "page": 5,
+      "page_display": "6",
+      "level": 1,
+      "end_page": 5,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 8.8.2 Exploratory biomarkers",
+      "page": 6,
+      "page_display": "7",
+      "level": 1,
+      "end_page": 6,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 8.8.4 Storage, re-use, and destruction of biomarker samples",
+      "page": 6,
+      "page_display": "7",
+      "level": 1,
+      "end_page": 6,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Multiplicity Control, Section 9.6 Interim analyses",
+      "page": 6,
+      "page_display": "7",
+      "level": 1,
+      "end_page": 6,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 9.4.1.1 RECIST 1.1-based endpoints, Section 9.4.1.2 Primary endpoint -",
+      "page": 6,
+      "page_display": "7",
+      "level": 1,
+      "end_page": 6,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 9.4.1.3 Progression Free Survival (3 years), Section 9.4.1.4 Progression free",
+      "page": 6,
+      "page_display": "7",
+      "level": 1,
+      "end_page": 6,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 9.5.1.2 Progression free survival in PD-L1 positive patients, Table 14 Pre-",
+      "page": 6,
+      "page_display": "7",
+      "level": 1,
+      "end_page": 6,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "planned statistical and sensitivity analyses to be conducted",
+      "page": 6,
+      "page_display": "7",
+      "level": 1,
+      "end_page": 6,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Section 9.4.3.2 EORTC QLQ CX24",
+      "page": 6,
+      "page_display": "7",
+      "level": 1,
+      "end_page": 7,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "TABLE OF CONTENTS",
+      "page": 8,
+      "page_display": "9",
+      "level": 1,
+      "end_page": 12,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "LIST OF TABLES",
+      "page": 13,
+      "page_display": "14",
+      "level": 1,
+      "end_page": 13,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "LIST OF FIGURES",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "LIST OF APPENDICES",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix A",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix B",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix C",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix D",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix E",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix F",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix G",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix H",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix I",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix J",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix K",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix L",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "PROTOCOL SUMMARY",
+      "page": 15,
+      "page_display": "16",
+      "level": 1,
+      "end_page": 15,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Schedule of activities",
+      "page": 15,
+      "page_display": "16",
+      "level": 1,
+      "end_page": 15,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "For durvalumab/placebo + standard of care chemoradiation therapy combination arms",
+      "page": 15,
+      "page_display": "16",
+      "level": 1,
+      "end_page": 15,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 1",
+      "page": 16,
+      "page_display": "17",
+      "level": 1,
+      "end_page": 16,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Schedule of assessments for durvalumab/placebo ± chemoradiation therapy screening and treatment and",
+      "page": 16,
+      "page_display": "17",
+      "level": 1,
+      "end_page": 20,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 2",
+      "page": 21,
+      "page_display": "22",
+      "level": 1,
+      "end_page": 23,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Synopsis",
+      "page": 24,
+      "page_display": "25",
+      "level": 1,
+      "end_page": 24,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "International Co-ordinating Investigator",
+      "page": 24,
+      "page_display": "25",
+      "level": 1,
+      "end_page": 24,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Protocol Title:",
+      "page": 24,
+      "page_display": "25",
+      "level": 1,
+      "end_page": 24,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rationale:",
+      "page": 24,
+      "page_display": "25",
+      "level": 1,
+      "end_page": 26,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Overall design:",
+      "page": 27,
+      "page_display": "28",
+      "level": 1,
+      "end_page": 27,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Study Period:",
+      "page": 28,
+      "page_display": "29",
+      "level": 1,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Number of patients:",
+      "page": 28,
+      "page_display": "29",
+      "level": 1,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Treatments and treatment duration:",
+      "page": 28,
+      "page_display": "29",
+      "level": 1,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Duration of treatment",
+      "page": 28,
+      "page_display": "29",
+      "level": 1,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Progression during treatment",
+      "page": 28,
+      "page_display": "29",
+      "level": 1,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Follow-up of patients post-discontinuation of study treatment",
+      "page": 29,
+      "page_display": "30",
+      "level": 1,
+      "end_page": 29,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Survival",
+      "page": 29,
+      "page_display": "30",
+      "level": 1,
+      "end_page": 29,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Independent Data Monitoring Committee:",
+      "page": 29,
+      "page_display": "30",
+      "level": 1,
+      "end_page": 29,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Statistical methods",
+      "page": 30,
+      "page_display": "31",
+      "level": 1,
+      "end_page": 31,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Schema",
+      "page": 32,
+      "page_display": "33",
+      "level": 1,
+      "end_page": 32,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "INTRODUCTION",
+      "page": 33,
+      "page_display": "34",
+      "level": 1,
+      "end_page": 33,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Study rationale",
+      "page": 33,
+      "page_display": "34",
+      "level": 1,
+      "end_page": 33,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.1.1",
+      "page": 33,
+      "page_display": "34",
+      "level": 1,
+      "end_page": 33,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rationale for combining checkpoint inhibitor therapy with",
+      "page": 33,
+      "page_display": "34",
+      "level": 1,
+      "end_page": 34,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Background",
+      "page": 35,
+      "page_display": "36",
+      "level": 1,
+      "end_page": 35,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.2.1",
+      "page": 35,
+      "page_display": "36",
+      "level": 1,
+      "end_page": 35,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Human papilloma virus infection in cervical cancer",
+      "page": 35,
+      "page_display": "36",
+      "level": 1,
+      "end_page": 35,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.2.2",
+      "page": 36,
+      "page_display": "37",
+      "level": 1,
+      "end_page": 36,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Staging of cervical cancer",
+      "page": 36,
+      "page_display": "37",
+      "level": 1,
+      "end_page": 36,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.2.3",
+      "page": 36,
+      "page_display": "37",
+      "level": 1,
+      "end_page": 36,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Lymph node status in cervical cancer",
+      "page": 36,
+      "page_display": "37",
+      "level": 1,
+      "end_page": 36,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.2.4",
+      "page": 37,
+      "page_display": "38",
+      "level": 1,
+      "end_page": 37,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Treatment of cervical cancer",
+      "page": 37,
+      "page_display": "38",
+      "level": 1,
+      "end_page": 38,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.2.5",
+      "page": 39,
+      "page_display": "40",
+      "level": 1,
+      "end_page": 39,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Cervical cancer establishes an immunosuppressive environment",
+      "page": 39,
+      "page_display": "40",
+      "level": 1,
+      "end_page": 39,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.2.6",
+      "page": 40,
+      "page_display": "41",
+      "level": 1,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Previous checkpoint inhibitor therapy in cervical cancer",
+      "page": 40,
+      "page_display": "41",
+      "level": 1,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.2.7",
+      "page": 40,
+      "page_display": "41",
+      "level": 1,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Immunotherapies",
+      "page": 40,
+      "page_display": "41",
+      "level": 1,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.2.8",
+      "page": 41,
+      "page_display": "42",
+      "level": 1,
+      "end_page": 41,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Durvalumab",
+      "page": 41,
+      "page_display": "42",
+      "level": 1,
+      "end_page": 41,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Benefit/risk assessment",
+      "page": 42,
+      "page_display": "43",
+      "level": 1,
+      "end_page": 42,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.3.1",
+      "page": 42,
+      "page_display": "43",
+      "level": 1,
+      "end_page": 42,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Potential benefits",
+      "page": 42,
+      "page_display": "43",
+      "level": 1,
+      "end_page": 42,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Durvalumab as monotherapy in cervical cancer",
+      "page": 42,
+      "page_display": "43",
+      "level": 1,
+      "end_page": 42,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Concurrent immunotherapy and chemoradiotherapy in cervical cancer",
+      "page": 43,
+      "page_display": "44",
+      "level": 1,
+      "end_page": 43,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.3.2",
+      "page": 44,
+      "page_display": "45",
+      "level": 1,
+      "end_page": 44,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Overall risks",
+      "page": 44,
+      "page_display": "45",
+      "level": 1,
+      "end_page": 44,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "2.3.3",
+      "page": 45,
+      "page_display": "46",
+      "level": 1,
+      "end_page": 45,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Overall benefit/risk",
+      "page": 45,
+      "page_display": "46",
+      "level": 1,
+      "end_page": 45,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "OBJECTIVES AND ENDPOINTS",
+      "page": 46,
+      "page_display": "47",
+      "level": 1,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 3",
+      "page": 46,
+      "page_display": "47",
+      "level": 1,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Study objectives",
+      "page": 46,
+      "page_display": "47",
+      "level": 1,
+      "end_page": 47,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "STUDY DESIGN",
+      "page": 48,
+      "page_display": "49",
+      "level": 1,
+      "end_page": 48,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Overall design",
+      "page": 48,
+      "page_display": "49",
+      "level": 1,
+      "end_page": 48,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "4.1.1.",
+      "page": 49,
+      "page_display": "50",
+      "level": 1,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Study Conduct Mitigation During Study Disruptions Due to Cases of",
+      "page": 49,
+      "page_display": "50",
+      "level": 1,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Civil Crisis, Natural Disaster, or Public Health Crisis",
+      "page": 49,
+      "page_display": "50",
+      "level": 1,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Scientific rationale for study design",
+      "page": 50,
+      "page_display": "51",
+      "level": 1,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "4.2.1",
+      "page": 50,
+      "page_display": "51",
+      "level": 1,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rationale for study endpoints (efficacy)",
+      "page": 50,
+      "page_display": "51",
+      "level": 1,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "4.2.2",
+      "page": 51,
+      "page_display": "52",
+      "level": 1,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "4.2.3",
+      "page": 51,
+      "page_display": "52",
+      "level": 1,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Choice of standard of care regimen",
+      "page": 51,
+      "page_display": "52",
+      "level": 1,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rationale of administering durvalumab concurrent with CCRT",
+      "page": 52,
+      "page_display": "53",
+      "level": 1,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "4.2.5",
+      "page": 52,
+      "page_display": "53",
+      "level": 1,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rationale for treatment duration",
+      "page": 52,
+      "page_display": "53",
+      "level": 1,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "4.2.6",
+      "page": 53,
+      "page_display": "54",
+      "level": 1,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rationale for stratification factors",
+      "page": 53,
+      "page_display": "54",
+      "level": 1,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Justification for dose",
+      "page": 53,
+      "page_display": "54",
+      "level": 1,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "4.3.1",
+      "page": 53,
+      "page_display": "54",
+      "level": 1,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Durvalumab monotherapy dose rationale",
+      "page": 53,
+      "page_display": "54",
+      "level": 1,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "PK/Pharmacodynamic data",
+      "page": 53,
+      "page_display": "54",
+      "level": 1,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Clinical data",
+      "page": 54,
+      "page_display": "55",
+      "level": 1,
+      "end_page": 54,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "4.3.2",
+      "page": 54,
+      "page_display": "55",
+      "level": 1,
+      "end_page": 54,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rationale for fixed dosing",
+      "page": 54,
+      "page_display": "55",
+      "level": 1,
+      "end_page": 54,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "End of study definition",
+      "page": 55,
+      "page_display": "56",
+      "level": 1,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "STUDY POPULATION",
+      "page": 55,
+      "page_display": "56",
+      "level": 1,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Inclusion criteria",
+      "page": 56,
+      "page_display": "57",
+      "level": 1,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Informed consent",
+      "page": 56,
+      "page_display": "57",
+      "level": 1,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Type of patient and disease characteristics",
+      "page": 56,
+      "page_display": "57",
+      "level": 1,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Weight",
+      "page": 57,
+      "page_display": "58",
+      "level": 1,
+      "end_page": 57,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Exclusion criteria",
+      "page": 57,
+      "page_display": "58",
+      "level": 1,
+      "end_page": 57,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Medical conditions",
+      "page": 57,
+      "page_display": "58",
+      "level": 1,
+      "end_page": 58,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Prior/concomitant therapy",
+      "page": 59,
+      "page_display": "60",
+      "level": 1,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1",
+      "title": "ECG",
+      "page": 59,
+      "page_display": "60",
+      "level": 1,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Prior/concurrent clinical study experience",
+      "page": 60,
+      "page_display": "61",
+      "level": 1,
+      "end_page": 60,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Other exclusions",
+      "page": 60,
+      "page_display": "61",
+      "level": 1,
+      "end_page": 60,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Lifestyle restrictions",
+      "page": 61,
+      "page_display": "62",
+      "level": 1,
+      "end_page": 61,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 4",
+      "page": 62,
+      "page_display": "63",
+      "level": 1,
+      "end_page": 62,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Highly effective methods of contraception (<1% failure rate)",
+      "page": 62,
+      "page_display": "63",
+      "level": 1,
+      "end_page": 62,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Screen failures",
+      "page": 62,
+      "page_display": "63",
+      "level": 1,
+      "end_page": 62,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "STUDY TREATMENTS",
+      "page": 63,
+      "page_display": "64",
+      "level": 1,
+      "end_page": 63,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Treatments administered",
+      "page": 63,
+      "page_display": "64",
+      "level": 1,
+      "end_page": 63,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.1.1",
+      "page": 63,
+      "page_display": "64",
+      "level": 1,
+      "end_page": 63,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Investigational products",
+      "page": 63,
+      "page_display": "64",
+      "level": 1,
+      "end_page": 63,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 5",
+      "page": 64,
+      "page_display": "65",
+      "level": 1,
+      "end_page": 64,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Study treatments",
+      "page": 64,
+      "page_display": "65",
+      "level": 1,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Durvalumab (MEDI4736)",
+      "page": 66,
+      "page_display": "67",
+      "level": 1,
+      "end_page": 66,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Preparation of durvalumab (MEDI4736) doses for administration with an IV bag",
+      "page": 66,
+      "page_display": "67",
+      "level": 1,
+      "end_page": 66,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Order of administration",
+      "page": 67,
+      "page_display": "68",
+      "level": 1,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Standard of care",
+      "page": 67,
+      "page_display": "68",
+      "level": 1,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1.1.2.1",
+      "title": "Cisplatin",
+      "page": 67,
+      "page_display": "68",
+      "level": 5,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Placebo",
+      "page": 68,
+      "page_display": "69",
+      "level": 1,
+      "end_page": 68,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.1.2",
+      "page": 68,
+      "page_display": "69",
+      "level": 1,
+      "end_page": 68,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Dose and treatment regimens",
+      "page": 68,
+      "page_display": "69",
+      "level": 1,
+      "end_page": 68,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 6",
+      "page": 68,
+      "page_display": "69",
+      "level": 1,
+      "end_page": 68,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1.1.2.2",
+      "title": "Carboplatin",
+      "page": 68,
+      "page_display": "69",
+      "level": 5,
+      "end_page": 69,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.1.3",
+      "page": 70,
+      "page_display": "71",
+      "level": 1,
+      "end_page": 70,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Post final data cut off",
+      "page": 71,
+      "page_display": "72",
+      "level": 1,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.1.4",
+      "page": 71,
+      "page_display": "72",
+      "level": 1,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Storage",
+      "page": 71,
+      "page_display": "72",
+      "level": 1,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Measures to minimize bias: randomization and blinding",
+      "page": 72,
+      "page_display": "73",
+      "level": 1,
+      "end_page": 72,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.2.1",
+      "page": 72,
+      "page_display": "73",
+      "level": 1,
+      "end_page": 72,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Subject enrollment and randomization",
+      "page": 72,
+      "page_display": "73",
+      "level": 1,
+      "end_page": 72,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.2.2",
+      "page": 73,
+      "page_display": "74",
+      "level": 1,
+      "end_page": 73,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Procedures for handling incorrectly enrolled or randomized subjects",
+      "page": 73,
+      "page_display": "74",
+      "level": 1,
+      "end_page": 73,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.2.3",
+      "page": 73,
+      "page_display": "74",
+      "level": 1,
+      "end_page": 73,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Methods for assigning treatment arms",
+      "page": 73,
+      "page_display": "74",
+      "level": 1,
+      "end_page": 73,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.2.4",
+      "page": 74,
+      "page_display": "75",
+      "level": 1,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Methods for ensuring blinding",
+      "page": 74,
+      "page_display": "75",
+      "level": 1,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Treatment compliance",
+      "page": 74,
+      "page_display": "75",
+      "level": 1,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Concomitant therapy",
+      "page": 74,
+      "page_display": "75",
+      "level": 1,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "General Concomitant Medication and Supportive Care Guidelines for Radiotherapy",
+      "page": 75,
+      "page_display": "76",
+      "level": 1,
+      "end_page": 75,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 7",
+      "page": 76,
+      "page_display": "77",
+      "level": 1,
+      "end_page": 76,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Prohibited concomitant medications",
+      "page": 76,
+      "page_display": "77",
+      "level": 1,
+      "end_page": 76,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 8",
+      "page": 77,
+      "page_display": "78",
+      "level": 1,
+      "end_page": 77,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Supportive medications",
+      "page": 77,
+      "page_display": "78",
+      "level": 1,
+      "end_page": 77,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.4.1",
+      "page": 78,
+      "page_display": "79",
+      "level": 1,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Other concomitant treatment",
+      "page": 78,
+      "page_display": "79",
+      "level": 1,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.4.2",
+      "page": 78,
+      "page_display": "79",
+      "level": 1,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Durvalumab drug-drug interactions",
+      "page": 78,
+      "page_display": "79",
+      "level": 1,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6.4.3",
+      "page": 78,
+      "page_display": "79",
+      "level": 1,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rescue medication",
+      "page": 78,
+      "page_display": "79",
+      "level": 1,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Dose modification",
+      "page": 78,
+      "page_display": "79",
+      "level": 1,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Treatment after the end of the study",
+      "page": 79,
+      "page_display": "80",
+      "level": 1,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "DISCONTINUATION OF TREATMENT AND SUBJECT",
+      "page": 79,
+      "page_display": "80",
+      "level": 1,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "WITHDRAWAL",
+      "page": 79,
+      "page_display": "80",
+      "level": 1,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Discontinuation of study treatment",
+      "page": 79,
+      "page_display": "80",
+      "level": 1,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "7.1.1",
+      "page": 80,
+      "page_display": "81",
+      "level": 1,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Procedures for discontinuation of study treatment",
+      "page": 80,
+      "page_display": "81",
+      "level": 1,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Lost to follow-up",
+      "page": 80,
+      "page_display": "81",
+      "level": 1,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Withdrawal from the study",
+      "page": 81,
+      "page_display": "82",
+      "level": 1,
+      "end_page": 81,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "STUDY ASSESSMENTS AND PROCEDURES",
+      "page": 81,
+      "page_display": "82",
+      "level": 1,
+      "end_page": 81,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Efficacy assessments",
+      "page": 82,
+      "page_display": "83",
+      "level": 1,
+      "end_page": 82,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.1.1",
+      "page": 83,
+      "page_display": "84",
+      "level": 1,
+      "end_page": 83,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Central reading of scans",
+      "page": 83,
+      "page_display": "84",
+      "level": 1,
+      "end_page": 83,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.1.2",
+      "page": 84,
+      "page_display": "85",
+      "level": 1,
+      "end_page": 84,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Survival assessments",
+      "page": 84,
+      "page_display": "85",
+      "level": 1,
+      "end_page": 84,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.1.3",
+      "page": 84,
+      "page_display": "85",
+      "level": 1,
+      "end_page": 84,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Patient-reported Outcomes (PROs)",
+      "page": 84,
+      "page_display": "85",
+      "level": 1,
+      "end_page": 84,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "EORTC QLQ-C30 and QLQ-CX24",
+      "page": 84,
+      "page_display": "85",
+      "level": 1,
+      "end_page": 84,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "PRO-CTCAE",
+      "page": 85,
+      "page_display": "86",
+      "level": 1,
+      "end_page": 85,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "PGIC",
+      "page": 85,
+      "page_display": "86",
+      "level": 1,
+      "end_page": 85,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "PGIS",
+      "page": 85,
+      "page_display": "86",
+      "level": 1,
+      "end_page": 85,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "EuroQol five-dimensional five-level questionnaire (EQ-5D-5L) and visual",
+      "page": 85,
+      "page_display": "86",
+      "level": 1,
+      "end_page": 85,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Administration of patient reported outcome questionnaires",
+      "page": 86,
+      "page_display": "87",
+      "level": 1,
+      "end_page": 86,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.1.4",
+      "page": 87,
+      "page_display": "88",
+      "level": 1,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Health care resource use",
+      "page": 87,
+      "page_display": "88",
+      "level": 1,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Administration of health care resource assessment",
+      "page": 87,
+      "page_display": "88",
+      "level": 1,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Safety assessments",
+      "page": 87,
+      "page_display": "88",
+      "level": 1,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.2.1",
+      "page": 87,
+      "page_display": "88",
+      "level": 1,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Physical examinations",
+      "page": 87,
+      "page_display": "88",
+      "level": 1,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.2.2",
+      "page": 88,
+      "page_display": "89",
+      "level": 1,
+      "end_page": 88,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Vital signs",
+      "page": 88,
+      "page_display": "89",
+      "level": 1,
+      "end_page": 88,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "First infusion",
+      "page": 88,
+      "page_display": "89",
+      "level": 1,
+      "end_page": 88,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Subsequent infusions",
+      "page": 88,
+      "page_display": "89",
+      "level": 1,
+      "end_page": 88,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.2.3",
+      "page": 89,
+      "page_display": "90",
+      "level": 1,
+      "end_page": 89,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Electrocardiograms",
+      "page": 89,
+      "page_display": "90",
+      "level": 1,
+      "end_page": 89,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.2.4",
+      "page": 89,
+      "page_display": "90",
+      "level": 1,
+      "end_page": 89,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Clinical safety laboratory assessments",
+      "page": 89,
+      "page_display": "90",
+      "level": 1,
+      "end_page": 89,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 9",
+      "page": 90,
+      "page_display": "91",
+      "level": 1,
+      "end_page": 90,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Clinical chemistry",
+      "page": 90,
+      "page_display": "91",
+      "level": 1,
+      "end_page": 90,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 10",
+      "page": 90,
+      "page_display": "91",
+      "level": 1,
+      "end_page": 90,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Hematology",
+      "page": 90,
+      "page_display": "91",
+      "level": 1,
+      "end_page": 90,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 11",
+      "page": 91,
+      "page_display": "92",
+      "level": 1,
+      "end_page": 91,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Urinalysis",
+      "page": 91,
+      "page_display": "92",
+      "level": 1,
+      "end_page": 91,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.2.5",
+      "page": 91,
+      "page_display": "92",
+      "level": 1,
+      "end_page": 91,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "WHO/ECOG performance status",
+      "page": 91,
+      "page_display": "92",
+      "level": 1,
+      "end_page": 91,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.2.6",
+      "page": 92,
+      "page_display": "93",
+      "level": 1,
+      "end_page": 92,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Early subject review for safety",
+      "page": 92,
+      "page_display": "93",
+      "level": 1,
+      "end_page": 92,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.2.7",
+      "page": 92,
+      "page_display": "93",
+      "level": 1,
+      "end_page": 92,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Other safety assessments",
+      "page": 92,
+      "page_display": "93",
+      "level": 1,
+      "end_page": 92,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pneumonitis investigation",
+      "page": 92,
+      "page_display": "93",
+      "level": 1,
+      "end_page": 92,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Collection of adverse events",
+      "page": 93,
+      "page_display": "94",
+      "level": 1,
+      "end_page": 93,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.1",
+      "page": 93,
+      "page_display": "94",
+      "level": 1,
+      "end_page": 93,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Method of detecting Adverse Events and Serious Adverse Events",
+      "page": 93,
+      "page_display": "94",
+      "level": 1,
+      "end_page": 93,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.2",
+      "page": 93,
+      "page_display": "94",
+      "level": 1,
+      "end_page": 93,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Time period and frequency for collecting adverse event and serious",
+      "page": 93,
+      "page_display": "94",
+      "level": 1,
+      "end_page": 93,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.3",
+      "page": 94,
+      "page_display": "95",
+      "level": 1,
+      "end_page": 94,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Follow-up of adverse events and serious adverse events",
+      "page": 94,
+      "page_display": "95",
+      "level": 1,
+      "end_page": 94,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.4",
+      "page": 94,
+      "page_display": "95",
+      "level": 1,
+      "end_page": 94,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Adverse event data collection",
+      "page": 94,
+      "page_display": "95",
+      "level": 1,
+      "end_page": 94,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.5",
+      "page": 95,
+      "page_display": "96",
+      "level": 1,
+      "end_page": 95,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Causality collection",
+      "page": 95,
+      "page_display": "96",
+      "level": 1,
+      "end_page": 95,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.6",
+      "page": 96,
+      "page_display": "97",
+      "level": 1,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Adverse events based on signs and symptoms",
+      "page": 96,
+      "page_display": "97",
+      "level": 1,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.7",
+      "page": 96,
+      "page_display": "97",
+      "level": 1,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.8",
+      "page": 96,
+      "page_display": "97",
+      "level": 1,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Hy’s law",
+      "page": 96,
+      "page_display": "97",
+      "level": 1,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.9",
+      "page": 96,
+      "page_display": "97",
+      "level": 1,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Disease progression",
+      "page": 96,
+      "page_display": "97",
+      "level": 1,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.10",
+      "page": 97,
+      "page_display": "98",
+      "level": 1,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "New cancers",
+      "page": 97,
+      "page_display": "98",
+      "level": 1,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.11",
+      "page": 97,
+      "page_display": "98",
+      "level": 1,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Deaths",
+      "page": 97,
+      "page_display": "98",
+      "level": 1,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.12",
+      "page": 97,
+      "page_display": "98",
+      "level": 1,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Adverse events of special interest",
+      "page": 97,
+      "page_display": "98",
+      "level": 1,
+      "end_page": 98,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.3.13",
+      "page": 99,
+      "page_display": "100",
+      "level": 1,
+      "end_page": 99,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Safety data to be collected following the final Data Cutoff of the study",
+      "page": 99,
+      "page_display": "100",
+      "level": 1,
+      "end_page": 99,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Safety reporting and medical management",
+      "page": 99,
+      "page_display": "100",
+      "level": 1,
+      "end_page": 99,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.4.1",
+      "page": 99,
+      "page_display": "100",
+      "level": 1,
+      "end_page": 99,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Reporting of serious adverse events",
+      "page": 99,
+      "page_display": "100",
+      "level": 1,
+      "end_page": 99,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.4.2",
+      "page": 100,
+      "page_display": "101",
+      "level": 1,
+      "end_page": 100,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pregnancy",
+      "page": 100,
+      "page_display": "101",
+      "level": 1,
+      "end_page": 100,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Maternal exposure",
+      "page": 100,
+      "page_display": "101",
+      "level": 1,
+      "end_page": 100,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.4.3",
+      "page": 101,
+      "page_display": "102",
+      "level": 1,
+      "end_page": 101,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Overdose",
+      "page": 101,
+      "page_display": "102",
+      "level": 1,
+      "end_page": 101,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Standard of Care",
+      "page": 101,
+      "page_display": "102",
+      "level": 1,
+      "end_page": 101,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.4.4",
+      "page": 101,
+      "page_display": "102",
+      "level": 1,
+      "end_page": 101,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Medication error",
+      "page": 101,
+      "page_display": "102",
+      "level": 1,
+      "end_page": 101,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.4.5",
+      "page": 102,
+      "page_display": "103",
+      "level": 1,
+      "end_page": 102,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Management of durvalumab-related toxicities",
+      "page": 102,
+      "page_display": "103",
+      "level": 1,
+      "end_page": 102,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Specific toxicity management and dose modification information - durvalumab",
+      "page": 102,
+      "page_display": "103",
+      "level": 1,
+      "end_page": 102,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pharmacokinetics",
+      "page": 103,
+      "page_display": "104",
+      "level": 1,
+      "end_page": 103,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.5.1",
+      "page": 103,
+      "page_display": "104",
+      "level": 1,
+      "end_page": 103,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Collection of samples",
+      "page": 103,
+      "page_display": "104",
+      "level": 1,
+      "end_page": 103,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.5.2",
+      "page": 104,
+      "page_display": "105",
+      "level": 1,
+      "end_page": 104,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Storage and destruction of pharmacokinetic/antidrug antibody samples",
+      "page": 104,
+      "page_display": "105",
+      "level": 1,
+      "end_page": 104,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "For China:",
+      "page": 104,
+      "page_display": "105",
+      "level": 1,
+      "end_page": 104,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pharmacodynamics",
+      "page": 104,
+      "page_display": "105",
+      "level": 1,
+      "end_page": 104,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Genetics",
+      "page": 104,
+      "page_display": "105",
+      "level": 1,
+      "end_page": 104,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.7.1",
+      "page": 104,
+      "page_display": "105",
+      "level": 1,
+      "end_page": 104,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Optional exploratory genetic sample",
+      "page": 104,
+      "page_display": "105",
+      "level": 1,
+      "end_page": 104,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.7.2",
+      "page": 105,
+      "page_display": "106",
+      "level": 1,
+      "end_page": 105,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Biomarkers",
+      "page": 105,
+      "page_display": "106",
+      "level": 1,
+      "end_page": 105,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.8.1",
+      "page": 105,
+      "page_display": "106",
+      "level": 1,
+      "end_page": 105,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Tumour samples:",
+      "page": 105,
+      "page_display": "106",
+      "level": 1,
+      "end_page": 105,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Tumor sample collection:",
+      "page": 105,
+      "page_display": "106",
+      "level": 1,
+      "end_page": 105,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "PD-L1 expression assessment",
+      "page": 105,
+      "page_display": "106",
+      "level": 1,
+      "end_page": 105,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.8.2",
+      "page": 106,
+      "page_display": "107",
+      "level": 1,
+      "end_page": 106,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Exploratory biomarkers",
+      "page": 106,
+      "page_display": "107",
+      "level": 1,
+      "end_page": 106,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Microsatellite instability and tumor mutation burden",
+      "page": 106,
+      "page_display": "107",
+      "level": 1,
+      "end_page": 106,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Tumor biomarkers",
+      "page": 107,
+      "page_display": "108",
+      "level": 1,
+      "end_page": 107,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Whole blood gene expression (PAXgene RNA)",
+      "page": 107,
+      "page_display": "108",
+      "level": 1,
+      "end_page": 107,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Plasma - ctDNA mutations",
+      "page": 107,
+      "page_display": "108",
+      "level": 1,
+      "end_page": 107,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.8.3",
+      "page": 108,
+      "page_display": "109",
+      "level": 1,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Management of biomarker data",
+      "page": 108,
+      "page_display": "109",
+      "level": 1,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.8.4",
+      "page": 108,
+      "page_display": "109",
+      "level": 1,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Storage, re-use, and destruction of biomarker samples",
+      "page": 108,
+      "page_display": "109",
+      "level": 1,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.8.5",
+      "page": 108,
+      "page_display": "109",
+      "level": 1,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Labeling and shipment of biological samples",
+      "page": 108,
+      "page_display": "109",
+      "level": 1,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "8.8.6",
+      "page": 109,
+      "page_display": "110",
+      "level": 1,
+      "end_page": 109,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Chain of custody of biological samples",
+      "page": 109,
+      "page_display": "110",
+      "level": 1,
+      "end_page": 109,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "STATISTICAL CONSIDERATIONS",
+      "page": 109,
+      "page_display": "110",
+      "level": 1,
+      "end_page": 109,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Statistical hypotheses",
+      "page": 110,
+      "page_display": "111",
+      "level": 1,
+      "end_page": 110,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Sample size determination",
+      "page": 110,
+      "page_display": "111",
+      "level": 1,
+      "end_page": 110,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Populations for analyses",
+      "page": 111,
+      "page_display": "112",
+      "level": 1,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 12",
+      "page": 111,
+      "page_display": "112",
+      "level": 1,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Summary of outcome variables and analysis populations",
+      "page": 111,
+      "page_display": "112",
+      "level": 1,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.3.1",
+      "page": 111,
+      "page_display": "112",
+      "level": 1,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Full analysis set",
+      "page": 111,
+      "page_display": "112",
+      "level": 1,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.3.2",
+      "page": 111,
+      "page_display": "112",
+      "level": 1,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Safety analysis set",
+      "page": 111,
+      "page_display": "112",
+      "level": 1,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.3.3",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "PK analysis set",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.3.4",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "PD-L1 positive analysis set",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Outcome measures for analyses",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.1",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Calculation or derivation of efficacy variables",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "RECIST 1.1-based endpoints",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Investigator RECIST 1.1-based assessments",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Blinded independent central review",
+      "page": 112,
+      "page_display": "113",
+      "level": 1,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pathological confirmation of local progression",
+      "page": 113,
+      "page_display": "114",
+      "level": 1,
+      "end_page": 113,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Primary endpoint - progression-free survival",
+      "page": 113,
+      "page_display": "114",
+      "level": 1,
+      "end_page": 113,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Progression Free Survival (3 years)",
+      "page": 114,
+      "page_display": "115",
+      "level": 1,
+      "end_page": 114,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Progression free survival in PD-L1 positive patients",
+      "page": 114,
+      "page_display": "115",
+      "level": 1,
+      "end_page": 114,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Overall survival",
+      "page": 115,
+      "page_display": "116",
+      "level": 1,
+      "end_page": 115,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Objective response rate",
+      "page": 115,
+      "page_display": "116",
+      "level": 1,
+      "end_page": 115,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Complete response rate",
+      "page": 115,
+      "page_display": "116",
+      "level": 1,
+      "end_page": 115,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Incidence of Local Progression, Distant Disease Progression, Secondary",
+      "page": 115,
+      "page_display": "116",
+      "level": 1,
+      "end_page": 115,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Malignancy",
+      "page": 115,
+      "page_display": "116",
+      "level": 1,
+      "end_page": 115,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Duration of response for Complete Responders",
+      "page": 116,
+      "page_display": "117",
+      "level": 1,
+      "end_page": 116,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.2",
+      "page": 116,
+      "page_display": "117",
+      "level": 1,
+      "end_page": 116,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Adverse events",
+      "page": 116,
+      "page_display": "117",
+      "level": 1,
+      "end_page": 117,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.3",
+      "page": 118,
+      "page_display": "119",
+      "level": 1,
+      "end_page": 118,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "EORTC-QLQ-C30",
+      "page": 118,
+      "page_display": "119",
+      "level": 1,
+      "end_page": 118,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Definition of clinically meaningful changes",
+      "page": 118,
+      "page_display": "119",
+      "level": 1,
+      "end_page": 118,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 13",
+      "page": 119,
+      "page_display": "120",
+      "level": 1,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Visit responses for EORTC QLQ-C30",
+      "page": 119,
+      "page_display": "120",
+      "level": 1,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "EORTC QLQ-CX24",
+      "page": 119,
+      "page_display": "120",
+      "level": 1,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.4",
+      "page": 119,
+      "page_display": "120",
+      "level": 1,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Patient-reported outcomes version of the Common Terminology Criteria",
+      "page": 119,
+      "page_display": "120",
+      "level": 1,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "for Adverse Events",
+      "page": 119,
+      "page_display": "120",
+      "level": 1,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.5",
+      "page": 120,
+      "page_display": "121",
+      "level": 1,
+      "end_page": 120,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Patient Global Impression of Change and Patient Global Impression of",
+      "page": 120,
+      "page_display": "121",
+      "level": 1,
+      "end_page": 120,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Severity",
+      "page": 120,
+      "page_display": "121",
+      "level": 1,
+      "end_page": 120,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.6",
+      "page": 120,
+      "page_display": "121",
+      "level": 1,
+      "end_page": 120,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.7",
+      "page": 120,
+      "page_display": "121",
+      "level": 1,
+      "end_page": 120,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Definition of compliance and evaluability rates",
+      "page": 120,
+      "page_display": "121",
+      "level": 1,
+      "end_page": 120,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.8",
+      "page": 121,
+      "page_display": "122",
+      "level": 1,
+      "end_page": 121,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.9",
+      "page": 121,
+      "page_display": "122",
+      "level": 1,
+      "end_page": 121,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Population pharmacokinetics and exposure-response/safety analysis",
+      "page": 121,
+      "page_display": "122",
+      "level": 1,
+      "end_page": 121,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pharmacokinetic analysis",
+      "page": 121,
+      "page_display": "122",
+      "level": 1,
+      "end_page": 121,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Immunogenicity analysis",
+      "page": 122,
+      "page_display": "123",
+      "level": 1,
+      "end_page": 122,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.10",
+      "page": 122,
+      "page_display": "123",
+      "level": 1,
+      "end_page": 122,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.4.11",
+      "page": 122,
+      "page_display": "123",
+      "level": 1,
+      "end_page": 122,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Statistical analyses",
+      "page": 122,
+      "page_display": "123",
+      "level": 1,
+      "end_page": 122,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.5.1",
+      "page": 122,
+      "page_display": "123",
+      "level": 1,
+      "end_page": 122,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Efficacy analyses",
+      "page": 122,
+      "page_display": "123",
+      "level": 1,
+      "end_page": 122,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 14",
+      "page": 123,
+      "page_display": "124",
+      "level": 1,
+      "end_page": 123,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pre-planned statistical and sensitivity analyses to be conducted",
+      "page": 123,
+      "page_display": "124",
+      "level": 1,
+      "end_page": 124,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Primary endpoint: Progression-free survival",
+      "page": 125,
+      "page_display": "126",
+      "level": 1,
+      "end_page": 126,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Progression-free survival in PD-L1 positive patients",
+      "page": 127,
+      "page_display": "128",
+      "level": 1,
+      "end_page": 128,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Duration of complete response",
+      "page": 129,
+      "page_display": "130",
+      "level": 1,
+      "end_page": 130,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.5.2",
+      "page": 131,
+      "page_display": "132",
+      "level": 1,
+      "end_page": 131,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Safety analyses",
+      "page": 131,
+      "page_display": "132",
+      "level": 1,
+      "end_page": 131,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.5.3",
+      "page": 131,
+      "page_display": "132",
+      "level": 1,
+      "end_page": 131,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pharmacokinetic data",
+      "page": 131,
+      "page_display": "132",
+      "level": 1,
+      "end_page": 131,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.5.4",
+      "page": 131,
+      "page_display": "132",
+      "level": 1,
+      "end_page": 131,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Immunogenicity data",
+      "page": 131,
+      "page_display": "132",
+      "level": 1,
+      "end_page": 131,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.5.5",
+      "page": 131,
+      "page_display": "132",
+      "level": 1,
+      "end_page": 131,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pharmacokinetic/pharmacodynamic relationships",
+      "page": 131,
+      "page_display": "132",
+      "level": 1,
+      "end_page": 131,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.5.6",
+      "page": 132,
+      "page_display": "133",
+      "level": 1,
+      "end_page": 132,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Biomarker data",
+      "page": 132,
+      "page_display": "133",
+      "level": 1,
+      "end_page": 132,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.5.7",
+      "page": 132,
+      "page_display": "133",
+      "level": 1,
+      "end_page": 132,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Methods for multiplicity control",
+      "page": 132,
+      "page_display": "133",
+      "level": 1,
+      "end_page": 132,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Interim analyses",
+      "page": 132,
+      "page_display": "133",
+      "level": 1,
+      "end_page": 132,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.6.1",
+      "page": 133,
+      "page_display": "134",
+      "level": 1,
+      "end_page": 133,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Data monitoring committee",
+      "page": 133,
+      "page_display": "134",
+      "level": 1,
+      "end_page": 133,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "China Cohort",
+      "page": 133,
+      "page_display": "134",
+      "level": 1,
+      "end_page": 134,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "REFERENCES",
+      "page": 135,
+      "page_display": "136",
+      "level": 1,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Aaronson et al 1993",
+      "page": 135,
+      "page_display": "136",
+      "level": 1,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Alexandrov et al 2013",
+      "page": 135,
+      "page_display": "136",
+      "level": 1,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Antonia et al 2017",
+      "page": 135,
+      "page_display": "136",
+      "level": 1,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Banerjee and Kamrava 2014",
+      "page": 135,
+      "page_display": "136",
+      "level": 1,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Basch et al 2009",
+      "page": 135,
+      "page_display": "136",
+      "level": 1,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Benard et al 2014",
+      "page": 135,
+      "page_display": "136",
+      "level": 1,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Benedetti-Panici et al 1996",
+      "page": 135,
+      "page_display": "136",
+      "level": 1,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Berman et al 1984",
+      "page": 135,
+      "page_display": "136",
+      "level": 1,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Brahmer et al 2012",
+      "page": 136,
+      "page_display": "137",
+      "level": 1,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Bruni et al 2016",
+      "page": 136,
+      "page_display": "137",
+      "level": 1,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Chen et al 2016",
+      "page": 136,
+      "page_display": "137",
+      "level": 1,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Colombo et al 2012",
+      "page": 136,
+      "page_display": "137",
+      "level": 1,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Crosbie et al 2013",
+      "page": 136,
+      "page_display": "137",
+      "level": 1,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "De Sanjose 2012",
+      "page": 136,
+      "page_display": "137",
+      "level": 1,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Dovedi et al 2014",
+      "page": 136,
+      "page_display": "137",
+      "level": 1,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Dovedi and Illidge 2015",
+      "page": 136,
+      "page_display": "137",
+      "level": 1,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Dunn et al 2004",
+      "page": 136,
+      "page_display": "137",
+      "level": 1,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Elit et al 2009",
+      "page": 137,
+      "page_display": "138",
+      "level": 1,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Emeka et al 2017",
+      "page": 137,
+      "page_display": "138",
+      "level": 1,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "EuroQol Group 1990",
+      "page": 137,
+      "page_display": "138",
+      "level": 1,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "EuroQol Group 2013",
+      "page": 137,
+      "page_display": "138",
+      "level": 1,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Fairman et al 2014",
+      "page": 137,
+      "page_display": "138",
+      "level": 1,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Fayers et al 2001",
+      "page": 137,
+      "page_display": "138",
+      "level": 1,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "FDA Guidance 2015",
+      "page": 137,
+      "page_display": "138",
+      "level": 1,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Formenti and Demaria 2013",
+      "page": 137,
+      "page_display": "138",
+      "level": 1,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Ferlay et al 2013",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Fuglsang et al 2015",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Gail and Simon 1985",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Gien and Covens 2009",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Green et al 2001",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Greimel et al 2006",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Gupta et al 2018",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Haie-Meder et al 2010",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Hanley et al 2015",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "J",
+      "title": "Clin Oncol",
+      "page": 138,
+      "page_display": "139",
+      "level": 1,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Havrilesky et al 2004",
+      "page": 139,
+      "page_display": "140",
+      "level": 1,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Hirano et al 2005",
+      "page": 139,
+      "page_display": "140",
+      "level": 1,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Hollebecque et al 2017",
+      "page": 139,
+      "page_display": "140",
+      "level": 1,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Inoue et al 1990",
+      "page": 139,
+      "page_display": "140",
+      "level": 1,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Iwai et al 2002",
+      "page": 139,
+      "page_display": "140",
+      "level": 1,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Jin 2014",
+      "page": 139,
+      "page_display": "140",
+      "level": 1,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Juergens et al 2017",
+      "page": 139,
+      "page_display": "140",
+      "level": 1,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Karim et al 2009",
+      "page": 139,
+      "page_display": "140",
+      "level": 1,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Kasuya et al 2013",
+      "page": 139,
+      "page_display": "140",
+      "level": 1,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Katanyoo et al 2011",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Keir et al 2008",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Koh et al 2013",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Kokka et al 2015",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Lai et al 1993",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Langer et al 2016",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Lan and DeMets 1983",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Lee et al 2006",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Lepique et al 2009",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "J",
+      "title": "Natl Compr Canc Netw",
+      "page": 140,
+      "page_display": "141",
+      "level": 1,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Litwin et al 1998",
+      "page": 141,
+      "page_display": "142",
+      "level": 1,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Lowy and Schiller 2006",
+      "page": 141,
+      "page_display": "142",
+      "level": 1,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Macdonald et al 2009",
+      "page": 141,
+      "page_display": "142",
+      "level": 1,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Markowitz et al 2012",
+      "page": 141,
+      "page_display": "142",
+      "level": 1,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Marth et al 2017",
+      "page": 141,
+      "page_display": "142",
+      "level": 1,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Maugen A, Pignon J, Burdett S, Domerg C, Fisher D, Paulus R, et al",
+      "page": 141,
+      "page_display": "142",
+      "level": 1,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Mazeron et al 2016",
+      "page": 141,
+      "page_display": "142",
+      "level": 1,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Menderes et al 2016",
+      "page": 141,
+      "page_display": "142",
+      "level": 1,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Morice et al 1999",
+      "page": 141,
+      "page_display": "142",
+      "level": 1,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Nam et al 2013",
+      "page": 142,
+      "page_display": "143",
+      "level": 1,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Narwal et al 2013",
+      "page": 142,
+      "page_display": "143",
+      "level": 1,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "NCCN 2020",
+      "page": 142,
+      "page_display": "143",
+      "level": 1,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Ng et al 2006",
+      "page": 142,
+      "page_display": "143",
+      "level": 1,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Oemar and Oppe 2013",
+      "page": 142,
+      "page_display": "143",
+      "level": 1,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Ojesina et al 2014",
+      "page": 142,
+      "page_display": "143",
+      "level": 1,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Okazaki et al 2007",
+      "page": 142,
+      "page_display": "143",
+      "level": 1,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Okudaira et al 2009",
+      "page": 142,
+      "page_display": "143",
+      "level": 1,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Osoba et al 1998",
+      "page": 142,
+      "page_display": "143",
+      "level": 1,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pardoll 2012",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pazdur 2008",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Pecorelli et al. 2009",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Petereit et al. 1995",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Postow et al 2012",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Powles et al 2014",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Qin et al 2016",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Qin et al 2017",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Quinn et al 2006",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rizvi et al 2015",
+      "page": 143,
+      "page_display": "144",
+      "level": 1,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rizvi et al 2016",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Ronco et al 2014",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Rose et al 1999",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Sakuragi et al 1999",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Salama et al 2016",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Samlal et al 1998",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Schellens et al 2017",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Segal et al 2015",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Sekine et al 2016",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2",
+      "title": "KEYNOTE-",
+      "page": 144,
+      "page_display": "145",
+      "level": 1,
+      "end_page": 144,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Sharabi et al 2014",
+      "page": 145,
+      "page_display": "146",
+      "level": 1,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Sharabi et al 2015",
+      "page": 145,
+      "page_display": "146",
+      "level": 1,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Sprangers and Aaronson 1992",
+      "page": 145,
+      "page_display": "146",
+      "level": 1,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Song et al. 2013",
+      "page": 145,
+      "page_display": "146",
+      "level": 1,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Stamell et al 2013",
+      "page": 145,
+      "page_display": "146",
+      "level": 1,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Stewart et al 2015",
+      "page": 145,
+      "page_display": "146",
+      "level": 1,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Sun and Chen 2010",
+      "page": 145,
+      "page_display": "146",
+      "level": 1,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Tangjitgamol et al 2014",
+      "page": 145,
+      "page_display": "146",
+      "level": 1,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Topalian et al 2012",
+      "page": 145,
+      "page_display": "146",
+      "level": 1,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Topalian et al 2014",
+      "page": 146,
+      "page_display": "147",
+      "level": 1,
+      "end_page": 146,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Twyman-Saint Victor et al 2015",
+      "page": 146,
+      "page_display": "147",
+      "level": 1,
+      "end_page": 146,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "USPSTF 2016",
+      "page": 146,
+      "page_display": "147",
+      "level": 1,
+      "end_page": 146,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Valdivieso et al 2017",
+      "page": 146,
+      "page_display": "147",
+      "level": 1,
+      "end_page": 146,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Wagenaar et al 2001",
+      "page": 146,
+      "page_display": "147",
+      "level": 1,
+      "end_page": 146,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Wang et al 2009",
+      "page": 146,
+      "page_display": "147",
+      "level": 1,
+      "end_page": 146,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Weichselbaum et al 2017",
+      "page": 146,
+      "page_display": "147",
+      "level": 1,
+      "end_page": 146,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Wiebe et al 2012",
+      "page": 146,
+      "page_display": "147",
+      "level": 1,
+      "end_page": 146,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Yang et al 2017",
+      "page": 146,
+      "page_display": "147",
+      "level": 1,
+      "end_page": 146,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Yarchoan et al 2017",
+      "page": 147,
+      "page_display": "148",
+      "level": 1,
+      "end_page": 147,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Yoon et al 2015",
+      "page": 147,
+      "page_display": "148",
+      "level": 1,
+      "end_page": 147,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Zhang et al 2008",
+      "page": 147,
+      "page_display": "148",
+      "level": 1,
+      "end_page": 147,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Zhang et al 2012",
+      "page": 147,
+      "page_display": "148",
+      "level": 1,
+      "end_page": 147,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Zhou et al 2017",
+      "page": 147,
+      "page_display": "148",
+      "level": 1,
+      "end_page": 147,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6,*1$785(\u00033$*(",
+      "page": 148,
+      "page_display": "149",
+      "level": 1,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "'RFXPHQW\u00031DPH\u001d\u0003",
+      "page": 148,
+      "page_display": "149",
+      "level": 1,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "'RFXPHQW\u00037LWOH",
+      "page": 148,
+      "page_display": "149",
+      "level": 1,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "'RFXPHQW\u0003,'",
+      "page": 148,
+      "page_display": "149",
+      "level": 1,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9HUVLRQ\u0003/DEHO",
+      "page": 148,
+      "page_display": "149",
+      "level": 1,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6HUYHU\u0003'DWH",
+      "page": 148,
+      "page_display": "149",
+      "level": 1,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "6LJQHG\u0003E\\",
+      "page": 148,
+      "page_display": "149",
+      "level": 1,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "0HDQLQJ\u0003RI\u00036LJQDWXUH",
+      "page": 148,
+      "page_display": "149",
+      "level": 1,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    }
+  ]
+}

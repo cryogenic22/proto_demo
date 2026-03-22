@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Site Budget Worksheet — P-14.pdf</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1e293b; background: #f8fafc; }
+.container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.subtitle { font-size: 12px; color: #64748b; margin-bottom: 16px; }
+.summary { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.summary-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 20px; min-width: 160px; }
+.summary-value { font-size: 24px; font-weight: 700; }
+.summary-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+.budget-table { width: 100%; border-collapse: collapse; font-size: 11px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+.budget-table th { background: #0f172a; color: white; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; position: sticky; top: 0; z-index: 10; }
+.budget-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+.budget-table tr:hover { background: #f8fafc; }
+.proc-name { min-width: 260px; }
+.proc-primary { font-weight: 600; font-size: 12px; color: #0f172a; line-height: 1.4; }
+.proc-canonical { font-size: 10px; color: #64748b; margin-top: 2px; }
+.mono { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 11px; color: #475569; }
+.center { text-align: center; }
+.freq { font-size: 14px; font-weight: 700; color: #0f172a; }
+.visits-cell { font-size: 10px; color: #64748b; max-width: 280px; line-height: 1.5; }
+.guidance { font-size: 10px; max-width: 260px; line-height: 1.6; }
+.cost-cell { white-space: nowrap; }
+.currency { color: #94a3b8; font-size: 11px; margin-right: 2px; }
+.needs-input { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.conf-green { }
+.conf-amber { background: #fffbeb !important; }
+.conf-red { background: #fef2f2 !important; }
+.conf-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+.conf-dot-green { background: #059669; }
+.conf-dot-amber { background: #d97706; }
+.conf-dot-red { background: #dc2626; }
+.hint-ok { color: #059669; font-weight: 500; }
+.hint-red { color: #dc2626; font-size: 10px; }
+.hint-amber { color: #d97706; font-size: 10px; }
+.hint-info { color: #0284c7; font-size: 10px; }
+.action-needed { color: #dc2626; font-weight: 600; font-size: 10px; }
+.page-ref { font-size: 9px; color: #94a3b8; font-style: italic; }
+.cost-input { width: 80px; padding: 4px 6px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 11px; text-align: right; }
+.cost-input:focus { outline: 2px solid #0284c7; border-color: transparent; }
+.line-total { font-weight: 600; text-align: right; white-space: nowrap; }
+.tier-low { background: #f1f5f9; color: #64748b; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-med { background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-high { background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-vhigh { background: #fecaca; color: #991b1b; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.grand-total { background: #0f172a; color: white; font-size: 14px; }
+.grand-total td { padding: 12px 10px; font-weight: 700; }
+.footer { margin-top: 16px; font-size: 11px; color: #94a3b8; }
+.footer p { margin-bottom: 4px; }
+@media print {
+  .cost-input { border: none; background: transparent; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Site Budget Worksheet</h1>
+<p class="subtitle">P-14.pdf | Generated 2026-03-22 15:17 UTC</p>
+
+<div class="summary">
+  <div class="summary-card">
+    <div class="summary-value" style="color:#0284c7;">63</div>
+    <div class="summary-label">Budget Line Items</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#0284c7;">156</div>
+    <div class="summary-label">Total Procedure Visits</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#059669;" id="grand-total-display">$12,250</div>
+    <div class="summary-label">Estimated Per-Patient Cost</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#64748b;">4/63</div>
+    <div class="summary-label">Procedures with CPT Codes</div>
+  </div>
+</div>
+
+<table class="budget-table">
+<thead>
+<tr>
+  <th style="min-width:260px">Procedure / Canonical Name</th>
+  <th>CPT</th>
+  <th>Category</th>
+  <th>Tier</th>
+  <th>Freq</th>
+  <th style="min-width:200px">Visits Required</th>
+  <th>Conf.</th>
+  <th style="min-width:100px">Unit Cost ($)</th>
+  <th>Line Total</th>
+  <th style="min-width:220px">Action Required</th>
+</tr>
+</thead>
+<tbody>
+
+        <tr class="conf-green" title="Source: Protocol pages 138, 139, 140&#10;Conditional: Physical examination: a full physical examination, including vital signs, height, and weight, will be performed at Screening and Day 1. Body mass index will be calculated at the Screening Visit (Day 0) only. Symptom-directed physical examinations will be performed on Day 29 and Day 57. On each dosing day before injection, the arm receiving the injection should be examined and the associated lymph nodes should be evaluated. Any clinically significant finding identified during a study visit should be reported as an MAAE. Vital signs are to be collected pre- and post-dosing on days of injection (Day 1 and Day 29). When applicable, vital sign measurements should be performed before blood collection. Participants who are febrile (body temperature ≥ 38.0°C/100.4°F) before dosing on Day 1 or Day 29 must be rescheduled within the relevant window period to receive the injection. Afebrile participants with minor illnesses can be enrolled at the discretion of the investigator.">
+          <td class="proc-name">
+            <div class="proc-primary">Physical examination²</div>
+            <div class="proc-canonical">Physical Examination <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="mono">99213</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">OL-3 C - OL-D57, Visit Number: OL-2 | Type: C | OL-D29, Visit Number: OL-1 | Type: C | PDV¹ and OL-D1¹, Visit Number: 0 | Type: C | PDV¹ and OL-D1¹, Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), C (Visit 5) M13 D394¹ 365 days after D29, Visit 0 (C) - PDV1 and OL-D1, BD-2 / BD-D29, Visit Number: 0 | Type of Visit: C | Month/Weekly Timepoint: - | Study Visit Day: D0 (Screening), Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, C (Visit 4) M7 D209¹ 180 days after D29 / D239¹, OL-2 C - OL-D29, BD-1 / BD-D1, Visit Number: 3 | Type of Visit: C | Month/Weekly Timepoint: M2 | Study Visit Day: D57, BD-3 / BD-D181</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_0"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_0">
+            $300</td>
+          <td class="guidance"><span class="hint-info">Conditional: Physical examination: a full physical examination,</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 138, 139, 140&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Randomization</div>
+            <div class="proc-canonical">Randomization <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline)</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_1"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_1">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 138, 139, 140&#10;No CPT code mapped — needs manual assignment&#10;Conditional: Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE; Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE; Recording of concomitant medications and non-study vaccinations">
+          <td class="proc-name">
+            <div class="proc-primary">Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE8</div>
+            <div class="proc-canonical">Concomitant Medications Review <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">11</td>
+          <td class="visits-cell">Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 21 days after D29 D50, SC M6 D179¹, BD-2 / BD-D29, Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, BD-1 / BD-D1, OL-1 | SC | 7 days after OL-D1 OL-D8, Unscheduled Visit 1 / Type of Visit C/H / Daily Timepoint D1, SC M3 D85¹, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 7 days after D1 D8, OL-2 (C) / OL-D29, SC M5 D149¹, Visit Number: 0 | Type of Visit: C | Month/Weekly Timepoint: - | Study Visit Day: D0 (Screening), OL-2 (SC) / 7 days after OL-D29 (OL-D36), Visit 0 | C | PDV1 and OL-D11, BD-1a / BD-D4, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 21 days after D1 D22, OL-1 | C | PDV1 and OL-D11, SC M9 D299¹, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 14 days after D29 D43, Unscheduled Visit 2 / Type of Visit C/H / Daily Timepoint D28, SC10 / 7, 14, and 21 days after BD-D1 (BD-D8, BD-D15, BD-D22), SC M8 D269¹, SC M11 D359¹, Visit Number: 3 | Type of Visit: C | Month/Weekly Timepoint: M2 | Study Visit Day: D57, BD-3 / BD-D181, OL-3 / OL-D57, OL-1 / 7 days after OL-D1 (OL-D8), SC M4 D119¹ 90 days after D29, Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), C (Visit 5) M13 D394¹ 365 days after D29, SC M12, C (Visit 4) M7 D209¹ 180 days after D29 / D239¹, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 7 days after D29 D36, OL-2 | C | OL-D29, 0 / PDV1 and OL-D11, SC M10 D329¹, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 14 days after D1 D15</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_2"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_2">
+            $825</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Recording of MAAEs, AE leading to withdrawal, and </span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 138, 139, 140&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Recording of unsolicited AEs</div>
+            <div class="proc-canonical">Adverse Event Assessment <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">9</td>
+          <td class="visits-cell">Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 7 days after D1 D8, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 14 days after D1 D15, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 21 days after D1 D22, Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 7 days after D29 D36, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 14 days after D29 D43, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 21 days after D29 D50, Visit Number: 3 | Type of Visit: C | Month/Weekly Timepoint: M2 | Study Visit Day: D57</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_3"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_3">
+            $675</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Section 11.2.6 (Informed Consent</div>
+            <div class="proc-canonical">Informed Consent <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Visit Number: OL-1 | Type: C | PDV¹ and OL-D1¹, Visit Number: 0 | Type: C | PDV¹ and OL-D1¹, Visit 0 (C) - PDV1 and OL-D1, Visit Number: 0 | Type of Visit: C | Month/Weekly Timepoint: - | Study Visit Day: D0 (Screening), BD-1 / BD-D1, Blinded Cohort, Brief Rationale</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_4"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_4">
+            $150</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 146, 147&#10;Low confidence at: Unscheduled Visit 2 / Type of Visit C/H / Daily Timepoint D28 (50%)&#10;No CPT code mapped — needs manual assignment&#10;Conditional: This can be a home visit if necessary.">
+          <td class="proc-name">
+            <div class="proc-primary">Blood sample for immunologic assessment of SARS-CoV-2 infection6</div>
+            <div class="proc-canonical">Blood Draw/Phlebotomy <span class="page-ref">(p.146, 147)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Unscheduled Visit 2 / Type of Visit C/H / Daily Timepoint D28, BD-1a / BD-D4, Unscheduled Visit 1 / Type of Visit C/H / Daily Timepoint D1</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            90%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_5"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_5">
+            $150</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: This can be a home visit if necessary.</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 175, 176, 177">
+          <td class="proc-name">
+            <div class="proc-primary">Coagulation disorders</div>
+            <div class="proc-canonical">Coagulation Panel <span class="page-ref">(p.175, 176, 177)</span></div>
+          </td>
+          <td class="center"><span class="mono">85610</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Medical Concept Descriptions/Guidance</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_6"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_6">
+            $75</td>
+          <td class="guidance"><span class="hint-ok">OK</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 138, 139, 140&#10;Conditional: Sample must be collected prior to dosing on days of injection (Day 1 and Day 29).">
+          <td class="proc-name">
+            <div class="proc-primary">Nasopharyngeal swab5</div>
+            <div class="proc-canonical">Nasal Swab <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="mono">87635</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">OL-1 | C | PDV1 and OL-D11, Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), Visit 0 (C) - PDV1 and OL-D1, Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, BD-1 / BD-D1, Blinded Cohort, Visit 0 | C | PDV1 and OL-D11</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            90%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_7"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_7">
+            $150</td>
+          <td class="guidance"><span class="hint-info">Conditional: Sample must be collected prior to dosing on days o</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 138, 139, 140&#10;Conditional: Pregnancy test at Screening and Day 1 and before the second vaccination will be a point-of-care urine test. At the discretion of the investigator a pregnancy test either via blood or point-of-care urine test can be performed. Follicle-stimulating hormone level may be measured to confirm menopausal status at the discretion of the investigator.">
+          <td class="proc-name">
+            <div class="proc-primary">Pregnancy testing³</div>
+            <div class="proc-canonical">Pregnancy Test <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="mono">81025</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Visit Number: OL-1 | Type: C | PDV¹ and OL-D1¹, Visit Number: 0 | Type: C | PDV¹ and OL-D1¹, Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), Visit 0 (C) - PDV1 and OL-D1, Visit Number: 0 | Type of Visit: C | Month/Weekly Timepoint: - | Study Visit Day: D0 (Screening), OL-2 C - OL-D29, Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, BD-1 / BD-D1</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_8"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_8">
+            $225</td>
+          <td class="guidance"><span class="hint-info">Conditional: Pregnancy test at Screening and Day 1 and before t</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 138, 139, 140&#10;No CPT code mapped — needs manual assignment&#10;Conditional: The participant will record entries in the eDiary approximately 30 minutes after dosing while at the study site, with instruction provided by study staff. Study participants will continue to record in the eDiary each day after they leave the study site, preferably in the evening, on the day of dosing and for 6 days following. Any solicited AR that is ongoing beyond Day 7 will be reported until resolution. Adverse reactions recorded in eDiaries beyond Day 7 should be reviewed either via phone call or at the following study visit. Participants will be given thermometers to record their temperatures and rulers to measure any injection site reactions.">
+          <td class="proc-name">
+            <div class="proc-primary">eDiary activation for recording solicited adverse reactions (7 days)6</div>
+            <div class="proc-canonical">e-Diary <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>PRO</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 7 days after D1 D8, Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 7 days after D29 D36, eDiary (W)</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_9"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_9">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: The participant will record entries in the eDiary </span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 138, 139, 140&#10;Low confidence at: Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline) (70%), Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29 (70%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Study injection (including 30-minute post-dosing observation period)</div>
+            <div class="proc-canonical">Study Drug Administration <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Treatment</td>
+          <td class="center"><span class="tier-med">$$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Visit Number: OL-1 | Type: C | PDV¹ and OL-D1¹, Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), Visit 0 (C) - PDV1 and OL-D1, Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, OL-2 C - OL-D29, BD-1 / BD-D1</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_10"
+              value="350"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_10">
+            $700</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure '8.1.3 (Convalescent Period Sta' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">8.1.3 (Convalescent Period Starting</div>
+            <div class="proc-canonical">8.1.3 (Convalescent Period Starting <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Description of Change</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_11"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_11">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 175, 176, 177&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Acute cardiovascular injury' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Acute cardiovascular injury</div>
+            <div class="proc-canonical">Acute cardiovascular injury <span class="page-ref">(p.175, 176, 177)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Medical Concept Descriptions/Guidance</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_12"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_12">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 175, 176, 177&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Acute kidney injury' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Acute kidney injury</div>
+            <div class="proc-canonical">Acute kidney injury <span class="page-ref">(p.175, 176, 177)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Medical Concept Descriptions/Guidance</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_13"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_13">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 175, 176, 177&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Acute liver injury' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Acute liver injury</div>
+            <div class="proc-canonical">Acute liver injury <span class="page-ref">(p.175, 176, 177)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Medical Concept Descriptions/Guidance</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_14"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_14">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 175, 176, 177&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Anaphylaxis' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Anaphylaxis</div>
+            <div class="proc-canonical">Anaphylaxis <span class="page-ref">(p.175, 176, 177)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Medical Concept Descriptions/Guidance</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_15"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_15">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 126&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Any Grade 3 and above AE' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Any Grade 3 and above AE</div>
+            <div class="proc-canonical">Any Grade 3 and above AE <span class="page-ref">(p.126)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Number and Percentage of Participants, Number of Events</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_16"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_16">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 126&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Any SAE' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Any SAE</div>
+            <div class="proc-canonical">Any SAE <span class="page-ref">(p.126)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Number and Percentage of Participants, Number of Events</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_17"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_17">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 126&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Any Solicited AR (Part A; over' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Any Solicited AR (Part A; overall and by local, systemic)</div>
+            <div class="proc-canonical">Any Solicited AR (Part A; overall and by local, systemic) <span class="page-ref">(p.126)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Number and Percentage of Participants, Number of Events, 95% CI</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_18"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_18">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 126&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Any Treatment-Related Grade 3 ' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Any Treatment-Related Grade 3 and above AE</div>
+            <div class="proc-canonical">Any Treatment-Related Grade 3 and above AE <span class="page-ref">(p.126)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Number and Percentage of Participants, Number of Events</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_19"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_19">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 126&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Any Treatment-Related SAE' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Any Treatment-Related SAE</div>
+            <div class="proc-canonical">Any Treatment-Related SAE <span class="page-ref">(p.126)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Number and Percentage of Participants, Number of Events</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_20"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_20">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 126&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Any Unsolicited AE' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Any Unsolicited AE</div>
+            <div class="proc-canonical">Any Unsolicited AE <span class="page-ref">(p.126)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Number and Percentage of Participants, Number of Events</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_21"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_21">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 126&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Any Unsolicited MAAE' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Any Unsolicited MAAE</div>
+            <div class="proc-canonical">Any Unsolicited MAAE <span class="page-ref">(p.126)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Number and Percentage of Participants, Number of Events</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_22"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_22">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 126&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Any Unsolicited Treatment-Rela' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Any Unsolicited Treatment-Related AE</div>
+            <div class="proc-canonical">Any Unsolicited Treatment-Related AE <span class="page-ref">(p.126)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Number and Percentage of Participants, Number of Events</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_23"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_23">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 141, 142, 143, 144, 145&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Blood for immunologic analysis' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Blood for immunologic analysis</div>
+            <div class="proc-canonical">Blood for immunologic analysis <span class="page-ref">(p.141, 142, 143)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">C (Visit 5) M13 D394¹ 365 days after D29, BD-2 / BD-D29, BD-1 / BD-D1, C (Visit 4) M7 D209¹ 180 days after D29 / D239¹, Blinded Cohort, BD-3 / BD-D181</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            61%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_24"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_24">
+            $225</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 138, 139, 140&#10;Low confidence at: Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline) (70%), Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29 (70%), Visit Number: 3 | Type of Visit: C | Month/Weekly Timepoint: M2 | Study Visit Day: D57 (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Blood for immunologic analysis' not in vocabulary — verify mapping&#10;Conditional: Sample must be collected prior to dosing on days of injection (Day 1 and Day 29).">
+          <td class="proc-name">
+            <div class="proc-primary">Blood for immunologic analysis5</div>
+            <div class="proc-canonical">Blood for immunologic analysis5 <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">OL-3 C - OL-D57, Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), Visit 0 (C) - PDV1 and OL-D1, Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, Visit Number: 3 | Type of Visit: C | Month/Weekly Timepoint: M2 | Study Visit Day: D57</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_25"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_25">
+            $225</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Sample must be collected prior to dosing on days o</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 152&#10;Low confidence at: Visit Number: OL-1 | Type: C | PDV¹ and OL-D1¹ (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Blood for immunologic analysis' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Blood for immunologic analysis⁴</div>
+            <div class="proc-canonical">Blood for immunologic analysis⁴ <span class="page-ref">(p.152)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Visit Number: 0 | Type: C | PDV¹ and OL-D1¹, Visit Number: OL-1 | Type: C | PDV¹ and OL-D1¹, Visit Number: OL-2 | Type: C | OL-D29</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            84%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_26"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_26">
+            $225</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 138, 139, 140&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Confirm participant meets incl' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Confirm participant meets inclusion and exclusion criteria</div>
+            <div class="proc-canonical">Confirm participant meets inclusion and exclusion criteria <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Visit Number: OL-1 | Type: C | PDV¹ and OL-D1¹, Visit Number: 0 | Type: C | PDV¹ and OL-D1¹, Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), Visit 0 (C) - PDV1 and OL-D1, Visit Number: 0 | Type of Visit: C | Month/Weekly Timepoint: - | Study Visit Day: D0 (Screening), BD-1 / BD-D1</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_27"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_27">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 148&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Confirm participant's request ' not in vocabulary — verify mapping&#10;Conditional: At the point when the mRNA-1273 vaccine is no longer available for study use, any participant who schedules a PDV after this timepoint will be unblinded (with no option to stay blinded), but will not be offered mRNA-1273 study vaccine.">
+          <td class="proc-name">
+            <div class="proc-primary">Confirm participant's request to be unblinded or not to be unblinded1</div>
+            <div class="proc-canonical">Confirm participant's request to be unblinded or not to be unblinded1 <span class="page-ref">(p.148)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Blinded Cohort</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_28"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_28">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: At the point when the mRNA-1273 vaccine is no long</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 148&#10;Low confidence at: Blinded Cohort (62%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Continue with original schedul' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Continue with original schedules of events, as applicable (Table 16, Table 17, Table 18, and Table 19)</div>
+            <div class="proc-canonical">Continue with original schedules of events, as applicable (Table 16, Table 17, Table 18, and Table 19) <span class="page-ref">(p.148)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">5</td>
+          <td class="visits-cell">Blinded Cohort, Previously Receiving mRNA-1273, Remaining on Placebo, Placebo Requesting mRNA-1273, mRNA-1273 who Received 1 Dose ONLY</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            88%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_29"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_29">
+            $375</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 148&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Counselling the importance of ' not in vocabulary — verify mapping&#10;Conditional: All participants are counselled about the importance of continuing other public health measures to limit the spread of disease including physical-social distancing, wearing a mask, and hand-washing.">
+          <td class="proc-name">
+            <div class="proc-primary">Counselling the importance of public health measures</div>
+            <div class="proc-canonical">Counselling the importance of public health measures <span class="page-ref">(p.148)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Blinded Cohort</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_30"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_30">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: All participants are counselled about the importan</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 175, 176, 177&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Dermatologic findings' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Dermatologic findings</div>
+            <div class="proc-canonical">Dermatologic findings <span class="page-ref">(p.175, 176, 177)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Medical Concept Descriptions/Guidance</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_31"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_31">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 126&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Discontinuation due to AE' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Discontinuation due to AE</div>
+            <div class="proc-canonical">Discontinuation due to AE <span class="page-ref">(p.126)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Number and Percentage of Participants, Number of Events</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_32"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_32">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 138, 139, 140&#10;Low confidence at: Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline) (70%), Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 7 days after D1 D8 (70%), Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 14 days after D1 D15 (70%), Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 21 days after D1 D22 (70%), Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29 (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Efficacy Assessment' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Efficacy Assessment</div>
+            <div class="proc-canonical">Efficacy Assessment <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">9</td>
+          <td class="visits-cell">Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 7 days after D1 D8, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 14 days after D1 D15, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 21 days after D1 D22, Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 7 days after D29 D36, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 14 days after D29 D43, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 21 days after D29 D50, Visit Number: 3 | Type of Visit: C | Month/Weekly Timepoint: M2 | Study Visit Day: D57</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_33"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_33">
+            $675</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 146, 147&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Follow-up safety2' not in vocabulary — verify mapping&#10;Conditional: Trained study personnel will call all participants to collect information relating to any AEs, MAAEs, AEs leading to withdrawal, SAEs, information on concomitant medications associated with those events, and any non-study vaccinations. All safety events will be followed until resolution.">
+          <td class="proc-name">
+            <div class="proc-primary">Follow-up safety2</div>
+            <div class="proc-canonical">Follow-up safety2 <span class="page-ref">(p.146, 147)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Unscheduled Visit 1 / Type of Visit C/H / Daily Timepoint D1, Unscheduled Visit 2 / Type of Visit C/H / Daily Timepoint D28</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_34"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_34">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Trained study personnel will call all participants</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 138, 139, 140&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Follow-up safety7' not in vocabulary — verify mapping&#10;Conditional: Trained study personnel will call all participants to collect information relating to any unsolicited AEs through Day 57 (including any signs and symptoms of COVID-19), MAAEs, AEs leading to withdrawal, SAEs, information on concomitant medications associated with those events, and any non-study vaccinations.">
+          <td class="proc-name">
+            <div class="proc-primary">Follow-up safety7</div>
+            <div class="proc-canonical">Follow-up safety7 <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 21 days after D29 D50, OL-1 / 7 days after OL-D1 (OL-D8), Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 21 days after D1 D22, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 7 days after D1 D8, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 14 days after D29 D43, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 7 days after D29 D36, OL-2 (SC) / 7 days after OL-D29 (OL-D36), OL-1 | SC | 7 days after OL-D1 OL-D8, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 14 days after D1 D15</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_35"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_35">
+            $450</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Trained study personnel will call all participants</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 155, 156, 157, 158&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Follow-up safety9,10' not in vocabulary — verify mapping&#10;Conditional: Trained study personnel will call all participants to collect information relating to any unsolicited AEs, MAAEs (including any signs and symptoms of COVID-19), AESIs, AEs leading to withdrawal, SAEs, information on concomitant medications associated with those events, and any non-study vaccinations.; Only for participants who chose to receive a BD.">
+          <td class="proc-name">
+            <div class="proc-primary">Follow-up safety9,10</div>
+            <div class="proc-canonical">Follow-up safety9,10 <span class="page-ref">(p.155, 156, 157)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">SC10 / 7, 14, and 21 days after BD-D1 (BD-D8, BD-D15, BD-D22)</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_36"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_36">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Trained study personnel will call all participants</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 141, 142, 143, 144, 145&#10;Low confidence at: SC M3 D85¹ (70%), SC M4 D119¹ 90 days after D29 (70%), SC M5 D149¹ (70%), SC M6 D179¹ (70%), C (Visit 4) M7 D209¹ 180 days after D29 / D239¹ (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Follow-up safety⁵' not in vocabulary — verify mapping&#10;Conditional: Trained study personnel will call all participants to collect information relating to any sign/symptoms of COVID-19, MAAEs, AESIs, AEs leading to withdrawal, SAEs, information on concomitant medications associated with those events, and any non-study vaccinations.">
+          <td class="proc-name">
+            <div class="proc-primary">Follow-up safety⁵</div>
+            <div class="proc-canonical">Follow-up safety⁵ <span class="page-ref">(p.141, 142, 143)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">11</td>
+          <td class="visits-cell">SC M3 D85¹, SC M4 D119¹ 90 days after D29, SC M5 D149¹, SC M6 D179¹, C (Visit 4) M7 D209¹ 180 days after D29 / D239¹, SC M8 D269¹, SC M9 D299¹, SC M10 D329¹, SC M11 D359¹, SC M12, C (Visit 5) M13 D394¹ 365 days after D29</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_37"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_37">
+            $825</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Trained study personnel will call all participants</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Lead to the Elimination of a' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Lead to the Elimination of a</div>
+            <div class="proc-canonical">Lead to the Elimination of a <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Description of Change</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_38"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_38">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 148&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Modified Supplemental Schedule' not in vocabulary — verify mapping&#10;Conditional: The Supplemental and the Modified Supplemental Schedule of Events are intended to occur in addition to the original schedules of events, as applicable (Table 16, Table 17, Table 18, and Table 19) and therefore there is a possibility for study visits to overlap. If visits overlap according to respective visit windows, a single visit may be done with the combined study procedures completed once.">
+          <td class="proc-name">
+            <div class="proc-primary">Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)3</div>
+            <div class="proc-canonical">Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)3 <span class="page-ref">(p.148)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">mRNA-1273 who Received 1 Dose ONLY</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_39"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_39">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: The Supplemental and the Modified Supplemental Sch</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 155, 156, 157, 158&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Recording of unsolicited AEs10' not in vocabulary — verify mapping&#10;Conditional: Only for participants who chose to receive a BD.">
+          <td class="proc-name">
+            <div class="proc-primary">Recording of unsolicited AEs10</div>
+            <div class="proc-canonical">Recording of unsolicited AEs10 <span class="page-ref">(p.155, 156, 157)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">BD-1 / BD-D1, BD-1a / BD-D4, SC10 / 7, 14, and 21 days after BD-D1 (BD-D8, BD-D15, BD-D22), BD-2 / BD-D29</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_40"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_40">
+            $300</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Only for participants who chose to receive a BD.</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 146, 147&#10;Low confidence at: Unscheduled Visit 1 / Type of Visit C/H / Daily Timepoint D1 (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Respiratory illness sample5' not in vocabulary — verify mapping&#10;Conditional: Participants with symptoms of COVID-19 will be asked to return within 72 hours or as soon as possible to the study site or medically qualified staff from the site will conduct a home visit as soon as possible to collect an NP swab sample (for RT-PCR) and collect a blood sample for immunologic assessment of SARS-CoV-2 infection and evaluate for COVID-19. An additional NP swab sample will also be tested for the presence of other respiratory pathogens. In addition, the study site may collect an additional (local/non-central) respiratory sample for SARS-CoV-2 testing to be able to render appropriate medical care for the study participant as determined by local standards of care. Additionally, clinical information will be carefully collected to evaluate the severity of the clinical case. If the RT-PCR test from the NP swab sample from the Illness Visit is negative for SARS-CoV-2, the participant will exit the Convalescent Period and resume the study schedule (Table 16, Table 17, and Table 18).">
+          <td class="proc-name">
+            <div class="proc-primary">Respiratory illness sample5</div>
+            <div class="proc-canonical">Respiratory illness sample5 <span class="page-ref">(p.146, 147)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Unscheduled Visit 1 / Type of Visit C/H / Daily Timepoint D1</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            85%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_41"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_41">
+            $75</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Participants with symptoms of COVID-19 will be ask</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 175, 176, 177&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Rhabdomyolysis' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Rhabdomyolysis</div>
+            <div class="proc-canonical">Rhabdomyolysis <span class="page-ref">(p.175, 176, 177)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Medical Concept Descriptions/Guidance</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_42"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_42">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 26, 27, 29, 30&#10;Low confidence at: Statistical Analysis Methods (70%), Col 2 (70%), Col 3 (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'SARS' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">SARS</div>
+            <div class="proc-canonical">SARS <span class="page-ref">(p.26, 27, 29)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Visit 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_43"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_43">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 146, 147&#10;Low confidence at: D2-D6 (50%), D7 (50%), D8-D13 (50%), D14 (50%), D21 (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Saliva sample' not in vocabulary — verify mapping&#10;Conditional: Participants will collect their own saliva sample using the saliva collection tubes provided on 3, 5, 7, 9, 14, and 21 days after the initial Illness Visit, and return them to the study site according to Sponsor instructions. Participants who are pending a central laboratory RT-PCR may exit from the Convalescent Period based on a negative RT-PCR result from a CLIA-certified or CLIA-certified waiver local laboratory at the investigator's discretion.; At this visit, a saliva sample will be collected.">
+          <td class="proc-name">
+            <div class="proc-primary">Saliva sample</div>
+            <div class="proc-canonical">Saliva sample <span class="page-ref">(p.146, 147)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Unscheduled Visit 2 / Type of Visit C/H / Daily Timepoint D28</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            60%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_44"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_44">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Participants will collect their own saliva sample </span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Section 1.1 (Synopsis), Sectio' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Section 1.1 (Synopsis), Section 2.3.2</div>
+            <div class="proc-canonical">Section 1.1 (Synopsis), Section 2.3.2 <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Description of Change</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_45"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_45">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Section 11.1 (Appendix 1: Sche' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Section 11.1 (Appendix 1: Schedules</div>
+            <div class="proc-canonical">Section 11.1 (Appendix 1: Schedules <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Brief Rationale</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_46"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_46">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Section 11.5 (Appendix 5: Adve' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Section 11.5 (Appendix 5: Adverse</div>
+            <div class="proc-canonical">Section 11.5 (Appendix 5: Adverse <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Description of Change, Brief Rationale</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_47"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_47">
+            $150</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Section 5.1.2 (Exclusion Crite' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Section 5.1.2 (Exclusion Criteria)</div>
+            <div class="proc-canonical">Section 5.1.2 (Exclusion Criteria) <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Description of Change</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_48"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_48">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Section 8.1.3 (Convalescent Pe' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Section 8.1.3 (Convalescent Period</div>
+            <div class="proc-canonical">Section 8.1.3 (Convalescent Period <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Description of Change</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_49"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_49">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 148&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Supplemental Schedule of Event' not in vocabulary — verify mapping&#10;Conditional: Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)">
+          <td class="proc-name">
+            <div class="proc-primary">Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)c</div>
+            <div class="proc-canonical">Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)c <span class="page-ref">(p.148)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Placebo Requesting mRNA-1273</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_50"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_50">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Supplemental Schedule of Events: Open-Label Days 1</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 138, 139, 140&#10;Low confidence at: Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 7 days after D1 D8 (50%), Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 14 days after D1 D15 (50%), Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 21 days after D1 D22 (50%), Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 7 days after D29 D36 (50%), Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 14 days after D29 D43 (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Surveillance for COVID-19/Unsc' not in vocabulary — verify mapping&#10;Conditional: Participants with symptoms of COVID-19 will be asked to return within 72 hours or as soon as possible to the study site for an unscheduled visit, to include an NP swab sample (for RT-PCR testing) and other clinical evaluations. If a study site visit is not possible, a home visit may be arranged to collect the NP swab sample and conduct clinical evaluations. If a home visit is not possible, the participant will be asked to submit a saliva sample to the study site by a Sponsor-approved method. At this visit, an NP swab and blood sample will be collected to evaluate for the presence of SARS-CoV-2 infection. An additional NP swab sample will be collected to test for the presence of other respiratory pathogens. Additionally, clinical information will be carefully collected to evaluate the severity of the clinical case. It is important to note that some of the symptoms of COVID-19 overlap with solicited systemic ARs that are expected after vaccination with mRNA-1273 (eg, myalgia, headache, fever, and chills). During the first 7 days after vaccination, when these solicited ARs are common, investigators should use their clinical judgement to decide if an NP swab should be collected. The collection of an NP swab prior to the Day 1 and Day 29 vaccination can help ensure that cases of COVID-19 are not overlooked. Any study participant reporting respiratory symptoms during the 7-day period after vaccination should be evaluated for COVID-19.">
+          <td class="proc-name">
+            <div class="proc-primary">Surveillance for COVID-19/Unscheduled Visit4</div>
+            <div class="proc-canonical">Surveillance for COVID-19/Unscheduled Visit4 <span class="page-ref">(p.138, 139, 140)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">9</td>
+          <td class="visits-cell">OL-2 SC - 7 days after OL-D29 (OL-D36), Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 21 days after D29 D50, OL-3 C - OL-D57, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 21 days after D1 D22, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 7 days after D1 D8, Visit Number: 1 | Type of Visit: C | Month/Weekly Timepoint: M0 | Study Visit Day: D1 (Baseline), Visit 0 (C) - PDV1 and OL-D1, OL-2 SC - 7 days after OL-D1 (OL-D8), Visit Number: 2 | Type of Visit: C | Month/Weekly Timepoint: M1 | Study Visit Day: D29, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 14 days after D29 D43, OL-2 C - OL-D29, Visit Number: 2 | Type of Visit: SC | Month/Weekly Timepoint: M1 | Study Visit Day: 7 days after D29 D36, Visit Number: 3 | Type of Visit: C | Month/Weekly Timepoint: M2 | Study Visit Day: D57, Visit Number: 1 | Type of Visit: SC | Month/Weekly Timepoint: M0 | Study Visit Day: 14 days after D1 D15</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            64%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_51"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_51">
+            $675</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Participants with symptoms of COVID-19 will be ask</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 153, 154&#10;Low confidence at: Visit 0 | C | PDV1 and OL-D11 (81%), OL-1 | SC | 7 days after OL-D1 OL-D8 (57%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Surveillance for COVID-19/Unsc' not in vocabulary — verify mapping&#10;Conditional: Participants with symptoms of COVID-19 will be asked to return within 72 hours or as soon as possible to the study site for an unscheduled visit, to include an NP swab sample (for RT-PCR testing) and other clinical evaluations. If a study site visit is not possible, a home visit may be arranged to collect the NP sample and conduct clinical evaluations. If a home visit is not possible, the participant will be asked to submit a saliva sample to the study site by a Sponsor-approved method. At this visit, an NP swab and blood sample will be collected to evaluate for the presence of SARS-CoV-2 infection. An additional NP swab sample will be collected to test for the presence of other respiratory pathogens. In addition, the study site may collect an additional (local/non-central) respiratory sample for SARS-CoV-2 testing to be able to render appropriate medical care for the study participant as determined by local standards of care. Additionally, clinical information will be carefully collected to evaluate the severity of the clinical case. It is important to note that some of the symptoms of COVID-19 overlap with solicited systemic ARs that are expected after vaccination with mRNA-1273 (eg, myalgia, headache, fever, and chills). During the first 7 days after vaccination, when these solicited ARs are common, investigators should use their clinical judgement to decide if an NP swab should be collected. The collection of an NP swab prior to the PDV can help ensure that cases of COVID-19 are not overlooked. Any study participant reporting respiratory symptoms during the 7-day period after vaccination should be evaluated for COVID-19.">
+          <td class="proc-name">
+            <div class="proc-primary">Surveillance for COVID-19/Unscheduled Visit6</div>
+            <div class="proc-canonical">Surveillance for COVID-19/Unscheduled Visit6 <span class="page-ref">(p.153, 154)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">Visit 0 | C | PDV1 and OL-D11, OL-1 | C | PDV1 and OL-D11, OL-1 | SC | 7 days after OL-D1 OL-D8, OL-2 | C | OL-D29</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            82%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_52"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_52">
+            $300</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Participants with symptoms of COVID-19 will be ask</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 155, 156, 157, 158&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Surveillance for COVID-19/Unsc' not in vocabulary — verify mapping&#10;Conditional: Participants with symptoms of COVID-19 will be asked to return within 72 hours or as soon as possible to the study site for an unscheduled visit, to collect an NP swab sample (for RT-PCR testing) and other clinical evaluations. If a study site visit is not possible, a home visit may be arranged to collect the NP sample and conduct clinical evaluations. If a home visit is not possible, the participant will be asked to submit a saliva sample to the study site by a Sponsor-approved method. At this visit, an NP swab and blood sample will be collected to evaluate for the presence of SARS-CoV-2 infection. An additional NP swab sample will be collected to test for the presence of other respiratory pathogens. In addition, the study site may collect an additional respiratory sample for SARS-CoV-2 testing to be able to render appropriate medical care for the study participant as determined by local">
+          <td class="proc-name">
+            <div class="proc-primary">Surveillance for COVID-19/Unscheduled Visit7</div>
+            <div class="proc-canonical">Surveillance for COVID-19/Unscheduled Visit7 <span class="page-ref">(p.155, 156, 157)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">BD-1 / BD-D1, SC10 / 7, 14, and 21 days after BD-D1 (BD-D8, BD-D15, BD-D22), BD-2 / BD-D29, BD-3 / BD-D181</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_53"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_53">
+            $300</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Participants with symptoms of COVID-19 will be ask</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 141, 142, 143, 144, 145&#10;Low confidence at: SC M3 D85¹ (50%), SC M4 D119¹ 90 days after D29 (50%), SC M5 D149¹ (50%), SC M6 D179¹ (50%), C (Visit 4) M7 D209¹ 180 days after D29 / D239¹ (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Surveillance for COVID-19/Unsc' not in vocabulary — verify mapping&#10;Conditional: Participants with symptoms of COVID-19 will be asked to return within 72 hours or as soon as possible to the study site for an unscheduled visit, to include an NP swab sample (for RT-PCR testing) and other clinical evaluations. If a study site visit is not possible, a home visit may be arranged to collect the NP swab sample and conduct clinical evaluations. If a home visit is not possible, the participant will be asked to submit a saliva sample to the study site by a Sponsor-approved method. At this visit, an NP swab and blood sample will be collected to evaluate for the presence of SARS-CoV-2 infection. An additional NP swab sample will be collected to test for the presence of other respiratory pathogens. In addition, the study site may collect an additional (local/non-central) respiratory sample for SARS-CoV-2 testing to be able to render appropriate medical care for the study participant as determined by local standards of care. Additionally, clinical information will be carefully collected to evaluate the severity of the clinical case.">
+          <td class="proc-name">
+            <div class="proc-primary">Surveillance for COVID-19/Unscheduled Visit³</div>
+            <div class="proc-canonical">Surveillance for COVID-19/Unscheduled Visit³ <span class="page-ref">(p.141, 142, 143)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">11</td>
+          <td class="visits-cell">SC M3 D85¹, SC M4 D119¹ 90 days after D29, SC M5 D149¹, SC M6 D179¹, C (Visit 4) M7 D209¹ 180 days after D29 / D239¹, SC M8 D269¹, SC M9 D299¹, SC M10 D329¹, SC M11 D359¹, SC M12, C (Visit 5) M13 D394¹ 365 days after D29</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_54"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_54">
+            $825</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Participants with symptoms of COVID-19 will be ask</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 146, 147&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Symptom-directed physical exam' not in vocabulary — verify mapping&#10;Conditional: Physical examination: a symptom-directed physical examination, including vital signs will be performed at the initial visit to confirm the diagnosis (denoted as D1 in this table) and at the Convalescent Visit (28 days after diagnosis [D28 in this table]).">
+          <td class="proc-name">
+            <div class="proc-primary">Symptom-directed physical examination1</div>
+            <div class="proc-canonical">Symptom-directed physical examination1 <span class="page-ref">(p.146, 147)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Unscheduled Visit 1 / Type of Visit C/H / Daily Timepoint D1, Unscheduled Visit 2 / Type of Visit C/H / Daily Timepoint D28</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_55"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_55">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Physical examination: a symptom-directed physical </span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 175, 176, 177&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Thrombocytopenia' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Thrombocytopenia</div>
+            <div class="proc-canonical">Thrombocytopenia <span class="page-ref">(p.175, 176, 177)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Medical Concept Descriptions/Guidance</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_56"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_56">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 26, 27, 29, 30&#10;Low confidence at: Col 3 (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'asymptomatic' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">asymptomatic</div>
+            <div class="proc-canonical">asymptomatic <span class="page-ref">(p.26, 27, 29)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Visit 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_57"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_57">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'of Events, Table 18)' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">of Events, Table 18)</div>
+            <div class="proc-canonical">of Events, Table 18) <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Brief Rationale</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_58"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_58">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'of Events, Table 23)' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">of Events, Table 23)</div>
+            <div class="proc-canonical">of Events, Table 23) <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Brief Rationale</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_59"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_59">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 26, 27, 29, 30&#10;Low confidence at: Col 3 (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'prevent COVID-19' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">prevent COVID-19</div>
+            <div class="proc-canonical">prevent COVID-19 <span class="page-ref">(p.26, 27, 29)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Visit 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_60"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_60">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 26, 27, 29, 30&#10;Low confidence at: Col 3 (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'serologically' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">serologically</div>
+            <div class="proc-canonical">serologically <span class="page-ref">(p.26, 27, 29)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Visit 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_61"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_61">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 4, 5, 6, 7, 8&#10;Low confidence at: Description of Change (70%), Brief Rationale (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'with the Illness Visit), Secti' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">with the Illness Visit), Section 11.1</div>
+            <div class="proc-canonical">with the Illness Visit), Section 11.1 <span class="page-ref">(p.4, 5, 6)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Brief Rationale</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_62"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_62">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+</tbody>
+<tfoot>
+<tr class="grand-total">
+  <td colspan="8" style="text-align:right;">ESTIMATED PER-PATIENT TOTAL</td>
+  <td></td>
+  <td id="grand-total-cell" style="text-align:right;">$12,250</td>
+  <td></td>
+</tr>
+</tfoot>
+</table>
+
+<div class="footer">
+  <h3 style="font-size:13px;color:#0f172a;margin-bottom:8px;">How to Complete This Worksheet</h3>
+  <ol style="font-size:12px;color:#475569;line-height:1.8;margin-left:20px;">
+    <li><strong>Review the "Action Required" column</strong> — green rows are ready, amber/red rows need your attention.</li>
+    <li><strong>Enter your site's unit costs</strong> in the cost column. Current values are estimates (LOW=$75, MEDIUM=$350, HIGH=$1,200, VERY_HIGH=$3,500). Line totals and the grand total will recalculate automatically.</li>
+    <li><strong>Add CPT codes</strong> where marked "Enter CPT" — check your institution's fee schedule.</li>
+    <li><strong>Verify amber/red rows</strong> against the source protocol (page numbers shown in parentheses after each procedure name).</li>
+    <li><strong>Check conditional procedures</strong> — the "Action Required" column shows footnote conditions that may reduce the actual frequency.</li>
+  </ol>
+  <div style="margin-top:12px;padding:10px 16px;background:#eff6ff;border-radius:6px;font-size:11px;color:#1e40af;">
+    <strong>Confidence Legend:</strong>
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#059669;margin:0 4px;vertical-align:middle;"></span> Green (≥90%) = reliable, no action needed &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d97706;margin:0 4px;vertical-align:middle;"></span> Amber (75-90%) = spot-check recommended &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#dc2626;margin:0 4px;vertical-align:middle;"></span> Red (<75%) = verify against source PDF
+  </div>
+</div>
+
+</div>
+
+<script>
+const LINE_COUNT = 63;
+const OCCURRENCES = [4,1,11,9,2,2,1,2,3,2,2,1,1,1,1,1,1,1,2,1,1,1,1,1,3,3,3,2,1,5,1,1,1,9,2,6,1,11,1,1,4,1,1,1,1,1,1,2,1,1,1,9,4,4,11,2,1,1,1,1,1,1,1];
+
+function recalculate() {
+  let grand = 0;
+  for (let i = 0; i < LINE_COUNT; i++) {
+    const input = document.getElementById('cost_' + i);
+    const cost = parseFloat(input.value) || 0;
+    const total = cost * OCCURRENCES[i];
+    document.getElementById('total_' + i).textContent = '$' + total.toLocaleString('en-US', {minimumFractionDigits: 0});
+    grand += total;
+  }
+  document.getElementById('grand-total-cell').textContent = '$' + grand.toLocaleString('en-US', {minimumFractionDigits: 0});
+  document.getElementById('grand-total-display').textContent = '$' + grand.toLocaleString('en-US', {minimumFractionDigits: 0});
+}
+</script>
+</body>
+</html>

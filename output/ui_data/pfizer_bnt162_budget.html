@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Site Budget Worksheet — Prot_0001 1.pdf</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1e293b; background: #f8fafc; }
+.container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.subtitle { font-size: 12px; color: #64748b; margin-bottom: 16px; }
+.summary { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.summary-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 20px; min-width: 160px; }
+.summary-value { font-size: 24px; font-weight: 700; }
+.summary-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+.budget-table { width: 100%; border-collapse: collapse; font-size: 11px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+.budget-table th { background: #0f172a; color: white; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; position: sticky; top: 0; z-index: 10; }
+.budget-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+.budget-table tr:hover { background: #f8fafc; }
+.proc-name { min-width: 260px; }
+.proc-primary { font-weight: 600; font-size: 12px; color: #0f172a; line-height: 1.4; }
+.proc-canonical { font-size: 10px; color: #64748b; margin-top: 2px; }
+.mono { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 11px; color: #475569; }
+.center { text-align: center; }
+.freq { font-size: 14px; font-weight: 700; color: #0f172a; }
+.visits-cell { font-size: 10px; color: #64748b; max-width: 280px; line-height: 1.5; }
+.guidance { font-size: 10px; max-width: 260px; line-height: 1.6; }
+.cost-cell { white-space: nowrap; }
+.currency { color: #94a3b8; font-size: 11px; margin-right: 2px; }
+.needs-input { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.conf-green { }
+.conf-amber { background: #fffbeb !important; }
+.conf-red { background: #fef2f2 !important; }
+.conf-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+.conf-dot-green { background: #059669; }
+.conf-dot-amber { background: #d97706; }
+.conf-dot-red { background: #dc2626; }
+.hint-ok { color: #059669; font-weight: 500; }
+.hint-red { color: #dc2626; font-size: 10px; }
+.hint-amber { color: #d97706; font-size: 10px; }
+.hint-info { color: #0284c7; font-size: 10px; }
+.action-needed { color: #dc2626; font-weight: 600; font-size: 10px; }
+.page-ref { font-size: 9px; color: #94a3b8; font-style: italic; }
+.cost-input { width: 80px; padding: 4px 6px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 11px; text-align: right; }
+.cost-input:focus { outline: 2px solid #0284c7; border-color: transparent; }
+.line-total { font-weight: 600; text-align: right; white-space: nowrap; }
+.tier-low { background: #f1f5f9; color: #64748b; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-med { background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-high { background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-vhigh { background: #fecaca; color: #991b1b; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.grand-total { background: #0f172a; color: white; font-size: 14px; }
+.grand-total td { padding: 12px 10px; font-weight: 700; }
+.footer { margin-top: 16px; font-size: 11px; color: #94a3b8; }
+.footer p { margin-bottom: 4px; }
+@media print {
+  .cost-input { border: none; background: transparent; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Site Budget Worksheet</h1>
+<p class="subtitle">Prot_0001 1.pdf | Generated 2026-03-22 15:28 UTC</p>
+
+<div class="summary">
+  <div class="summary-card">
+    <div class="summary-value" style="color:#0284c7;">42</div>
+    <div class="summary-label">Budget Line Items</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#0284c7;">77</div>
+    <div class="summary-label">Total Procedure Visits</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#059669;" id="grand-total-display">$7,700</div>
+    <div class="summary-label">Estimated Per-Patient Cost</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#64748b;">3/42</div>
+    <div class="summary-label">Procedures with CPT Codes</div>
+  </div>
+</div>
+
+<table class="budget-table">
+<thead>
+<tr>
+  <th style="min-width:260px">Procedure / Canonical Name</th>
+  <th>CPT</th>
+  <th>Category</th>
+  <th>Tier</th>
+  <th>Freq</th>
+  <th style="min-width:200px">Visits Required</th>
+  <th>Conf.</th>
+  <th style="min-width:100px">Unit Cost ($)</th>
+  <th>Line Total</th>
+  <th style="min-width:220px">Action Required</th>
+</tr>
+</thead>
+<tbody>
+
+        <tr class="conf-red" title="Source: Protocol pages 39, 41, 42, 43, 44, 45, 46, 48, 49, 50&#10;Low confidence at: Visit 2 / Next-Day Follow-up Visit (Vax 1) (70%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">According to eligibility, ascertain willingness to receive BNT162b2</div>
+            <div class="proc-canonical">Eligibility Assessment <span class="page-ref">(p.39, 41, 42)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">101 / Vaccination 3 / From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, Visit 2 / Next-Day Follow-up Visit (Vax 1), 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 401 / Vaccination 1 / Day 1c</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_0"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_0">
+            $150</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 240, 241, 242, 243&#10;Low confidence at: Term (70%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">BMI</div>
+            <div class="proc-canonical">Body Mass Index <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_1"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_1">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 39, 41, 42, 43, 44, 45, 46, 48, 49, 50&#10;Low confidence at: Visit 8 / 6-Month Follow-up Visit (70%), Visit 8a / Vax 3 (70%), Unplanned / Potential COVID-19 Illness Visit (70%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Collect AEs and SAEs as appropriate</div>
+            <div class="proc-canonical">Adverse Event Assessment <span class="page-ref">(p.39, 41, 42)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">10</td>
+          <td class="visits-cell">103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, Visit 7 / 1-Month Follow-up Visit, 104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, 302 / 1-Week Follow-up Visit (After Vax 3) / 6 to 8 Days After Visit 301, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 101 / Vaccination 3 / From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, Screening, Visit 6 / 2-Week Follow-up Visit (Vax 2), 405 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 402, 301 / Vax 3a / 150 to 210 Days After Visit 2, Visit 1 / Vax 1, 305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303, 406 / 18-Month Follow-up Visita / 532 to 560 Days After Visit 402, Unplanned / Potential COVID-19 Illness Visit, 304 / 1-Week Follow-up Visit (After Vax 4)b / 6 to 8 Days After Visit 303, Visit 4 / Vax 2, Unplanned / Potential COVID-19 Illness Visitᵇ / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 401 / Vaccination 1 / Day 1c, Visit 5 / 1-Week Follow-up Visit (Vax 2), 306 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 301, 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 404 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 402, Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset, Visit 3 / 1-Week Follow-up Visit (Vax 1), Visit 8a / Vax 3, 307 / 18-Month Follow-up Visitc / 532 to 560 Days After Visit 301, Unplanned / Potential COVID-19 Illness Visitb / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 403 / 1-Week Follow-up Visit / 6 to 8 Days After Visit 402, Visit 2 / Next-Day Follow-up Visit (Vax 1)</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            88%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_2"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_2">
+            $750</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 51, 52&#10;Low confidence at: 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102 (50%), 104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102 (50%), 105 / 18-Month Telephone Contactᵃ / 532 to 560 Days After Visit 102 (50%), Unplanned / Potential COVID-19 Illness Visitᵇ / Optimally Within 3 Days After Potential COVID-19 Illness Onset (50%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Collect prohibited medication use</div>
+            <div class="proc-canonical">Concomitant Medications Review <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">8</td>
+          <td class="visits-cell">103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, 302 / 1-Week Follow-up Visit (After Vax 3) / 6 to 8 Days After Visit 301, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 101 / Vaccination 3 / From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, 405 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 402, 301 / Vax 3a / 150 to 210 Days After Visit 2, 305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303, 304 / 1-Week Follow-up Visit (After Vax 4)b / 6 to 8 Days After Visit 303, Unplanned / Potential COVID-19 Illness Visitᵇ / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 401 / Vaccination 1 / Day 1c, 404 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 402, 306 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 301, 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 307 / 18-Month Follow-up Visitc / 532 to 560 Days After Visit 301, 105 / 18-Month Telephone Contactᵃ / 532 to 560 Days After Visit 102, 403 / 1-Week Follow-up Visit / 6 to 8 Days After Visit 402</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            65%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_3"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_3">
+            $600</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Contact the participant by telephone</div>
+            <div class="proc-canonical">Telephone Contact <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">402 / Vaccination 2 / 19 to 23 Days After Visit 401, 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 105 / 18-Month Telephone Contactᵃ / 532 to 560 Days After Visit 102, 104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, 403 / 1-Week Follow-up Visit / 6 to 8 Days After Visit 402</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            88%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_4"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_4">
+            $225</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Obtain informed consent</div>
+            <div class="proc-canonical">Informed Consent <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">101 / Vaccination 3 / From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, 301 / Vax 3a / 150 to 210 Days After Visit 2, 401 / Vaccination 1 / Day 1c</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_5"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_5">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 51, 52&#10;Low confidence at: 101 / Vaccination 3 / From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ (70%), 102 / Vaccination 4 / 19 to 23 Days After Visit 101 (70%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Obtain vaccine vial allocation via IRT</div>
+            <div class="proc-canonical">Randomization <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">101 / Vaccination 3 / From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, 401 / Vaccination 1 / Day 1c, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 301 / Vax 3a / 150 to 210 Days After Visit 2, 102 / Vaccination 4 / 19 to 23 Days After Visit 101</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_6"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_6">
+            $150</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 51, 52&#10;Low confidence at: 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102 (50%), 104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102 (50%), 105 / 18-Month Telephone Contactᵃ / 532 to 560 Days After Visit 102 (29%)">
+          <td class="proc-name">
+            <div class="proc-primary">For participants who are HIV-positive, record latest CD4 count and HIV viral load</div>
+            <div class="proc-canonical">CD4 Count <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="mono">86359</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">101 / Vaccination 3 / From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, 401 / Vaccination 1 / Day 1c, 103 / 1-Month Telephone Contact / 28 to 35 Days After Visit 102, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 105 / 18-Month Telephone Contactᵃ / 532 to 560 Days After Visit 102, 404 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 402, 104 / 6-Month Telephone Contact / 175 to 189 Days After Visit 102, 403 / 1-Week Follow-up Visit / 6 to 8 Days After Visit 402</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            61%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_7"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_7">
+            $300</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 53, 54, 55&#10;Conditional: Only for those participants who will receive Dose 4.">
+          <td class="proc-name">
+            <div class="proc-primary">Obtain nasal (midturbinate) swab(s)</div>
+            <div class="proc-canonical">Nasal Swab <span class="page-ref">(p.53, 54, 55)</span></div>
+          </td>
+          <td class="center"><span class="mono">87635</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">402 / Vaccination 2 / 19 to 23 Days After Visit 401, 401 / Vaccination 1 / Day 1c, 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 405 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 402, Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset, 301 / Vax 3a / 150 to 210 Days After Visit 2</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_8"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_8">
+            $225</td>
+          <td class="guidance"><span class="hint-info">Conditional: Only for those participants who will receive Dose </span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 53, 54, 55&#10;Low confidence at: 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301 (50%)&#10;Conditional: Only for those participants who will receive Dose 4.">
+          <td class="proc-name">
+            <div class="proc-primary">Perform urine pregnancy test (if appropriate)</div>
+            <div class="proc-canonical">Pregnancy Test <span class="page-ref">(p.53, 54, 55)</span></div>
+          </td>
+          <td class="center"><span class="mono">81025</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 301 / Vax 3a / 150 to 210 Days After Visit 2, 401 / Vaccination 1 / Day 1c</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            89%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_9"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_9">
+            $150</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-info">Conditional: Only for those participants who will receive Dose </span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 28, 29, 30, 31, 32, 33, 34&#10;Low confidence at: Estimands (50%), Endpoints (50%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Primary Immunogenicity
+BNT162b2-experienced participants</div>
+            <div class="proc-canonical">Immunogenicity Sample <span class="page-ref">(p.28, 29, 30)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>PK</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Endpoints, Estimands, N=12</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_10"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_10">
+            $150</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 39, 41, 42, 43, 44, 45, 46, 48, 49, 50&#10;Low confidence at: Visit 5 / 1-Week Follow-up Visit (Vax 2) (50%)&#10;No CPT code mapped — needs manual assignment&#10;Conditional: If protocol amendment 20 is approved and participants are informed of early study completion, e-diary device return should be arranged by the site.">
+          <td class="proc-name">
+            <div class="proc-primary">Collect e-diary or assist the participant to delete application</div>
+            <div class="proc-canonical">e-Diary <span class="page-ref">(p.39, 41, 42)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>PRO</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">307 / 18-Month Follow-up Visitc / 532 to 560 Days After Visit 301, Screening, 401 / Vaccination 1 / Day 1c, Visit 5 / 1-Week Follow-up Visit (Vax 2), 404 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 402, 105 / 18-Month Telephone Contactᵃ / 532 to 560 Days After Visit 102, 406 / 18-Month Follow-up Visita / 532 to 560 Days After Visit 402</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_11"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_11">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: If protocol amendment 20 is approved and participa</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 39, 41, 42, 43, 44, 45, 46, 48, 49, 50&#10;Low confidence at: Screening (70%), Visit 1 / Vax 1 (70%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Assess acute reactions for at least 30 minutes after study intervention administration</div>
+            <div class="proc-canonical">Post-Dose Observation <span class="page-ref">(p.39, 41, 42)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Safety</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Screening, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 401 / Vaccination 1 / Day 1c, 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 301 / Vax 3a / 150 to 210 Days After Visit 2, Visit 1 / Vax 1</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_12"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_12">
+            $150</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 39, 41, 42, 43, 44, 45, 46, 48, 49, 50&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Review ongoing reactogenicity e-diary symptoms and obtain stop dates</div>
+            <div class="proc-canonical">Reactogenicity Assessment <span class="page-ref">(p.39, 41, 42)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Safety</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Visit 4 / Vax 2, Visit 6 / 2-Week Follow-up Visit (Vax 2), Screening, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 401 / Vaccination 1 / Day 1c, 404 / 1-Month Follow-up Visit / 28 to 35 Days After Visit 402, 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, Visit 1 / Vax 1, 305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303, Visit 2 / Next-Day Follow-up Visit (Vax 1)</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            88%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_13"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_13">
+            $150</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 39, 41, 42, 43, 44, 45, 46, 48, 49, 50&#10;Low confidence at: Screening (70%), Visit 1 / Vax 1 (70%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Administer study intervention</div>
+            <div class="proc-canonical">Study Drug Administration <span class="page-ref">(p.39, 41, 42)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Treatment</td>
+          <td class="center"><span class="tier-med">$$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Screening, 402 / Vaccination 2 / 19 to 23 Days After Visit 401, 401 / Vaccination 1 / Day 1c, 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 301 / Vax 3a / 150 to 210 Days After Visit 2, Visit 1 / Vax 1</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_14"
+              value="350"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_14">
+            $700</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Confirm participant meets local/national recommending criteria or is at least 175 days after Vaccination 2 (Visit 4/Visit 2)</div>
+            <div class="proc-canonical">Vaccination <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Treatment</td>
+          <td class="center"><span class="tier-med">$$</span></td>
+          <td class="center freq">5</td>
+          <td class="visits-cell">101 / Vaccination 3 / From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, 401 / Vaccination 1 / Day 1c, 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301, 301 / Vax 3a / 150 to 210 Days After Visit 2, 305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303, 302 / 1-Week Follow-up Visit (After Vax 3) / 6 to 8 Days After Visit 301, 102 / Vaccination 4 / 19 to 23 Days After Visit 101, 304 / 1-Week Follow-up Visit (After Vax 4)b / 6 to 8 Days After Visit 303</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_15"
+              value="350"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_15">
+            $1,750</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211&#10;Low confidence at: N=12 (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'AE/SAE Statistical Methods' not in vocabulary — verify mapping&#10;Conditional: Miettinen and Nurminen method">
+          <td class="proc-name">
+            <div class="proc-primary">AE/SAE Statistical Methods</div>
+            <div class="proc-canonical">AE/SAE Statistical Methods <span class="page-ref">(p.191, 192, 193)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">N=12</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_16"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_16">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Miettinen and Nurminen method</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 240, 241, 242, 243&#10;Low confidence at: Term (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Abs' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Abs</div>
+            <div class="proc-canonical">Abs <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_17"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_17">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 73, 74, 75, 76, 77, 78&#10;Low confidence at: Estimands (50%), Endpoints (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'BNT162b2-experienced participa' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">BNT162b2-experienced participants</div>
+            <div class="proc-canonical">BNT162b2-experienced participants <span class="page-ref">(p.73, 74, 75)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Estimands, Endpoints</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_18"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_18">
+            $150</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 240, 241, 242, 243&#10;Low confidence at: Term (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'DNA' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">DNA</div>
+            <div class="proc-canonical">DNA <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_19"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_19">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 240, 241, 242, 243&#10;Low confidence at: Term (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'E1, E2, etc' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">E1, E2, etc</div>
+            <div class="proc-canonical">E1, E2, etc <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_20"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_20">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 240, 241, 242, 243&#10;Low confidence at: Term (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'ECMO' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">ECMO</div>
+            <div class="proc-canonical">ECMO <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_21"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_21">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 240, 241, 242, 243&#10;Low confidence at: Term (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'EDP' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">EDP</div>
+            <div class="proc-canonical">EDP <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_22"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_22">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 240, 241, 242, 243&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'FiO2' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">FiO2</div>
+            <div class="proc-canonical">FiO2 <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_23"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_23">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211&#10;Low confidence at: N=12 (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'GMR calculation' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">GMR calculation</div>
+            <div class="proc-canonical">GMR calculation <span class="page-ref">(p.191, 192, 193)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">N=12</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_24"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_24">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 240, 241, 242, 243&#10;Low confidence at: Term (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'LPX' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">LPX</div>
+            <div class="proc-canonical">LPX <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_25"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_25">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 240, 241, 242, 243&#10;Low confidence at: Term (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'PaO2' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">PaO2</div>
+            <div class="proc-canonical">PaO2 <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_26"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_26">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;Low confidence at: Version Date (50%), Summary and Rationale for Changes (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 10' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 10</div>
+            <div class="proc-canonical">Protocol amendment 10 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_27"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_27">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;Low confidence at: Version Date (50%), Summary and Rationale for Changes (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 11' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 11</div>
+            <div class="proc-canonical">Protocol amendment 11 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_28"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_28">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 13' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 13</div>
+            <div class="proc-canonical">Protocol amendment 13 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_29"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_29">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;Low confidence at: Summary and Rationale for Changes (38%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 14' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 14</div>
+            <div class="proc-canonical">Protocol amendment 14 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            66%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_30"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_30">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 15' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 15</div>
+            <div class="proc-canonical">Protocol amendment 15 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_31"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_31">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;Low confidence at: Version Date (50%), Summary and Rationale for Changes (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 2' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 2</div>
+            <div class="proc-canonical">Protocol amendment 2 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_32"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_32">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;Low confidence at: Version Date (50%), Summary and Rationale for Changes (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 4' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 4</div>
+            <div class="proc-canonical">Protocol amendment 4 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_33"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_33">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;Low confidence at: Version Date (50%), Summary and Rationale for Changes (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 5' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 5</div>
+            <div class="proc-canonical">Protocol amendment 5 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_34"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_34">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;Low confidence at: Version Date (50%), Summary and Rationale for Changes (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 6' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 6</div>
+            <div class="proc-canonical">Protocol amendment 6 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_35"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_35">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;Low confidence at: Version Date (50%), Summary and Rationale for Changes (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 8' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 8</div>
+            <div class="proc-canonical">Protocol amendment 8 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_36"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_36">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14&#10;Low confidence at: Version Date (50%), Summary and Rationale for Changes (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Protocol amendment 9' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Protocol amendment 9</div>
+            <div class="proc-canonical">Protocol amendment 9 <span class="page-ref">(p.2, 3, 4)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Summary and Rationale for Changes</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_37"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_37">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 240, 241, 242, 243&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'SUSAR' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">SUSAR</div>
+            <div class="proc-canonical">SUSAR <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_38"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_38">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211&#10;Low confidence at: N=12 (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Secondary' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Secondary</div>
+            <div class="proc-canonical">Secondary <span class="page-ref">(p.191, 192, 193)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">N=12</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_39"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_39">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 240, 241, 242, 243&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'SpO2' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">SpO2</div>
+            <div class="proc-canonical">SpO2 <span class="page-ref">(p.240, 241, 242)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Term</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_40"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_40">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 125, 128, 129&#10;Low confidence at: Recorded on the CRF (70%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure '' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary"></div>
+            <div class="proc-canonical"> <span class="page-ref">(p.125, 128, 129)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Recorded on the CRF</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_41"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_41">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+</tbody>
+<tfoot>
+<tr class="grand-total">
+  <td colspan="8" style="text-align:right;">ESTIMATED PER-PATIENT TOTAL</td>
+  <td></td>
+  <td id="grand-total-cell" style="text-align:right;">$7,700</td>
+  <td></td>
+</tr>
+</tfoot>
+</table>
+
+<div class="footer">
+  <h3 style="font-size:13px;color:#0f172a;margin-bottom:8px;">How to Complete This Worksheet</h3>
+  <ol style="font-size:12px;color:#475569;line-height:1.8;margin-left:20px;">
+    <li><strong>Review the "Action Required" column</strong> — green rows are ready, amber/red rows need your attention.</li>
+    <li><strong>Enter your site's unit costs</strong> in the cost column. Current values are estimates (LOW=$75, MEDIUM=$350, HIGH=$1,200, VERY_HIGH=$3,500). Line totals and the grand total will recalculate automatically.</li>
+    <li><strong>Add CPT codes</strong> where marked "Enter CPT" — check your institution's fee schedule.</li>
+    <li><strong>Verify amber/red rows</strong> against the source protocol (page numbers shown in parentheses after each procedure name).</li>
+    <li><strong>Check conditional procedures</strong> — the "Action Required" column shows footnote conditions that may reduce the actual frequency.</li>
+  </ol>
+  <div style="margin-top:12px;padding:10px 16px;background:#eff6ff;border-radius:6px;font-size:11px;color:#1e40af;">
+    <strong>Confidence Legend:</strong>
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#059669;margin:0 4px;vertical-align:middle;"></span> Green (≥90%) = reliable, no action needed &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d97706;margin:0 4px;vertical-align:middle;"></span> Amber (75-90%) = spot-check recommended &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#dc2626;margin:0 4px;vertical-align:middle;"></span> Red (<75%) = verify against source PDF
+  </div>
+</div>
+
+</div>
+
+<script>
+const LINE_COUNT = 42;
+const OCCURRENCES = [2,1,10,8,3,1,2,4,3,2,2,1,2,2,2,5,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+
+function recalculate() {
+  let grand = 0;
+  for (let i = 0; i < LINE_COUNT; i++) {
+    const input = document.getElementById('cost_' + i);
+    const cost = parseFloat(input.value) || 0;
+    const total = cost * OCCURRENCES[i];
+    document.getElementById('total_' + i).textContent = '$' + total.toLocaleString('en-US', {minimumFractionDigits: 0});
+    grand += total;
+  }
+  document.getElementById('grand-total-cell').textContent = '$' + grand.toLocaleString('en-US', {minimumFractionDigits: 0});
+  document.getElementById('grand-total-display').textContent = '$' + grand.toLocaleString('en-US', {minimumFractionDigits: 0});
+}
+</script>
+</body>
+</html>

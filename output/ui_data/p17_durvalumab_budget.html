@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Site Budget Worksheet — P17_durvalumab.pdf</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1e293b; background: #f8fafc; }
+.container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.subtitle { font-size: 12px; color: #64748b; margin-bottom: 16px; }
+.summary { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.summary-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 20px; min-width: 160px; }
+.summary-value { font-size: 24px; font-weight: 700; }
+.summary-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+.budget-table { width: 100%; border-collapse: collapse; font-size: 11px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+.budget-table th { background: #0f172a; color: white; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; position: sticky; top: 0; z-index: 10; }
+.budget-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+.budget-table tr:hover { background: #f8fafc; }
+.proc-name { min-width: 260px; }
+.proc-primary { font-weight: 600; font-size: 12px; color: #0f172a; line-height: 1.4; }
+.proc-canonical { font-size: 10px; color: #64748b; margin-top: 2px; }
+.mono { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 11px; color: #475569; }
+.center { text-align: center; }
+.freq { font-size: 14px; font-weight: 700; color: #0f172a; }
+.visits-cell { font-size: 10px; color: #64748b; max-width: 280px; line-height: 1.5; }
+.guidance { font-size: 10px; max-width: 260px; line-height: 1.6; }
+.cost-cell { white-space: nowrap; }
+.currency { color: #94a3b8; font-size: 11px; margin-right: 2px; }
+.needs-input { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.conf-green { }
+.conf-amber { background: #fffbeb !important; }
+.conf-red { background: #fef2f2 !important; }
+.conf-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+.conf-dot-green { background: #059669; }
+.conf-dot-amber { background: #d97706; }
+.conf-dot-red { background: #dc2626; }
+.hint-ok { color: #059669; font-weight: 500; }
+.hint-red { color: #dc2626; font-size: 10px; }
+.hint-amber { color: #d97706; font-size: 10px; }
+.hint-info { color: #0284c7; font-size: 10px; }
+.action-needed { color: #dc2626; font-weight: 600; font-size: 10px; }
+.page-ref { font-size: 9px; color: #94a3b8; font-style: italic; }
+.cost-input { width: 80px; padding: 4px 6px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 11px; text-align: right; }
+.cost-input:focus { outline: 2px solid #0284c7; border-color: transparent; }
+.line-total { font-weight: 600; text-align: right; white-space: nowrap; }
+.tier-low { background: #f1f5f9; color: #64748b; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-med { background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-high { background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-vhigh { background: #fecaca; color: #991b1b; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.grand-total { background: #0f172a; color: white; font-size: 14px; }
+.grand-total td { padding: 12px 10px; font-weight: 700; }
+.footer { margin-top: 16px; font-size: 11px; color: #94a3b8; }
+.footer p { margin-bottom: 4px; }
+@media print {
+  .cost-input { border: none; background: transparent; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Site Budget Worksheet</h1>
+<p class="subtitle">P17_durvalumab.pdf | Generated 2026-03-22 14:57 UTC</p>
+
+<div class="summary">
+  <div class="summary-card">
+    <div class="summary-value" style="color:#0284c7;">36</div>
+    <div class="summary-label">Budget Line Items</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#0284c7;">112</div>
+    <div class="summary-label">Total Procedure Visits</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#059669;" id="grand-total-display">$26,600</div>
+    <div class="summary-label">Estimated Per-Patient Cost</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#64748b;">7/36</div>
+    <div class="summary-label">Procedures with CPT Codes</div>
+  </div>
+</div>
+
+<table class="budget-table">
+<thead>
+<tr>
+  <th style="min-width:260px">Procedure / Canonical Name</th>
+  <th>CPT</th>
+  <th>Category</th>
+  <th>Tier</th>
+  <th>Freq</th>
+  <th style="min-width:200px">Visits Required</th>
+  <th>Conf.</th>
+  <th style="min-width:100px">Unit Cost ($)</th>
+  <th>Line Total</th>
+  <th style="min-width:220px">Action Required</th>
+</tr>
+</thead>
+<tbody>
+
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;No CPT code mapped — needs manual assignment&#10;Conditional: ECOG performance status (PS) of 0 or 1 at enrolment and randomization.">
+          <td class="proc-name">
+            <div class="proc-primary">WHO/ECOG performance statusn</div>
+            <div class="proc-canonical">ECOG Performance Status <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Efficacy</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">Screening, C1a, C2a, C3a, C4a, C5 to PD/C24a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_0"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_0">
+            $450</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: ECOG performance status (PS) of 0 or 1 at enrolmen</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 21, 22, 23&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Concomitant medications</div>
+            <div class="proc-canonical">Concomitant Medications Review <span class="page-ref">(p.21, 22, 23)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Day (±3) 30, Months (±2 week) 2, Months (±2 week) 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_1"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_1">
+            $225</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: For details, see Section (50%)&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Eligibility criteria</div>
+            <div class="proc-canonical">Eligibility Assessment <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Screening</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            89%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_2"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_2">
+            $75</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: Screening (50%), For details, see Section (50%)&#10;No CPT code mapped — needs manual assignment&#10;Conditional: Written informed consent and any locally required privacy act document authorization must be obtained prior to performing any protocol-specific procedures, including screening/baseline evaluations. All patients will be required to provide consent to supply a sample of their tumor (archived or newly acquired biopsy) for entry into this study. This consent is included in the main patient ICF. Informed consent of study procedures may be obtained prior to the 28-day screening window, if necessary. The collection of additional biopsies upon progression is OPTIONAL but strongly encouraged. If laboratory or imaging procedures were performed for alternate reasons prior">
+          <td class="proc-name">
+            <div class="proc-primary">Informed consent: study proceduresb</div>
+            <div class="proc-canonical">Informed Consent <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Screening</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            82%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_3"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_3">
+            $75</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Written informed consent and any locally required </span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: Screening (70%), For details, see Section (70%)">
+          <td class="proc-name">
+            <div class="proc-primary">Physical exam (full)</div>
+            <div class="proc-canonical">Physical Examination <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="mono">99213</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">5</td>
+          <td class="visits-cell">Screening, C2a, C4a, Day (±3) 30 / Months (±2 week) 2, 3, 6, 9, 12, 15 / 21 months and every 6 months (±2 weeks), C3a, C5 to PD/C24a, C1a, Day (±3) 30</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            70%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_4"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_4">
+            $375</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 21, 22, 23&#10;No CPT code mapped — needs manual assignment&#10;Conditional: Patients may be contacted in the week following data cutoffs to confirm survival status. Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF.">
+          <td class="proc-name">
+            <div class="proc-primary">Survival statuse</div>
+            <div class="proc-canonical">Survival Follow-up <span class="page-ref">(p.21, 22, 23)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">Months (±2 week) 3, Months (±2 week) 6, Months (±2 week) 9, Months (±2 week) 12, Months (±2 week) 15, 21 months and every 6 months (±2 weeks)</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_5"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_5">
+            $450</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Patients may be contacted in the week following da</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: Screening (50%), For details, see Section (50%)&#10;Conditional: Body weight is recorded at each visit along with vital signs.">
+          <td class="proc-name">
+            <div class="proc-primary">Vital signsd</div>
+            <div class="proc-canonical">Vital Signs <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="mono">99000</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">Screening, Day (±3) 30, C3a, C1a, C5 to PD/C24a, C2a, C4a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            82%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_6"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_6">
+            $450</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-info">Conditional: Body weight is recorded at each visit along with v</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 21, 22, 23&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Weight</div>
+            <div class="proc-canonical">Body Weight <span class="page-ref">(p.21, 22, 23)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Day (±3) 30, Months (±2 week) 2, Months (±2 week) 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_7"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_7">
+            $225</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: C1a (50%), C2a (50%), C4a (50%), For details, see Section (50%)&#10;No CPT code mapped — needs manual assignment&#10;Conditional: Pre-dose same day as infusion (may not exceed 6 hours prior to start of infusion).">
+          <td class="proc-name">
+            <div class="proc-primary">Immunogenicity assessment (ADA sampling to identify ADA responses in patient circulation)</div>
+            <div class="proc-canonical">Immunogenicity sampling <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Immunology</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Months (±2 week) 6, Months (±2 week) 3, C1a, C2a, C4a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            69%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_8"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_8">
+            $225</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Pre-dose same day as infusion (may not exceed 6 ho</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20">
+          <td class="proc-name">
+            <div class="proc-primary">Hepatitis B and C and HIV</div>
+            <div class="proc-canonical">Hepatitis Panel <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="mono">86709</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Screening</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_9"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_9">
+            $75</td>
+          <td class="guidance"><span class="hint-ok">OK</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Conditional: For women of childbearing potential only. A urine or serum pregnancy test is acceptable. Women of childbearing potential are required to have a pregnancy test within 7 days prior to the first dose of study treatment and then q4w. Results must be available and reviewed by the treating physician or Investigator prior to commencing an infusion.">
+          <td class="proc-name">
+            <div class="proc-primary">Pregnancy testk</div>
+            <div class="proc-canonical">Pregnancy Test <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="mono">81025</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">Screening, Day (±3) 30, C3a, C1a, C5 to PD/C24a, C2a, C4a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_10"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_10">
+            $450</td>
+          <td class="guidance"><span class="hint-info">Conditional: For women of childbearing potential only. A urine </span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Conditional: If TSH is measured within 14 days prior to Day 1 (first infusion day), it does not need to be repeated at Day 1.; Free T3 or free T4 will only be measured if TSH is abnormal or if there is clinical suspicion of an AE related to the endocrine system.">
+          <td class="proc-name">
+            <div class="proc-primary">TSHi (reflex free T3 or free T4)j</div>
+            <div class="proc-canonical">Thyroid Function Tests <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="mono">84443</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">Screening, Day (±3) 30, C3a, C1a, Months (±2 week) 3, Months (±2 week) 2, C5 to PD/C24a, C2a, C4a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_11"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_11">
+            $450</td>
+          <td class="guidance"><span class="hint-info">Conditional: If TSH is measured within 14 days prior to Day 1 (</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20">
+          <td class="proc-name">
+            <div class="proc-primary">Urinalysis</div>
+            <div class="proc-canonical">Urinalysis <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="mono">81003</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Screening</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_12"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_12">
+            $75</td>
+          <td class="guidance"><span class="hint-ok">OK</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: C2a (50%), C3a (50%), C4a (50%), C5 to PD/C24a (50%)&#10;No CPT code mapped — needs manual assignment&#10;Conditional: Sample will be taken at last dose of platinum administration (C2D8 if a 6th week of platinum agent is needed or C2D1 if platinum agent is administered only for 5 weeks)">
+          <td class="proc-name">
+            <div class="proc-primary">ctDNA (plasma)</div>
+            <div class="proc-canonical">ctDNA <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-high">$$$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">Day (±3) 30, Months (±2 week) 6, C3a, C1a, Months (±2 week) 2, C2a, C4a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            69%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_13"
+              value="1200"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_13">
+            $4,800</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Sample will be taken at last dose of platinum admi</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: C1a (40%), C2a (40%), C4a (40%)&#10;No CPT code mapped — needs manual assignment&#10;Conditional: Post infusion within 1 hour of the end of infusion.; Pre-dose same day as infusion (may not exceed 6 hours prior to start of infusion).">
+          <td class="proc-name">
+            <div class="proc-primary">PK sample (serum)</div>
+            <div class="proc-canonical">PK Sample <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>PK</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">C1a, C2a, C4a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            71%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_14"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_14">
+            $225</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Post infusion within 1 hour of the end of infusion</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: C1a (50%), C2a (70%), C3a (70%), C4a (70%), C5 to PD/C24a (70%)&#10;No CPT code mapped — needs manual assignment&#10;Conditional: Will be administered using a site-based, ePRO device. The PRO questionnaires must be administered and completed at the clinic prior to treatment administration performed at the site and ideally before any discussions of health status to avoid biasing the participant's responses to the questions. As feasible, site staff should also ensure PRO questionnaires are completed prior to other study procedures, such as collection of laboratory samples and before discussion of disease progression to avoid biasing the patient's responses to the questions.PRO-CTCAE will only be administered in those countries where a linguistically validated version exists. It is permitted for the baseline ePROs to be completed prior to C1D1 as long as treatment is given within 3 days of ePRO completion.">
+          <td class="proc-name">
+            <div class="proc-primary">EORTC QLQ-C30 and CX24, PGIS, EQ-5Dt</div>
+            <div class="proc-canonical">EORTC QLQ-C30 <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>PRO</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">C2a, C3a, C4a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            68%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_15"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_15">
+            $225</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Will be administered using a site-based, ePRO devi</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Conditional: Blocks are preferred to slides (except China). Refer to the Laboratory Manual for further details on tissue requirements.">
+          <td class="proc-name">
+            <div class="proc-primary">Optional newly acquired tumor biopsy collected upon progressionv</div>
+            <div class="proc-canonical">Tumor Biopsy <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="mono">20206</span></td>
+          <td>Procedure</td>
+          <td class="center"><span class="tier-vhigh">$$$$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">C2a, C3a, C4a, C5 to PD/C24a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            93%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_16"
+              value="3500"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_16">
+            $14,000</td>
+          <td class="guidance"><span class="hint-amber">High-cost item — verify frequency is correct</span><br><span class="hint-info">Conditional: Blocks are preferred to slides (except China). Ref</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 21, 22, 23&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'AE/SAE assessment' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">AE/SAE assessment</div>
+            <div class="proc-canonical">AE/SAE assessment <span class="page-ref">(p.21, 22, 23)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Day (±3) 30, Months (±2 week) 2, Months (±2 week) 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_17"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_17">
+            $225</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 21, 22, 23&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Clinical chemistry' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Clinical chemistry</div>
+            <div class="proc-canonical">Clinical chemistry <span class="page-ref">(p.21, 22, 23)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Day (±3) 30, Months (±2 week) 2, Months (±2 week) 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_18"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_18">
+            $225</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Clinical chemistryg' not in vocabulary — verify mapping&#10;Conditional: Serum or plasma clinical chemistry (including LFT monitoring) and hematology may be performed more frequently if clinically indicated or based on the local clinical practice.; If screening clinical chemistry and hematology assessments are performed within 3 days prior to Day 1 (first infusion day), they do not need to be repeated at Day 1.">
+          <td class="proc-name">
+            <div class="proc-primary">Clinical chemistryg</div>
+            <div class="proc-canonical">Clinical chemistryg <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">Screening, C1a, C2a, C3a, C4a, C5 to PD/C24a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_19"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_19">
+            $450</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Serum or plasma clinical chemistry (including LFT </span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: For details, see Section (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Day' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Day</div>
+            <div class="proc-canonical">Day <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">C2a, C3a, C4a, C5 to PD/C24a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            89%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_20"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_20">
+            $300</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: Screening (50%), For details, see Section (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Demography, including baseline' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Demography, including baseline characteristics and tobacco use</div>
+            <div class="proc-canonical">Demography, including baseline characteristics and tobacco use <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Screening</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_21"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_21">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Durvalumab/placebop,q' not in vocabulary — verify mapping&#10;Conditional: During the combination portion of treatment, durvalumab or placebo will be administered first. If there is not enough time to administer cisplatin afterward on that day, it should be given the following day and must be administered within 1 calendar day of the durvalumab infusion. Treatment should start no more than 3 working days after being randomized. The day patients begin treatment will be designated C1D1.; Results for LFTs, electrolytes, full blood count (while on chemotherapy), and creatinine must be available before commencing an infusion (within 3 days) and reviewed by the treating physician or Investigator prior to dosing.">
+          <td class="proc-name">
+            <div class="proc-primary">Durvalumab/placebop,q</div>
+            <div class="proc-canonical">Durvalumab/placebop,q <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">5</td>
+          <td class="visits-cell">C1a, C2a, C3a, C4a, C5 to PD/C24a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_22"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_22">
+            $375</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: During the combination portion of treatment, durva</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: Screening (50%), C1a (50%), C2a (50%), C3a (50%), C4a (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'ECGe' not in vocabulary — verify mapping&#10;Conditional: Any clinically significant abnormalities detected require triplicate ECG results.; A single ECG at screening should be done. Any clinically significant abnormalities detected require triplicate ECG results.">
+          <td class="proc-name">
+            <div class="proc-primary">ECGe</div>
+            <div class="proc-canonical">ECGe <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Screening</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            50%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_23"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_23">
+            $75</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Any clinically significant abnormalities detected </span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'FFPE tumor sample' not in vocabulary — verify mapping&#10;Conditional: Blocks are preferred to slides (except China). Refer to the Laboratory Manual for further details on tissue requirements.">
+          <td class="proc-name">
+            <div class="proc-primary">FFPE tumor sample</div>
+            <div class="proc-canonical">FFPE tumor sample <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Screening</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_24"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_24">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: Blocks are preferred to slides (except China). Ref</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: C2a (30%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Genetics research sample (opti' not in vocabulary — verify mapping&#10;Conditional: The sample for genetic research will be obtained at Day 1 pre-dose (at or after randomization). If, for any reason, the sample is not drawn at Day 1, it may be taken at any visit until the last study visit. Only 1 sample should be collected per patient for genetics during the study.">
+          <td class="proc-name">
+            <div class="proc-primary">Genetics research sample (optional DNA element for long-term storage/future use) w</div>
+            <div class="proc-canonical">Genetics research sample (optional DNA element for long-term storage/future use) w <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">C1a, C2a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            86%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_25"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_25">
+            $150</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: The sample for genetic research will be obtained a</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'HPV genotype, if available' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">HPV genotype, if available</div>
+            <div class="proc-canonical">HPV genotype, if available <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Screening</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_26"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_26">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 21, 22, 23&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Hematology' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Hematology</div>
+            <div class="proc-canonical">Hematology <span class="page-ref">(p.21, 22, 23)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Day (±3) 30, Months (±2 week) 2, Months (±2 week) 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_27"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_27">
+            $225</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Hematologyh' not in vocabulary — verify mapping&#10;Conditional: If screening clinical chemistry and hematology assessments are performed within 3 days prior to Day 1 (first infusion day), they do not need to be repeated at Day 1.">
+          <td class="proc-name">
+            <div class="proc-primary">Hematologyh</div>
+            <div class="proc-canonical">Hematologyh <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">Screening, C1a, C2a, C3a, C4a, C5 to PD/C24a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_28"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_28">
+            $450</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: If screening clinical chemistry and hematology ass</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 21, 22, 23&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'PK assessment' not in vocabulary — verify mapping&#10;Conditional: PK and immunogenicity samples are collected 90 days (3 months) (±7 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (±7 days) after study treatment ends.">
+          <td class="proc-name">
+            <div class="proc-primary">PK assessment</div>
+            <div class="proc-canonical">PK assessment <span class="page-ref">(p.21, 22, 23)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">Months (±2 week) 3</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_29"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_29">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: PK and immunogenicity samples are collected 90 day</span></td>
+        </tr>
+        <tr class="conf-amber" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: For details, see Section (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Radiation plan collection' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Radiation plan collection</div>
+            <div class="proc-canonical">Radiation plan collection <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">For details, see Section, Screening</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-amber"></span>
+            89%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_30"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_30">
+            $150</td>
+          <td class="guidance"><span class="hint-amber">Check: some visit marks uncertain</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'SoC cisplatin chemotherapy' not in vocabulary — verify mapping&#10;Conditional: A 6th week of platinum agent is optional per investigator discretion.">
+          <td class="proc-name">
+            <div class="proc-primary">SoC cisplatin chemotherapy</div>
+            <div class="proc-canonical">SoC cisplatin chemotherapy <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">1</td>
+          <td class="visits-cell">C1a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_31"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_31">
+            $75</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span><br><span class="hint-info">Conditional: A 6th week of platinum agent is optional per inves</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'SoC radiation therapy' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">SoC radiation therapy</div>
+            <div class="proc-canonical">SoC radiation therapy <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">C1a, For details, see Section</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_32"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_32">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Week' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Week</div>
+            <div class="proc-canonical">Week <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">C2a, C3a, C4a, C5 to PD/C24a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_33"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_33">
+            $300</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-red" title="Source: Protocol pages 16, 17, 18, 19, 20&#10;Low confidence at: C1a (50%), C2a (50%), For details, see Section (50%)&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Whole blood for gene expressio' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Whole blood for gene expression (PAXgene RNA tubes)</div>
+            <div class="proc-canonical">Whole blood for gene expression (PAXgene RNA tubes) <span class="page-ref">(p.16, 17, 18)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">C1a, C2a</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-red"></span>
+            69%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_34"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_34">
+            $150</td>
+          <td class="guidance"><span class="hint-red">LOW CONFIDENCE — verify frequency against source PDF</span><br><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 21, 22, 23&#10;No CPT code mapped — needs manual assignment&#10;Procedure 'Whole blood for gene expressio' not in vocabulary — verify mapping">
+          <td class="proc-name">
+            <div class="proc-primary">Whole blood for gene expression (PaxGene-RNA tubes)</div>
+            <div class="proc-canonical">Whole blood for gene expression (PaxGene-RNA tubes) <span class="page-ref">(p.21, 22, 23)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Unknown</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">Day (±3) 30, Months (±2 week) 2</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_35"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_35">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+</tbody>
+<tfoot>
+<tr class="grand-total">
+  <td colspan="8" style="text-align:right;">ESTIMATED PER-PATIENT TOTAL</td>
+  <td></td>
+  <td id="grand-total-cell" style="text-align:right;">$26,600</td>
+  <td></td>
+</tr>
+</tfoot>
+</table>
+
+<div class="footer">
+  <h3 style="font-size:13px;color:#0f172a;margin-bottom:8px;">How to Complete This Worksheet</h3>
+  <ol style="font-size:12px;color:#475569;line-height:1.8;margin-left:20px;">
+    <li><strong>Review the "Action Required" column</strong> — green rows are ready, amber/red rows need your attention.</li>
+    <li><strong>Enter your site's unit costs</strong> in the cost column. Current values are estimates (LOW=$75, MEDIUM=$350, HIGH=$1,200, VERY_HIGH=$3,500). Line totals and the grand total will recalculate automatically.</li>
+    <li><strong>Add CPT codes</strong> where marked "Enter CPT" — check your institution's fee schedule.</li>
+    <li><strong>Verify amber/red rows</strong> against the source protocol (page numbers shown in parentheses after each procedure name).</li>
+    <li><strong>Check conditional procedures</strong> — the "Action Required" column shows footnote conditions that may reduce the actual frequency.</li>
+  </ol>
+  <div style="margin-top:12px;padding:10px 16px;background:#eff6ff;border-radius:6px;font-size:11px;color:#1e40af;">
+    <strong>Confidence Legend:</strong>
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#059669;margin:0 4px;vertical-align:middle;"></span> Green (≥90%) = reliable, no action needed &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d97706;margin:0 4px;vertical-align:middle;"></span> Amber (75-90%) = spot-check recommended &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#dc2626;margin:0 4px;vertical-align:middle;"></span> Red (<75%) = verify against source PDF
+  </div>
+</div>
+
+</div>
+
+<script>
+const LINE_COUNT = 36;
+const OCCURRENCES = [6,3,1,1,5,6,6,3,3,1,6,6,1,4,3,3,4,3,3,6,4,1,5,1,1,2,1,3,6,1,2,1,2,4,2,2];
+
+function recalculate() {
+  let grand = 0;
+  for (let i = 0; i < LINE_COUNT; i++) {
+    const input = document.getElementById('cost_' + i);
+    const cost = parseFloat(input.value) || 0;
+    const total = cost * OCCURRENCES[i];
+    document.getElementById('total_' + i).textContent = '$' + total.toLocaleString('en-US', {minimumFractionDigits: 0});
+    grand += total;
+  }
+  document.getElementById('grand-total-cell').textContent = '$' + grand.toLocaleString('en-US', {minimumFractionDigits: 0});
+  document.getElementById('grand-total-display').textContent = '$' + grand.toLocaleString('en-US', {minimumFractionDigits: 0});
+}
+</script>
+</body>
+</html>
