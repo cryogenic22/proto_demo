@@ -191,19 +191,22 @@ class VerbatimExtractor:
             # Extract verbatim text — NO LLM, pure PyMuPDF
             # Use formatted extraction if available, fall back to plain text
             if hasattr(self, '_output_format') and self._output_format == "html":
-                text = self.section_parser.get_section_formatted(pdf_bytes, section, output="html")
+                text = self.section_parser.get_section_formatted(
+                    pdf_bytes, section, output="html",
+                    strip_heading=True,
+                )
             elif hasattr(self, '_output_format') and self._output_format == "docx":
-                text = self.section_parser.get_section_formatted(pdf_bytes, section, output="html")
+                text = self.section_parser.get_section_formatted(
+                    pdf_bytes, section, output="html",
+                    strip_heading=True,
+                )
             else:
                 text = self.section_parser.get_section_text(pdf_bytes, section)
-
-            # Strip the section heading — the user wants the body content,
-            # not the heading they already see in the section tree/selector.
-            if isinstance(text, str):
-                import re as _re
-                text = _re.sub(
-                    r"^\s*<h[2-6][^>]*>.*?</h[2-6]>\s*", "", text, count=1
-                ).strip()
+                # Strip the first line if it matches the section heading
+                if isinstance(text, str) and text.startswith(f"{section.number}"):
+                    lines = text.split("\n", 1)
+                    if len(lines) > 1:
+                        text = lines[1].strip()
 
             text_parts.append(text)
 

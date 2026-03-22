@@ -891,6 +891,7 @@ Return ONLY the JSON array."""
         section: Section,
         output: str = "html",
         include_subsections: bool = True,
+        strip_heading: bool = False,
     ) -> str | bytes:
         """Extract section content with formatting — no page chrome, just content.
 
@@ -900,6 +901,9 @@ Return ONLY the JSON array."""
         Args:
             section: The section to extract.
             output: "html" for semantic HTML, "docx" for Word document bytes.
+            strip_heading: If True, remove the section's own heading from output.
+                This gives the body content only — useful when the heading is
+                already displayed by the UI (e.g., section tree, verbatim panel).
             include_subsections: If True, include subsection content.
 
         Returns:
@@ -1100,7 +1104,15 @@ Return ONLY the JSON array."""
         # Step 2: Paragraph reconstruction from Y-gaps
         paragraphs = self._reconstruct_paragraphs(raw_lines, section_number=section.number)
 
-        # Step 3: Output generation
+        # Step 3: Strip the section's own heading if requested
+        if strip_heading and paragraphs:
+            # Remove the first HEADING paragraph (it's the section title)
+            if paragraphs[0].get("type") == "HEADING":
+                paragraphs = paragraphs[1:]
+            elif paragraphs[0].get("type") == "SUBHEADING":
+                paragraphs = paragraphs[1:]
+
+        # Step 4: Output generation
         if output == "docx":
             return self._paragraphs_to_docx(paragraphs)
         return self._paragraphs_to_html(paragraphs)
