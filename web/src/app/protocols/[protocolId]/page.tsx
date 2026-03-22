@@ -357,7 +357,7 @@ export default function ProtocolWorkspacePage() {
   if (expandedTable) {
     const tableIdx = protocol.tables.indexOf(expandedTable);
     return (
-      <div className="h-screen">
+      <div className="fixed inset-0 z-50 bg-neutral-50">
         <SoAReviewAssistant
           table={expandedTable}
           protocolId={protocolId}
