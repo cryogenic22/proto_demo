@@ -787,23 +787,36 @@ async def get_page_image(protocol_id: str, page_number: int):
     """Render a PDF page as a PNG image for the document viewer."""
     from fastapi.responses import Response
 
-    # Find the PDF file — check uploaded storage and golden_set cache
+    # Find the PDF file — check multiple locations and naming patterns
     pdf_path = None
-    candidates = [
-        Path(f"data/pdfs/{protocol_id}.pdf"),
-        Path(f"golden_set/cached_pdfs/{protocol_id}.pdf"),
-    ]
-    # Also try matching by prefix (P-09, P-14, etc.)
-    pid_upper = protocol_id.upper().replace("_", "-")
-    candidates.append(Path(f"golden_set/cached_pdfs/{pid_upper}.pdf"))
-    # Try common variations
-    for p in Path("golden_set/cached_pdfs").glob("*.pdf"):
-        if p.stem.upper().replace("-", "") == pid_upper.replace("-", ""):
-            candidates.append(p)
+    pid = protocol_id
+    # Normalize: p09 → P-09, p14 → P-14, p01_brivaracetam → P-01
+    pid_norm = pid.upper().replace("_", "-")
+    # Extract numeric prefix: p09 → P-09, p14 → P-14
+    import re as _re
+    num_match = _re.match(r"^[pP][-_]?(\d+)", pid)
+    pid_dash = f"P-{num_match.group(1).zfill(2)}" if num_match else pid_norm
 
-    for candidate in candidates:
-        if candidate.exists():
-            pdf_path = candidate
+    search_dirs = [Path("data/pdfs"), Path("golden_set/cached_pdfs")]
+    for d in search_dirs:
+        if not d.exists():
+            continue
+        # Try exact match, normalized match, and prefix match
+        for pattern in [f"{pid}.pdf", f"{pid_norm}.pdf", f"{pid_dash}.pdf"]:
+            candidate = d / pattern
+            if candidate.exists():
+                pdf_path = candidate
+                break
+        if pdf_path:
+            break
+        # Fuzzy match: strip non-alphanumeric and compare
+        for p in d.glob("*.pdf"):
+            stem_clean = _re.sub(r"[^a-zA-Z0-9]", "", p.stem).lower()
+            pid_clean = _re.sub(r"[^a-zA-Z0-9]", "", pid).lower()
+            if stem_clean == pid_clean or stem_clean.startswith(pid_clean):
+                pdf_path = p
+                break
+        if pdf_path:
             break
 
     if not pdf_path:

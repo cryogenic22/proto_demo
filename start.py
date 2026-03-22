@@ -29,6 +29,17 @@ if SEED_DIR.exists():
         updated += 1
     print(f"Seeded {updated} protocols into volume.", flush=True)
 
+    # Seed PDFs for source document preview
+    PDF_SEED = Path("data_seed/pdfs")
+    PDF_DIR = Path("data/pdfs")
+    PDF_DIR.mkdir(parents=True, exist_ok=True)
+    if PDF_SEED.exists():
+        for src in PDF_SEED.glob("*.pdf"):
+            dst = PDF_DIR / src.name
+            if not dst.exists():
+                shutil.copy2(src, dst)
+                print(f"  Seeded PDF: {src.name}", flush=True)
+
     # Remove P-27 if it exists (empty protocol, no extraction data)
     p27 = DATA_DIR / "P-27.json"
     if p27.exists():
