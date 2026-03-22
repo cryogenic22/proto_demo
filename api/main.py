@@ -510,6 +510,103 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         gc.collect()
 
 
+# ---------------------------------------------------------------------------
+# Protocol & Knowledge Element endpoints
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/protocols")
+async def list_protocols():
+    """List all stored protocols."""
+    from src.persistence.ke_store import create_ke_store
+
+    store = create_ke_store()
+    return store.list_protocols()
+
+
+@app.get("/api/protocols/{protocol_id}")
+async def get_protocol(protocol_id: str):
+    """Get full protocol data."""
+    from src.persistence.ke_store import create_ke_store
+
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(
+            status_code=404, detail=f"Protocol {protocol_id} not found"
+        )
+    return protocol.model_dump(mode="json")
+
+
+@app.get("/api/protocols/{protocol_id}/sections")
+async def get_protocol_sections(protocol_id: str):
+    """Get the section tree for a protocol."""
+    from src.persistence.ke_store import create_ke_store
+
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(
+            status_code=404, detail=f"Protocol {protocol_id} not found"
+        )
+    return [s.model_dump() for s in protocol.sections]
+
+
+@app.get("/api/protocols/{protocol_id}/sections/{section_number:path}")
+async def get_section_content(protocol_id: str, section_number: str):
+    """Get content for a specific section."""
+    from src.persistence.ke_store import create_ke_store
+
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(
+            status_code=404, detail=f"Protocol {protocol_id} not found"
+        )
+
+    def find_section(sections, number):
+        for s in sections:
+            if s.number == number:
+                return s
+            found = find_section(s.children, number)
+            if found:
+                return found
+        return None
+
+    section = find_section(protocol.sections, section_number)
+    if not section:
+        raise HTTPException(
+            status_code=404, detail=f"Section {section_number} not found"
+        )
+    return section.model_dump()
+
+
+@app.get("/api/protocols/{protocol_id}/budget")
+async def get_protocol_budget(protocol_id: str):
+    """Get budget line items for a protocol."""
+    from src.persistence.ke_store import create_ke_store
+
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(
+            status_code=404, detail=f"Protocol {protocol_id} not found"
+        )
+    return protocol.budget_lines
+
+
+@app.get("/api/protocols/{protocol_id}/knowledge-elements")
+async def get_knowledge_elements(
+    protocol_id: str, ke_type: str | None = None
+):
+    """Get knowledge elements for a protocol, optionally filtered by type."""
+    from src.persistence.ke_store import create_ke_store
+
+    store = create_ke_store()
+    kes = store.get_knowledge_elements(protocol_id, ke_type)
+    return [ke.model_dump() for ke in kes]
+
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))

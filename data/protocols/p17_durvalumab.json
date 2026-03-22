@@ -1,0 +1,37 @@
+{
+  "protocol_id": "p17_durvalumab",
+  "document_name": "P17_durvalumab.pdf",
+  "document_hash": "def456",
+  "total_pages": 179,
+  "metadata": {
+    "title": "A Phase III Study of Durvalumab With or Without Tremelimumab in Patients With Unresectable Stage III NSCLC",
+    "short_title": "PACIFIC-2 Durvalumab",
+    "protocol_number": "D4191C00003",
+    "nct_number": "NCT03519971",
+    "sponsor": "AstraZeneca",
+    "phase": "Phase III",
+    "therapeutic_area": "Oncology",
+    "indication": "Non-Small Cell Lung Cancer (NSCLC)",
+    "study_type": "Interventional",
+    "arms": [
+      "Durvalumab + Tremelimumab",
+      "Durvalumab",
+      "Placebo"
+    ],
+    "amendment_number": "5",
+    "version": "5"
+  },
+  "sections": [],
+  "tables": [],
+  "procedures": [],
+  "budget_lines": [],
+  "quality_summary": {
+    "total_cells": 581,
+    "correct_cells": 538,
+    "corrections": 43,
+    "accuracy": 0.926
+  },
+  "knowledge_elements": [],
+  "created_at": "2026-03-22T00:30:00Z",
+  "pipeline_version": "0.6.0"
+}
