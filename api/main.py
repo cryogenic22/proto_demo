@@ -585,7 +585,7 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
                 pipeline_output_to_protocol,
             )
 
-            protocol = pipeline_output_to_protocol(result_json, filename)
+            protocol = pipeline_output_to_protocol(result_json, filename, pdf_bytes=pdf_bytes)
             store = create_ke_store()
             store.save_protocol(protocol)
             logger.info("Saved protocol %s to store", protocol.protocol_id)
@@ -719,6 +719,43 @@ async def get_procedures_library():
         )
         for r in rows
     ]
+
+
+@app.put("/api/procedures/{canonical_name}")
+async def update_procedure(canonical_name: str, updates: dict):
+    """Update a procedure's CPT code, category, or cost tier."""
+    import csv
+    from pathlib import Path
+
+    csv_path = Path("data/procedure_mapping.csv")
+    if not csv_path.exists():
+        raise HTTPException(status_code=404, detail="Procedure mapping file not found")
+
+    lines = csv_path.read_text(encoding="utf-8").splitlines()
+    updated = False
+    new_lines = []
+
+    for line in lines:
+        if line.startswith("#") or not line.strip():
+            new_lines.append(line)
+            continue
+        reader = csv.reader([line])
+        for parts in reader:
+            if len(parts) >= 6 and parts[0].strip().lower() == canonical_name.lower():
+                if "cpt_code" in updates:
+                    parts[1] = str(updates["cpt_code"])
+                if "category" in updates:
+                    parts[3] = str(updates["category"])
+                if "cost_tier" in updates:
+                    parts[4] = str(updates["cost_tier"])
+                updated = True
+            new_lines.append(",".join(f'"{p}"' if "," in p else p for p in parts))
+
+    if not updated:
+        raise HTTPException(status_code=404, detail=f"Procedure '{canonical_name}' not found")
+
+    csv_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
+    return {"status": "updated", "canonical_name": canonical_name}
 
 
 # ---------------------------------------------------------------------------
