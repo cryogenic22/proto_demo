@@ -1,28 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TopBar } from "@/components/layout/TopBar";
 import { UploadZone } from "@/components/extraction/UploadZone";
 import { ProcessingStatus } from "@/components/extraction/ProcessingStatus";
-import { uploadProtocol } from "@/lib/api";
+import { uploadProtocol, getJobStatus } from "@/lib/api";
 import { Card, CardBody } from "@/components/ui/Card";
+
+type PageState =
+  | { kind: "idle" }
+  | { kind: "uploading"; file: File }
+  | { kind: "processing"; jobId: string; fileName: string; fileSize: number }
+  | { kind: "error"; message: string };
 
 export default function HomePage() {
   const router = useRouter();
-  const [state, setState] = useState<
-    | { kind: "idle" }
-    | { kind: "uploading"; file: File }
-    | { kind: "processing"; jobId: string; file: File }
-    | { kind: "error"; message: string }
-  >({ kind: "idle" });
+  const [state, setState] = useState<PageState>({ kind: "idle" });
+
+  // Resume any in-progress job from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("active_job");
+    if (!saved) return;
+    try {
+      const { jobId, fileName, fileSize } = JSON.parse(saved);
+      getJobStatus(jobId).then((s) => {
+        if (s.status === "processing" || s.status === "pending") {
+          setState({ kind: "processing", jobId, fileName, fileSize });
+        } else {
+          localStorage.removeItem("active_job");
+        }
+      }).catch(() => localStorage.removeItem("active_job"));
+    } catch {
+      localStorage.removeItem("active_job");
+    }
+  }, []);
 
   const handleFileSelected = async (file: File) => {
     setState({ kind: "uploading", file });
 
     try {
       const { job_id } = await uploadProtocol(file);
-      setState({ kind: "processing", jobId: job_id, file });
+      localStorage.setItem(
+        "active_job",
+        JSON.stringify({ jobId: job_id, fileName: file.name, fileSize: file.size })
+      );
+      setState({ kind: "processing", jobId: job_id, fileName: file.name, fileSize: file.size });
     } catch (err: any) {
       setState({ kind: "error", message: err.message || "Upload failed" });
     }
@@ -66,8 +89,8 @@ export default function HomePage() {
         {state.kind === "processing" && (
           <ProcessingStatus
             jobId={state.jobId}
-            fileName={state.file.name}
-            fileSize={state.file.size}
+            fileName={state.fileName}
+            fileSize={state.fileSize}
           />
         )}
 

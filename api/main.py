@@ -71,8 +71,43 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory job store (production: use Redis or database)
-jobs: dict[str, dict[str, Any]] = {}
+# ---------------------------------------------------------------------------
+# Persistent job store — survives server restarts
+# ---------------------------------------------------------------------------
+
+_JOBS_FILE = Path("data/jobs.json")
+
+
+def _load_jobs() -> dict[str, dict[str, Any]]:
+    """Load jobs from disk on startup."""
+    if _JOBS_FILE.exists():
+        try:
+            return json.loads(_JOBS_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            logger.warning("Could not load jobs.json, starting fresh")
+    return {}
+
+
+def _save_jobs() -> None:
+    """Persist current jobs dict to disk."""
+    try:
+        _JOBS_FILE.parent.mkdir(parents=True, exist_ok=True)
+        _JOBS_FILE.write_text(
+            json.dumps(jobs, indent=2, default=str), encoding="utf-8"
+        )
+    except Exception as e:
+        logger.warning("Could not save jobs.json: %s", e)
+
+
+jobs: dict[str, dict[str, Any]] = _load_jobs()
+
+# Mark any jobs that were "processing" when the server died as failed
+for _jid, _jdata in jobs.items():
+    if _jdata.get("status") == "processing":
+        _jdata["status"] = "failed"
+        _jdata["message"] = "Server restarted during extraction"
+        _jdata["error"] = "Server restart — please re-upload"
+_save_jobs()
 
 
 @app.exception_handler(Exception)
@@ -360,6 +395,8 @@ async def extract_protocol(file: UploadFile = File(...)):
         "completed_at": None,
     }
 
+    _save_jobs()
+
     # Run extraction in background with error logging
     task = asyncio.create_task(_run_extraction(job_id, pdf_bytes, file.filename))
     task.add_done_callback(_task_done_callback)
@@ -421,6 +458,7 @@ async def clear_all_jobs():
     """Clear all jobs from the queue."""
     count = len(jobs)
     jobs.clear()
+    _save_jobs()
     return {"cleared": count}
 
 
@@ -430,6 +468,7 @@ async def delete_job(job_id: str):
     if job_id not in jobs:
         raise HTTPException(status_code=404, detail="Job not found")
     del jobs[job_id]
+    _save_jobs()
     return {"deleted": job_id}
 
 
@@ -538,6 +577,7 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["message"] = f"Extracted {len(result.tables)} tables"
         jobs[job_id]["result"] = result_json
         jobs[job_id]["completed_at"] = time.time()
+        _save_jobs()
 
         # Persist protocol to the knowledge-element store
         try:
@@ -589,6 +629,7 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         tel.log_error(job_id, "pipeline", str(e), traceback.format_exc())
 
     finally:
+        _save_jobs()
         import gc
         gc.collect()
 

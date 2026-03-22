@@ -49,9 +49,11 @@ export function ProcessingStatus({ jobId, fileName, fileSize }: ProcessingStatus
         if (!cancelled) {
           setStatus(s);
           if (s.status === "completed") {
+            localStorage.removeItem("active_job");
             setTimeout(() => router.push(`/results/${jobId}`), 800);
-          }
-          if (s.status !== "completed" && s.status !== "failed") {
+          } else if (s.status === "failed") {
+            localStorage.removeItem("active_job");
+          } else {
             setTimeout(poll, 1500);
           }
         }
