@@ -196,6 +196,15 @@ class VerbatimExtractor:
                 text = self.section_parser.get_section_formatted(pdf_bytes, section, output="html")
             else:
                 text = self.section_parser.get_section_text(pdf_bytes, section)
+
+            # Strip the section heading — the user wants the body content,
+            # not the heading they already see in the section tree/selector.
+            if isinstance(text, str):
+                import re as _re
+                text = _re.sub(
+                    r"^\s*<h[2-6][^>]*>.*?</h[2-6]>\s*", "", text, count=1
+                ).strip()
+
             text_parts.append(text)
 
             # Extract tables if requested
