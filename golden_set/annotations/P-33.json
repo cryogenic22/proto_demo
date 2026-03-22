@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "source": "golden_set\\protocol_annotations\\P-33_annotation.xlsx",
+  "tables": [],
+  "footnotes": [],
+  "procedures": [],
+  "summary": {
+    "total_cells": 0,
+    "correct_cells": 0,
+    "wrong_cells": 0,
+    "unchecked_cells": 0,
+    "cell_accuracy": 0.0,
+    "footnotes_annotated": 0,
+    "procedures_annotated": 0
+  }
+}
