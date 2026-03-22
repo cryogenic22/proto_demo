@@ -21,6 +21,7 @@ import { SectionContent } from "@/components/protocol/SectionContent";
 import { ProtocolMetaCard } from "@/components/protocol/ProtocolMetaCard";
 import { KEBadge } from "@/components/protocol/KEBadge";
 import { AssistantPanel, type AssistantMode } from "@/components/protocol/AssistantPanel";
+import { SoAReviewAssistant } from "@/components/protocol/SoAReviewAssistant";
 import { cn } from "@/lib/utils";
 
 function findSection(sections: SectionNode[], number: string): SectionNode | null {
@@ -352,17 +353,15 @@ export default function ProtocolWorkspacePage() {
 
   const totalSections = countSections(protocol.sections);
 
-  // If a table is expanded, show it full-width
+  // If a table is expanded, show the SoA Review Assistant
   if (expandedTable) {
     return (
-      <div>
-        <TopBar
-          title={protocol.metadata.short_title || protocol.metadata.title || protocol.document_name}
-          subtitle={expandedTable.title || `Table ${expandedTable.table_id}`}
+      <div className="h-screen">
+        <SoAReviewAssistant
+          table={expandedTable}
+          protocolId={protocolId}
+          onClose={() => setExpandedTable(null)}
         />
-        <div className="h-[calc(100vh-3.5rem)]">
-          <TableDetailView table={expandedTable} onClose={() => setExpandedTable(null)} />
-        </div>
       </div>
     );
   }
