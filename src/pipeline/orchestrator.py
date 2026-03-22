@@ -212,8 +212,10 @@ class PipelineOrchestrator:
         schema = await self.structural_analyzer.analyze(region, pages)
 
         # Stage 4b: Grid Anchoring (deterministic row skeleton from PyMuPDF)
+        # Disabled by default — constrains coverage on some formats.
+        # Enable via config for protocols where structural stability matters more.
         grid_skeleton = None
-        if pdf_bytes:
+        if pdf_bytes and self.config.enable_grid_anchor:
             try:
                 logger.info(f"  Table {region.table_id}: Grid Anchoring")
                 grid_skeleton = self.grid_anchor.extract_skeleton(

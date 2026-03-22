@@ -74,20 +74,29 @@ def compute_teds(
 
     result = TEDSResult(protocol_id=protocol_id)
 
+    # Build table ID mapping — match tables by procedure name overlap
+    # when table_ids differ (e.g., pipeline uses "p14_soa", GT uses "soa_1")
+    ex_tables = extraction.get("tables", [])
+    gt_tables = ground_truth.get("tables", [])
+
+    table_id_map = _build_table_id_map(ex_tables, gt_tables)
+
     # Build cell maps from ground truth
     gt_cells: dict[tuple[str, int, int], dict] = {}
-    for table in ground_truth.get("tables", []):
+    for table in gt_tables:
         tid = table.get("table_id", "")
         for cell in table.get("ground_truth_cells", []):
             key = (tid, cell["row"], cell["col"])
             gt_cells[key] = cell
 
-    # Build cell maps from extraction
+    # Build cell maps from extraction (using mapped table IDs)
     ex_cells: dict[tuple[str, int, int], dict] = {}
-    for table in extraction.get("tables", []):
-        tid = table.get("table_id", "")
+    for table in ex_tables:
+        ext_tid = table.get("table_id", "")
+        # Use mapped GT table_id if available, otherwise use original
+        mapped_tid = table_id_map.get(ext_tid, ext_tid)
         for cell in table.get("cells", []):
-            key = (tid, cell["row"], cell["col"])
+            key = (mapped_tid, cell["row"], cell["col"])
             ex_cells[key] = cell
 
     # Compare
@@ -172,6 +181,58 @@ def compute_teds(
         result.footnote_marker_coverage = len(gt_markers & ex_markers) / max(len(gt_markers), 1)
 
     return result
+
+
+def _build_table_id_map(ex_tables: list, gt_tables: list) -> dict[str, str]:
+    """Match extraction table_ids to GT table_ids by procedure name overlap.
+
+    When pipeline uses "p14_soa" and GT uses "soa_1", matches them by
+    finding which GT table shares the most procedure names (col 0 text).
+    """
+    # Check if IDs already match
+    ex_ids = {t.get("table_id", "") for t in ex_tables}
+    gt_ids = {t.get("table_id", "") for t in gt_tables}
+    if ex_ids & gt_ids:
+        return {}  # IDs overlap — no remapping needed
+
+    def _get_proc_names(cells: list, key_field: str = "raw_value") -> set:
+        return {
+            str(c.get(key_field, c.get("value", c.get("extracted_value", "")))).strip().lower()[:40]
+            for c in cells
+            if c.get("col", -1) == 0 and str(c.get(key_field, c.get("value", ""))).strip()
+        }
+
+    mapping = {}
+    used_gt = set()
+
+    for ex_t in ex_tables:
+        ex_id = ex_t.get("table_id", "")
+        ex_procs = _get_proc_names(ex_t.get("cells", []))
+        if not ex_procs:
+            continue
+
+        best_gt_id = None
+        best_overlap = 0
+
+        for gt_t in gt_tables:
+            gt_id = gt_t.get("table_id", "")
+            if gt_id in used_gt:
+                continue
+            gt_procs = _get_proc_names(gt_t.get("ground_truth_cells", []))
+            overlap = len(ex_procs & gt_procs)
+            if overlap > best_overlap:
+                best_overlap = overlap
+                best_gt_id = gt_id
+
+        if best_gt_id and best_overlap >= 2:
+            mapping[ex_id] = best_gt_id
+            used_gt.add(best_gt_id)
+            logger.debug(f"Table map: {ex_id} → {best_gt_id} ({best_overlap} shared procs)")
+
+    if mapping:
+        logger.info(f"Table ID remapping: {mapping}")
+
+    return mapping
 
 
 def _values_match(extracted: str, expected: str) -> bool:
