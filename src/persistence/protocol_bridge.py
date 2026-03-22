@@ -30,6 +30,90 @@ def _protocol_id_from(filename: str) -> str:
     return f"{slug}_{digest}"
 
 
+def _extract_metadata(pdf_bytes: bytes, filename: str) -> ProtocolMetadata:
+    """Extract protocol metadata from PDF cover page / first pages."""
+    if not pdf_bytes:
+        return ProtocolMetadata()
+    try:
+        import fitz
+
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        # Read first 5 pages for metadata
+        text = ""
+        for i in range(min(5, doc.page_count)):
+            text += doc[i].get_text("text") + "\n"
+        doc.close()
+
+        title = ""
+        sponsor = ""
+        phase = ""
+        protocol_number = ""
+        indication = ""
+        therapeutic_area = ""
+
+        lines = [l.strip() for l in text.split("\n") if l.strip()]
+
+        for i, line in enumerate(lines):
+            ll = line.lower()
+            # Title: usually the longest line in first 2 pages, or after "Title:"
+            if "protocol title" in ll or "study title" in ll or "full title" in ll:
+                if i + 1 < len(lines):
+                    title = lines[i + 1]
+            # Phase
+            if not phase:
+                m = re.search(r"phase\s*([1234I]+[/\\]?[234I]*[/\\]?[234I]*)", line, re.IGNORECASE)
+                if m:
+                    phase = f"Phase {m.group(1).replace('\\', '/').upper()}"
+            # Protocol number
+            if not protocol_number:
+                m = re.search(r"protocol\s*(?:number|no\.?|#)?\s*[:.]?\s*([A-Z0-9][-A-Z0-9_]{3,})", line, re.IGNORECASE)
+                if m:
+                    protocol_number = m.group(1)
+            # Sponsor
+            if "sponsor" in ll and not sponsor:
+                m = re.search(r"sponsor\s*[:.]?\s*(.+)", line, re.IGNORECASE)
+                if m:
+                    sponsor = m.group(1).strip().strip(":")
+
+        # If no title found, use the longest line from page 1 as a guess
+        if not title:
+            page1_lines = [l for l in lines[:30] if len(l) > 40 and not l.startswith("Page")]
+            if page1_lines:
+                title = max(page1_lines, key=len)
+
+        # Detect therapeutic area from common keywords
+        text_lower = text.lower()
+        if any(w in text_lower for w in ["oncology", "tumor", "carcinoma", "cancer"]):
+            therapeutic_area = "Oncology"
+        elif any(w in text_lower for w in ["vaccine", "immunization", "covid"]):
+            therapeutic_area = "Vaccines"
+        elif any(w in text_lower for w in ["neurology", "epilepsy", "seizure"]):
+            therapeutic_area = "Neurology"
+        elif any(w in text_lower for w in ["cardiology", "cardiac", "heart"]):
+            therapeutic_area = "Cardiology"
+
+        # Detect indication from first few pages
+        for line in lines[:50]:
+            ll = line.lower()
+            if "indication" in ll:
+                m = re.search(r"indication\s*[:.]?\s*(.+)", line, re.IGNORECASE)
+                if m and not indication:
+                    indication = m.group(1).strip()
+
+        logger.info(f"Extracted metadata: title={title[:50]}... phase={phase}")
+        return ProtocolMetadata(
+            title=title,
+            sponsor=sponsor,
+            phase=phase,
+            protocol_number=protocol_number,
+            therapeutic_area=therapeutic_area,
+            indication=indication,
+        )
+    except Exception as e:
+        logger.warning(f"Metadata extraction failed: {e}")
+        return ProtocolMetadata()
+
+
 def _parse_sections(pdf_bytes: bytes, filename: str) -> list[SectionNode]:
     """Parse sections with content_html from the PDF.
 
@@ -175,6 +259,9 @@ def pipeline_output_to_protocol(
     if pdf_bytes:
         sections = _parse_sections(pdf_bytes, filename)
 
+    # Extract metadata from PDF synopsis
+    metadata = _extract_metadata(pdf_bytes, filename)
+
     # Build budget lines from extraction
     budget_lines = _build_budget_lines(result_json)
 
@@ -186,7 +273,7 @@ def pipeline_output_to_protocol(
         document_name=result_json.get("document_name", filename),
         document_hash=result_json.get("document_hash", ""),
         total_pages=result_json.get("total_pages", 0),
-        metadata=ProtocolMetadata(),
+        metadata=metadata,
         sections=sections,
         tables=result_json.get("tables", []),
         procedures=result_json.get("procedures", []),
