@@ -45,13 +45,27 @@ app = FastAPI(
 )
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+
+_allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    FRONTEND_URL,
+]
+
+
+def _cors_origin_allowed(origin: str) -> bool:
+    """Allow explicit origins + any *.up.railway.app subdomain."""
+    if origin in _allowed_origins:
+        return True
+    if origin.endswith(".up.railway.app") and origin.startswith("https://"):
+        return True
+    return False
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:3001",
-        FRONTEND_URL,
-    ],
+    allow_origin_regex=r"https://.*\.up\.railway\.app",
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
