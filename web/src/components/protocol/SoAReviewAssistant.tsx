@@ -600,13 +600,17 @@ function CellDetailPanel({
 }) {
   const [showSource, setShowSource] = useState(false);
   const [pdfError, setPdfError] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
+
+  // Source page navigation — start at the table's source page
+  const initialPage = reviewItem?.source_page || sourcePages[0] || 1;
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
   if (!cell) return null;
 
-  // Determine the source page: from review item, or first page of the table
-  const sourcePage = reviewItem?.source_page || sourcePages[0] || 0;
-  // Convert to 0-indexed for the API
-  const pageIndex = Math.max(0, sourcePage - 1);
+  // 0-indexed for the API (source_pages are 1-indexed in the data,
+  // but some protocols use 0-indexed — handle both)
+  const pageIndex = currentPage;
 
   return (
     <div className="fixed top-0 right-0 w-[380px] h-full bg-white border-l border-neutral-200 shadow-lg z-50 flex flex-col">
@@ -639,12 +643,44 @@ function CellDetailPanel({
 
       {/* Source PDF preview */}
       {showSource && (
-        <div className="border-b border-neutral-200 bg-neutral-100 shrink-0">
-          <div className="px-3 py-1.5 flex items-center justify-between bg-white border-b border-neutral-100">
+        <div className={cn(
+          "border-b border-neutral-200 bg-neutral-100",
+          zoomed ? "fixed inset-0 z-[100] border-0 flex flex-col" : "shrink-0"
+        )}>
+          <div className="px-3 py-1.5 flex items-center justify-between bg-white border-b border-neutral-100 shrink-0">
             <span className="text-[10px] font-semibold text-neutral-600 uppercase tracking-wide">Source Document</span>
-            <span className="text-[10px] text-neutral-400 font-mono">Page {sourcePage}</span>
+            <div className="flex items-center gap-1">
+              <button onClick={() => setCurrentPage(Math.max(0, currentPage - 1))} className="p-0.5 rounded hover:bg-neutral-100 text-neutral-500">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+              </button>
+              <span className="text-[10px] text-neutral-500 font-mono min-w-[40px] text-center">{currentPage}</span>
+              <button onClick={() => setCurrentPage(currentPage + 1)} className="p-0.5 rounded hover:bg-neutral-100 text-neutral-500">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+              </button>
+              <button
+                onClick={() => setZoomed(!zoomed)}
+                className="p-0.5 rounded hover:bg-neutral-100 text-neutral-500 ml-1"
+                title={zoomed ? "Exit fullscreen" : "Fullscreen"}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  {zoomed ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+                  )}
+                </svg>
+              </button>
+              {zoomed && (
+                <button onClick={() => { setZoomed(false); setShowSource(false); }} className="p-0.5 rounded hover:bg-neutral-100 text-neutral-500 ml-1">
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              )}
+            </div>
           </div>
-          <div className="p-2 max-h-[300px] overflow-auto flex justify-center">
+          <div className={cn(
+            "overflow-auto flex items-start justify-center p-2",
+            zoomed ? "flex-1" : "max-h-[300px]"
+          )}>
             {pdfError ? (
               <div className="py-8 text-center text-neutral-400">
                 <p className="text-xs">PDF not available for this protocol</p>
@@ -652,13 +688,20 @@ function CellDetailPanel({
               </div>
             ) : (
               <img
+                key={`${protocolId}-${pageIndex}`}
                 src={getPageImageUrl(protocolId, pageIndex)}
-                alt={`Source page ${sourcePage}`}
-                className="max-w-full rounded shadow"
+                alt={`Source page ${currentPage}`}
+                className={cn("rounded shadow", zoomed ? "max-h-full" : "max-w-full")}
                 onError={() => setPdfError(true)}
               />
             )}
           </div>
+          {/* Page range hint */}
+          {sourcePages.length > 0 && (
+            <div className="px-3 py-1 bg-white border-t border-neutral-100 text-[10px] text-neutral-400 shrink-0">
+              Table spans pages: {sourcePages.join(", ")}
+            </div>
+          )}
         </div>
       )}
 
@@ -675,12 +718,12 @@ function CellDetailPanel({
             <span className={cn("font-medium px-1.5 py-0.5 rounded", confColor(cell.confidence))}>
               {(cell.confidence * 100).toFixed(0)}%
             </span>
-            {sourcePage > 0 && (
+            {currentPage > 0 && (
               <button
                 onClick={() => { setShowSource(true); setPdfError(false); }}
                 className="text-brand-primary hover:underline"
               >
-                p.{sourcePage}
+                p.{currentPage}
               </button>
             )}
           </div>
