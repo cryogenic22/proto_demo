@@ -1,12 +1,46 @@
+# Frontend (separate Railway service)
 web/node_modules
 web/.next
 web/out
-__pycache__
-*.pyc
+
+# Git
 .git
-.hypothesis
+
+# Python caches
+__pycache__
+*.py[cod]
+*.egg-info
+.venv
+venv
+env
+
+# Testing
 .pytest_cache
+.hypothesis
+htmlcov
+.coverage
+tests/
+
+# IDE
+.idea
+.vscode
+
+# Large cached files
 golden_set/cached_pdfs
+
+# Generated outputs
+output/
+
+# Telemetry & checkpoints (recreated at runtime)
+.telemetry
+.checkpoints
+
+# Docs and notes
+docs/
+rough_notes.md
+starter.md
+*.log
+
+# Environment (secrets)
 .env
 .env.local
-*.egg-info
