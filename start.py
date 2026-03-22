@@ -11,28 +11,29 @@ print(f"PORT: {os.environ.get('PORT', 'NOT SET')}", flush=True)
 print(f"Working dir: {os.getcwd()}", flush=True)
 print("=" * 60, flush=True)
 
-# Seed protocol data into the volume on first deploy.
-# Railway volumes mount over data/ — so git-committed seed files
-# are hidden. Copy them from data_seed/ if the volume is empty.
+# Seed protocol data into the volume on every deploy.
+# Railway volumes mount over data/ — git-committed seed files are hidden.
+# Always copy seed files to ensure updates (sections, tables) propagate.
+# User-uploaded protocols (not in seed) are preserved.
 SEED_DIR = Path("data_seed/protocols")
 DATA_DIR = Path("data/protocols")
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 if SEED_DIR.exists():
-    existing = list(DATA_DIR.glob("*.json"))
     seeds = list(SEED_DIR.glob("*.json"))
-    if not existing and seeds:
-        print(f"Seeding {len(seeds)} protocols into volume...", flush=True)
-        for src in seeds:
-            dst = DATA_DIR / src.name
-            shutil.copy2(src, dst)
-            print(f"  Copied {src.name}", flush=True)
-    else:
-        print(
-            f"Volume has {len(existing)} protocols, "
-            f"seed has {len(seeds)} — skipping seed.",
-            flush=True,
-        )
+    updated = 0
+    for src in seeds:
+        dst = DATA_DIR / src.name
+        # Always overwrite seed protocols with latest data
+        shutil.copy2(src, dst)
+        updated += 1
+    print(f"Seeded {updated} protocols into volume.", flush=True)
+
+    # Remove P-27 if it exists (empty protocol, no extraction data)
+    p27 = DATA_DIR / "P-27.json"
+    if p27.exists():
+        p27.unlink()
+        print("  Removed empty P-27.json", flush=True)
 
 # Test critical imports before uvicorn tries
 try:
