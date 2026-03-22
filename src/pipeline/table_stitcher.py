@@ -10,7 +10,7 @@ from __future__ import annotations
 import logging
 import re
 
-from src.models.schema import TableRegion
+from src.models.schema import TableRegion, TableType
 
 logger = logging.getLogger(__name__)
 
@@ -69,22 +69,38 @@ class TableStitcher:
 
     def _should_merge(self, prev: TableRegion, curr: TableRegion) -> bool:
         """Determine if curr should be merged into prev."""
-        # Must be on consecutive pages
-        if not self._pages_are_consecutive(prev, curr):
+        # Must be on consecutive or near-consecutive pages (allow 1 gap for
+        # interleaved text pages between SoA table pages)
+        if not self._pages_are_near(prev, curr, max_gap=2):
             return False
 
-        # Check for continuation markers
+        # Rule 1: Continuation markers (strongest signal)
         if curr.continuation_markers:
             return True
         if curr.title and _CONTINUATION_RE.search(curr.title):
             return True
 
-        # Check for matching base titles
+        # Rule 2: Matching base titles
         if prev.title and curr.title:
             base_prev = self._base_title(prev.title)
             base_curr = self._base_title(curr.title)
             if base_prev and base_curr and base_prev == base_curr:
                 return True
+
+        # Rule 3 (NEW): Both are SOA type and on near-consecutive pages.
+        # SoA tables commonly span 2-20 pages without continuation markers.
+        if (prev.table_type == TableType.SOA
+                and curr.table_type == TableType.SOA
+                and self._pages_are_near(prev, curr, max_gap=2)):
+            # Continuation pages rarely have titles
+            if not curr.title or curr.title == prev.title:
+                return True
+            # Or curr title starts with same table number pattern
+            if prev.title and curr.title:
+                prev_num = re.match(r'^Table\s+(\d+[-.]?\d*)', prev.title, re.IGNORECASE)
+                curr_num = re.match(r'^Table\s+(\d+[-.]?\d*)', curr.title, re.IGNORECASE)
+                if prev_num and curr_num and prev_num.group(1) == curr_num.group(1):
+                    return True
 
         return False
 
@@ -94,6 +110,13 @@ class TableStitcher:
         last_page_of_prev = max(prev.pages)
         first_page_of_curr = min(curr.pages)
         return first_page_of_curr == last_page_of_prev + 1
+
+    @staticmethod
+    def _pages_are_near(prev: TableRegion, curr: TableRegion, max_gap: int = 1) -> bool:
+        """Check if curr starts within max_gap pages after prev ends."""
+        last_page_of_prev = max(prev.pages)
+        first_page_of_curr = min(curr.pages)
+        return 0 < (first_page_of_curr - last_page_of_prev) <= max_gap + 1
 
     @staticmethod
     def _base_title(title: str) -> str:

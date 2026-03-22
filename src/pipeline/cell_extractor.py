@@ -110,6 +110,34 @@ Important:
 
 Return ONLY valid JSON array."""
 
+# Prompt for text-layout pages (>500 chars, no detected table grid lines)
+EXTRACTION_PROMPT_TEXT_LAYOUT = """You are analyzing a clinical trial \
+Schedule of Activities page.
+{page_break_markers}
+IMPORTANT: This page presents the SoA as TEXT WITHOUT VISIBLE GRID LINES.
+The table structure is defined by HORIZONTAL ALIGNMENT -- text at the same
+X-position belongs to the same column.
+
+- The LEFTMOST column contains procedure names (assessments, tests,
+  evaluations)
+- SUBSEQUENT columns represent study visits or time points
+- An "X" at a column position means that procedure is performed at that
+  visit
+- EMPTY positions (no text at that column) mean the procedure is NOT
+  performed
+
+Extract EVERY cell including empty ones. Pay close attention to:
+1. Horizontal alignment -- text at similar X-positions = same column
+2. "X" marks may be aligned with visit headers above
+3. Procedure names in the first column may wrap to multiple lines
+4. Footnote markers (a, b, c) may appear as superscripts
+
+{columns}
+Focus: rows {row_range}, section "{row_group}"
+
+Return JSON array of cells as before.
+Return ONLY valid JSON array."""
+
 
 class CellExtractor:
     """Pass 2: Extract cell values from table chunks at full resolution."""
@@ -125,6 +153,7 @@ class CellExtractor:
         pages: list[PageImage],
         pass_number: int = 1,
         grid_skeleton: GridSkeleton | None = None,
+        is_text_layout: bool = False,
     ) -> list[ExtractedCell]:
         """
         Extract all cell values from a table.
@@ -137,6 +166,8 @@ class CellExtractor:
             grid_skeleton: Deterministic row anchors from PyMuPDF.
                 When provided, row indices are locked to the skeleton
                 instead of being inferred by the VLM.
+            is_text_layout: True if the table uses text-layout (no grid
+                lines). Uses the specialized text-layout prompt.
 
         Returns:
             List of ExtractedCell objects.
@@ -173,7 +204,12 @@ class CellExtractor:
             return await self._extract_chunk(table_images, prompt)
 
         # Fallback: unanchored extraction (original behavior)
-        prompt_template = EXTRACTION_PROMPT_V1 if pass_number == 1 else EXTRACTION_PROMPT_V2
+        # Use text-layout prompt when flagged
+        if is_text_layout:
+            logger.info("Detected text-layout table — using text-layout prompt")
+            prompt_template = EXTRACTION_PROMPT_TEXT_LAYOUT
+        else:
+            prompt_template = EXTRACTION_PROMPT_V1 if pass_number == 1 else EXTRACTION_PROMPT_V2
 
         # Build column description from schema
         col_desc = ", ".join(
@@ -315,12 +351,40 @@ class CellExtractor:
             return_exceptions=True,
         )
 
+        # Apply cumulative row offset so page 2 rows don't restart at 0.
+        # Pages are processed concurrently but assembled in order here.
         all_cells: list[ExtractedCell] = []
+        cumulative_row_offset = 0
         for i, res in enumerate(results):
             if isinstance(res, Exception):
                 logger.error(f"Per-page extraction failed on page {i}: {res}")
-            else:
-                all_cells.extend(res)
+                continue
+
+            page_cells: list[ExtractedCell] = res
+            if not page_cells:
+                continue
+
+            if i > 0 and page_cells and not (grid_skeleton and grid_skeleton.rows):
+                # Only apply offset when there's no grid skeleton
+                # (grid skeleton already has correct absolute row indices)
+                min_row_in_page = min(c.row for c in page_cells)
+                if min_row_in_page < cumulative_row_offset:
+                    # VLM restarted row numbering — apply offset
+                    offset_cells = []
+                    for cell in page_cells:
+                        offset_cells.append(cell.model_copy(
+                            update={"row": cell.row + cumulative_row_offset}
+                        ))
+                    page_cells = offset_cells
+
+            all_cells.extend(page_cells)
+
+            # Update offset for next page: next page starts after
+            # the highest row seen so far
+            if page_cells:
+                max_row_this_page = max(c.row for c in page_cells)
+                cumulative_row_offset = max_row_this_page + 1
+
         return all_cells
 
     @staticmethod
@@ -451,6 +515,43 @@ class CellExtractor:
             for pn in region.pages
             if pn in page_map
         ]
+
+    @staticmethod
+    def detect_text_layout(pdf_bytes: bytes, table_pages: list[int]) -> bool:
+        """Detect if a table region uses text-layout (no grid lines).
+
+        Heuristic: pages with >500 characters of text content but where
+        PyMuPDF's find_tables() returns 0 tables are text-layout pages.
+        Falls back to False if fitz is not available or detection fails.
+        """
+        try:
+            import fitz
+        except ImportError:
+            return False
+
+        try:
+            doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+            text_layout_pages = 0
+            checked_pages = 0
+
+            for pg in table_pages:
+                if pg >= doc.page_count:
+                    continue
+                checked_pages += 1
+                page = doc[pg]
+                text = page.get_text("text")
+                tables = page.find_tables()
+
+                # Text-layout: lots of text but no detected table grid
+                if len(text) > 500 and len(tables.tables) == 0:
+                    text_layout_pages += 1
+
+            doc.close()
+
+            # If majority of pages are text-layout, flag the region
+            return checked_pages > 0 and text_layout_pages > checked_pages / 2
+        except Exception:
+            return False
 
 
 def _safe_int(value, default: int = 0) -> int:

@@ -8,6 +8,7 @@ extracted, validated, and confidence-scored.
 from __future__ import annotations
 
 import logging
+import re
 import time
 
 from src.llm.client import LLMClient
@@ -153,6 +154,19 @@ class PipelineOrchestrator:
             logger.error(f"Table stitching failed: {e}")
             warnings.append(f"Table stitching failed: {e}")
 
+        # Stage 3b: SoA Table Validation — reject non-SoA tables
+        if self.config.soa_only:
+            validated_regions = []
+            for region in regions:
+                if self._is_likely_soa(region, pdf_bytes):
+                    validated_regions.append(region)
+                else:
+                    logger.info(
+                        f"Rejected non-SoA table '{region.title}' on pages {region.pages}"
+                    )
+                    warnings.append(f"Rejected non-SoA table: {region.title}")
+            regions = validated_regions
+
         if not regions:
             warnings.append("No tables detected in document")
             return PipelineOutput(
@@ -231,18 +245,45 @@ class PipelineOrchestrator:
                 logger.warning(f"  Grid anchoring failed, falling back to VLM: {e}")
                 grid_skeleton = None
 
+        # Stage 4c: Detect text-layout tables (no grid lines)
+        is_text_layout = False
+        if pdf_bytes:
+            is_text_layout = CellExtractor.detect_text_layout(
+                pdf_bytes, region.pages
+            )
+            if is_text_layout:
+                logger.info(f"  Table {region.table_id}: Detected text-layout format")
+
         # Stage 5: Cell Extraction (Pass 2 — run twice for consistency)
         logger.info(f"  Table {region.table_id}: Cell Extraction")
         pass1_cells = await self.cell_extractor.extract(
             region, schema, pages, pass_number=1,
             grid_skeleton=grid_skeleton,
+            is_text_layout=is_text_layout,
         )
+
+        # Stage 5b: Text-grid fallback — when VLM returns very few cells,
+        # try deterministic text-position extraction as fallback.
+        if len(pass1_cells) < 20 and pdf_bytes:
+            try:
+                from src.pipeline.text_grid_extractor import extract_cells_from_text_layout
+                text_cells = extract_cells_from_text_layout(pdf_bytes, region.pages)
+                if len(text_cells) > len(pass1_cells):
+                    logger.info(
+                        f"  Text-grid fallback produced {len(text_cells)} cells "
+                        f"(VLM only found {len(pass1_cells)})"
+                    )
+                    # Use text cells as Pass 1, VLM as Pass 2 for reconciliation
+                    pass1_cells = text_cells
+            except Exception as e:
+                logger.warning(f"  Text-grid fallback failed: {e}")
 
         pass2_cells = None
         if self.config.max_extraction_passes >= 2:
             pass2_cells = await self.cell_extractor.extract(
                 region, schema, pages, pass_number=2,
                 grid_skeleton=grid_skeleton,
+                is_text_layout=is_text_layout,
             )
 
         # Stage 6: Footnote Extraction + Resolution
@@ -299,6 +340,50 @@ class PipelineOrchestrator:
             cost_map=cost_map,
         )
 
+        # Stage 9c: Grid Anchor Post-Validation (always runs when PDF available)
+        grid_post_warnings: list[str] = []
+        if pdf_bytes and reconciliation.cells:
+            try:
+                grid_skeleton_post = self.grid_anchor.extract_skeleton(
+                    pdf_bytes, region.pages, table_id=region.table_id
+                )
+                if grid_skeleton_post and grid_skeleton_post.rows:
+                    # Compare extracted row headers against grid skeleton
+                    extracted_procedures = {
+                        c.row_header.strip().lower()
+                        for c in reconciliation.cells
+                        if c.row_header
+                    }
+                    anchored_procedures = {
+                        r.procedure_name.strip().lower()
+                        for r in grid_skeleton_post.rows
+                    }
+
+                    # Flag procedures in extraction that aren't in the grid
+                    phantom_procedures = extracted_procedures - anchored_procedures
+                    if (phantom_procedures
+                            and len(phantom_procedures) > len(anchored_procedures) * 0.3):
+                        msg = (
+                            f"Grid validation: {len(phantom_procedures)} extracted "
+                            f"procedures not found in PDF text layer — possible "
+                            f"phantoms: {list(phantom_procedures)[:5]}"
+                        )
+                        grid_post_warnings.append(msg)
+                        logger.warning(f"  {msg}")
+
+                    # Flag procedures in grid that aren't in extraction (coverage gap)
+                    missing_procedures = anchored_procedures - extracted_procedures
+                    if missing_procedures:
+                        msg = (
+                            f"Grid validation: {len(missing_procedures)} procedures "
+                            f"in PDF but not extracted: "
+                            f"{list(missing_procedures)[:5]}"
+                        )
+                        grid_post_warnings.append(msg)
+                        logger.warning(f"  {msg}")
+            except Exception as e:
+                logger.warning(f"Grid anchor post-validation failed: {e}")
+
         # Compute overall confidence
         if reconciliation.cells:
             overall_confidence = sum(
@@ -351,6 +436,60 @@ class PipelineOrchestrator:
             })
 
         return table
+
+    def _is_likely_soa(self, region, pdf_bytes: bytes) -> bool:
+        """Validate that a detected region is actually an SoA table.
+
+        SoA tables have:
+        - Multiple columns (visits) -- at least 4
+        - Procedure-like row headers in the first column
+        - X marks or checkmarks in the data cells
+        - Title containing "Schedule", "SoA", or "Activities"
+
+        Non-SoA tables (synopsis, amendments, endpoints) have:
+        - 2-3 columns (label + value)
+        - No X marks
+        - Titles like "Synopsis", "Amendment", "Objectives"
+        """
+        # Title-based rejection
+        if region.title:
+            title_lower = region.title.lower()
+            reject_keywords = [
+                "synopsis", "amendment", "objective", "endpoint",
+                "abbreviation", "definition", "reference", "figure",
+                "dosing schedule", "grading scale", "stopping rule",
+            ]
+            if any(kw in title_lower for kw in reject_keywords):
+                return False
+
+            # Title-based acceptance
+            accept_keywords = [
+                "schedule of activities", "schedule of assessments",
+                "schedule of evaluations", "schedule of procedures",
+                "soa", "s.o.a.",
+            ]
+            if any(kw in title_lower for kw in accept_keywords):
+                return True
+
+        # Content-based validation using PyMuPDF text layer
+        if pdf_bytes:
+            import fitz
+            doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+            x_count = 0
+            for pg in region.pages:
+                if pg < doc.page_count:
+                    text = doc[pg].get_text("text")
+                    x_count += len(re.findall(r'\bX\b', text))
+            doc.close()
+
+            # SoA tables have many X marks; non-SoA tables have few or none
+            if x_count >= 5:
+                return True
+            if x_count == 0 and len(region.pages) <= 2:
+                return False  # Likely not an SoA table
+
+        # Default: accept (don't over-filter)
+        return True
 
     @staticmethod
     def _build_cost_map(cells, procedures) -> dict:
