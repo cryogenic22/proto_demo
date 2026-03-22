@@ -920,7 +920,7 @@ Return ONLY the JSON array."""
                 after_y=start_y if end == start else 0.0,
             )
 
-        # Header/footer patterns to strip
+        # Header/footer patterns to strip (static)
         hf_patterns = [
             re.compile(r"^Page \d+", re.IGNORECASE),
             re.compile(r"^Confidential$", re.IGNORECASE),
@@ -930,6 +930,42 @@ Return ONLY the JSON array."""
             re.compile(r"^Final Protocol", re.IGNORECASE),
             re.compile(r"^PFIZER CONFIDENTIAL$", re.IGNORECASE),
         ]
+
+        # Finding 13: Auto-detect protocol-specific headers/footers by
+        # finding text that appears in the top/bottom 80pt of 3+ pages
+        from collections import Counter
+        top_texts = Counter()
+        bottom_texts = Counter()
+        for page_num in range(start, min(end + 1, doc.page_count)):
+            page = doc[page_num]
+            page_height = page.rect.height
+            blocks = page.get_text("dict")["blocks"]
+            for block in blocks:
+                if "lines" not in block:
+                    continue
+                for line in block["lines"]:
+                    spans = line.get("spans", [])
+                    if not spans:
+                        continue
+                    y = spans[0]["origin"][1]
+                    text = "".join(s["text"] for s in spans).strip()
+                    if not text or len(text) < 5:
+                        continue
+                    if y < 80:
+                        top_texts[text] += 1
+                    elif y > page_height - 80:
+                        bottom_texts[text] += 1
+
+        # Text appearing on 3+ pages in header/footer zone = auto-strip
+        auto_hf: set[str] = set()
+        pages_scanned = min(end + 1, doc.page_count) - start
+        threshold = max(3, pages_scanned // 3)
+        for text, count in top_texts.items():
+            if count >= threshold:
+                auto_hf.add(text)
+        for text, count in bottom_texts.items():
+            if count >= threshold:
+                auto_hf.add(text)
 
         # Step 1: Extract all lines with full metadata
         raw_lines: list[dict] = []
@@ -991,8 +1027,10 @@ Return ONLY the JSON array."""
                     if not text:
                         continue
 
-                    # Skip headers/footers
+                    # Skip headers/footers (static patterns + auto-detected)
                     if any(p.match(text) for p in hf_patterns):
+                        continue
+                    if text in auto_hf:
                         continue
                     if "Continued on table" in text:
                         continue
@@ -1084,8 +1122,13 @@ Return ONLY the JSON array."""
         para_gap_threshold = max(typical_gap * 1.4, 20.0)
 
         # List item patterns — match ONLY at start of line
+        # Finding 9: expanded bullet character set to catch Unicode variants
         numbered_list_re = re.compile(r"^(\d{1,3})[.)]\s")
-        bullet_re = re.compile(r"^[\u2022\u2023\u25E6\u2043•●○–—\-]\s")
+        bullet_re = re.compile(
+            r"^[\u2022\u2023\u25E6\u2043\u25AA\u25AB\u25CF\u25CB"
+            r"\u2013\u2014\u2015\u2212\u25A0\u25A1\u25B8\u25B9"
+            r"•●○◦◆◇■□▪▸►–—\-]\s"
+        )
 
         # Compute base X (leftmost text position) for indent detection
         text_lines = [l for l in raw_lines if l.get("text")]
@@ -1148,18 +1191,21 @@ Return ONLY the JSON array."""
                     # Multi-level number (4.2, 5.1.3) = section heading
                     is_section_heading = True
                 elif section_number:
-                    # We know which section we're extracting. Within Section
-                    # 5.1, a line "4. Phase 2/3..." is a numbered list item,
-                    # NOT section 4. Only the current section number and its
-                    # subsections (5.1, 5.1.1, 5.2) are real headings.
-                    # A single digit is only a heading if it's a known section
-                    # AND it's not the parent of our current section.
-                    # Within Section 5.1, "5." is the parent — not a new heading.
-                    sec_parent = section_number.split(".")[0] if "." in section_number else ""
-                    if candidate_num in known_section_nums and candidate_num != sec_parent:
+                    # We know which section we're extracting.
+                    # Finding 10 fix: the section's OWN number is always a heading
+                    # (it's the section title line like "1 Synopsis").
+                    if candidate_num == section_number:
                         is_section_heading = True
-                    # else: single digit that's either not a known section or
-                    # is our parent section = numbered list item
+                    # Subsection headings (5.1, 5.2 within section 5) are headings
+                    elif candidate_num.startswith(section_number + "."):
+                        is_section_heading = True
+                    # Within Section 5.1, "4." is a list item, not section 4.
+                    # A single digit is only a heading if it's a known section
+                    # AND not the parent of our current section.
+                    else:
+                        sec_parent = section_number.split(".")[0] if "." in section_number else ""
+                        if candidate_num in known_section_nums and candidate_num != sec_parent:
+                            is_section_heading = True
                 elif indent_level == 0:
                     is_section_heading = True
 
@@ -1219,11 +1265,22 @@ Return ONLY the JSON array."""
 
             elif line["page"] != current.get("last_page"):
                 # Cross-page boundary handling
-                if is_list_item or is_section_heading or is_subheading:
+                if is_section_heading or is_subheading:
                     start_new = True
+                elif is_list_item:
+                    # New list item on new page = always start new
+                    start_new = True
+                # Finding 8 fix: if current is a LIST_ITEM and the next line
+                # is NOT a new list item, merge it as continuation.
+                # "4. Phase 2/3 only: Participants who... are at higher risk"
+                # continues on next page with "for acquiring COVID-19..."
+                elif current and current["type"] in ("LIST_ITEM", "LIST_ITEM_L2") and not is_list_item:
+                    # Check if previous text ends with sentence-ending punctuation
+                    if current["text"].rstrip().endswith((".", ";", "!")):
+                        start_new = True  # Sentence ended — new paragraph
+                    # else: merge continuation into list item
                 # Issue B: previous paragraph ends with period/colon AND this
-                # line starts at a bullet-marker X position → new list item,
-                # not continuation. Catches sub-bullets that span pages.
+                # line starts at a bullet-marker X position → new paragraph
                 elif current and current["text"].rstrip().endswith((".", ":", ";")):
                     if is_bullet or indent_level >= 2:
                         start_new = True
@@ -1523,12 +1580,17 @@ Return ONLY the JSON array."""
             # Try to extract section number from title
             match = re.match(r"^(\d{1,2}(?:\.\d{1,3}){0,4})\.?\s+(.*)", title.strip())
             if match:
+                sec_num = match.group(1)
+                # Finding 6 fix: compute level from section number instead
+                # of trusting fitz TOC level. P-14's PDF bookmarks assign
+                # level 1 to subsections like "2.1", "4.1" which should be L2.
+                computed_level = sec_num.count(".") + 1
                 sections.append(Section(
-                    number=match.group(1),
+                    number=sec_num,
                     title=match.group(2).strip(),
                     page=page - 1,  # fitz TOC is 1-indexed
                     page_display=str(page),
-                    level=level,
+                    level=computed_level,
                 ))
             else:
                 # Non-numbered sections (appendices, etc.)
@@ -1764,7 +1826,7 @@ Return ONLY the JSON array."""
         return sections
 
     def _compute_page_ranges(self, sections: list[Section], total_pages: int):
-        """Compute end_page for each section based on the next section's start."""
+        """Compute end_page for each section and build parent-child hierarchy."""
         flat = self._flatten(sections)
         for i, s in enumerate(flat):
             if i + 1 < len(flat):
@@ -1773,6 +1835,17 @@ Return ONLY the JSON array."""
                     s.end_page = s.page
             else:
                 s.end_page = total_pages - 1
+
+        # Finding 11: Build children tree from section numbers
+        # "2.1" is a child of "2", "4.1.1" is a child of "4.1"
+        section_map = {s.number: s for s in flat if s.number}
+        for s in flat:
+            if not s.number or "." not in s.number:
+                continue
+            parent_num = ".".join(s.number.split(".")[:-1])
+            parent = section_map.get(parent_num)
+            if parent and s not in parent.children:
+                parent.children.append(s)
 
     def _flatten(self, sections: list[Section]) -> list[Section]:
         """Flatten nested sections into a sorted list."""
