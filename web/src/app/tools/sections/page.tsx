@@ -147,11 +147,30 @@ export default function DocumentExplorerPage() {
     }
   }, [uploadFile]);
 
-  const handleSectionClick = useCallback((section: SectionLike) => {
+  const handleSectionClick = useCallback(async (section: SectionLike) => {
     setSelectedSection(section);
     setPdfPage(Math.max(0, section.page - 1));
     setVerbatimResult(null);
-  }, []);
+
+    // Auto-extract content if the section has no content_html and we have a file
+    if (!section.content_html && verbatimFile) {
+      const sectionRef = section.number
+        ? `Copy Section ${section.number}`
+        : `Copy the "${section.title}" section`;
+      setVerbatimLoading(true);
+      try {
+        const result = await extractVerbatim(verbatimFile, sectionRef, "html");
+        setVerbatimResult(result);
+        if (result.source_pages?.length > 0) {
+          setPdfPage(Math.max(0, result.source_pages[0] - 1));
+        }
+      } catch {
+        // Silently fail — user can still use the instruction bar
+      } finally {
+        setVerbatimLoading(false);
+      }
+    }
+  }, [verbatimFile]);
 
   const handleVerbatimExtract = useCallback(async () => {
     if (!instruction.trim() || !verbatimFile) return;
@@ -375,10 +394,24 @@ export default function DocumentExplorerPage() {
                 </div>
               ) : selectedSection?.content_html ? (
                 <div className="section-content max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripSectionHeading(selectedSection.content_html)) }} />
+              ) : selectedSection && verbatimLoading ? (
+                <div className="flex items-center justify-center py-16">
+                  <div className="text-center">
+                    <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                    <p className="text-sm text-neutral-500">Extracting section content...</p>
+                    <p className="text-xs text-neutral-400 mt-1">
+                      Copying Section {selectedSection.number} {selectedSection.title}
+                    </p>
+                  </div>
+                </div>
               ) : selectedSection ? (
                 <div className="text-center py-16 text-neutral-400">
-                  <p className="text-sm">No content extracted for this section.</p>
-                  <p className="text-xs mt-1">Use the instruction bar below to extract content verbatim.</p>
+                  <p className="text-sm">No content available for this section.</p>
+                  <p className="text-xs mt-1">
+                    {verbatimFile
+                      ? "Auto-extraction failed. Try the instruction bar below."
+                      : "Upload the document below to enable content extraction."}
+                  </p>
                 </div>
               ) : (
                 <div className="text-center py-16 text-neutral-400">
