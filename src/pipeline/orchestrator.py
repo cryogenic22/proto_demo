@@ -243,8 +243,6 @@ class PipelineOrchestrator:
                 table = await self._process_table(region, pages, pdf_bytes)
 
                 # Layer 3: Post-extraction marker validation
-                # A real SoA table has X/checkmark MARKER cells.
-                # Tables with 0 markers and >5 cells are not SoA.
                 if self.config.soa_only:
                     marker_count = sum(
                         1 for c in table.cells
@@ -252,13 +250,55 @@ class PipelineOrchestrator:
                     )
                     if marker_count == 0 and len(table.cells) > 5:
                         logger.info(
-                            f"REJECTED (post-extraction): '{table.title}' "
-                            f"has {len(table.cells)} cells but 0 MARKER — "
-                            f"not an SoA table"
+                            f"REJECTED (0 markers): '{table.title}' "
+                            f"— {len(table.cells)} cells, 0 MARKER"
                         )
                         warnings.append(
-                            f"Rejected after extraction: {table.title} "
-                            f"(0 markers in {len(table.cells)} cells)"
+                            f"Rejected: {table.title} (0 markers)"
+                        )
+                        continue
+
+                    # Layer 4: High-flagged-rate rejection
+                    # >80% flagged = almost certainly not SoA
+                    if len(table.cells) > 10:
+                        flagged_rate = (
+                            len(table.flagged_cells) / len(table.cells)
+                        )
+                        if flagged_rate > 0.80:
+                            logger.info(
+                                f"REJECTED (flagged rate): '{table.title}' "
+                                f"— {flagged_rate:.0%} of cells flagged"
+                            )
+                            warnings.append(
+                                f"Rejected: {table.title} "
+                                f"({flagged_rate:.0%} flagged)"
+                            )
+                            continue
+
+                    # Layer 5: Column header validation
+                    # SoA tables have visit/time column headers
+                    visit_re = re.compile(
+                        r"visit\s*\d|day\s*[-\d]|week\s*\d|month\s*\d"
+                        r"|screening|baseline|follow.?up|end of"
+                        r"|cycle\s*\d|dose\s*\d|period"
+                        r"|vaccination|treatment\s*phase",
+                        re.IGNORECASE,
+                    )
+                    col_headers = [
+                        h.text for h in table.schema_info.column_headers
+                    ]
+                    has_visit_col = any(
+                        visit_re.search(h) for h in col_headers
+                    )
+                    if not has_visit_col and len(col_headers) >= 3:
+                        logger.info(
+                            f"REJECTED (no visit columns): "
+                            f"'{table.title}' — headers: "
+                            f"{col_headers[:5]}"
+                        )
+                        warnings.append(
+                            f"Rejected: {table.title} "
+                            f"(no visit-like columns)"
                         )
                         continue
 

@@ -452,6 +452,12 @@ export default function ProtocolWorkspacePage() {
                                   <span className="text-amber-600 font-medium">{flagged.length} flagged</span>
                                 )}
                               </div>
+                              {/* High flagged rate warning */}
+                              {cells.length > 5 && flagged.length / cells.length > 0.5 && (
+                                <div className="mt-2 px-2 py-1 bg-amber-50 border border-amber-200 rounded text-[10px] text-amber-700">
+                                  {(flagged.length / cells.length * 100).toFixed(0)}% cells flagged — this may not be an SoA table
+                                </div>
+                              )}
                             </CardBody>
                           </Card>
                         </button>
