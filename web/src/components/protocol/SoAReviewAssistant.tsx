@@ -249,6 +249,7 @@ export function SoAReviewAssistant({
             isFlagged={flaggedSet.has(`${selectedCell.row}-${selectedCell.col}`)}
             action={cellActions.get(`${selectedCell.row}-${selectedCell.col}`)}
             protocolId={protocolId}
+            sourcePages={table.source_pages || []}
             onClose={() => setSelectedCell(null)}
             onAction={(a) => handleCellAction(selectedCell.row, selectedCell.col, a)}
           />
@@ -585,7 +586,7 @@ import React from "react";
 
 function CellDetailPanel({
   cell, footnotes, reviewItem, isFlagged, action, protocolId,
-  onClose, onAction,
+  sourcePages, onClose, onAction,
 }: {
   cell: ExtractedCell | null;
   footnotes: ResolvedFootnote[];
@@ -593,10 +594,19 @@ function CellDetailPanel({
   isFlagged: boolean;
   action?: string;
   protocolId: string;
+  sourcePages: number[];
   onClose: () => void;
   onAction: (action: string) => void;
 }) {
+  const [showSource, setShowSource] = useState(false);
+  const [pdfError, setPdfError] = useState(false);
+
   if (!cell) return null;
+
+  // Determine the source page: from review item, or first page of the table
+  const sourcePage = reviewItem?.source_page || sourcePages[0] || 0;
+  // Convert to 0-indexed for the API
+  const pageIndex = Math.max(0, sourcePage - 1);
 
   return (
     <div className="fixed top-0 right-0 w-[380px] h-full bg-white border-l border-neutral-200 shadow-lg z-50 flex flex-col">
@@ -608,12 +618,49 @@ function CellDetailPanel({
             Row: <span className="font-medium text-neutral-700">{cell.row_header}</span> · Col: <span className="font-medium text-neutral-700">{cell.col_header}</span>
           </div>
         </div>
-        <button onClick={onClose} className="p-1 rounded-md hover:bg-neutral-100 text-neutral-400">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-            <path d="M4 4L12 12M12 4L4 12" />
-          </svg>
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => { setShowSource(!showSource); setPdfError(false); }}
+            className={cn(
+              "px-2 py-1 text-[10px] font-medium rounded transition-colors",
+              showSource ? "bg-brand-primary text-white" : "text-neutral-500 hover:bg-neutral-100"
+            )}
+            title="Toggle source document view"
+          >
+            {showSource ? "Hide Source" : "View Source"}
+          </button>
+          <button onClick={onClose} className="p-1 rounded-md hover:bg-neutral-100 text-neutral-400">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <path d="M4 4L12 12M12 4L4 12" />
+            </svg>
+          </button>
+        </div>
       </div>
+
+      {/* Source PDF preview */}
+      {showSource && (
+        <div className="border-b border-neutral-200 bg-neutral-100 shrink-0">
+          <div className="px-3 py-1.5 flex items-center justify-between bg-white border-b border-neutral-100">
+            <span className="text-[10px] font-semibold text-neutral-600 uppercase tracking-wide">Source Document</span>
+            <span className="text-[10px] text-neutral-400 font-mono">Page {sourcePage}</span>
+          </div>
+          <div className="p-2 max-h-[300px] overflow-auto flex justify-center">
+            {pdfError ? (
+              <div className="py-8 text-center text-neutral-400">
+                <p className="text-xs">PDF not available for this protocol</p>
+                <p className="text-[10px] mt-1">Upload the source document to enable preview</p>
+              </div>
+            ) : (
+              <img
+                src={getPageImageUrl(protocolId, pageIndex)}
+                alt={`Source page ${sourcePage}`}
+                className="max-w-full rounded shadow"
+                onError={() => setPdfError(true)}
+              />
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -628,6 +675,14 @@ function CellDetailPanel({
             <span className={cn("font-medium px-1.5 py-0.5 rounded", confColor(cell.confidence))}>
               {(cell.confidence * 100).toFixed(0)}%
             </span>
+            {sourcePage > 0 && (
+              <button
+                onClick={() => { setShowSource(true); setPdfError(false); }}
+                className="text-brand-primary hover:underline"
+              >
+                p.{sourcePage}
+              </button>
+            )}
           </div>
         </div>
 
@@ -668,7 +723,12 @@ function CellDetailPanel({
                   <p className="text-neutral-500 mt-1 font-mono">Value: {reviewItem.extracted_value}</p>
                 )}
                 {reviewItem.source_page > 0 && (
-                  <p className="text-neutral-400 mt-1">Source: page {reviewItem.source_page}</p>
+                  <button
+                    onClick={() => { setShowSource(true); setPdfError(false); }}
+                    className="text-brand-primary text-[10px] hover:underline mt-1"
+                  >
+                    View source page {reviewItem.source_page}
+                  </button>
                 )}
               </div>
             )}
