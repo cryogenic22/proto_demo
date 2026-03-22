@@ -127,8 +127,11 @@ class GridAnchor:
                     if not proc_name:
                         continue
 
-                    # Skip rows that are just page headers/footers
-                    if self._is_noise(proc_name):
+                    # For table-detected rows, only skip obvious noise
+                    # (page headers, section numbers). Don't apply aggressive
+                    # body text filtering — find_tables() already identified
+                    # this as table content, trust it.
+                    if self._is_table_noise(proc_name):
                         continue
 
                     # Get Y-position from the table cell bounding box
@@ -206,6 +209,23 @@ class GridAnchor:
                 ))
 
         return rows
+
+    def _is_table_noise(self, text: str) -> bool:
+        """Light noise filter for table-detected rows. Only rejects obvious non-data."""
+        text_lower = text.lower().strip()
+        # Only reject clear page chrome and section numbers
+        if re.match(r"^page \d+", text_lower):
+            return True
+        if re.match(r"^confidential$", text_lower):
+            return True
+        if re.match(r"^\d{1,2}\.\d", text_lower):  # Section numbers like "1.3.2"
+            return True
+        if re.match(r"^(pf-|protocol [a-z]|final protocol)", text_lower):
+            return True
+        # Very long text is body paragraphs, not procedure names
+        if len(text) > 200:
+            return True
+        return False
 
     def _is_noise(self, text: str) -> bool:
         """Check if text is a page header, footer, or non-table content."""
