@@ -17,7 +17,1651 @@
     "amendment_number": "",
     "version": ""
   },
-  "sections": [],
+  "sections": [
+    {
+      "number": "",
+      "title": "TABLE OF CONTENTS",
+      "page": 36,
+      "end_page": 40,
+      "level": 1,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "1.1",
+      "title": "Synopsis",
+      "page": 10,
+      "end_page": 33,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "1.2",
+      "title": "Schema",
+      "page": 34,
+      "end_page": 34,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "2.1",
+      "title": "Study Rationale",
+      "page": 46,
+      "end_page": 46,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "2.2",
+      "title": "Background and Overview",
+      "page": 46,
+      "end_page": 46,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "2.2.1",
+          "title": "Nonclinical Studies",
+          "page": 47,
+          "end_page": 47,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "2.2.2",
+          "title": "Clinical Studies",
+          "page": 47,
+          "end_page": 49,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "2.3",
+      "title": "Benefit/Risk Assessment",
+      "page": 50,
+      "end_page": 50,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "2.3.1",
+          "title": "Potential Benefits of Study Participation",
+          "page": 50,
+          "end_page": 50,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "2.3.2",
+          "title": "Risks From Study Participation",
+          "page": 50,
+          "end_page": 51,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "2.3.3",
+          "title": "Overall Benefit/Risk Conclusion",
+          "page": 52,
+          "end_page": 52,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "4.1",
+      "title": "General Design",
+      "page": 58,
+      "end_page": 58,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "4.1.1",
+          "title": "Part A, the Blinded Phase",
+          "page": 58,
+          "end_page": 59,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "4.1.2",
+          "title": "Part B, the Open-Label Observational Phase",
+          "page": 60,
+          "end_page": 62,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "4.1.3",
+          "title": "Part C, the Booster Dose Phase",
+          "page": 63,
+          "end_page": 63,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "4.2",
+      "title": "Scientific Rationale for Study Design",
+      "page": 64,
+      "end_page": 64,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "4.3",
+      "title": "Choice of Dose and Control Product",
+      "page": 65,
+      "end_page": 65,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "4.4",
+      "title": "End of Study Definition",
+      "page": 65,
+      "end_page": 66,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "5.1",
+      "title": "Inclusion and Exclusion Criteria (Part A, Part B, and Part C)",
+      "page": 67,
+      "end_page": 67,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "5.1.1",
+          "title": "Inclusion Criteria",
+          "page": 67,
+          "end_page": 67,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "5.1.2",
+          "title": "Exclusion Criteria",
+          "page": 68,
+          "end_page": 69,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "5.2",
+      "title": "Participant Restrictions",
+      "page": 70,
+      "end_page": 70,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "5.3",
+      "title": "Screen Failures (Part A, Blinded Phase Only)",
+      "page": 70,
+      "end_page": 70,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "6.1",
+      "title": "Investigational Product",
+      "page": 71,
+      "end_page": 71,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "6.2",
+      "title": "Dosing and Management of Investigational Product",
+      "page": 71,
+      "end_page": 71,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "6.2.1",
+          "title": "Method of Randomly Assigning Participants to Treatment Groups (Part A, Blinded Phase Only)",
+          "page": 71,
+          "end_page": 71,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "6.2.2",
+          "title": "Administration of Investigational Product",
+          "page": 72,
+          "end_page": 72,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "6.2.3",
+          "title": "Delivery and Receipt",
+          "page": 73,
+          "end_page": 73,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "6.2.4",
+          "title": "Packaging and Labeling",
+          "page": 73,
+          "end_page": 73,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "6.2.5",
+          "title": "Storage",
+          "page": 74,
+          "end_page": 74,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "6.2.6",
+          "title": "Investigational Product Accountability",
+          "page": 74,
+          "end_page": 74,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "6.2.7",
+          "title": "Handling and Disposal",
+          "page": 74,
+          "end_page": 74,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "6.2.8",
+          "title": "Unblinding",
+          "page": 75,
+          "end_page": 76,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "6.3",
+      "title": "Study Treatment Compliance",
+      "page": 77,
+      "end_page": 77,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "6.4",
+      "title": "Prior and Concomitant Therapy",
+      "page": 78,
+      "end_page": 78,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "6.4.1",
+          "title": "Prior Medications and Therapies",
+          "page": 78,
+          "end_page": 78,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "6.4.2",
+          "title": "Concomitant Medications and Therapies",
+          "page": 78,
+          "end_page": 78,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "6.4.3",
+          "title": "Concomitant Medications and Vaccines That May Lead to the Elimination of a Participant From Per-protocol Analyses",
+          "page": 79,
+          "end_page": 79,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "7.1",
+      "title": "Criteria for Delay of Study Treatment",
+      "page": 80,
+      "end_page": 80,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "7.2",
+      "title": "Discontinuation of Study Treatment",
+      "page": 81,
+      "end_page": 81,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "7.3",
+      "title": "Participant Withdrawal From the Study",
+      "page": 82,
+      "end_page": 82,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "7.3.1",
+          "title": "Participant Withdrawal",
+          "page": 82,
+          "end_page": 82,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "7.4",
+      "title": "Lost to Follow-up",
+      "page": 83,
+      "end_page": 85,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "8.1",
+      "title": "Efficacy and Immunogenicity Assessments and Procedures",
+      "page": 86,
+      "end_page": 86,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "8.1.1",
+          "title": "Efficacy Assessments Related to COVID-19 and SARS-CoV-2 Infection",
+          "page": 86,
+          "end_page": 86,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.1.2",
+          "title": "Surveillance for COVID-19 Symptoms",
+          "page": 87,
+          "end_page": 88,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.1.3",
+          "title": "Convalescent Period Starting With the Illness Visit",
+          "page": 90,
+          "end_page": 90,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.1.4",
+          "title": "Ancillary Supplies for Participant Use",
+          "page": 92,
+          "end_page": 92,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.1.5",
+          "title": "Immunogenicity Assessments",
+          "page": 93,
+          "end_page": 93,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "8.2",
+      "title": "Safety Assessments",
+      "page": 93,
+      "end_page": 93,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "8.2.1",
+          "title": "Safety Phone Calls",
+          "page": 94,
+          "end_page": 94,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.2.2",
+          "title": "Use of Electronic Diaries",
+          "page": 94,
+          "end_page": 96,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.2.3",
+          "title": "Demographics/Medical History",
+          "page": 97,
+          "end_page": 97,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.2.4",
+          "title": "Physical Examination",
+          "page": 97,
+          "end_page": 97,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.2.5",
+          "title": "Vital Sign Measurements",
+          "page": 97,
+          "end_page": 97,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.2.6",
+          "title": "Blood Sampling",
+          "page": 98,
+          "end_page": 98,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "8.3",
+      "title": "Safety Definitions and Procedures",
+      "page": 99,
+      "end_page": 99,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "8.3.1",
+          "title": "Adverse Event",
+          "page": 99,
+          "end_page": 99,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.2",
+          "title": "Medically Attended Adverse Events",
+          "page": 99,
+          "end_page": 99,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.3",
+          "title": "Adverse Events of Special Interest",
+          "page": 100,
+          "end_page": 102,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.4",
+          "title": "Serious Adverse Events",
+          "page": 103,
+          "end_page": 103,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.5",
+          "title": "Solicited Adverse Reactions (Part A)",
+          "page": 104,
+          "end_page": 104,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.6",
+          "title": "Recording and Follow-up of Pregnancy",
+          "page": 107,
+          "end_page": 107,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.7",
+          "title": "Recording and Follow-up of an AE and/or SAE",
+          "page": 108,
+          "end_page": 108,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.8",
+          "title": "Time Period and Frequency for Collecting AE and SAE Information",
+          "page": 108,
+          "end_page": 108,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.9",
+          "title": "Assessment of Intensity",
+          "page": 108,
+          "end_page": 108,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.10",
+          "title": "Assessment of Causality",
+          "page": 109,
+          "end_page": 109,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.11",
+          "title": "Reporting Adverse Events",
+          "page": 110,
+          "end_page": 110,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.3.12",
+          "title": "Regulatory Reporting Requirements for SAEs",
+          "page": 110,
+          "end_page": 110,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "8.4",
+      "title": "Monitoring Committees",
+      "page": 111,
+      "end_page": 111,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "8.4.1",
+          "title": "Protocol Safety Review Team",
+          "page": 111,
+          "end_page": 111,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.4.2",
+          "title": "Data and Safety Monitoring Board",
+          "page": 111,
+          "end_page": 111,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.4.3",
+          "title": "Adjudication Committee",
+          "page": 112,
+          "end_page": 112,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "8.4.4",
+          "title": "Independent Cardiac Event Adjudication Committee",
+          "page": 112,
+          "end_page": 112,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "8.5",
+      "title": "Management of Overdose",
+      "page": 113,
+      "end_page": 113,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "8.6",
+      "title": "Pharmacokinetics",
+      "page": 113,
+      "end_page": 113,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "8.7",
+      "title": "Pharmacodynamics",
+      "page": 113,
+      "end_page": 113,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "8.8",
+      "title": "Exploratory Assessments and Biomarkers",
+      "page": 113,
+      "end_page": 113,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "8.9",
+      "title": "Medical Resource Utilization and Health Economics",
+      "page": 113,
+      "end_page": 113,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "9.1",
+      "title": "Blinding and Responsibility for Analyses",
+      "page": 114,
+      "end_page": 114,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "9.2",
+      "title": "Statistical Hypotheses",
+      "page": 114,
+      "end_page": 114,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "9.3",
+      "title": "Sample Size Determination",
+      "page": 115,
+      "end_page": 115,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "9.3.1",
+          "title": "Power for Selected Secondary Efficacy Endpoints",
+          "page": 117,
+          "end_page": 117,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "9.4",
+      "title": "Analysis Populations",
+      "page": 118,
+      "end_page": 118,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "9.5",
+      "title": "Statistical Analyses",
+      "page": 119,
+      "end_page": 119,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "9.5.1",
+          "title": "Efficacy Analyses",
+          "page": 119,
+          "end_page": 122,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "9.5.2",
+          "title": "Safety Analyses",
+          "page": 125,
+          "end_page": 125,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "9.5.3",
+          "title": "Immunogenicity Analyses",
+          "page": 126,
+          "end_page": 126,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "9.5.4",
+          "title": "Exploratory Analyses in Part A",
+          "page": 129,
+          "end_page": 129,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "9.5.5",
+          "title": "Subgroup Analyses",
+          "page": 129,
+          "end_page": 129,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "9.6",
+      "title": "Interim Analyses",
+      "page": 130,
+      "end_page": 130,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "11.1",
+      "title": "APPENDIX 1: Schedules of Events",
+      "page": 137,
+      "end_page": 137,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "11.2",
+      "title": "APPENDIX 2: Study Governance Considerations",
+      "page": 159,
+      "end_page": 159,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "11.2.1",
+          "title": "Regulatory and Ethical Considerations",
+          "page": 159,
+          "end_page": 159,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.2",
+          "title": "Study Monitoring",
+          "page": 159,
+          "end_page": 160,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.3",
+          "title": "Audits and Inspections",
+          "page": 161,
+          "end_page": 161,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.4",
+          "title": "Financial Disclosure",
+          "page": 161,
+          "end_page": 161,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.5",
+          "title": "Recruitment Procedures",
+          "page": 161,
+          "end_page": 161,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.6",
+          "title": "Informed Consent Process",
+          "page": 161,
+          "end_page": 161,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.7",
+          "title": "Protocol Amendments",
+          "page": 162,
+          "end_page": 162,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.8",
+          "title": "Protocol Deviations",
+          "page": 163,
+          "end_page": 163,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.9",
+          "title": "Data Protection",
+          "page": 163,
+          "end_page": 163,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.10",
+          "title": "Sample Retention and Future Biomedical Research",
+          "page": 164,
+          "end_page": 164,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.11",
+          "title": "Data Quality Assurance and Quality Control",
+          "page": 165,
+          "end_page": 165,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.12",
+          "title": "Data Collection and Management",
+          "page": 166,
+          "end_page": 166,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.13",
+          "title": "Source Documents",
+          "page": 166,
+          "end_page": 166,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.14",
+          "title": "Retention of Records",
+          "page": 167,
+          "end_page": 167,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.15",
+          "title": "Study and Site Closure",
+          "page": 167,
+          "end_page": 167,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.2.16",
+          "title": "Publication Policy",
+          "page": 168,
+          "end_page": 168,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "11.3",
+      "title": "APPENDIX\u00a03: Contraceptive Guidance",
+      "page": 169,
+      "end_page": 170,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "11.4",
+      "title": "APPENDIX\u00a04: Statistical Appendices",
+      "page": 171,
+      "end_page": 171,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [
+        {
+          "number": "11.4.1",
+          "title": "Estimands and Estimand Specifications",
+          "page": 171,
+          "end_page": 171,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        },
+        {
+          "number": "11.4.2",
+          "title": "Statistical Methods and Sensitivity Analyses",
+          "page": 174,
+          "end_page": 174,
+          "level": 3,
+          "ke_type": "SECTION",
+          "content_html": "",
+          "children": [],
+          "quality_score": null
+        }
+      ],
+      "quality_score": null
+    },
+    {
+      "number": "11.5",
+      "title": "APPENDIX 5: Adverse Events of Special Interest Terms",
+      "page": 175,
+      "end_page": 176,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "11.6",
+      "title": "APPENDIX\u00a06: Protocol Amendment History",
+      "page": 177,
+      "end_page": 192,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "LIST OF TABLES",
+      "page": 41,
+      "end_page": 41,
+      "level": 1,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a01: Objectives and Endpoints",
+      "page": 53,
+      "end_page": 57,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a02: Summary of Treatment Groups",
+      "page": 71,
+      "end_page": 71,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a03: Grading of COVID-19 Symptoms",
+      "page": 91,
+      "end_page": 91,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a04: Maximum Planned Immunogenicity Blood Sampling Volumes per Participant by Visit",
+      "page": 98,
+      "end_page": 98,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a05: Solicited Adverse Reactions and Grades",
+      "page": 105,
+      "end_page": 106,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a06: Conditions and Sample Size to Demonstrate Vaccine Efficacy",
+      "page": 116,
+      "end_page": 116,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a07: Power of Demonstrating Vaccine Efficacy Against Severe COVID-19",
+      "page": 117,
+      "end_page": 117,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a08: Populations for Analyses",
+      "page": 118,
+      "end_page": 118,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a09: Statistical Analysis Methods of Efficacy Endpoints",
+      "page": 119,
+      "end_page": 119,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a010: Treatment Cohorts for the Long-term Efficacy Analyses",
+      "page": 123,
+      "end_page": 123,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table 11: Long-term Efficacy Endpoints",
+      "page": 124,
+      "end_page": 124,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a012: Analysis Strategy for Safety Parameters in Part A",
+      "page": 126,
+      "end_page": 126,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a013: Immunogenicity Endpoints and Statistical Methods",
+      "page": 127,
+      "end_page": 128,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a014: Burden of Disease Score",
+      "page": 129,
+      "end_page": 129,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a015: Interim Boundaries Using O\u2019Brien-Fleming Spending Function, Calculation Based on the PP Set for the Primary Efficacy Endpoint",
+      "page": 131,
+      "end_page": 136,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a016: Schedule of Events (Vaccination Phase, Day\u00a01 \u2013 Day\u00a057)",
+      "page": 138,
+      "end_page": 140,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a017: Schedule of Events (Surveillance Phase, Day\u00a064 \u2013 Day\u00a0394)",
+      "page": 141,
+      "end_page": 143,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a018: Schedule of Events (Surveillance Phase, Day\u00a0401 \u2013 Day\u00a0759)",
+      "page": 144,
+      "end_page": 145,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a019: Schedule of Events (Convalescent Period, Starting With the Illness Visit)",
+      "page": 146,
+      "end_page": 147,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a020: Part B: Participant Decision Visit",
+      "page": 148,
+      "end_page": 148,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a021: Supplemental Schedule of Events: Open-Label Observational Phase - Placebo Participants who Request to Receive mRNA-1273",
+      "page": 149,
+      "end_page": 151,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a022: Modified Supplemental Schedule of Events: Open-Label Observational Phase \u2013 mRNA-1273 Participants Who ONLY Received 1 Dose of mRNA-1273",
+      "page": 152,
+      "end_page": 154,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a023: Part C Supplemental Schedule of Events: Booster Dose Phase",
+      "page": 155,
+      "end_page": 158,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a024: Intercurrent Event Types",
+      "page": 171,
+      "end_page": 171,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a025: Primary Objective and Estimands With Rationale for Strategies to Address Intercurrent Events for Per-protocol Analysis",
+      "page": 172,
+      "end_page": 173,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table 26: Summary of Statistical Methods and Sensitivity Analyses",
+      "page": 174,
+      "end_page": 174,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Table\u00a027: Adverse Events of Special Interest",
+      "page": 175,
+      "end_page": 175,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "LIST OF FIGURES",
+      "page": 42,
+      "end_page": 45,
+      "level": 1,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Figure\u00a01: Study Flow Diagram: Part A, the Blinded Phase Followed by Part B, the Open-Label Phase Including Part C, the Booster Dose Phase",
+      "page": 34,
+      "end_page": 34,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Figure\u00a02: Part B, the Open-Label Observational Phase, and Part C, the Booster Dose Phase",
+      "page": 35,
+      "end_page": 35,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Figure\u00a03: Surveillance for COVID-19 Symptoms and the Corresponding Clinical Data Pathways",
+      "page": 89,
+      "end_page": 89,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    },
+    {
+      "number": "",
+      "title": "Figure\u00a04: Boundary Crossing Probabilities by Effect Size",
+      "page": 116,
+      "end_page": 116,
+      "level": 2,
+      "ke_type": "SECTION",
+      "content_html": "",
+      "children": [],
+      "quality_score": null
+    }
+  ],
   "tables": [
     {
       "table_id": "p4_soa",
