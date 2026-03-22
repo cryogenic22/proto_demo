@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProtoExtract Report — Prot_0001 1.pdf</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #1e293b; background: #f8fafc; line-height: 1.5; }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+h1 { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+h2 { font-size: 17px; font-weight: 600; color: #0f172a; margin: 32px 0 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+h3 { font-size: 14px; font-weight: 600; color: #334155; margin: 20px 0 8px; }
+.subtitle { font-size: 13px; color: #64748b; margin-bottom: 24px; }
+.meta { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: #64748b; margin-bottom: 24px; }
+.meta span { background: #f1f5f9; padding: 4px 10px; border-radius: 6px; }
+
+/* KPI Cards */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.kpi { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; }
+.kpi-value { font-size: 28px; font-weight: 700; }
+.kpi-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+.kpi-good { color: #059669; }
+.kpi-warn { color: #d97706; }
+.kpi-bad { color: #dc2626; }
+.kpi-info { color: #0284c7; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; font-size: 11px; margin: 8px 0 20px; }
+.data-table th { background: #f1f5f9; color: #475569; font-weight: 600; text-align: left; padding: 8px 10px; border: 1px solid #e2e8f0; white-space: nowrap; }
+.data-table td { padding: 6px 10px; border: 1px solid #e2e8f0; vertical-align: top; }
+.data-table tr:hover { background: #f8fafc; }
+.data-table .sticky { position: sticky; left: 0; background: white; z-index: 1; font-weight: 500; }
+
+/* Cell confidence coloring */
+.conf-high { background: #ecfdf5; }
+.conf-mid { background: #fefce8; }
+.conf-low { background: #fef2f2; }
+.flagged { outline: 2px solid #f59e0b; outline-offset: -2px; }
+
+/* Badges */
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+.badge-soa { background: #dbeafe; color: #1d4ed8; }
+.badge-cond { background: #fef3c7; color: #92400e; }
+.badge-exc { background: #fecaca; color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+.badge-clar { background: #e2e8f0; color: #475569; }
+.badge-cost-low { background: #f1f5f9; color: #64748b; }
+.badge-cost-med { background: #e0f2fe; color: #0369a1; }
+.badge-cost-high { background: #fef3c7; color: #92400e; }
+.badge-cost-vhigh { background: #fecaca; color: #991b1b; }
+
+/* Table section */
+.table-section { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+.table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.table-meta { font-size: 12px; color: #64748b; }
+.conf-bar { display: inline-block; width: 60px; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; vertical-align: middle; }
+.conf-fill { height: 100%; border-radius: 4px; }
+.grid-scroll { overflow-x: auto; margin: 0 -20px; padding: 0 20px; }
+
+/* Procedure mapping */
+.proc-table td:nth-child(3) { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 10px; }
+
+/* Review queue */
+.review-item { display: flex; gap: 12px; padding: 10px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; margin-bottom: 8px; font-size: 12px; }
+.review-icon { width: 28px; height: 28px; background: #fef3c7; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Narrative */
+.narrative { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+.narrative h2 { margin-top: 0; }
+.narrative-section { margin-bottom: 16px; }
+.narrative-section h3 { color: #0f172a; font-size: 13px; margin-bottom: 6px; }
+.narrative-section p { font-size: 12px; color: #475569; line-height: 1.6; }
+.finding { display: flex; gap: 10px; padding: 8px 12px; border-radius: 6px; margin-bottom: 6px; font-size: 12px; }
+.finding-good { background: #ecfdf5; color: #065f46; }
+.finding-warn { background: #fffbeb; color: #92400e; }
+.finding-bad { background: #fef2f2; color: #991b1b; }
+.finding-info { background: #eff6ff; color: #1e40af; }
+.finding-icon { font-size: 14px; flex-shrink: 0; }
+
+/* Print */
+@media print {
+  body { background: white; }
+  .container { max-width: 100%; padding: 12px; }
+  .table-section { break-inside: avoid; }
+  .grid-scroll { overflow: visible; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<h1>Protocol Table Extraction Report</h1>
+<p class="subtitle">Prot_0001 1.pdf</p>
+<div class="meta">
+  <span>252 pages</span>
+  <span>9 SOA tables</span>
+  <span>1701s processing</span>
+  <span>Pipeline v0.1.0</span>
+  <span>2026-03-22 00:50 UTC</span>
+</div>
+
+<!-- KPIs -->
+<div class="kpis">
+  <div class="kpi">
+    <div class="kpi-value kpi-info">9</div>
+    <div class="kpi-label">SOA Tables</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-info">351</div>
+    <div class="kpi-label">Cells Extracted</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-bad">48%</div>
+    <div class="kpi-label">Avg Confidence</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-info">16</div>
+    <div class="kpi-label">Footnotes Resolved</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-warn">123</div>
+    <div class="kpi-label">Cells for Review</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value kpi-info">62</div>
+    <div class="kpi-label">Procedures Mapped</div>
+  </div>
+</div>
+
+
+
+<!-- Narrative Analysis -->
+<div class="narrative">
+<h2>Extraction Analysis</h2>
+<div class="narrative-section"><p>This report contains the extraction results for <strong>Prot_0001 1.pdf</strong> (252 pages). The pipeline identified <strong>9 SOA (Schedule of Activities) table(s)</strong> and extracted <strong>351 cells</strong> with an average confidence of <strong>48%</strong>. Each cell was extracted twice using different prompts, cross-checked by an adversarial validation agent, and verified against OCR output where available. Cells highlighted in <span style="background:#fef2f2;padding:2px 4px;border-radius:3px;">red</span> have low confidence; cells with <span style="outline:2px solid #f59e0b;padding:2px 4px;border-radius:3px;">orange outlines</span> are flagged for human review.</p></div>
+<div class="narrative-section"><h3>Key Findings</h3>
+<div class="finding finding-bad"><span class="finding-icon">&#10007;</span><div><strong>Low extraction confidence.</strong> Average confidence is only 48%. Significant disagreement between extraction passes — manual review of flagged cells is strongly recommended.</div></div>
+<div class="finding finding-warn"><span class="finding-icon">&#9888;</span><div><strong>123 cells (35%) require human review.</strong> These cells either showed disagreement between extraction passes, were flagged by the adversarial challenger, or fell below confidence thresholds. The table with the most flagged cells is "Administration of a Fourth (or Fifth) Dose of BNT162b2 to Eligible Participants From Protocol Amendments 13, 14, and 15" (102 flagged).</div></div>
+<div class="finding finding-good"><span class="finding-icon">&#10003;</span><div><strong>16 footnotes extracted and classified.</strong> Types found: 8 conditional, 7 clarification, 1 exception. Footnotes are anchored to specific cells and displayed as superscripts in the grid view.</div></div>
+<div class="finding finding-warn"><span class="finding-icon">&#9888;</span><div><strong>10 of 62 procedures could not be mapped</strong> to the canonical vocabulary. These are shown as their raw extracted names in the procedure mapping tables below. 11 procedures have CPT codes. Unmapped procedures may be protocol-specific assessments or novel procedures not yet in the mapping database.</div></div>
+<div class="finding finding-info"><span class="finding-icon">&#9432;</span><div><strong>Confidence varies significantly across tables</strong> (range: 0% to 95%). The lowest-confidence table is "p41_soa" at 0%. This table may have complex structure (multi-level headers, dense footnotes, or spanning cells) that is harder to extract reliably.</div></div>
+<div class="finding finding-info"><span class="finding-icon">&#9432;</span><div><strong>6 table(s) span multiple pages.</strong> These were automatically stitched from continuation pages. Multi-page tables are more prone to extraction errors at page boundaries — pay special attention to rows near page breaks.</div></div>
+</div>
+<div class="narrative-section"><h3>Reviewer Guidance</h3><p>When reviewing this extraction:</p><ul style="font-size:12px;color:#475569;margin:6px 0 0 20px;line-height:1.8;"><li><strong>Flagged cells (orange outline)</strong> — These require verification against the source PDF. The pipeline was not confident in the extracted value.</li><li><strong>Red-background cells</strong> — Low confidence (&lt;70%). The two extraction passes disagreed, or the adversarial checker found a potential error.</li><li><strong>Procedure mapping</strong> — Verify that raw procedure names are correctly mapped to canonical names. "Unknown" category procedures need manual mapping.</li><li><strong>Footnotes</strong> — Verify that footnote markers (superscripts) are anchored to the correct cells and that the footnote text matches the source document.</li><li><strong>Visit windows</strong> — Confirm that Day/Week/Month calculations and window ranges match the protocol.</li></ul></div>
+</div>
+
+<!-- Comparison with Previous Run -->
+
+<div style="background:white;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin-bottom:24px;">
+  <h2 style="margin-top:0;border:none;">Comparison with Previous Run</h2>
+  <p style="font-size:12px;color:#64748b;">Previous: pfizer_bnt162_extraction_v6.json</p>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
+    <div style="background:#f8fafc;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:24px;font-weight:700;color:#0284c7;">9 → 9</div>
+      <div style="font-size:11px;color:#64748b;">Tables</div>
+    </div>
+    <div style="background:#f8fafc;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:24px;font-weight:700;color:#0284c7;">351 → 351</div>
+      <div style="font-size:11px;color:#64748b;">Cells</div>
+    </div>
+    <div style="background:#f8fafc;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:24px;font-weight:700;color:#64748b;">&#8212; 0.0%</div>
+      <div style="font-size:11px;color:#64748b;">Confidence Delta</div>
+    </div>
+    <div style="background:#f8fafc;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:24px;font-weight:700;color:#059669;">100%</div>
+      <div style="font-size:11px;color:#64748b;">Cell Stability</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0;">
+    <div style="background:#ecfdf5;border-radius:6px;padding:8px;text-align:center;font-size:12px;">
+      <strong>351</strong> unchanged
+    </div>
+    <div style="background:#fefce8;border-radius:6px;padding:8px;text-align:center;font-size:12px;">
+      <strong>0</strong> changed
+    </div>
+    <div style="background:#eff6ff;border-radius:6px;padding:8px;text-align:center;font-size:12px;">
+      <strong>0</strong> new
+    </div>
+    <div style="background:#fef2f2;border-radius:6px;padding:8px;text-align:center;font-size:12px;">
+      <strong>0</strong> removed
+    </div>
+  </div>
+
+  <div style="font-size:12px;color:#64748b;margin-top:12px;">
+    <strong>Footnotes:</strong> 16 → 16
+    (0)
+  </div></div>
+
+<!-- Tables -->
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">p41_soa</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 41, 42, 43, 44, 45, 46 &middot;
+        0 cells &middot;
+        0 flagged &middot;
+        0 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#dc2626;">0%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:0%;background:#dc2626;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <p style='color:#94a3b8;font-size:12px;'>No cells extracted</p>
+  </div>
+
+  
+  
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td>Visit Number / Visit Desc</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Screening / Screening / 0</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 1 / Vax 1 / Day 1</td><td>1</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 2 / Next-Day Follow</td><td>3</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 3 / 1-Week Follow-u</td><td>8</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 4 / Vax 2 / 19 to 2</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 5 / 1-Week Follow-u</td><td>8</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 6 / 2-Week Follow-u</td><td>16</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 7 / 1-Month Follow-</td><td>35</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Study procedures for Visi</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Unplanned / Potential COV</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+<tr><td>Visit 8 / 6-Month Follow-</td><td>189</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 8a / Vax 3 / 175 to</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 8b / 1-Week Follow-</td><td>8</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 8c / 1-Month Follow</td><td>35</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 9 / 12-Month Follow</td><td>378</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Visit 10 / 24-Month Follo</td><td>742</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Unplanned / Potential COV</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3><p style="color:#059669;font-size:12px;">All cells passed validation — no review needed.</p>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">p48_soa</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 48, 49, 50 &middot;
+        0 cells &middot;
+        0 flagged &middot;
+        0 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#dc2626;">0%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:0%;background:#dc2626;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <p style='color:#94a3b8;font-size:12px;'>No cells extracted</p>
+  </div>
+
+  
+  
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td>Visit Number / Visit Desc</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>1 / Vaccination 1 / Day 1</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>2 / Vaccination 2 / 19 to</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>3 / 1-Month Follow-up Vis</td><td>35</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>4 / 6-Month Follow-up Vis</td><td>189</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>5 / 12-Month Follow-up Vi</td><td>378</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>6 / 24-Month Follow-up Vi</td><td>742</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Unplanned / Potential COV</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3><p style="color:#059669;font-size:12px;">All cells passed validation — no review needed.</p>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">Administration of BNT162b2 to Those Originally Assigned to Placebo</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 51, 52 &middot;
+        120 cells &middot;
+        0 flagged &middot;
+        5 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#059669;">95%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:95%;background:#059669;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <table class="data-table">
+<thead><tr><th class="sticky">Procedure</th>
+<th>Visit Number / </th>
+<th>101 | Vaccinati</th>
+<th>102 | Vaccinati</th>
+<th>103 | 1-Month T</th>
+<th>104 | 6-Month T</th>
+<th>105 | 18-Month </th>
+<th>Unplanned | Pot</th>
+<th>Col 7</th>
+</tr></thead><tbody>
+<tr><td class="sticky">Visit Description</td>
+<td class="conf-high" title="Confidence: 95%">Visit Descripti</td>
+<td class="conf-high" title="Confidence: 95%">Vaccination 3</td>
+<td class="conf-high" title="Confidence: 95%">Vaccination 4</td>
+<td class="conf-high" title="Confidence: 95%">1-Month Telepho</td>
+<td class="conf-high" title="Confidence: 95%">6-Month Telepho</td>
+<td class="conf-high" title="Confidence: 95%
+This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to reaching this time point.">18-Month Teleph<sup style="color:#0284c7">a</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%
+This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to potential COVID-19 illness onset.">Potential COVID<sup style="color:#0284c7">b</sup></td>
+</tr>
+<tr><td class="sticky">Visit Window (Days)</td>
+<td class="conf-high" title="Confidence: 95%">Visit Window (D</td>
+<td class="conf-high" title="Confidence: 95%
+For participants who become eligible according to recommendations detailed separately and available in the electronic study reference portal.
+For any remaining Phase 2/3 placebo recipients who wish to receive BNT162b2; may be combined with Visit 4 for Phase 2/3 participants.">From Recommenda<sup style="color:#0284c7">c,d</sup></td>
+<td class="conf-high" title="Confidence: 95%">19 to 23 Days A</td>
+<td class="conf-high" title="Confidence: 95%">28 to 35 Days A</td>
+<td class="conf-high" title="Confidence: 95%">175 to 189 Days</td>
+<td class="conf-high" title="Confidence: 95%">532 to 560 Days</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">Optimally Withi</td>
+</tr>
+<tr><td class="sticky">Collection of COVID-19–related</td>
+<td class="conf-high" title="Confidence: 95%">Collection of C</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+</tr>
+<tr><td class="sticky">Obtain informed consent</td>
+<td class="conf-high" title="Confidence: 95%">Obtain informed</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Perform urine pregnancy test (</td>
+<td class="conf-high" title="Confidence: 95%">Perform urine p</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Confirm use of contraceptives </td>
+<td class="conf-high" title="Confidence: 95%">Confirm use of </td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Collect prohibited medication </td>
+<td class="conf-high" title="Confidence: 95%">Collect prohibi</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+</tr>
+<tr><td class="sticky">For participants who are HIV-p</td>
+<td class="conf-high" title="Confidence: 95%">For participant</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Review and consider eligibilit</td>
+<td class="conf-high" title="Confidence: 95%">Review and cons</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Review temporary delay criteri</td>
+<td class="conf-high" title="Confidence: 95%">Review temporar</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Collect blood sample for immun</td>
+<td class="conf-high" title="Confidence: 95%
+Only if the participant has no blood sample collected in the previous 7 days.">Collect blood s<sup style="color:#0284c7">e,e</sup></td>
+<td class="conf-high" title="Confidence: 95%">~20 mL</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Obtain nasal (midturbinate) sw</td>
+<td class="conf-high" title="Confidence: 95%">Obtain nasal (m</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+</tr>
+<tr><td class="sticky">Obtain vaccine vial allocation</td>
+<td class="conf-high" title="Confidence: 95%">Obtain vaccine </td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Administer BNT162b2</td>
+<td class="conf-high" title="Confidence: 95%">Administer BNT1</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Assess acute reactions for at </td>
+<td class="conf-high" title="Confidence: 95%">Assess acute re</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%">X</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+</tbody></table>
+  </div>
+
+  <h3>Procedure Mapping</h3>
+<table class="data-table proc-table">
+<thead><tr><th>Raw Name</th><th>Canonical Name</th><th>CPT Code</th><th>Category</th><th>Cost</th></tr></thead><tbody>
+<tr><td>Administer BNT162b2</td><td><strong>Study Drug Administration</strong></td><td>—</td><td>Treatment</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>Assess acute reactions for at least 30 m</td><td><strong>Post-Dose Observation</strong></td><td>—</td><td>Safety</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Assess acute reactions for at least 30 m</td><td><strong>Post-Dose Observation</strong></td><td>—</td><td>Safety</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect blood sample for immunogenicity
+</td><td><strong>Blood Draw/Phlebotomy</strong></td><td>—</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect blood sample for immunogenicity </td><td><strong>Immunogenicity Sample</strong></td><td>—</td><td>PK</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect prohibited medication use</td><td><strong>Concomitant Medications Review</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collection of COVID-19–related clinical </td><td><strong>Adverse Event Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collection of COVID-19–related clinical </td><td><strong>Adverse Event Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Confirm use of contraceptives (if approp</td><td><strong>Vaccination</strong></td><td>—</td><td>Treatment</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>For participants who are HIV-positive, r</td><td><strong>Viral Load</strong></td><td>—</td><td>Laboratory</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>For participants who are HIV-positive, r</td><td><strong>CD4 Count</strong></td><td>86359 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain informed consent</td><td><strong>Informed Consent</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain nasal (midturbinate) swab</td><td><strong>Nasal Swab</strong></td><td>87635 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain vaccine vial allocation via IRT</td><td><strong>Randomization</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Perform urine pregnancy test (if appropr</td><td><strong>Pregnancy Test</strong></td><td>81025 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Review and consider eligibility</td><td><strong>Eligibility Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Review temporary delay criteria</td><td><strong>Vaccination</strong></td><td>—</td><td>Treatment</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>Visit Description</td><td><strong>Visit Description</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Visit Window (Days)</td><td><strong>Visit Window (Days)</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+</tbody></table>
+  <h3>Footnotes</h3>
+<table class="data-table">
+<thead><tr><th style="width:40px">Marker</th><th>Text</th><th>Type</th><th>Cells</th></tr></thead><tbody>
+<tr><td><strong style="color:#0284c7;font-size:14px;">a</strong></td><td>This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to reaching this time point.</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">b</strong></td><td>This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to potential COVID-19 illness onset.</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">c</strong></td><td>For participants who become eligible according to recommendations detailed separately and available in the electronic study reference portal.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">d</strong></td><td>For any remaining Phase 2/3 placebo recipients who wish to receive BNT162b2; may be combined with Visit 4 for Phase 2/3 participants.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">e</strong></td><td>Only if the participant has no blood sample collected in the previous 7 days.</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>1</td></tr>
+</tbody></table>
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td>Visit Number / Visit Desc</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>101 | Vaccination 3 | Fro</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>102 | Vaccination 4 | 19 </td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>103 | 1-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>104 | 6-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>105 | 18-Month Telephone </td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Unplanned | Potential COV</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3><p style="color:#059669;font-size:12px;">All cells passed validation — no review needed.</p>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">1.3.4. Administration of an Additional Dose of BNT162b2 (5, 10, or 30 μg) or BNT162b2SA (30 μg) (Subset for Evaluation of Boostability and Protection Against Emerging VOCs)</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 53, 54, 55 &middot;
+        0 cells &middot;
+        0 flagged &middot;
+        0 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#dc2626;">0%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:0%;background:#dc2626;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <p style='color:#94a3b8;font-size:12px;'>No cells extracted</p>
+  </div>
+
+  
+  
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td>Visit Number / Visit Desc</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>301 / Vax 3a / 150 to 210</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>302 / 1-Week Follow-up Vi</td><td>8</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>303 / 1-Month Follow-up V</td><td>35</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>304 / 1-Week Follow-up Vi</td><td>8</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>305 / 1-Month Follow-up V</td><td>35</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>306 / 6-Month Follow-up V</td><td>189</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>307 / 18-Month Follow-up </td><td>560</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Unplanned / Potential COV</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3><p style="color:#059669;font-size:12px;">All cells passed validation — no review needed.</p>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">Administration of BNT162b2SA to BNT162b2-Naïve Participants</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 56, 57, 58 &middot;
+        0 cells &middot;
+        0 flagged &middot;
+        0 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#dc2626;">0%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:0%;background:#dc2626;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <p style='color:#94a3b8;font-size:12px;'>No cells extracted</p>
+  </div>
+
+  
+  
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td>Visit Number / Visit Desc</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>401 / Vaccination 1 / Day</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>402 / Vaccination 2 / 19 </td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>403 / 1-Week Follow-up Vi</td><td>8</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>404 / 1-Month Follow-up V</td><td>35</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>405 / 6-Month Follow-up V</td><td>189</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>406 / 18-Month Follow-up </td><td>560</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Unplanned / Potential COV</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3><p style="color:#059669;font-size:12px;">All cells passed validation — no review needed.</p>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">p59_soa</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 59 &middot;
+        24 cells &middot;
+        1 flagged &middot;
+        0 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#059669;">93%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:93%;background:#059669;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <table class="data-table">
+<thead><tr><th class="sticky">Procedure</th>
+<th>Visit Number / </th>
+<th>201</th>
+<th>202 Onward</th>
+<th>Col 3</th>
+<th>Col 4</th>
+<th>Col 5</th>
+<th>Col 6</th>
+<th>Col 7</th>
+</tr></thead><tbody>
+<tr><td class="sticky">Visit Description</td>
+<td class="conf-high" title="Confidence: 95%">Visit Descripti</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Visit Window (Days)</td>
+<td class="conf-high" title="Confidence: 95%">Visit Window (D</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Collection of COVID-19–related</td>
+<td class="conf-low flagged" title="Confidence: 50%">Collection of C</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+</tbody></table>
+  </div>
+
+  <h3>Procedure Mapping</h3>
+<table class="data-table proc-table">
+<thead><tr><th>Raw Name</th><th>Canonical Name</th><th>CPT Code</th><th>Category</th><th>Cost</th></tr></thead><tbody>
+<tr><td>Collection of COVID-19–related clinical </td><td><strong>Adverse Event Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Visit Description</td><td><strong>Visit Description</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Visit Window (Days)</td><td><strong>Visit Window (Days)</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+</tbody></table>
+  
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td>Visit Number / Visit Desc</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>201</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>202 Onward</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+</tbody></table>
+  <h3>Review Queue</h3>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;Collection of COVID-19–related clinical and laboratory infor</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Collection of COVID-19–related</code></div></div></div>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">p60_soa</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 60 &middot;
+        21 cells &middot;
+        3 flagged &middot;
+        2 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#059669;">89%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:89%;background:#059669;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <table class="data-table">
+<thead><tr><th class="sticky">Procedure</th>
+<th>Visit Number / </th>
+<th>501 | Third Dos</th>
+<th>502 | 1-Month T</th>
+</tr></thead><tbody>
+<tr><td class="sticky">Visit Description</td>
+<td class="conf-high" title="Confidence: 95%">Visit Descripti</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Visit Window (Days)</td>
+<td class="conf-high" title="Confidence: 95%">Visit Window (D</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Obtain informed consent for as</td>
+<td class="conf-high" title="Confidence: 95%">Obtain informed</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Collect prohibited medication </td>
+<td class="conf-high" title="Confidence: 95%
+Collect nonstudy vaccine information and prohibited medication use">Collect prohibi<sup style="color:#0284c7">d</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Collect blood sample for immun</td>
+<td class="conf-low flagged" title="Confidence: 50%">Collect blood s</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Obtain nasal (midturbinate) sw</td>
+<td class="conf-low flagged" title="Confidence: 50%">Obtain nasal (m</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Collect AEs and SAEs as approp</td>
+<td class="conf-low flagged" title="Confidence: 50%
+Potential COVID-19 Illness Visit">Collect AEs and<sup style="color:#0284c7">b</sup></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+</tbody></table>
+  </div>
+
+  <h3>Procedure Mapping</h3>
+<table class="data-table proc-table">
+<thead><tr><th>Raw Name</th><th>Canonical Name</th><th>CPT Code</th><th>Category</th><th>Cost</th></tr></thead><tbody>
+<tr><td>Collect AEs and SAEs as appropriate</td><td><strong>Adverse Event Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect AEs and SAEs as appropriateb</td><td><strong>Adverse Event Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect blood sample for immunogenicity </td><td><strong>Immunogenicity Sample</strong></td><td>—</td><td>PK</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect blood sample for immunogenicity </td><td><strong>Immunogenicity Sample</strong></td><td>—</td><td>PK</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect prohibited medication use</td><td><strong>Concomitant Medications Review</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain informed consent for asymptomatic</td><td><strong>Informed Consent</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain nasal (midturbinate) swab</td><td><strong>Nasal Swab</strong></td><td>87635 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain nasal (midturbinate) swab (self-s</td><td><strong>Nasal Swab</strong></td><td>87635 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Visit Description</td><td><strong>Visit Description</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Visit Window (Days)</td><td><strong>Visit Window (Days)</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+</tbody></table>
+  <h3>Footnotes</h3>
+<table class="data-table">
+<thead><tr><th style="width:40px">Marker</th><th>Text</th><th>Type</th><th>Cells</th></tr></thead><tbody>
+<tr><td><strong style="color:#0284c7;font-size:14px;">b</strong></td><td>Potential COVID-19 Illness Visit</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">d</strong></td><td>Collect nonstudy vaccine information and prohibited medication use</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>1</td></tr>
+</tbody></table>
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td>Visit Number / Visit Desc</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>501 | Third Dose of BNT16</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>502 | 1-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>503 | 6-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>504 | 12-Month Follow-up </td><td>378</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Unplanned | Potential COV</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;Collect blood sample for immunogenicity assessment&#x27; vs &#x27;Coll</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Collect blood sample for immun</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;Obtain nasal (midturbinate) swab&#x27; vs &#x27;Obtain nasal (midturbi</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Obtain nasal (midturbinate) sw</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Pass disagreement: &#x27;Collect AEs and SAEs as appropriate&#x27; vs &#x27;Collect AEs and SAE</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Collect AEs and SAEs as approp</code></div></div></div>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">p61_soa</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 61 &middot;
+        84 cells &middot;
+        17 flagged &middot;
+        3 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#059669;">86%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:86%;background:#059669;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <table class="data-table">
+<thead><tr><th class="sticky">Procedure</th>
+<th>Visit Number / </th>
+<th>501 | Third Dos</th>
+<th>502 | 1-Month T</th>
+<th>503 | 6-Month T</th>
+<th>504 | 12-Month </th>
+<th>Unplanned | Pot</th>
+</tr></thead><tbody>
+<tr><td class="sticky">Visit Description</td>
+<td class="conf-high" title="Confidence: 95%">Visit Descripti</td>
+<td class="conf-high" title="Confidence: 95%">Third Dose of B</td>
+<td class="conf-high" title="Confidence: 95%">1-Month Telepho</td>
+<td class="conf-high" title="Confidence: 95%
+This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to reaching this time point.">6-Month Telepho<sup style="color:#0284c7">a</sup></td>
+<td class="conf-high" title="Confidence: 95%
+This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to reaching this time point.">12-Month Follow<sup style="color:#0284c7">a</sup></td>
+<td class="conf-high" title="Confidence: 95%
+This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to potential COVID-19 illness onset.">Potential COVID<sup style="color:#0284c7">b</sup></td>
+</tr>
+<tr><td class="sticky">Visit Window (Days)</td>
+<td class="conf-high" title="Confidence: 95%">Visit Window (D</td>
+<td class="conf-high" title="Confidence: 95%
+The opportunity to receive a third dose of BNT162b2 will be offered as part of the study, according to recommendations detailed separately, and available in the electronic study reference portal.">Per Recommendat<sup style="color:#0284c7">c</sup></td>
+<td class="conf-high" title="Confidence: 95%">28 to 35 Days A</td>
+<td class="conf-high" title="Confidence: 95%">175 to 189 Days</td>
+<td class="conf-high" title="Confidence: 95%">350 to 378 Days</td>
+<td class="conf-mid flagged" title="Confidence: 76%
+The opportunity to receive a third dose of BNT162b2 will be offered as part of the study, according to recommendations detailed separately, and available in the electronic study reference portal.">Optimally Withi<sup style="color:#0284c7">c</sup></td>
+</tr>
+<tr><td class="sticky">Confirm participant has only r</td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Obtain informed consent</td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Perform urine pregnancy test (</td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+</tr>
+<tr><td class="sticky">Confirm use of contraceptives </td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Collect nonstudy vaccine infor</td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Collect prohibited medication </td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-low flagged" title="Confidence: 48%"></td>
+</tr>
+<tr><td class="sticky">For participants who are HIV-p</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Review and consider eligibilit</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Review temporary delay criteri</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Collect blood sample for immun</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Obtain nasal (midturbinate) sw</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+<tr><td class="sticky">Obtain vaccine vial allocation</td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+<td class="conf-high" title="Confidence: 95%"></td>
+</tr>
+</tbody></table>
+  </div>
+
+  <h3>Procedure Mapping</h3>
+<table class="data-table proc-table">
+<thead><tr><th>Raw Name</th><th>Canonical Name</th><th>CPT Code</th><th>Category</th><th>Cost</th></tr></thead><tbody>
+<tr><td>Collect blood sample for immunogenicity </td><td><strong>Immunogenicity Sample</strong></td><td>—</td><td>PK</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect nonstudy vaccine informationd</td><td><strong>Concomitant Medications Review</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect prohibited medication used</td><td><strong>Concomitant Medications Review</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Confirm participant has only received 2 </td><td><strong>Eligibility Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Confirm use of contraceptives (if approp</td><td><strong>Vaccination</strong></td><td>—</td><td>Treatment</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>For participants who are HIV-positive, r</td><td><strong>CD4 Count</strong></td><td>86359 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain informed consent</td><td><strong>Informed Consent</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain nasal (midturbinate) swab</td><td><strong>Nasal Swab</strong></td><td>87635 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain vaccine vial allocation via IRT</td><td><strong>Randomization</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Perform urine pregnancy test (if appropr</td><td><strong>Pregnancy Test</strong></td><td>81025 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Review and consider eligibility</td><td><strong>Eligibility Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Review temporary delay criteria</td><td><strong>Vaccination</strong></td><td>—</td><td>Treatment</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>Visit Description</td><td><strong>Visit Description</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Visit Window (Days)</td><td><strong>Visit Window (Days)</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+</tbody></table>
+  <h3>Footnotes</h3>
+<table class="data-table">
+<thead><tr><th style="width:40px">Marker</th><th>Text</th><th>Type</th><th>Cells</th></tr></thead><tbody>
+<tr><td><strong style="color:#0284c7;font-size:14px;">a</strong></td><td>This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to reaching this time point.</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>2</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">b</strong></td><td>This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to potential COVID-19 illness onset.</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">c</strong></td><td>The opportunity to receive a third dose of BNT162b2 will be offered as part of the study, according to recommendations detailed separately, and available in the electronic study reference portal.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>2</td></tr>
+</tbody></table>
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td>Visit Number / Visit Desc</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>501 | Third Dose of BNT16</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>502 | 1-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>503 | 6-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>504 | 12-Month Follow-up </td><td>378</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Unplanned | Potential COV</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 0</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 2</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 5, Col 3</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 1, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.76 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Optimally Within 3 Days After </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 1</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 3, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 3, Col 1</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 1</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 2</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 3</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 4, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 6, Col 4</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 7, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 7, Col 5</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.47 below threshold 0.85</div></div></div>
+</div>
+
+<div class="table-section">
+  <div class="table-header">
+    <div>
+      <h2 style="margin:0;border:none;padding:0;">Administration of a Fourth (or Fifth) Dose of BNT162b2 to Eligible Participants From Protocol Amendments 13, 14, and 15</h2>
+      <div class="table-meta">
+        <span class="badge badge-soa">SOA</span>
+        Pages 62, 63, 64 &middot;
+        102 cells &middot;
+        102 flagged &middot;
+        6 footnotes
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:24px;font-weight:700;color:#d97706;">70%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:70%;background:#d97706;"></div></div>
+    </div>
+  </div>
+
+  <h3>Extracted Grid</h3>
+  <div class="grid-scroll">
+    <table class="data-table">
+<thead><tr><th class="sticky">Procedure</th>
+<th>Visit Number / </th>
+<th>601 / Dose 4a /</th>
+<th>602 / 1-Month T</th>
+<th>603 / 6-Month T</th>
+<th>604 / Dose 5a /</th>
+<th>605 / 1-Month T</th>
+</tr></thead><tbody>
+<tr><td class="sticky">Visit Description</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Visit Descripti</td>
+<td class="conf-mid flagged" title="Confidence: 70%
+Applicable to those eligible participants per protocol amendments 13,14, and 15 who received Dose 3 at Visit 8a or 301 or Dose 4 at Visit 303.">Dose 4a<sup style="color:#0284c7">a</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%">1-Month Telepho</td>
+<td class="conf-mid flagged" title="Confidence: 70%
+This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to reaching this time point.">6-Month Telepho<sup style="color:#0284c7">b</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%
+Applicable to those eligible participants per protocol amendments 13,14, and 15 who received Dose 3 at Visit 8a or 301 or Dose 4 at Visit 303.">Dose 5a<sup style="color:#0284c7">a</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%
+The COVID-19 illness visit may be conducted as an in-person or telehealth visit. This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to potential COVID-19 illness onset.">Potential COVID<sup style="color:#0284c7">c</sup></td>
+</tr>
+<tr><td class="sticky">Visit Window (Days)</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Visit Window (D</td>
+<td class="conf-mid flagged" title="Confidence: 70%">At Least 175 Da</td>
+<td class="conf-mid flagged" title="Confidence: 70%">28 to 35 Days A</td>
+<td class="conf-mid flagged" title="Confidence: 70%">175 to 189 Days</td>
+<td class="conf-mid flagged" title="Confidence: 70%">At Least 175 Da</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Optimally Withi</td>
+</tr>
+<tr><td class="sticky">Administer BNT162b2</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Administer BNT1</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Assess acute reactions for at </td>
+<td class="conf-mid flagged" title="Confidence: 70%">Assess acute re</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Collect AEs and SAEs as approp</td>
+<td class="conf-mid flagged" title="Confidence: 70%
+AEs and SAEs, nonstudy vaccines and prohibited medications, and information relating to a potential COVID-19 illness will still be recorded in the original study database.">Collect AEs and<sup style="color:#0284c7">d,d</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%
+AEs need only be recorded if the participant remains in the AE reporting period (see Section 8.3.1).">Xf<sup style="color:#0284c7">f</sup></td>
+</tr>
+<tr><td class="sticky">Collection of COVID-19–related</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Collection of C</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+</tr>
+<tr><td class="sticky">Obtain informed consent</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Obtain informed</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Perform urine pregnancy test (</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Perform urine p</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Confirm use of contraceptives </td>
+<td class="conf-mid flagged" title="Confidence: 70%">Confirm use of </td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Collect nonstudy vaccine infor</td>
+<td class="conf-mid flagged" title="Confidence: 70%
+AEs and SAEs, nonstudy vaccines and prohibited medications, and information relating to a potential COVID-19 illness will still be recorded in the original study database.">Collect nonstud<sup style="color:#0284c7">d,d</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Collect prohibited medication </td>
+<td class="conf-mid flagged" title="Confidence: 70%
+AEs and SAEs, nonstudy vaccines and prohibited medications, and information relating to a potential COVID-19 illness will still be recorded in the original study database.">Collect prohibi<sup style="color:#0284c7">d</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+</tr>
+<tr><td class="sticky">For participants who are HIV-p</td>
+<td class="conf-mid flagged" title="Confidence: 70%
+Not required to be recorded for Phase 1 participants who received Dose 3 at Visit 8a.">For participant<sup style="color:#0284c7">e</sup></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Review and consider eligibilit</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Review and cons</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Review temporary delay criteri</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Review temporar</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Obtain nasal (midturbinate) sw</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Obtain nasal (m</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+</tr>
+<tr><td class="sticky">Obtain vaccine vial allocation</td>
+<td class="conf-mid flagged" title="Confidence: 70%">Obtain vaccine </td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+<tr><td class="sticky">Assess acute reactions for at </td>
+<td class="conf-mid flagged" title="Confidence: 70%">Assess acute re</td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+<td class="conf-mid flagged" title="Confidence: 70%">X</td>
+<td class="conf-mid flagged" title="Confidence: 70%"></td>
+</tr>
+</tbody></table>
+  </div>
+
+  <h3>Procedure Mapping</h3>
+<table class="data-table proc-table">
+<thead><tr><th>Raw Name</th><th>Canonical Name</th><th>CPT Code</th><th>Category</th><th>Cost</th></tr></thead><tbody>
+<tr><td>Administer BNT162b2</td><td><strong>Study Drug Administration</strong></td><td>—</td><td>Treatment</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>Assess acute reactions for at least 30 m</td><td><strong>Post-Dose Observation</strong></td><td>—</td><td>Safety</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect AEs and SAEs as appropriated</td><td><strong>Adverse Event Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect nonstudy vaccine informationd</td><td><strong>Concomitant Medications Review</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collect prohibited medication used</td><td><strong>Concomitant Medications Review</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Collection of COVID-19–related clinical </td><td><strong>Adverse Event Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Confirm use of contraceptives (if approp</td><td><strong>Vaccination</strong></td><td>—</td><td>Treatment</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>For participants who are HIV-positive, r</td><td><strong>CD4 Count</strong></td><td>86359 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain informed consent</td><td><strong>Informed Consent</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain nasal (midturbinate) swab</td><td><strong>Nasal Swab</strong></td><td>87635 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Obtain vaccine vial allocation via IRT</td><td><strong>Randomization</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Perform urine pregnancy test (if appropr</td><td><strong>Pregnancy Test</strong></td><td>81025 (CPT)</td><td>Laboratory</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Review and consider eligibility</td><td><strong>Eligibility Assessment</strong></td><td>—</td><td>General</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Review temporary delay criteria</td><td><strong>Vaccination</strong></td><td>—</td><td>Treatment</td><td><span class="badge badge-cost-med">$$</span></td></tr>
+<tr><td>Visit Description</td><td><strong>Visit Description</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+<tr><td>Visit Window (Days)</td><td><strong>Visit Window (Days)</strong></td><td>—</td><td>Unknown</td><td><span class="badge badge-cost-low">$</span></td></tr>
+</tbody></table>
+  <h3>Footnotes</h3>
+<table class="data-table">
+<thead><tr><th style="width:40px">Marker</th><th>Text</th><th>Type</th><th>Cells</th></tr></thead><tbody>
+<tr><td><strong style="color:#0284c7;font-size:14px;">a</strong></td><td>Applicable to those eligible participants per protocol amendments 13,14, and 15 who received Dose 3 at Visit 8a or 301 or Dose 4 at Visit 303.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>2</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">b</strong></td><td>This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to reaching this time point.</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">c</strong></td><td>The COVID-19 illness visit may be conducted as an in-person or telehealth visit. This visit should not be performed if protocol amendment 20 is approved and participants are informed of early study completion prior to potential COVID-19 illness onset.</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">d</strong></td><td>AEs and SAEs, nonstudy vaccines and prohibited medications, and information relating to a potential COVID-19 illness will still be recorded in the original study database.</td><td><span class="badge badge-clar">CLARIFICATION</span></td><td>3</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">e</strong></td><td>Not required to be recorded for Phase 1 participants who received Dose 3 at Visit 8a.</td><td><span class="badge badge-exc">EXCEPTION</span></td><td>1</td></tr>
+<tr><td><strong style="color:#0284c7;font-size:14px;">f</strong></td><td>AEs need only be recorded if the participant remains in the AE reporting period (see Section 8.3.1).</td><td><span class="badge badge-cond">CONDITIONAL</span></td><td>1</td></tr>
+</tbody></table>
+  <h3>Visit Schedule</h3>
+<table class="data-table">
+<thead><tr><th>Visit</th><th>Target Day</th><th>Window</th><th>Cycle</th><th>Unscheduled</th></tr></thead><tbody>
+<tr><td>Visit Number / Visit Desc</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>601 / Dose 4a / At Least </td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>602 / 1-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>603 / 6-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>604 / Dose 5a / At Least </td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>605 / 1-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>606 / 6-Month Telephone C</td><td>—</td><td>—</td><td>—</td><td></td></tr>
+<tr><td>Unplanned / Potential COV</td><td>—</td><td>—</td><td>—</td><td>Yes</td></tr>
+</tbody></table>
+  <h3>Review Queue</h3>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 0</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Administer BNT162b2</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 1</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 2</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 3</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 4</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 2, Col 5</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 8, Col 0</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Confirm use of contraceptives </code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 8, Col 1</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 8, Col 2</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 8, Col 3</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 8, Col 4</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 8, Col 5</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 13, Col 0</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Review temporary delay criteri</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 13, Col 1</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 13, Col 2</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 13, Col 3</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 13, Col 4</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>X</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 13, Col 5</strong> <span class="badge badge-cost-medium">$$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 0</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Visit Description</code></div></div></div>
+<div class="review-item"><div class="review-icon">⚠</div><div style="flex:1;"><div><strong>Row 0, Col 1</strong> <span class="badge badge-cost-low">$</span> <span class="badge badge-clar">LOCAL RESOLUTION</span></div><div style="color:#64748b;margin-top:2px;">Confidence 0.70 below threshold 0.85</div><div style=&quot;margin-top:2px;&quot;>Value: <code style=&quot;background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:11px;&quot;>Dose 4a</code></div></div></div>
+<p style="font-size:12px;color:#94a3b8;">... and 82 more items</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Site Budget Worksheet — Prot_0001 1.pdf</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1e293b; background: #f8fafc; }
+.container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.subtitle { font-size: 12px; color: #64748b; margin-bottom: 16px; }
+.summary { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.summary-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 20px; min-width: 160px; }
+.summary-value { font-size: 24px; font-weight: 700; }
+.summary-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+.budget-table { width: 100%; border-collapse: collapse; font-size: 11px; background: white; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+.budget-table th { background: #0f172a; color: white; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; position: sticky; top: 0; z-index: 10; }
+.budget-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+.budget-table tr:hover { background: #f8fafc; }
+.proc-name { min-width: 260px; }
+.proc-primary { font-weight: 600; font-size: 12px; color: #0f172a; line-height: 1.4; }
+.proc-canonical { font-size: 10px; color: #64748b; margin-top: 2px; }
+.mono { font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 11px; color: #475569; }
+.center { text-align: center; }
+.freq { font-size: 14px; font-weight: 700; color: #0f172a; }
+.visits-cell { font-size: 10px; color: #64748b; max-width: 280px; line-height: 1.5; }
+.guidance { font-size: 10px; max-width: 260px; line-height: 1.6; }
+.cost-cell { white-space: nowrap; }
+.currency { color: #94a3b8; font-size: 11px; margin-right: 2px; }
+.needs-input { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.conf-green { }
+.conf-amber { background: #fffbeb !important; }
+.conf-red { background: #fef2f2 !important; }
+.conf-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+.conf-dot-green { background: #059669; }
+.conf-dot-amber { background: #d97706; }
+.conf-dot-red { background: #dc2626; }
+.hint-ok { color: #059669; font-weight: 500; }
+.hint-red { color: #dc2626; font-size: 10px; }
+.hint-amber { color: #d97706; font-size: 10px; }
+.hint-info { color: #0284c7; font-size: 10px; }
+.action-needed { color: #dc2626; font-weight: 600; font-size: 10px; }
+.page-ref { font-size: 9px; color: #94a3b8; font-style: italic; }
+.cost-input { width: 80px; padding: 4px 6px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 11px; text-align: right; }
+.cost-input:focus { outline: 2px solid #0284c7; border-color: transparent; }
+.line-total { font-weight: 600; text-align: right; white-space: nowrap; }
+.tier-low { background: #f1f5f9; color: #64748b; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-med { background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-high { background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.tier-vhigh { background: #fecaca; color: #991b1b; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+.grand-total { background: #0f172a; color: white; font-size: 14px; }
+.grand-total td { padding: 12px 10px; font-weight: 700; }
+.footer { margin-top: 16px; font-size: 11px; color: #94a3b8; }
+.footer p { margin-bottom: 4px; }
+@media print {
+  .cost-input { border: none; background: transparent; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Site Budget Worksheet</h1>
+<p class="subtitle">Prot_0001 1.pdf | Generated 2026-03-22 00:50 UTC</p>
+
+<div class="summary">
+  <div class="summary-card">
+    <div class="summary-value" style="color:#0284c7;">11</div>
+    <div class="summary-label">Budget Line Items</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#0284c7;">31</div>
+    <div class="summary-label">Total Procedure Visits</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#059669;" id="grand-total-display">$3,425</div>
+    <div class="summary-label">Estimated Per-Patient Cost</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-value" style="color:#64748b;">3/11</div>
+    <div class="summary-label">Procedures with CPT Codes</div>
+  </div>
+</div>
+
+<table class="budget-table">
+<thead>
+<tr>
+  <th style="min-width:260px">Procedure / Canonical Name</th>
+  <th>CPT</th>
+  <th>Category</th>
+  <th>Tier</th>
+  <th>Freq</th>
+  <th style="min-width:200px">Visits Required</th>
+  <th>Conf.</th>
+  <th style="min-width:100px">Unit Cost ($)</th>
+  <th>Line Total</th>
+  <th style="min-width:220px">Action Required</th>
+</tr>
+</thead>
+<tbody>
+
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Collect prohibited medication use</div>
+            <div class="proc-canonical">Concomitant Medications Review <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">6</td>
+          <td class="visits-cell">Unplanned, 604 / Dose 5a / At Least 175 Days After Visit 303, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 104 | 6-Month Telephone Contact | 175 to 189 Days After Visit 102, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 103 | 1-Month Telephone Contact | 28 to 35 Days After Visit 102, 603 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 601, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, 105 | 18-Month Telephone Contactᵃ | 532 to 560 Days After Visit 102, 602 / 1-Month Telephone Contact / 28 to 35 Days After Visit 601, 102 | Vaccination 4 | 19 to 23 Days After Visit 101</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_0"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_0">
+            $450</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Collection of COVID-19–related clinical and laboratory information (including local diagnosis)</div>
+            <div class="proc-canonical">Adverse Event Assessment <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">Unplanned, 604 / Dose 5a / At Least 175 Days After Visit 303, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 602 / 1-Month Telephone Contact / 28 to 35 Days After Visit 601</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_1"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_1">
+            $300</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Obtain informed consent</div>
+            <div class="proc-canonical">Informed Consent <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">604 / Dose 5a / At Least 175 Days After Visit 303, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_2"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_2">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Obtain vaccine vial allocation via IRT</div>
+            <div class="proc-canonical">Randomization <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">604 / Dose 5a / At Least 175 Days After Visit 303, 102 | Vaccination 4 | 19 to 23 Days After Visit 101, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_3"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_3">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Review and consider eligibility</div>
+            <div class="proc-canonical">Eligibility Assessment <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>General</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">604 / Dose 5a / At Least 175 Days After Visit 303, 102 | Vaccination 4 | 19 to 23 Days After Visit 101, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_4"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_4">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52">
+          <td class="proc-name">
+            <div class="proc-primary">For participants who are HIV-positive, record latest CD4 count and HIV viral load</div>
+            <div class="proc-canonical">CD4 Count <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="mono">86359</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">4</td>
+          <td class="visits-cell">604 / Dose 5a / At Least 175 Days After Visit 303, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 104 | 6-Month Telephone Contact | 175 to 189 Days After Visit 102, 103 | 1-Month Telephone Contact | 28 to 35 Days After Visit 102, 603 / 6-Month Telephone Contactb / 175 to 189 Days After Visit 601, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, 105 | 18-Month Telephone Contactᵃ | 532 to 560 Days After Visit 102, 602 / 1-Month Telephone Contact / 28 to 35 Days After Visit 601</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_5"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_5">
+            $300</td>
+          <td class="guidance"><span class="hint-ok">OK</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52">
+          <td class="proc-name">
+            <div class="proc-primary">Obtain nasal (midturbinate) swab</div>
+            <div class="proc-canonical">Nasal Swab <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="mono">87635</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">3</td>
+          <td class="visits-cell">Unplanned, 604 / Dose 5a / At Least 175 Days After Visit 303, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 605 / 1-Month Telephone Contact / 28 to 35 Days After Visit 604, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ, 102 | Vaccination 4 | 19 to 23 Days After Visit 101</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_6"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_6">
+            $225</td>
+          <td class="guidance"><span class="hint-ok">OK</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52">
+          <td class="proc-name">
+            <div class="proc-primary">Perform urine pregnancy test (if appropriate)</div>
+            <div class="proc-canonical">Pregnancy Test <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="mono">81025</span></td>
+          <td>Laboratory</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">604 / Dose 5a / At Least 175 Days After Visit 303, 102 | Vaccination 4 | 19 to 23 Days After Visit 101, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_7"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_7">
+            $150</td>
+          <td class="guidance"><span class="hint-ok">OK</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Assess acute reactions for at least 30 minutes after study intervention administration</div>
+            <div class="proc-canonical">Post-Dose Observation <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Safety</td>
+          <td class="center"><span class="tier-low">$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">604 / Dose 5a / At Least 175 Days After Visit 303, 102 | Vaccination 4 | 19 to 23 Days After Visit 101, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_8"
+              value="75"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_8">
+            $150</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Administer BNT162b2</div>
+            <div class="proc-canonical">Study Drug Administration <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Treatment</td>
+          <td class="center"><span class="tier-med">$$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">604 / Dose 5a / At Least 175 Days After Visit 303, 102 | Vaccination 4 | 19 to 23 Days After Visit 101, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_9"
+              value="350"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_9">
+            $700</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+        <tr class="conf-green" title="Source: Protocol pages 51, 52&#10;No CPT code mapped — needs manual assignment">
+          <td class="proc-name">
+            <div class="proc-primary">Confirm use of contraceptives (if appropriate)</div>
+            <div class="proc-canonical">Vaccination <span class="page-ref">(p.51, 52)</span></div>
+          </td>
+          <td class="center"><span class="needs-input">Enter CPT</span></td>
+          <td>Treatment</td>
+          <td class="center"><span class="tier-med">$$</span></td>
+          <td class="center freq">2</td>
+          <td class="visits-cell">604 / Dose 5a / At Least 175 Days After Visit 303, 102 | Vaccination 4 | 19 to 23 Days After Visit 101, 601 / Dose 4a / At Least 175 Days After Visit 8a OR Visit 301, 101 | Vaccination 3 | From Recommendationᶜ or At Least 175 Days After Vaccination 2ᵈ</td>
+          <td class="center">
+            <span class="conf-dot conf-dot-green"></span>
+            95%
+          </td>
+          <td class="cost-cell">
+            <span class="currency">$</span>
+            <input type="number" class="cost-input" id="cost_10"
+              value="350"
+              onchange="recalculate()" min="0" step="10"
+              placeholder="Enter cost">
+          </td>
+          <td class="line-total" id="total_10">
+            $700</td>
+          <td class="guidance"><span class="hint-red">Missing CPT code — assign billing code</span></td>
+        </tr>
+</tbody>
+<tfoot>
+<tr class="grand-total">
+  <td colspan="8" style="text-align:right;">ESTIMATED PER-PATIENT TOTAL</td>
+  <td></td>
+  <td id="grand-total-cell" style="text-align:right;">$3,425</td>
+  <td></td>
+</tr>
+</tfoot>
+</table>
+
+<div class="footer">
+  <h3 style="font-size:13px;color:#0f172a;margin-bottom:8px;">How to Complete This Worksheet</h3>
+  <ol style="font-size:12px;color:#475569;line-height:1.8;margin-left:20px;">
+    <li><strong>Review the "Action Required" column</strong> — green rows are ready, amber/red rows need your attention.</li>
+    <li><strong>Enter your site's unit costs</strong> in the cost column. Current values are estimates (LOW=$75, MEDIUM=$350, HIGH=$1,200, VERY_HIGH=$3,500). Line totals and the grand total will recalculate automatically.</li>
+    <li><strong>Add CPT codes</strong> where marked "Enter CPT" — check your institution's fee schedule.</li>
+    <li><strong>Verify amber/red rows</strong> against the source protocol (page numbers shown in parentheses after each procedure name).</li>
+    <li><strong>Check conditional procedures</strong> — the "Action Required" column shows footnote conditions that may reduce the actual frequency.</li>
+  </ol>
+  <div style="margin-top:12px;padding:10px 16px;background:#eff6ff;border-radius:6px;font-size:11px;color:#1e40af;">
+    <strong>Confidence Legend:</strong>
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#059669;margin:0 4px;vertical-align:middle;"></span> Green (≥90%) = reliable, no action needed &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d97706;margin:0 4px;vertical-align:middle;"></span> Amber (75-90%) = spot-check recommended &nbsp;
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#dc2626;margin:0 4px;vertical-align:middle;"></span> Red (<75%) = verify against source PDF
+  </div>
+</div>
+
+</div>
+
+<script>
+const LINE_COUNT = 11;
+const OCCURRENCES = [6,4,2,2,2,4,3,2,2,2,2];
+
+function recalculate() {
+  let grand = 0;
+  for (let i = 0; i < LINE_COUNT; i++) {
+    const input = document.getElementById('cost_' + i);
+    const cost = parseFloat(input.value) || 0;
+    const total = cost * OCCURRENCES[i];
+    document.getElementById('total_' + i).textContent = '$' + total.toLocaleString('en-US', {minimumFractionDigits: 0});
+    grand += total;
+  }
+  document.getElementById('grand-total-cell').textContent = '$' + grand.toLocaleString('en-US', {minimumFractionDigits: 0});
+  document.getElementById('grand-total-display').textContent = '$' + grand.toLocaleString('en-US', {minimumFractionDigits: 0});
+}
+</script>
+</body>
+</html>

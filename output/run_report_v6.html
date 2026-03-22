@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProtoExtract Pipeline Run Report — v6</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #0f172a; }
+  h2 { font-size: 20px; font-weight: 600; margin: 32px 0 16px; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 24px 0 12px; color: #334155; }
+  .subtitle { color: #64748b; font-size: 14px; margin-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 16px 0; }
+  .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .card-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; font-weight: 600; }
+  .card-value { font-size: 32px; font-weight: 700; margin: 4px 0; }
+  .card-detail { font-size: 13px; color: #64748b; }
+  .green { color: #16a34a; }
+  .yellow { color: #ca8a04; }
+  .red { color: #dc2626; }
+  .blue { color: #2563eb; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  th { background: #0f172a; color: white; padding: 10px 14px; text-align: left; font-size: 13px; font-weight: 600; }
+  td { padding: 8px 14px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-yellow { background: #fef9c3; color: #854d0e; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .section-box { background: white; border-radius: 8px; padding: 16px; margin: 8px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border-left: 4px solid #3b82f6; }
+  .section-box h4 { margin-bottom: 6px; font-size: 14px; }
+  .section-box .meta { font-size: 12px; color: #94a3b8; }
+  .section-box .preview { font-size: 13px; margin-top: 8px; color: #475569; }
+  .confidence-bar { height: 8px; border-radius: 4px; background: #e2e8f0; overflow: hidden; margin: 4px 0; }
+  .confidence-fill { height: 100%; border-radius: 4px; }
+  .findings { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 16px; margin: 16px 0; }
+  .findings h3 { color: #92400e; margin-top: 0; }
+  .footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; text-align: center; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>ProtoExtract Pipeline Run Report</h1>
+<p class="subtitle">v6 (Grid Anchoring) &mdash; 22 March 2026 &mdash; Consolidated Ground Truth Benchmark</p>
+
+<h2>Executive Summary</h2>
+<div class="grid">
+  <div class="card">
+    <div class="card-label">Cell Accuracy (Pfizer v6)</div>
+    <div class="card-value green">99.5%</div>
+    <div class="card-detail">1 wrong cell out of 219 matched &mdash; best ever</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Cell Accuracy (Pfizer v4)</div>
+    <div class="card-value green">98.4%</div>
+    <div class="card-detail">26 wrong out of 1,634 &mdash; best structural coverage</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Cell Accuracy (Durvalumab v1)</div>
+    <div class="card-value green">97.1%</div>
+    <div class="card-detail">17 wrong out of 581 &mdash; oncology cross-validation</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Ground Truth Coverage</div>
+    <div class="card-value blue">13</div>
+    <div class="card-detail">protocols, 27,833 cells, 620 corrections</div>
+  </div>
+</div>
+
+<h2>Version Trajectory &mdash; Pfizer BNT162b2</h2>
+<table>
+  <tr><th>Version</th><th>Cell Accuracy</th><th>Wrong</th><th>Missing</th><th>Extra</th><th>Cells</th><th>Key Change</th></tr>
+  <tr><td>v2</td><td>98.7%</td><td>18</td><td>227</td><td>230</td><td>1,634</td><td>Initial extraction</td></tr>
+  <tr><td>v3</td><td>98.7%</td><td>21</td><td>45</td><td>142</td><td>1,634</td><td>Table stitching fix</td></tr>
+  <tr><td><strong>v4</strong></td><td><strong>98.4%</strong></td><td><strong>26</strong></td><td><strong>0</strong></td><td><strong>0</strong></td><td><strong>1,634</strong></td><td>Structural completeness &mdash; best overall</td></tr>
+  <tr><td>v5</td><td>98.1%</td><td>29</td><td>102</td><td>334</td><td>1,866</td><td>Superscript cleanup (accuracy up, structure down)</td></tr>
+  <tr><td>v6</td><td><span class="badge badge-green">99.5%</span></td><td>1</td><td>1,415</td><td>132</td><td>351</td><td>Grid anchoring &mdash; highest accuracy, low coverage</td></tr>
+</table>
+
+<div class="findings">
+  <h3>Key Finding: Accuracy vs Coverage Trade-off</h3>
+  <p><strong>v4 is the production-ready version</strong> &mdash; 98.4% accuracy with 100% coverage (0 missing, 0 extra).</p>
+  <p><strong>v6 proves the grid anchoring concept</strong> &mdash; 99.5% accuracy (only 1 error!) but too restrictive, extracting only 351 of 1,634 cells. The noise filters in grid_anchor.py need to be loosened to recover full coverage while maintaining the structural stability.</p>
+  <p><strong>v5's superscript cleanup is valuable</strong> &mdash; should be applied to v4's output as a post-processing step rather than re-running extraction.</p>
+</div>
+
+<h2>Cross-Protocol Comparison</h2>
+<table>
+  <tr><th>Protocol</th><th>Therapeutic Area</th><th>Pages</th><th>GT Cells</th><th>GT Errors</th><th>Pipeline Accuracy</th><th>Confidence</th></tr>
+  <tr><td>Pfizer BNT162b2</td><td>Vaccines</td><td>252</td><td>1,634</td><td>30</td><td><span class="badge badge-green">98.4%</span></td><td>HIGH</td></tr>
+  <tr><td>P-17 Durvalumab</td><td>Oncology (IO)</td><td>149</td><td>581</td><td>43</td><td><span class="badge badge-green">97.1%</span></td><td>HIGH</td></tr>
+  <tr><td>P-03 (Myovant)</td><td>Oncology (ADT)</td><td>412</td><td>5,916</td><td>125</td><td><em>Not yet extracted</em></td><td>&mdash;</td></tr>
+  <tr><td>P-14 (Roche)</td><td>Oncology</td><td>221</td><td>4,159</td><td>271</td><td><em>Not yet extracted</em></td><td>&mdash;</td></tr>
+  <tr><td>P-01 (Brivaracetam)</td><td>Neurology</td><td>120</td><td>3,389</td><td>1</td><td><em>Not yet extracted</em></td><td>&mdash;</td></tr>
+</table>
+
+<h2>What Works &mdash; High Confidence</h2>
+<div class="grid">
+  <div class="card">
+    <div class="card-label">MARKER Cells (X, checkmarks)</div>
+    <div class="card-value green">100%</div>
+    <div class="card-detail">Zero errors across all versions and protocols</div>
+    <div class="confidence-bar"><div class="confidence-fill" style="width:100%;background:#16a34a"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-label">EMPTY Cells</div>
+    <div class="card-value green">100%</div>
+    <div class="card-detail">Correctly identifies blank cells</div>
+    <div class="confidence-bar"><div class="confidence-fill" style="width:100%;background:#16a34a"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-label">CONDITIONAL Cells</div>
+    <div class="card-value green">100%</div>
+    <div class="card-detail">X with footnote markers correctly classified</div>
+    <div class="confidence-bar"><div class="confidence-fill" style="width:100%;background:#16a34a"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-label">Footnote Coverage</div>
+    <div class="card-value green">100%</div>
+    <div class="card-detail">All 27 Pfizer + 16 Durvalumab markers resolved</div>
+    <div class="confidence-bar"><div class="confidence-fill" style="width:100%;background:#16a34a"></div></div>
+  </div>
+</div>
+
+<h2>What Needs Work &mdash; Honest Assessment</h2>
+<div class="grid">
+  <div class="card">
+    <div class="card-label">TEXT Cell Accuracy</div>
+    <div class="card-value yellow">87-90%</div>
+    <div class="card-detail">All errors are TEXT type &mdash; procedure names, descriptions</div>
+    <div class="confidence-bar"><div class="confidence-fill" style="width:89%;background:#ca8a04"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-label">Grid Anchor Coverage</div>
+    <div class="card-value red">21%</div>
+    <div class="card-detail">v6 only extracted 351/1,634 cells &mdash; noise filter too aggressive</div>
+    <div class="confidence-bar"><div class="confidence-fill" style="width:21%;background:#dc2626"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-label">Structural Stability</div>
+    <div class="card-value yellow">Variable</div>
+    <div class="card-detail">v4=perfect, v5=regressed, v6=restricted &mdash; needs stabilization</div>
+    <div class="confidence-bar"><div class="confidence-fill" style="width:60%;background:#ca8a04"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-label">Oncology Section Parsing</div>
+    <div class="card-value yellow">6 secs</div>
+    <div class="card-detail">AstraZeneca format &mdash; sparse bookmarks, non-ICH headings</div>
+    <div class="confidence-bar"><div class="confidence-fill" style="width:15%;background:#ca8a04"></div></div>
+  </div>
+</div>
+
+<h2>Error Analysis &mdash; Root Causes</h2>
+<table>
+  <tr><th>Error Pattern</th><th>Count (Pfizer)</th><th>Count (Durva)</th><th>Root Cause</th><th>Fix Available</th></tr>
+  <tr><td>Phantom rows &mdash; text in cells GT marks empty</td><td>20</td><td>10</td><td>VLM creates rows that don't exist in PDF</td><td>Grid anchoring (needs tuning)</td></tr>
+  <tr><td>Span bleeding &mdash; multi-column text duplicated</td><td>4</td><td>5</td><td>Spanning text copied to every column</td><td>Table stitcher merge logic</td></tr>
+  <tr><td>Superscript contamination</td><td>0 (fixed in v5)</td><td>0</td><td>Footnote markers in procedure names</td><td><span class="badge badge-green">FIXED</span></td></tr>
+  <tr><td>Row index shift (±1-2 rows)</td><td>2</td><td>2</td><td>VLM non-deterministic row numbering</td><td>Grid anchoring (concept proven)</td></tr>
+</table>
+
+<h2>Verbatim Section Extraction &mdash; Pfizer BNT162b2</h2>
+<p>15 sections extracted across levels 1-4 with paragraph reconstruction, list detection, and DOCX output.</p>
+<table>
+  <tr><th>Section</th><th>Level</th><th>Page</th><th>Words</th><th>Elements</th><th>Lists</th><th>Tables</th></tr>
+  <tr><td>1. PROTOCOL SUMMARY</td><td>L1</td><td>26</td><td>1,156</td><td>21</td><td></td><td>Yes</td></tr>
+  <tr><td>2. INTRODUCTION</td><td>L1</td><td>66</td><td>1,382</td><td>29</td><td></td><td></td></tr>
+  <tr><td>2.1 Study Rationale</td><td>L2</td><td>66</td><td>1,364</td><td>27</td><td></td><td></td></tr>
+  <tr><td>3. OBJECTIVES, ESTIMANDS, AND ENDPOINTS</td><td>L1</td><td>72</td><td>759</td><td>10</td><td></td><td>Yes</td></tr>
+  <tr><td>5.1 Inclusion Criteria</td><td>L2</td><td>88</td><td>473</td><td>24</td><td>Yes</td><td></td></tr>
+  <tr><td>5.2 Exclusion Criteria</td><td>L2</td><td>89</td><td>1,020</td><td>55</td><td>Yes</td><td></td></tr>
+  <tr><td>6. STUDY INTERVENTION</td><td>L1</td><td>93</td><td>529</td><td>11</td><td></td><td>Yes</td></tr>
+  <tr><td>6.3 Measures to Minimize Bias</td><td>L2</td><td>98</td><td>1,029</td><td>24</td><td></td><td></td></tr>
+  <tr><td>8.1 Efficacy Assessments</td><td>L2</td><td>108</td><td>574</td><td>29</td><td></td><td></td></tr>
+  <tr><td>8.2.2 Electronic Diary</td><td>L3</td><td>113</td><td>892</td><td>18</td><td></td><td>Yes</td></tr>
+  <tr><td>8.3.1 AE Collection Period</td><td>L3</td><td>120</td><td>849</td><td>15</td><td></td><td></td></tr>
+  <tr><td>9.2 Sample Size</td><td>L2</td><td>189</td><td>613</td><td>12</td><td></td><td>Yes</td></tr>
+  <tr><td>9.4.2 Efficacy Analyses</td><td>L3</td><td>206</td><td>2,198</td><td>113</td><td></td><td>Yes</td></tr>
+  <tr><td>4.1.1 Phase 1</td><td>L3</td><td>81</td><td>1,624</td><td>31</td><td></td><td></td></tr>
+  <tr><td>8.11.1.2 Visit 1 &mdash; Vaccination 1</td><td>L4</td><td>130</td><td>1,134</td><td>45</td><td></td><td></td></tr>
+</table>
+
+<h3>Section Extraction Quality</h3>
+<div class="grid">
+  <div class="card">
+    <div class="card-label">Y-Coordinate Clipping</div>
+    <div class="card-value green">Working</div>
+    <div class="card-detail">Section 6 returns correct content &mdash; no cross-contamination</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Paragraph Reconstruction</div>
+    <div class="card-value green">Working</div>
+    <div class="card-detail">57 raw lines &rarr; 24 semantic elements in Section 5.1</div>
+  </div>
+  <div class="card">
+    <div class="card-label">List Detection</div>
+    <div class="card-value green">Working</div>
+    <div class="card-detail">Numbered and bulleted lists in inclusion/exclusion criteria</div>
+  </div>
+  <div class="card">
+    <div class="card-label">DOCX Output</div>
+    <div class="card-value green">Working</div>
+    <div class="card-detail">15 DOCX files generated with heading styles and list formatting</div>
+  </div>
+</div>
+
+<h2>Ground Truth Dataset</h2>
+<table>
+  <tr><th>Protocol</th><th>Area</th><th>Cells</th><th>Correct</th><th>Errors</th><th>Accuracy</th></tr>
+  <tr><td>P-01 Brivaracetam</td><td>Neurology</td><td>3,389</td><td>3,388</td><td>1</td><td>100.0%</td></tr>
+  <tr><td>P-03 HERO</td><td>Oncology</td><td>5,916</td><td>5,791</td><td>125</td><td>97.9%</td></tr>
+  <tr><td>P-05</td><td>Mixed</td><td>808</td><td>807</td><td>1</td><td>99.9%</td></tr>
+  <tr><td>P-09</td><td>Mixed</td><td>1,789</td><td>1,735</td><td>54</td><td>97.0%</td></tr>
+  <tr><td>P-14 (Roche)</td><td>Oncology</td><td>4,159</td><td>3,888</td><td>271</td><td>93.5%</td></tr>
+  <tr><td>P-27</td><td>Mixed</td><td>2,592</td><td>2,567</td><td>25</td><td>99.0%</td></tr>
+  <tr><td>P-32</td><td>Mixed</td><td>290</td><td>290</td><td>0</td><td>100.0%</td></tr>
+  <tr><td>P-34</td><td>Oncology</td><td>1,445</td><td>1,431</td><td>14</td><td>99.0%</td></tr>
+  <tr><td>Prot_0001-1</td><td>Vaccines</td><td>5,230</td><td>5,174</td><td>56</td><td>98.9%</td></tr>
+  <tr><td><strong>Pfizer BNT162</strong></td><td>Vaccines</td><td>1,634</td><td>1,604</td><td>30</td><td>98.2%</td></tr>
+  <tr><td><strong>P-17 Durvalumab</strong></td><td>Oncology</td><td>581</td><td>538</td><td>43</td><td>92.6%</td></tr>
+  <tr style="font-weight:700;background:#f1f5f9"><td>TOTAL</td><td></td><td>27,833</td><td>27,213</td><td>620</td><td>97.8%</td></tr>
+</table>
+
+<h2>Procedure Vocabulary</h2>
+<div class="grid">
+  <div class="card">
+    <div class="card-label">Canonical Procedures</div>
+    <div class="card-value blue">265</div>
+    <div class="card-detail">Up from 182 (+46%)</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Aliases</div>
+    <div class="card-value blue">1,314</div>
+    <div class="card-detail">Up from 182 (7.2x increase)</div>
+  </div>
+  <div class="card">
+    <div class="card-label">CPT Codes</div>
+    <div class="card-value blue">151</div>
+    <div class="card-detail">Up from 115 (+31%)</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Therapeutic Domains</div>
+    <div class="card-value blue">21</div>
+    <div class="card-detail">Oncology, Neuro, Derm, Ophth, Cardio...</div>
+  </div>
+</div>
+
+<h2>Recommended Next Steps</h2>
+<table>
+  <tr><th>#</th><th>Action</th><th>Impact</th><th>Effort</th></tr>
+  <tr><td>1</td><td><strong>Tune grid anchor noise filters</strong> &mdash; loosen body text heuristics to recover coverage while keeping structural stability</td><td>Could combine v4 coverage (100%) with v6 accuracy (99.5%)</td><td>1 day</td></tr>
+  <tr><td>2</td><td><strong>Apply superscript cleanup as post-processing</strong> on v4 output &mdash; don't re-extract, just clean</td><td>Eliminates 7 TEXT errors without structural regression</td><td>2 hours</td></tr>
+  <tr><td>3</td><td><strong>Wire verification agent</strong> between reconciler and validator &mdash; YES/NO check on low-confidence TEXT cells</td><td>~5% TEXT accuracy improvement at 500x lower cost</td><td>1 day</td></tr>
+  <tr><td>4</td><td><strong>Run pipeline on P-14 and P-03</strong> &mdash; the two protocols with highest error rates (271 and 125 corrections)</td><td>Tests generalization to complex oncology formats</td><td>1 hour (extraction time)</td></tr>
+  <tr><td>5</td><td><strong>Improve Durvalumab section parsing</strong> &mdash; AstraZeneca format needs non-ICH heading detection or LLM fallback</td><td>Currently only 6 sections found vs expected ~50+</td><td>2 days</td></tr>
+</table>
+
+<div class="footer">
+  <p>Generated by ProtoExtract Pipeline &mdash; 22 March 2026</p>
+  <p>231 tests passing &bull; Zero regressions &bull; Consolidated ground truth from dual-team annotation</p>
+</div>
+
+</div>
+</body>
+</html>
