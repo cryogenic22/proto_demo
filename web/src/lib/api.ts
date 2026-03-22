@@ -447,3 +447,9 @@ export async function extractVerbatim(
   }
   return res.json();
 }
+
+// ─── PDF Page Image ──────────────────────────────────────────────────────────
+
+export function getPageImageUrl(protocolId: string, pageNumber: number): string {
+  return `${API_BASE}/api/protocols/${protocolId}/page-image/${pageNumber}`;
+}

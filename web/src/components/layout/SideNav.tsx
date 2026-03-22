@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   {
     label: "Tools",
     items: [
-      { name: "Section Explorer", href: "/tools/sections", icon: "document" },
+      { name: "Document Explorer", href: "/tools/sections", icon: "document" },
       { name: "Verbatim Extract", href: "/tools/verbatim", icon: "clipboard" },
     ],
   },

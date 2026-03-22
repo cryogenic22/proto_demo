@@ -745,6 +745,63 @@ async def get_protocol(protocol_id: str):
     return protocol.model_dump(mode="json")
 
 
+@app.get("/api/protocols/{protocol_id}/page-image/{page_number}")
+async def get_page_image(protocol_id: str, page_number: int):
+    """Render a PDF page as a PNG image for the document viewer."""
+    from fastapi.responses import Response
+
+    # Find the PDF file — check uploaded storage and golden_set cache
+    pdf_path = None
+    candidates = [
+        Path(f"data/pdfs/{protocol_id}.pdf"),
+        Path(f"golden_set/cached_pdfs/{protocol_id}.pdf"),
+    ]
+    # Also try matching by prefix (P-09, P-14, etc.)
+    pid_upper = protocol_id.upper().replace("_", "-")
+    candidates.append(Path(f"golden_set/cached_pdfs/{pid_upper}.pdf"))
+    # Try common variations
+    for p in Path("golden_set/cached_pdfs").glob("*.pdf"):
+        if p.stem.upper().replace("-", "") == pid_upper.replace("-", ""):
+            candidates.append(p)
+
+    for candidate in candidates:
+        if candidate.exists():
+            pdf_path = candidate
+            break
+
+    if not pdf_path:
+        raise HTTPException(
+            status_code=404,
+            detail=f"PDF not found for {protocol_id}",
+        )
+
+    try:
+        import fitz
+
+        doc = fitz.open(str(pdf_path))
+        if page_number < 0 or page_number >= doc.page_count:
+            doc.close()
+            raise HTTPException(
+                status_code=404,
+                detail=f"Page {page_number} out of range (0-{doc.page_count - 1})",
+            )
+        page = doc[page_number]
+        pix = page.get_pixmap(dpi=150)
+        img_bytes = pix.tobytes("png")
+        doc.close()
+        return Response(
+            content=img_bytes,
+            media_type="image/png",
+            headers={"Cache-Control": "public, max-age=3600"},
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Failed to render page: {e}"
+        )
+
+
 @app.get("/api/protocols/{protocol_id}/sections")
 async def get_protocol_sections(protocol_id: str):
     """Get the section tree for a protocol."""
