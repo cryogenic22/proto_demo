@@ -1,0 +1,638 @@
+{
+  "protocol": "P-01 Brivaracetam",
+  "file": "P-01.pdf",
+  "total_sections": 63,
+  "max_depth": 2,
+  "sections": [
+    {
+      "number": "2.1",
+      "title": "Background and epidemiology of targeted disease",
+      "page": 11,
+      "page_display": "12",
+      "level": 2,
+      "end_page": 11,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.2",
+      "title": "Background information regarding product",
+      "page": 12,
+      "page_display": "13",
+      "level": 2,
+      "end_page": 13,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.4",
+      "title": "Safety of BRV",
+      "page": 14,
+      "page_display": "15",
+      "level": 2,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.5",
+      "title": "Study rationale",
+      "page": 14,
+      "page_display": "15",
+      "level": 2,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3.1",
+      "title": "Primary objective",
+      "page": 14,
+      "page_display": "15",
+      "level": 2,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3.2",
+      "title": "Secondary objective",
+      "page": 14,
+      "page_display": "15",
+      "level": 2,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3.3",
+      "title": "Exploratory objectives",
+      "page": 14,
+      "page_display": "15",
+      "level": 2,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.1",
+      "title": "Safety variables",
+      "page": 15,
+      "page_display": "16",
+      "level": 2,
+      "end_page": 15,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.2",
+      "title": "Efficacy variables",
+      "page": 15,
+      "page_display": "16",
+      "level": 2,
+      "end_page": 15,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.3",
+      "title": "Pharmacoeconomic variables",
+      "page": 16,
+      "page_display": "17",
+      "level": 2,
+      "end_page": 16,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1",
+      "title": "Study description",
+      "page": 16,
+      "page_display": "17",
+      "level": 2,
+      "end_page": 17,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.2",
+      "title": "Schedule of study assessments",
+      "page": 18,
+      "page_display": "19",
+      "level": 2,
+      "end_page": 22,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.3",
+      "title": "Visit schedule",
+      "page": 23,
+      "page_display": "24",
+      "level": 2,
+      "end_page": 23,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.4",
+      "title": "Rationale for study design and selection of dose",
+      "page": 24,
+      "page_display": "25",
+      "level": 2,
+      "end_page": 24,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1",
+      "title": "Inclusion criteria",
+      "page": 25,
+      "page_display": "26",
+      "level": 2,
+      "end_page": 25,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2",
+      "title": "Exclusion criteria",
+      "page": 26,
+      "page_display": "27",
+      "level": 2,
+      "end_page": 26,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.3",
+      "title": "Withdrawal criteria",
+      "page": 26,
+      "page_display": "27",
+      "level": 2,
+      "end_page": 27,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.1",
+      "title": "Description of investigational medicinal product(s)",
+      "page": 28,
+      "page_display": "29",
+      "level": 2,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.2",
+      "title": "Treatments to be administered",
+      "page": 28,
+      "page_display": "29",
+      "level": 2,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.3",
+      "title": "Packaging",
+      "page": 28,
+      "page_display": "29",
+      "level": 2,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.4",
+      "title": "Labeling",
+      "page": 28,
+      "page_display": "29",
+      "level": 2,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.5",
+      "title": "Handling and storage requirements",
+      "page": 28,
+      "page_display": "29",
+      "level": 2,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.6",
+      "title": "Drug accountability",
+      "page": 29,
+      "page_display": "30",
+      "level": 2,
+      "end_page": 29,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.7",
+      "title": "Procedures for monitoring subject compliance",
+      "page": 30,
+      "page_display": "31",
+      "level": 2,
+      "end_page": 30,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.8",
+      "title": "Concomitant medication(s)/treatment(s)",
+      "page": 30,
+      "page_display": "31",
+      "level": 2,
+      "end_page": 30,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.9",
+      "title": "Blinding",
+      "page": 30,
+      "page_display": "31",
+      "level": 2,
+      "end_page": 30,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.10",
+      "title": "Randomization and numbering of subjects",
+      "page": 31,
+      "page_display": "32",
+      "level": 2,
+      "end_page": 31,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1",
+      "title": "Entry Visit",
+      "page": 31,
+      "page_display": "32",
+      "level": 2,
+      "end_page": 31,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2",
+      "title": "Full Evaluation Visit",
+      "page": 32,
+      "page_display": "33",
+      "level": 2,
+      "end_page": 32,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3",
+      "title": "Minimal Evaluation Visit",
+      "page": 33,
+      "page_display": "34",
+      "level": 2,
+      "end_page": 33,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.4",
+      "title": "Yearly Evaluation Visit",
+      "page": 34,
+      "page_display": "35",
+      "level": 2,
+      "end_page": 34,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.5",
+      "title": "Unscheduled Visit",
+      "page": 35,
+      "page_display": "36",
+      "level": 2,
+      "end_page": 35,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.6",
+      "title": "Last Evaluation Period Visit or Early Discontinuation Visit",
+      "page": 35,
+      "page_display": "36",
+      "level": 2,
+      "end_page": 35,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.7",
+      "title": "Down-Titration Phone Call",
+      "page": 36,
+      "page_display": "37",
+      "level": 2,
+      "end_page": 36,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.8",
+      "title": "Final Visit",
+      "page": 36,
+      "page_display": "37",
+      "level": 2,
+      "end_page": 36,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1",
+      "title": "Additional efficacy and pharmacoeconomic assessments",
+      "page": 37,
+      "page_display": "38",
+      "level": 2,
+      "end_page": 37,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1",
+      "title": "Adverse events",
+      "page": 38,
+      "page_display": "39",
+      "level": 2,
+      "end_page": 39,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.2",
+      "title": "Serious adverse events",
+      "page": 40,
+      "page_display": "41",
+      "level": 2,
+      "end_page": 41,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3",
+      "title": "Immediate reporting of adverse events",
+      "page": 42,
+      "page_display": "43",
+      "level": 2,
+      "end_page": 42,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.4",
+      "title": "Anticipated serious adverse events",
+      "page": 42,
+      "page_display": "43",
+      "level": 2,
+      "end_page": 42,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.5",
+      "title": "Laboratory measurements",
+      "page": 42,
+      "page_display": "43",
+      "level": 2,
+      "end_page": 43,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.6",
+      "title": "Other safety measurements",
+      "page": 44,
+      "page_display": "45",
+      "level": 2,
+      "end_page": 44,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.1",
+      "title": "Adherence to protocol",
+      "page": 45,
+      "page_display": "46",
+      "level": 2,
+      "end_page": 45,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2",
+      "title": "Monitoring",
+      "page": 46,
+      "page_display": "47",
+      "level": 2,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.3",
+      "title": "Data handling",
+      "page": 47,
+      "page_display": "48",
+      "level": 2,
+      "end_page": 47,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4",
+      "title": "Termination of the study",
+      "page": 48,
+      "page_display": "49",
+      "level": 2,
+      "end_page": 48,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.5",
+      "title": "Archiving and data retention",
+      "page": 49,
+      "page_display": "50",
+      "level": 2,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.6",
+      "title": "Audit and inspection",
+      "page": 49,
+      "page_display": "50",
+      "level": 2,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7",
+      "title": "Good Clinical Practice",
+      "page": 49,
+      "page_display": "50",
+      "level": 2,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12.1",
+      "title": "Definition of analysis populations",
+      "page": 49,
+      "page_display": "50",
+      "level": 2,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12.2",
+      "title": "General statistical considerations",
+      "page": 50,
+      "page_display": "51",
+      "level": 2,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12.3",
+      "title": "Planned safety analyses",
+      "page": 50,
+      "page_display": "51",
+      "level": 2,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12.4",
+      "title": "Planned efficacy analyses",
+      "page": 50,
+      "page_display": "51",
+      "level": 2,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12.5",
+      "title": "Planned pharmacoeconomic analyses",
+      "page": 51,
+      "page_display": "52",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12.6",
+      "title": "Handling of protocol deviations",
+      "page": 51,
+      "page_display": "52",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12.7",
+      "title": "Handling of dropouts or missing data",
+      "page": 51,
+      "page_display": "52",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12.8",
+      "title": "Planned interim analysis and data monitoring",
+      "page": 51,
+      "page_display": "52",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12.9",
+      "title": "Determination of sample size",
+      "page": 51,
+      "page_display": "52",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "13.1",
+      "title": "Informed consent",
+      "page": 51,
+      "page_display": "52",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "13.2",
+      "title": "Subject identification cards",
+      "page": 52,
+      "page_display": "53",
+      "level": 2,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "13.3",
+      "title": "Institutional Review Boards and Independent Ethics Committees",
+      "page": 52,
+      "page_display": "53",
+      "level": 2,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "13.4",
+      "title": "Subject privacy",
+      "page": 53,
+      "page_display": "54",
+      "level": 2,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "13.5",
+      "title": "Protocol amendments",
+      "page": 53,
+      "page_display": "54",
+      "level": 2,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    }
+  ]
+}

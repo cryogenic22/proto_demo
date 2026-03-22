@@ -1,0 +1,1488 @@
+{
+  "protocol": "P-14 Roche",
+  "file": "P-14.pdf",
+  "total_sections": 148,
+  "max_depth": 2,
+  "sections": [
+    {
+      "number": "1.1",
+      "title": "Synopsis",
+      "page": 10,
+      "page_display": "11",
+      "level": 1,
+      "end_page": 33,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Figure 1: Study Flow Diagram: Part A, the Blinded Phase Followed by Part B, the Open-Label Phase Including Part C, the Booster Dose Phase",
+      "page": 34,
+      "page_display": "35",
+      "level": 2,
+      "end_page": 34,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.2",
+      "title": "Schema",
+      "page": 34,
+      "page_display": "35",
+      "level": 1,
+      "end_page": 34,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Figure 2: Part B, the Open-Label Observational Phase, and Part C, the Booster Dose Phase",
+      "page": 35,
+      "page_display": "36",
+      "level": 2,
+      "end_page": 35,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "TABLE OF CONTENTS",
+      "page": 36,
+      "page_display": "37",
+      "level": 1,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "LIST OF TABLES",
+      "page": 41,
+      "page_display": "42",
+      "level": 1,
+      "end_page": 41,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "LIST OF FIGURES",
+      "page": 42,
+      "page_display": "43",
+      "level": 1,
+      "end_page": 45,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.1",
+      "title": "Study Rationale",
+      "page": 46,
+      "page_display": "47",
+      "level": 1,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.2",
+      "title": "Background and Overview",
+      "page": 46,
+      "page_display": "47",
+      "level": 1,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.2.1",
+      "title": "Nonclinical Studies",
+      "page": 47,
+      "page_display": "48",
+      "level": 2,
+      "end_page": 47,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.2.2",
+      "title": "Clinical Studies",
+      "page": 47,
+      "page_display": "48",
+      "level": 2,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.3",
+      "title": "Benefit/Risk Assessment",
+      "page": 50,
+      "page_display": "51",
+      "level": 1,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.3.1",
+      "title": "Potential Benefits of Study Participation",
+      "page": 50,
+      "page_display": "51",
+      "level": 2,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.3.2",
+      "title": "Risks From Study Participation",
+      "page": 50,
+      "page_display": "51",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.3.3",
+      "title": "Overall Benefit/Risk Conclusion",
+      "page": 52,
+      "page_display": "53",
+      "level": 2,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 1: Objectives and Endpoints",
+      "page": 53,
+      "page_display": "54",
+      "level": 2,
+      "end_page": 57,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.1",
+      "title": "General Design",
+      "page": 58,
+      "page_display": "59",
+      "level": 1,
+      "end_page": 58,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.1.1",
+      "title": "Part A, the Blinded Phase",
+      "page": 58,
+      "page_display": "59",
+      "level": 2,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.1.2",
+      "title": "Part B, the Open-Label Observational Phase",
+      "page": 60,
+      "page_display": "61",
+      "level": 2,
+      "end_page": 62,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.1.3",
+      "title": "Part C, the Booster Dose Phase",
+      "page": 63,
+      "page_display": "64",
+      "level": 2,
+      "end_page": 63,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.2",
+      "title": "Scientific Rationale for Study Design",
+      "page": 64,
+      "page_display": "65",
+      "level": 1,
+      "end_page": 64,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.3",
+      "title": "Choice of Dose and Control Product",
+      "page": 65,
+      "page_display": "66",
+      "level": 1,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.4",
+      "title": "End of Study Definition",
+      "page": 65,
+      "page_display": "66",
+      "level": 1,
+      "end_page": 66,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1",
+      "title": "Inclusion and Exclusion Criteria (Part A, Part B, and Part C)",
+      "page": 67,
+      "page_display": "68",
+      "level": 1,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1.1",
+      "title": "Inclusion Criteria",
+      "page": 67,
+      "page_display": "68",
+      "level": 2,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1.2",
+      "title": "Exclusion Criteria",
+      "page": 68,
+      "page_display": "69",
+      "level": 2,
+      "end_page": 69,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.2",
+      "title": "Participant Restrictions",
+      "page": 70,
+      "page_display": "71",
+      "level": 1,
+      "end_page": 70,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.3",
+      "title": "Screen Failures (Part A, Blinded Phase Only)",
+      "page": 70,
+      "page_display": "71",
+      "level": 1,
+      "end_page": 70,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 2: Summary of Treatment Groups",
+      "page": 71,
+      "page_display": "72",
+      "level": 2,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1",
+      "title": "Investigational Product",
+      "page": 71,
+      "page_display": "72",
+      "level": 1,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2",
+      "title": "Dosing and Management of Investigational Product",
+      "page": 71,
+      "page_display": "72",
+      "level": 1,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.1",
+      "title": "Method of Randomly Assigning Participants to Treatment Groups (Part A, Blinded Phase Only)",
+      "page": 71,
+      "page_display": "72",
+      "level": 2,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.2",
+      "title": "Administration of Investigational Product",
+      "page": 72,
+      "page_display": "73",
+      "level": 2,
+      "end_page": 72,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.3",
+      "title": "Delivery and Receipt",
+      "page": 73,
+      "page_display": "74",
+      "level": 2,
+      "end_page": 73,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.4",
+      "title": "Packaging and Labeling",
+      "page": 73,
+      "page_display": "74",
+      "level": 2,
+      "end_page": 73,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.5",
+      "title": "Storage",
+      "page": 74,
+      "page_display": "75",
+      "level": 2,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.6",
+      "title": "Investigational Product Accountability",
+      "page": 74,
+      "page_display": "75",
+      "level": 2,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.7",
+      "title": "Handling and Disposal",
+      "page": 74,
+      "page_display": "75",
+      "level": 2,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.8",
+      "title": "Unblinding",
+      "page": 75,
+      "page_display": "76",
+      "level": 2,
+      "end_page": 76,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.3",
+      "title": "Study Treatment Compliance",
+      "page": 77,
+      "page_display": "78",
+      "level": 1,
+      "end_page": 77,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.4",
+      "title": "Prior and Concomitant Therapy",
+      "page": 78,
+      "page_display": "79",
+      "level": 1,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.4.1",
+      "title": "Prior Medications and Therapies",
+      "page": 78,
+      "page_display": "79",
+      "level": 2,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.4.2",
+      "title": "Concomitant Medications and Therapies",
+      "page": 78,
+      "page_display": "79",
+      "level": 2,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.4.3",
+      "title": "Concomitant Medications and Vaccines That May Lead to the Elimination of a Participant From Per-protocol Analyses",
+      "page": 79,
+      "page_display": "80",
+      "level": 2,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.1",
+      "title": "Criteria for Delay of Study Treatment",
+      "page": 80,
+      "page_display": "81",
+      "level": 1,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.2",
+      "title": "Discontinuation of Study Treatment",
+      "page": 81,
+      "page_display": "82",
+      "level": 1,
+      "end_page": 81,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.3",
+      "title": "Participant Withdrawal From the Study",
+      "page": 82,
+      "page_display": "83",
+      "level": 1,
+      "end_page": 82,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.3.1",
+      "title": "Participant Withdrawal",
+      "page": 82,
+      "page_display": "83",
+      "level": 2,
+      "end_page": 82,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.4",
+      "title": "Lost to Follow-up",
+      "page": 83,
+      "page_display": "84",
+      "level": 1,
+      "end_page": 85,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1",
+      "title": "Efficacy and Immunogenicity Assessments and Procedures",
+      "page": 86,
+      "page_display": "87",
+      "level": 1,
+      "end_page": 86,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.1",
+      "title": "Efficacy Assessments Related to COVID-19 and SARS-CoV-2 Infection",
+      "page": 86,
+      "page_display": "87",
+      "level": 2,
+      "end_page": 86,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.2",
+      "title": "Surveillance for COVID-19 Symptoms",
+      "page": 87,
+      "page_display": "88",
+      "level": 2,
+      "end_page": 88,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Figure 3: Surveillance for COVID-19 Symptoms and the Corresponding Clinical Data Pathways",
+      "page": 89,
+      "page_display": "90",
+      "level": 2,
+      "end_page": 89,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.3",
+      "title": "Convalescent Period Starting With the Illness Visit",
+      "page": 90,
+      "page_display": "91",
+      "level": 2,
+      "end_page": 90,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 3: Grading of COVID-19 Symptoms",
+      "page": 91,
+      "page_display": "92",
+      "level": 2,
+      "end_page": 91,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.4",
+      "title": "Ancillary Supplies for Participant Use",
+      "page": 92,
+      "page_display": "93",
+      "level": 2,
+      "end_page": 92,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.5",
+      "title": "Immunogenicity Assessments",
+      "page": 93,
+      "page_display": "94",
+      "level": 2,
+      "end_page": 93,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2",
+      "title": "Safety Assessments",
+      "page": 93,
+      "page_display": "94",
+      "level": 1,
+      "end_page": 93,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.1",
+      "title": "Safety Phone Calls",
+      "page": 94,
+      "page_display": "95",
+      "level": 2,
+      "end_page": 94,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.2",
+      "title": "Use of Electronic Diaries",
+      "page": 94,
+      "page_display": "95",
+      "level": 2,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.3",
+      "title": "Demographics/Medical History",
+      "page": 97,
+      "page_display": "98",
+      "level": 2,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.4",
+      "title": "Physical Examination",
+      "page": 97,
+      "page_display": "98",
+      "level": 2,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.5",
+      "title": "Vital Sign Measurements",
+      "page": 97,
+      "page_display": "98",
+      "level": 2,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 4: Maximum Planned Immunogenicity Blood Sampling Volumes per Participant by Visit",
+      "page": 98,
+      "page_display": "99",
+      "level": 2,
+      "end_page": 98,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.6",
+      "title": "Blood Sampling",
+      "page": 98,
+      "page_display": "99",
+      "level": 2,
+      "end_page": 98,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3",
+      "title": "Safety Definitions and Procedures",
+      "page": 99,
+      "page_display": "100",
+      "level": 1,
+      "end_page": 99,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.1",
+      "title": "Adverse Event",
+      "page": 99,
+      "page_display": "100",
+      "level": 2,
+      "end_page": 99,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.2",
+      "title": "Medically Attended Adverse Events",
+      "page": 99,
+      "page_display": "100",
+      "level": 2,
+      "end_page": 99,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.3",
+      "title": "Adverse Events of Special Interest",
+      "page": 100,
+      "page_display": "101",
+      "level": 2,
+      "end_page": 102,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.4",
+      "title": "Serious Adverse Events",
+      "page": 103,
+      "page_display": "104",
+      "level": 2,
+      "end_page": 103,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.5",
+      "title": "Solicited Adverse Reactions (Part A)",
+      "page": 104,
+      "page_display": "105",
+      "level": 2,
+      "end_page": 104,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 5: Solicited Adverse Reactions and Grades",
+      "page": 105,
+      "page_display": "106",
+      "level": 2,
+      "end_page": 106,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.6",
+      "title": "Recording and Follow-up of Pregnancy",
+      "page": 107,
+      "page_display": "108",
+      "level": 2,
+      "end_page": 107,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.7",
+      "title": "Recording and Follow-up of an AE and/or SAE",
+      "page": 108,
+      "page_display": "109",
+      "level": 2,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.8",
+      "title": "Time Period and Frequency for Collecting AE and SAE Information",
+      "page": 108,
+      "page_display": "109",
+      "level": 2,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.9",
+      "title": "Assessment of Intensity",
+      "page": 108,
+      "page_display": "109",
+      "level": 2,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.10",
+      "title": "Assessment of Causality",
+      "page": 109,
+      "page_display": "110",
+      "level": 2,
+      "end_page": 109,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.11",
+      "title": "Reporting Adverse Events",
+      "page": 110,
+      "page_display": "111",
+      "level": 2,
+      "end_page": 110,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.12",
+      "title": "Regulatory Reporting Requirements for SAEs",
+      "page": 110,
+      "page_display": "111",
+      "level": 2,
+      "end_page": 110,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.4",
+      "title": "Monitoring Committees",
+      "page": 111,
+      "page_display": "112",
+      "level": 1,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.4.1",
+      "title": "Protocol Safety Review Team",
+      "page": 111,
+      "page_display": "112",
+      "level": 2,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.4.2",
+      "title": "Data and Safety Monitoring Board",
+      "page": 111,
+      "page_display": "112",
+      "level": 2,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.4.3",
+      "title": "Adjudication Committee",
+      "page": 112,
+      "page_display": "113",
+      "level": 2,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.4.4",
+      "title": "Independent Cardiac Event Adjudication Committee",
+      "page": 112,
+      "page_display": "113",
+      "level": 2,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.5",
+      "title": "Management of Overdose",
+      "page": 113,
+      "page_display": "114",
+      "level": 1,
+      "end_page": 113,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.6",
+      "title": "Pharmacokinetics",
+      "page": 113,
+      "page_display": "114",
+      "level": 1,
+      "end_page": 113,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.7",
+      "title": "Pharmacodynamics",
+      "page": 113,
+      "page_display": "114",
+      "level": 1,
+      "end_page": 113,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.8",
+      "title": "Exploratory Assessments and Biomarkers",
+      "page": 113,
+      "page_display": "114",
+      "level": 1,
+      "end_page": 113,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.9",
+      "title": "Medical Resource Utilization and Health Economics",
+      "page": 113,
+      "page_display": "114",
+      "level": 1,
+      "end_page": 113,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1",
+      "title": "Blinding and Responsibility for Analyses",
+      "page": 114,
+      "page_display": "115",
+      "level": 1,
+      "end_page": 114,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2",
+      "title": "Statistical Hypotheses",
+      "page": 114,
+      "page_display": "115",
+      "level": 1,
+      "end_page": 114,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.3",
+      "title": "Sample Size Determination",
+      "page": 115,
+      "page_display": "116",
+      "level": 1,
+      "end_page": 115,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 6: Conditions and Sample Size to Demonstrate Vaccine Efficacy",
+      "page": 116,
+      "page_display": "117",
+      "level": 2,
+      "end_page": 116,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Figure 4: Boundary Crossing Probabilities by Effect Size",
+      "page": 116,
+      "page_display": "117",
+      "level": 2,
+      "end_page": 116,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 7: Power of Demonstrating Vaccine Efficacy Against Severe COVID-19",
+      "page": 117,
+      "page_display": "118",
+      "level": 2,
+      "end_page": 117,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.3.1",
+      "title": "Power for Selected Secondary Efficacy Endpoints",
+      "page": 117,
+      "page_display": "118",
+      "level": 2,
+      "end_page": 117,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 8: Populations for Analyses",
+      "page": 118,
+      "page_display": "119",
+      "level": 2,
+      "end_page": 118,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4",
+      "title": "Analysis Populations",
+      "page": 118,
+      "page_display": "119",
+      "level": 1,
+      "end_page": 118,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 9: Statistical Analysis Methods of Efficacy Endpoints",
+      "page": 119,
+      "page_display": "120",
+      "level": 2,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5",
+      "title": "Statistical Analyses",
+      "page": 119,
+      "page_display": "120",
+      "level": 1,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5.1",
+      "title": "Efficacy Analyses",
+      "page": 119,
+      "page_display": "120",
+      "level": 2,
+      "end_page": 122,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 10: Treatment Cohorts for the Long-term Efficacy Analyses",
+      "page": 123,
+      "page_display": "124",
+      "level": 2,
+      "end_page": 123,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 11: Long-term Efficacy Endpoints",
+      "page": 124,
+      "page_display": "125",
+      "level": 2,
+      "end_page": 124,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5.2",
+      "title": "Safety Analyses",
+      "page": 125,
+      "page_display": "126",
+      "level": 2,
+      "end_page": 125,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 12: Analysis Strategy for Safety Parameters in Part A",
+      "page": 126,
+      "page_display": "127",
+      "level": 2,
+      "end_page": 126,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5.3",
+      "title": "Immunogenicity Analyses",
+      "page": 126,
+      "page_display": "127",
+      "level": 2,
+      "end_page": 126,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 13: Immunogenicity Endpoints and Statistical Methods",
+      "page": 127,
+      "page_display": "128",
+      "level": 2,
+      "end_page": 128,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 14: Burden of Disease Score",
+      "page": 129,
+      "page_display": "130",
+      "level": 2,
+      "end_page": 129,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5.4",
+      "title": "Exploratory Analyses in Part A",
+      "page": 129,
+      "page_display": "130",
+      "level": 2,
+      "end_page": 129,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5.5",
+      "title": "Subgroup Analyses",
+      "page": 129,
+      "page_display": "130",
+      "level": 2,
+      "end_page": 129,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.6",
+      "title": "Interim Analyses",
+      "page": 130,
+      "page_display": "131",
+      "level": 1,
+      "end_page": 130,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 15: Interim Boundaries Using O’Brien-Fleming Spending Function, Calculation Based on the PP Set for the Primary Efficacy Endpoint",
+      "page": 131,
+      "page_display": "132",
+      "level": 2,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.1",
+      "title": "APPENDIX 1: Schedules of Events",
+      "page": 137,
+      "page_display": "138",
+      "level": 1,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 16: Schedule of Events (Vaccination Phase, Day 1 – Day 57)",
+      "page": 138,
+      "page_display": "139",
+      "level": 2,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 17: Schedule of Events (Surveillance Phase, Day 64 – Day 394)",
+      "page": 141,
+      "page_display": "142",
+      "level": 2,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 18: Schedule of Events (Surveillance Phase, Day 401 – Day 759)",
+      "page": 144,
+      "page_display": "145",
+      "level": 2,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 19: Schedule of Events (Convalescent Period, Starting With the Illness Visit)",
+      "page": 146,
+      "page_display": "147",
+      "level": 2,
+      "end_page": 147,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 20: Part B: Participant Decision Visit",
+      "page": 148,
+      "page_display": "149",
+      "level": 2,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 21: Supplemental Schedule of Events: Open-Label Observational Phase - Placebo Participants who Request to Receive mRNA-1273",
+      "page": 149,
+      "page_display": "150",
+      "level": 2,
+      "end_page": 151,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 22: Modified Supplemental Schedule of Events: Open-Label Observational Phase – mRNA-1273 Participants Who ONLY Received 1 Dose of mRNA-1273",
+      "page": 152,
+      "page_display": "153",
+      "level": 2,
+      "end_page": 154,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 23: Part C Supplemental Schedule of Events: Booster Dose Phase",
+      "page": 155,
+      "page_display": "156",
+      "level": 2,
+      "end_page": 158,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2",
+      "title": "APPENDIX 2: Study Governance Considerations",
+      "page": 159,
+      "page_display": "160",
+      "level": 1,
+      "end_page": 159,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.1",
+      "title": "Regulatory and Ethical Considerations",
+      "page": 159,
+      "page_display": "160",
+      "level": 2,
+      "end_page": 159,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.2",
+      "title": "Study Monitoring",
+      "page": 159,
+      "page_display": "160",
+      "level": 2,
+      "end_page": 160,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.3",
+      "title": "Audits and Inspections",
+      "page": 161,
+      "page_display": "162",
+      "level": 2,
+      "end_page": 161,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.4",
+      "title": "Financial Disclosure",
+      "page": 161,
+      "page_display": "162",
+      "level": 2,
+      "end_page": 161,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.5",
+      "title": "Recruitment Procedures",
+      "page": 161,
+      "page_display": "162",
+      "level": 2,
+      "end_page": 161,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.6",
+      "title": "Informed Consent Process",
+      "page": 161,
+      "page_display": "162",
+      "level": 2,
+      "end_page": 161,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.7",
+      "title": "Protocol Amendments",
+      "page": 162,
+      "page_display": "163",
+      "level": 2,
+      "end_page": 162,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.8",
+      "title": "Protocol Deviations",
+      "page": 163,
+      "page_display": "164",
+      "level": 2,
+      "end_page": 163,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.9",
+      "title": "Data Protection",
+      "page": 163,
+      "page_display": "164",
+      "level": 2,
+      "end_page": 163,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.10",
+      "title": "Sample Retention and Future Biomedical Research",
+      "page": 164,
+      "page_display": "165",
+      "level": 2,
+      "end_page": 164,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.11",
+      "title": "Data Quality Assurance and Quality Control",
+      "page": 165,
+      "page_display": "166",
+      "level": 2,
+      "end_page": 165,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.12",
+      "title": "Data Collection and Management",
+      "page": 166,
+      "page_display": "167",
+      "level": 2,
+      "end_page": 166,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.13",
+      "title": "Source Documents",
+      "page": 166,
+      "page_display": "167",
+      "level": 2,
+      "end_page": 166,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.14",
+      "title": "Retention of Records",
+      "page": 167,
+      "page_display": "168",
+      "level": 2,
+      "end_page": 167,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.15",
+      "title": "Study and Site Closure",
+      "page": 167,
+      "page_display": "168",
+      "level": 2,
+      "end_page": 167,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2.16",
+      "title": "Publication Policy",
+      "page": 168,
+      "page_display": "169",
+      "level": 2,
+      "end_page": 168,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.3",
+      "title": "APPENDIX 3: Contraceptive Guidance",
+      "page": 169,
+      "page_display": "170",
+      "level": 1,
+      "end_page": 170,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 24: Intercurrent Event Types",
+      "page": 171,
+      "page_display": "172",
+      "level": 2,
+      "end_page": 171,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4",
+      "title": "APPENDIX 4: Statistical Appendices",
+      "page": 171,
+      "page_display": "172",
+      "level": 1,
+      "end_page": 171,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4.1",
+      "title": "Estimands and Estimand Specifications",
+      "page": 171,
+      "page_display": "172",
+      "level": 2,
+      "end_page": 171,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 25: Primary Objective and Estimands With Rationale for Strategies to Address Intercurrent Events for Per-protocol Analysis",
+      "page": 172,
+      "page_display": "173",
+      "level": 2,
+      "end_page": 173,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 26: Summary of Statistical Methods and Sensitivity Analyses",
+      "page": 174,
+      "page_display": "175",
+      "level": 2,
+      "end_page": 174,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4.2",
+      "title": "Statistical Methods and Sensitivity Analyses",
+      "page": 174,
+      "page_display": "175",
+      "level": 2,
+      "end_page": 174,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 27: Adverse Events of Special Interest",
+      "page": 175,
+      "page_display": "176",
+      "level": 2,
+      "end_page": 175,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.5",
+      "title": "APPENDIX 5: Adverse Events of Special Interest Terms",
+      "page": 175,
+      "page_display": "176",
+      "level": 1,
+      "end_page": 176,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.6",
+      "title": "APPENDIX 6: Protocol Amendment History",
+      "page": 177,
+      "page_display": "178",
+      "level": 1,
+      "end_page": 192,
+      "start_y": 0.0,
+      "children": []
+    }
+  ]
+}

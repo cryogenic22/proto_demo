@@ -1,0 +1,2398 @@
+{
+  "protocol": "Pfizer BNT162",
+  "file": "Prot_0001 1.pdf",
+  "total_sections": 239,
+  "max_depth": 6,
+  "sections": [
+    {
+      "number": "",
+      "title": "TABLE OF CONTENTS",
+      "page": 15,
+      "page_display": "16",
+      "level": 1,
+      "end_page": 22,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "LIST OF TABLES",
+      "page": 23,
+      "page_display": "24",
+      "level": 1,
+      "end_page": 23,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "LIST OF FIGURES",
+      "page": 24,
+      "page_display": "25",
+      "level": 1,
+      "end_page": 24,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1",
+      "title": "PROTOCOL SUMMARY",
+      "page": 25,
+      "page_display": "26",
+      "level": 1,
+      "end_page": 25,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.1",
+      "title": "Synopsis",
+      "page": 25,
+      "page_display": "26",
+      "level": 2,
+      "end_page": 38,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.2",
+      "title": "Schema",
+      "page": 39,
+      "page_display": "40",
+      "level": 2,
+      "end_page": 39,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.3",
+      "title": "Schedule of Activities",
+      "page": 40,
+      "page_display": "41",
+      "level": 2,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.3.1",
+      "title": "Phase 1",
+      "page": 40,
+      "page_display": "41",
+      "level": 3,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.3.2",
+      "title": "Phase 2/3",
+      "page": 47,
+      "page_display": "48",
+      "level": 3,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.3.3",
+      "title": "Administration of BNT162b2 to Those Originally Assigned to Placebo",
+      "page": 51,
+      "page_display": "52",
+      "level": 3,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.3.4",
+      "title": "Administration of an Additional Dose of BNT162b2 (5, 10, or 30 µg) or BNT162b2SA (30 µg) (Subset for Evaluation of Boostability and Protection Against Emerging VOCs)",
+      "page": 53,
+      "page_display": "54",
+      "level": 3,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.3.5",
+      "title": "Administration of BNT162b2SA to BNT162b2-Naïve Participants",
+      "page": 56,
+      "page_display": "57",
+      "level": 3,
+      "end_page": 58,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.3.6",
+      "title": "Surveillance for Asymptomatic SARS-CoV-2 Infection",
+      "page": 59,
+      "page_display": "60",
+      "level": 3,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.3.7",
+      "title": "Administration of a Third Dose of BNT162b2 to Participants Who Have Not Previously Received a Third Dose",
+      "page": 60,
+      "page_display": "61",
+      "level": 3,
+      "end_page": 61,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1.3.8",
+      "title": "Administration of a Fourth (or Fifth) Dose of BNT162b2 to Eligible Participants From Protocol Amendments 13, 14, and 15",
+      "page": 62,
+      "page_display": "63",
+      "level": 3,
+      "end_page": 64,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2",
+      "title": "INTRODUCTION",
+      "page": 65,
+      "page_display": "66",
+      "level": 1,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.1",
+      "title": "Study Rationale",
+      "page": 65,
+      "page_display": "66",
+      "level": 2,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.2",
+      "title": "Background",
+      "page": 65,
+      "page_display": "66",
+      "level": 2,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.3",
+      "title": "Clinical Overview",
+      "page": 68,
+      "page_display": "69",
+      "level": 2,
+      "end_page": 68,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.4",
+      "title": "Benefit/Risk Assessment",
+      "page": 68,
+      "page_display": "69",
+      "level": 2,
+      "end_page": 68,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.4.1",
+      "title": "Risk Assessment",
+      "page": 69,
+      "page_display": "70",
+      "level": 3,
+      "end_page": 69,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.4.2",
+      "title": "Benefit Assessment",
+      "page": 70,
+      "page_display": "71",
+      "level": 3,
+      "end_page": 70,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2.4.3",
+      "title": "Overall Benefit/Risk Conclusion",
+      "page": 70,
+      "page_display": "71",
+      "level": 3,
+      "end_page": 70,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3",
+      "title": "OBJECTIVES, ESTIMANDS, AND ENDPOINTS",
+      "page": 71,
+      "page_display": "72",
+      "level": 1,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3.1",
+      "title": "For Phase 1",
+      "page": 71,
+      "page_display": "72",
+      "level": 2,
+      "end_page": 72,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3.2",
+      "title": "For Phase 2/3",
+      "page": 73,
+      "page_display": "74",
+      "level": 2,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4",
+      "title": "STUDY DESIGN",
+      "page": 79,
+      "page_display": "80",
+      "level": 1,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.1",
+      "title": "Overall Design",
+      "page": 79,
+      "page_display": "80",
+      "level": 2,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.1.1",
+      "title": "Phase 1",
+      "page": 80,
+      "page_display": "81",
+      "level": 3,
+      "end_page": 81,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.1.2",
+      "title": "Phase 2/3",
+      "page": 82,
+      "page_display": "83",
+      "level": 3,
+      "end_page": 84,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.2",
+      "title": "Scientific Rationale for Study Design",
+      "page": 85,
+      "page_display": "86",
+      "level": 2,
+      "end_page": 85,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.3",
+      "title": "Justification for Dose",
+      "page": 86,
+      "page_display": "87",
+      "level": 2,
+      "end_page": 86,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4.4",
+      "title": "End of Study Definition",
+      "page": 87,
+      "page_display": "88",
+      "level": 2,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5",
+      "title": "STUDY POPULATION",
+      "page": 87,
+      "page_display": "88",
+      "level": 1,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1",
+      "title": "Inclusion Criteria",
+      "page": 87,
+      "page_display": "88",
+      "level": 2,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.2",
+      "title": "Exclusion Criteria",
+      "page": 88,
+      "page_display": "89",
+      "level": 2,
+      "end_page": 90,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.3",
+      "title": "Lifestyle Considerations",
+      "page": 91,
+      "page_display": "92",
+      "level": 2,
+      "end_page": 91,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.3.1",
+      "title": "Contraception",
+      "page": 91,
+      "page_display": "92",
+      "level": 3,
+      "end_page": 91,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.4",
+      "title": "Screen Failures",
+      "page": 91,
+      "page_display": "92",
+      "level": 2,
+      "end_page": 91,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.5",
+      "title": "Criteria for Temporarily Delaying Enrollment/Randomization/Study Intervention Administration",
+      "page": 92,
+      "page_display": "93",
+      "level": 2,
+      "end_page": 92,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6",
+      "title": "STUDY INTERVENTION",
+      "page": 92,
+      "page_display": "93",
+      "level": 1,
+      "end_page": 92,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1",
+      "title": "Study Intervention(s) Administered",
+      "page": 93,
+      "page_display": "94",
+      "level": 2,
+      "end_page": 93,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1.1",
+      "title": "Manufacturing Process",
+      "page": 94,
+      "page_display": "95",
+      "level": 3,
+      "end_page": 94,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1.2",
+      "title": "Administration",
+      "page": 94,
+      "page_display": "95",
+      "level": 3,
+      "end_page": 94,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2",
+      "title": "Preparation/Handling/Storage/Accountability",
+      "page": 95,
+      "page_display": "96",
+      "level": 2,
+      "end_page": 95,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.1",
+      "title": "Preparation and Dispensing",
+      "page": 96,
+      "page_display": "97",
+      "level": 3,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.3",
+      "title": "Measures to Minimize Bias: Randomization and Blinding",
+      "page": 97,
+      "page_display": "98",
+      "level": 2,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.3.1",
+      "title": "Allocation to Study Intervention",
+      "page": 97,
+      "page_display": "98",
+      "level": 3,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.3.2",
+      "title": "Blinding of Site Personnel",
+      "page": 97,
+      "page_display": "98",
+      "level": 3,
+      "end_page": 97,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.3.3",
+      "title": "Blinding of the Sponsor",
+      "page": 98,
+      "page_display": "99",
+      "level": 3,
+      "end_page": 98,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.3.4",
+      "title": "Breaking the Blind",
+      "page": 99,
+      "page_display": "100",
+      "level": 3,
+      "end_page": 99,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.4",
+      "title": "Study Intervention Compliance",
+      "page": 100,
+      "page_display": "101",
+      "level": 2,
+      "end_page": 100,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.5",
+      "title": "Concomitant Therapy",
+      "page": 100,
+      "page_display": "101",
+      "level": 2,
+      "end_page": 100,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.5.1",
+      "title": "Prohibited During the Study",
+      "page": 101,
+      "page_display": "102",
+      "level": 3,
+      "end_page": 101,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.5.2",
+      "title": "Permitted During the Study",
+      "page": 102,
+      "page_display": "103",
+      "level": 3,
+      "end_page": 102,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.6",
+      "title": "Dose Modification",
+      "page": 102,
+      "page_display": "103",
+      "level": 2,
+      "end_page": 102,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.7",
+      "title": "Intervention After the End of the Study",
+      "page": 103,
+      "page_display": "104",
+      "level": 2,
+      "end_page": 103,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7",
+      "title": "DISCONTINUATION OF STUDY INTERVENTION AND PARTICIPANT DISCONTINUATION/WITHDRAWAL",
+      "page": 103,
+      "page_display": "104",
+      "level": 1,
+      "end_page": 103,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.1",
+      "title": "Discontinuation of Study Intervention",
+      "page": 103,
+      "page_display": "104",
+      "level": 2,
+      "end_page": 103,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.2",
+      "title": "Participant Discontinuation/Withdrawal From the Study",
+      "page": 103,
+      "page_display": "104",
+      "level": 2,
+      "end_page": 104,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.2.1",
+      "title": "Withdrawal of Consent",
+      "page": 105,
+      "page_display": "106",
+      "level": 3,
+      "end_page": 105,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.3",
+      "title": "Lost to Follow-up",
+      "page": 105,
+      "page_display": "106",
+      "level": 2,
+      "end_page": 105,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8",
+      "title": "STUDY ASSESSMENTS AND PROCEDURES",
+      "page": 105,
+      "page_display": "106",
+      "level": 1,
+      "end_page": 106,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1",
+      "title": "Efficacy and/or Immunogenicity Assessments",
+      "page": 107,
+      "page_display": "108",
+      "level": 2,
+      "end_page": 107,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.1",
+      "title": "Efficacy Against COVID-19",
+      "page": 107,
+      "page_display": "108",
+      "level": 3,
+      "end_page": 108,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.2",
+      "title": "Efficacy Against Asymptomatic SARS-CoV-2 Infection",
+      "page": 109,
+      "page_display": "110",
+      "level": 3,
+      "end_page": 109,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.2.1",
+      "title": "Seroconversion of N-Binding Antibody",
+      "page": 109,
+      "page_display": "110",
+      "level": 4,
+      "end_page": 109,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.2.2",
+      "title": "NAAT-Confirmed SARS-CoV-2 Infection",
+      "page": 110,
+      "page_display": "111",
+      "level": 4,
+      "end_page": 110,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.3",
+      "title": "Vaccine-Induced Immunogenicity",
+      "page": 110,
+      "page_display": "111",
+      "level": 3,
+      "end_page": 110,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.4",
+      "title": "Biological Samples",
+      "page": 110,
+      "page_display": "111",
+      "level": 3,
+      "end_page": 110,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.5",
+      "title": "Surveillance for Asymptomatic SARS-CoV-2 Infection",
+      "page": 111,
+      "page_display": "112",
+      "level": 3,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2",
+      "title": "Safety Assessments",
+      "page": 111,
+      "page_display": "112",
+      "level": 2,
+      "end_page": 111,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.1",
+      "title": "Clinical Safety Laboratory Assessments (Phase 1 Participants Only)",
+      "page": 112,
+      "page_display": "113",
+      "level": 3,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.2",
+      "title": "Electronic Diary",
+      "page": 112,
+      "page_display": "113",
+      "level": 3,
+      "end_page": 112,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.2.1",
+      "title": "Grading Scales",
+      "page": 113,
+      "page_display": "114",
+      "level": 4,
+      "end_page": 113,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.2.2",
+      "title": "Local Reactions",
+      "page": 113,
+      "page_display": "114",
+      "level": 4,
+      "end_page": 113,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 1. Local Reaction Grading Scale",
+      "page": 114,
+      "page_display": "115",
+      "level": 2,
+      "end_page": 114,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.2.3",
+      "title": "Systemic Events",
+      "page": 114,
+      "page_display": "115",
+      "level": 4,
+      "end_page": 114,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 2. Systemic Event Grading Scale",
+      "page": 115,
+      "page_display": "116",
+      "level": 2,
+      "end_page": 115,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.2.4",
+      "title": "Fever",
+      "page": 115,
+      "page_display": "116",
+      "level": 4,
+      "end_page": 115,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 3. Scale for Fever",
+      "page": 116,
+      "page_display": "117",
+      "level": 2,
+      "end_page": 116,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.2.5",
+      "title": "Antipyretic Medication",
+      "page": 116,
+      "page_display": "117",
+      "level": 4,
+      "end_page": 116,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.3",
+      "title": "Phase 1 Stopping Rules",
+      "page": 116,
+      "page_display": "117",
+      "level": 3,
+      "end_page": 116,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.4",
+      "title": "Surveillance of Events That Could Represent Enhanced COVID-19 and Phase 2/3 Stopping Rule",
+      "page": 117,
+      "page_display": "118",
+      "level": 3,
+      "end_page": 117,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.5",
+      "title": "Randomization and Vaccination After a Stopping Rule Is Met",
+      "page": 118,
+      "page_display": "119",
+      "level": 3,
+      "end_page": 118,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2.6",
+      "title": "Pregnancy Testing",
+      "page": 118,
+      "page_display": "119",
+      "level": 3,
+      "end_page": 118,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3",
+      "title": "Adverse Events and Serious Adverse Events",
+      "page": 118,
+      "page_display": "119",
+      "level": 2,
+      "end_page": 118,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.1",
+      "title": "Time Period and Frequency for Collecting AE and SAE Information",
+      "page": 119,
+      "page_display": "120",
+      "level": 3,
+      "end_page": 119,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.1.1",
+      "title": "Reporting SAEs to Pfizer Safety",
+      "page": 120,
+      "page_display": "121",
+      "level": 4,
+      "end_page": 120,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.1.2",
+      "title": "Recording Nonserious AEs and SAEs on the CRF",
+      "page": 121,
+      "page_display": "122",
+      "level": 4,
+      "end_page": 121,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.2",
+      "title": "Method of Detecting AEs and SAEs",
+      "page": 121,
+      "page_display": "122",
+      "level": 3,
+      "end_page": 121,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.3",
+      "title": "Follow-up of AEs and SAEs",
+      "page": 121,
+      "page_display": "122",
+      "level": 3,
+      "end_page": 121,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.4",
+      "title": "Regulatory Reporting Requirements for SAEs",
+      "page": 121,
+      "page_display": "122",
+      "level": 3,
+      "end_page": 121,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.5",
+      "title": "Exposure During Pregnancy or Breastfeeding, and Occupational Exposure",
+      "page": 122,
+      "page_display": "123",
+      "level": 3,
+      "end_page": 122,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.5.1",
+      "title": "Exposure During Pregnancy",
+      "page": 122,
+      "page_display": "123",
+      "level": 4,
+      "end_page": 122,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.6",
+      "title": "Exposure During Breastfeeding",
+      "page": 123,
+      "page_display": "124",
+      "level": 3,
+      "end_page": 123,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.6.1",
+      "title": "Occupational Exposure",
+      "page": 124,
+      "page_display": "125",
+      "level": 4,
+      "end_page": 124,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.7",
+      "title": "Cardiovascular and Death Events",
+      "page": 124,
+      "page_display": "125",
+      "level": 3,
+      "end_page": 124,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.8",
+      "title": "Disease-Related Events and/or Disease-Related Outcomes Not Qualifying as AEs or SAEs",
+      "page": 124,
+      "page_display": "125",
+      "level": 3,
+      "end_page": 124,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.10",
+      "title": "Medical Device Deficiencies",
+      "page": 125,
+      "page_display": "126",
+      "level": 3,
+      "end_page": 125,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.11",
+      "title": "Medication Errors",
+      "page": 125,
+      "page_display": "126",
+      "level": 3,
+      "end_page": 125,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.9",
+      "title": "Adverse Events of Special Interest",
+      "page": 125,
+      "page_display": "126",
+      "level": 3,
+      "end_page": 125,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.9.1",
+      "title": "Lack of Efficacy",
+      "page": 125,
+      "page_display": "126",
+      "level": 4,
+      "end_page": 125,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.4",
+      "title": "Treatment of Overdose",
+      "page": 126,
+      "page_display": "127",
+      "level": 2,
+      "end_page": 126,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.10",
+      "title": "Health Economics",
+      "page": 127,
+      "page_display": "128",
+      "level": 2,
+      "end_page": 127,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11",
+      "title": "Study Procedures",
+      "page": 127,
+      "page_display": "128",
+      "level": 2,
+      "end_page": 127,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.5",
+      "title": "Pharmacokinetics",
+      "page": 127,
+      "page_display": "128",
+      "level": 2,
+      "end_page": 127,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.6",
+      "title": "Pharmacodynamics",
+      "page": 127,
+      "page_display": "128",
+      "level": 2,
+      "end_page": 127,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.7",
+      "title": "Genetics",
+      "page": 127,
+      "page_display": "128",
+      "level": 2,
+      "end_page": 127,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.8",
+      "title": "Biomarkers",
+      "page": 127,
+      "page_display": "128",
+      "level": 2,
+      "end_page": 127,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.9",
+      "title": "Immunogenicity Assessments",
+      "page": 127,
+      "page_display": "128",
+      "level": 2,
+      "end_page": 127,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1",
+      "title": "Phase 1",
+      "page": 128,
+      "page_display": "129",
+      "level": 3,
+      "end_page": 128,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.1",
+      "title": "Screening: (0 to 28 Days Before Visit 1)",
+      "page": 128,
+      "page_display": "129",
+      "level": 4,
+      "end_page": 128,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.2",
+      "title": "Visit 1 – Vaccination 1: (Day 1)",
+      "page": 129,
+      "page_display": "130",
+      "level": 4,
+      "end_page": 130,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.3",
+      "title": "Visit 2 – Next-Day Follow-up Visit (Vaccination 1): (1 to 3 Days After Visit 1)",
+      "page": 131,
+      "page_display": "132",
+      "level": 4,
+      "end_page": 131,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.4",
+      "title": "Visit 3 – 1-Week Follow-up Visit (Vaccination 1): (6 to 8 Days After Visit 1)",
+      "page": 132,
+      "page_display": "133",
+      "level": 4,
+      "end_page": 133,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.5",
+      "title": "Visit 4 – Vaccination 2: (19 to 23 Days After Visit 1)",
+      "page": 134,
+      "page_display": "135",
+      "level": 4,
+      "end_page": 135,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.6",
+      "title": "Visit 5 – 1-Week Follow-up Visit (Vaccination 2): (6 to 8 Days After Visit 4)",
+      "page": 136,
+      "page_display": "137",
+      "level": 4,
+      "end_page": 136,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.7",
+      "title": "Visit 6 – 2-Week Follow-up Visit (Vaccination 2): (12 to 16 Days After Visit 4)",
+      "page": 137,
+      "page_display": "138",
+      "level": 4,
+      "end_page": 137,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.8",
+      "title": "Visit 7 – 1-Month Follow-up Visit: (28 to 35 Days After Visit 4)",
+      "page": 138,
+      "page_display": "139",
+      "level": 4,
+      "end_page": 138,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.10",
+      "title": "Between Visits 8 and 9",
+      "page": 139,
+      "page_display": "140",
+      "level": 4,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.11",
+      "title": "Visit 8a – Vaccination 3: (175 to 315 Days After Vaccination 2)",
+      "page": 139,
+      "page_display": "140",
+      "level": 4,
+      "end_page": 139,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.9",
+      "title": "Visit 8 – 6-Month Follow-up Visit: (175 to 189 Days After Visit 4)",
+      "page": 139,
+      "page_display": "140",
+      "level": 4,
+      "end_page": 140,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.12",
+      "title": "Visit 8b – 1-Week Follow-up Visit (After Vaccination 3): (6 to 8 Days After Visit 8a)",
+      "page": 141,
+      "page_display": "142",
+      "level": 4,
+      "end_page": 141,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.13",
+      "title": "Visit 8c – 1-Month Follow-up Visit (After Vaccination 3): (28 to 35 Days After Visit 8a)",
+      "page": 142,
+      "page_display": "143",
+      "level": 4,
+      "end_page": 142,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.14",
+      "title": "Visit 9 – 12-Month Follow-up Visit: (350 to 378 Days After Visit 4): Only for Those Participants Who Originally Received BNT162b1 or BNT162b2 or Placebo Recipients Who Decline BNT162b2",
+      "page": 143,
+      "page_display": "144",
+      "level": 4,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.1.15",
+      "title": "Visit 10 – 24-Month Follow-up Visit: (714 to 742 Days After Visit 4):  Only for Those Participants Who Originally Received BNT162b1 or BNT162b2 or Placebo Recipients Who Decline BNT162b2",
+      "page": 143,
+      "page_display": "144",
+      "level": 4,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.2",
+      "title": "Phase 2/3",
+      "page": 143,
+      "page_display": "144",
+      "level": 3,
+      "end_page": 143,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.2.1",
+      "title": "Visit 1 – Vaccination 1: (Day 1)",
+      "page": 143,
+      "page_display": "144",
+      "level": 4,
+      "end_page": 145,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.2.2",
+      "title": "Visit 2 – Vaccination 2: (19 to 23 Days After Visit 1)",
+      "page": 146,
+      "page_display": "147",
+      "level": 4,
+      "end_page": 147,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.2.3",
+      "title": "Visit 3 – 1-Month Follow-up Visit (After Vaccination 2): (28 to 35 Days After Visit 2)",
+      "page": 148,
+      "page_display": "149",
+      "level": 4,
+      "end_page": 148,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.2.4",
+      "title": "Visit 4 – 6-Month Follow-up Visit: (175 to 189 Days After Visit 2)",
+      "page": 149,
+      "page_display": "150",
+      "level": 4,
+      "end_page": 149,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.2.5",
+      "title": "Visit 5 – 12-Month Follow-up Visit: (350 to 378 Days After Visit 2): Only for Those Participants Who Originally Received BNT162b2 or Placebo Recipients Who Decline BNT162b2",
+      "page": 150,
+      "page_display": "151",
+      "level": 4,
+      "end_page": 150,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.11.2.6",
+      "title": "Visit 6 – 24-Month Follow-up Visit: (714 to 742 Days After Visit 2) ): Only for Those Participants Who Originally Received BNT162b2 or Placebo Recipients Who Decline BNT162b2",
+      "page": 150,
+      "page_display": "151",
+      "level": 4,
+      "end_page": 150,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.12",
+      "title": "Unscheduled Visit for a Grade 3 or Suspected Grade 4 Reaction",
+      "page": 151,
+      "page_display": "152",
+      "level": 2,
+      "end_page": 151,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.13",
+      "title": "COVID-19 Surveillance (All Participants)",
+      "page": 152,
+      "page_display": "153",
+      "level": 2,
+      "end_page": 152,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.13.1",
+      "title": "Potential COVID-19 Illness Visit: (Optimally Within 3 Days After Potential COVID-19 Illness Onset)",
+      "page": 153,
+      "page_display": "154",
+      "level": 3,
+      "end_page": 154,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.13.2",
+      "title": "Potential COVID-19 Convalescent Visit: (28 to 35 Days After Potential  COVID-19 Illness Visit)",
+      "page": 155,
+      "page_display": "156",
+      "level": 3,
+      "end_page": 155,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.14",
+      "title": "Communication and Use of Technology",
+      "page": 155,
+      "page_display": "156",
+      "level": 2,
+      "end_page": 155,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.15",
+      "title": "SARS-CoV-2 NAAT Results",
+      "page": 155,
+      "page_display": "156",
+      "level": 2,
+      "end_page": 155,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.16",
+      "title": "Procedures for Administration of BNT162b2 to Those Originally Assigned to Placebo",
+      "page": 156,
+      "page_display": "157",
+      "level": 2,
+      "end_page": 156,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.16.1",
+      "title": "Visit 101 – Vaccination 3: (From Recommendation or at Least 175 Days After Vaccination 2)",
+      "page": 156,
+      "page_display": "157",
+      "level": 3,
+      "end_page": 157,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.16.2",
+      "title": "Visit 102 – Vaccination 4: (19 to 23 Days After Visit 101)",
+      "page": 158,
+      "page_display": "159",
+      "level": 3,
+      "end_page": 158,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.16.3",
+      "title": "Visit 103 – 1-Month Follow-up Telephone Contact (After Vaccination 4): (28 to 35 Days After Visit 102)",
+      "page": 159,
+      "page_display": "160",
+      "level": 3,
+      "end_page": 159,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.16.4",
+      "title": "Visit 104 – 6-Month Follow-up Telephone Contact (After Vaccination 4): (175 to 189 Days After Visit 102)",
+      "page": 159,
+      "page_display": "160",
+      "level": 3,
+      "end_page": 159,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.16.5",
+      "title": "Visit 105 – 18-Month Follow-up Telephone Contact (After Vaccination 4): (532 to 560 Days After Visit 102)",
+      "page": 160,
+      "page_display": "161",
+      "level": 3,
+      "end_page": 160,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.17",
+      "title": "Administration of an Additional Dose of BNT162b2 (5, 10, or 30 µg) or BNT162b2SA (30 µg) (Subset for Evaluation of Boostability and Protection Against Emerging VOCs)",
+      "page": 161,
+      "page_display": "162",
+      "level": 2,
+      "end_page": 161,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.17.1",
+      "title": "Visit 301 – Vaccination 3: (150 to 210 Days After Visit 2)",
+      "page": 161,
+      "page_display": "162",
+      "level": 3,
+      "end_page": 162,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.17.2",
+      "title": "Visit 302 – 1-Week Follow-up Visit (After Vaccination 3): (6 to 8 Days After Visit 301)",
+      "page": 163,
+      "page_display": "164",
+      "level": 3,
+      "end_page": 163,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.17.3",
+      "title": "Visit 303 – 1-Month Follow-up Visit (After Vaccination 3): (28 to 35 Days After Visit 301)",
+      "page": 164,
+      "page_display": "165",
+      "level": 3,
+      "end_page": 164,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.17.4",
+      "title": "Visit 304 – 1-Week Follow-up Visit (Vaccination 4): (6 to 8 Days After Visit 303): Only for Those Participants Who Received a fourth dose of BNT162b2SA",
+      "page": 165,
+      "page_display": "166",
+      "level": 3,
+      "end_page": 165,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.17.5",
+      "title": "Visit 305 – 1-Month Follow-up Visit (Vaccination 4): (28 to 35 Days After Visit 303): Only for Those Participants Who Received a fourth dose of BNT162b2SA",
+      "page": 166,
+      "page_display": "167",
+      "level": 3,
+      "end_page": 166,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.17.6",
+      "title": "Visit 306 – 6-Month Follow-up Visit: (175 to 189 Days After Visit 301)",
+      "page": 167,
+      "page_display": "168",
+      "level": 3,
+      "end_page": 167,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.17.7",
+      "title": "Visit 307 – 18-Month Follow-up Visit: (532 to 560 Days After Visit 301)",
+      "page": 167,
+      "page_display": "168",
+      "level": 3,
+      "end_page": 167,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.18",
+      "title": "Administration of BNT162b2SA to BNT162b2-Naïve Participants",
+      "page": 168,
+      "page_display": "169",
+      "level": 2,
+      "end_page": 168,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.18.1",
+      "title": "Visit 401 – Vaccination 1: (Day 1)",
+      "page": 168,
+      "page_display": "169",
+      "level": 3,
+      "end_page": 169,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.18.2",
+      "title": "Visit 402 – Vaccination 2: (19 to 23 Days After Visit 401)",
+      "page": 170,
+      "page_display": "171",
+      "level": 3,
+      "end_page": 171,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.18.3",
+      "title": "Visit 403 – 1-Week Follow-up Visit (After Vaccination 2): (6 to 8 Days After Visit 402)",
+      "page": 172,
+      "page_display": "173",
+      "level": 3,
+      "end_page": 172,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.18.4",
+      "title": "Visit 404 – 1-Month Follow-up Visit (After Vaccination 2): (28 to 35 Days After Visit 402)",
+      "page": 173,
+      "page_display": "174",
+      "level": 3,
+      "end_page": 173,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.18.5",
+      "title": "Visit 405 – 6-Month Follow-up Visit: (175 to 189 Days After Visit 402)",
+      "page": 173,
+      "page_display": "174",
+      "level": 3,
+      "end_page": 173,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.18.6",
+      "title": "Visit 406 – 18-Month Follow-up Visit: (532 to 560 Days After Visit 402)",
+      "page": 174,
+      "page_display": "175",
+      "level": 3,
+      "end_page": 174,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.19",
+      "title": "Surveillance for Asymptomatic SARS-CoV-2 Infection",
+      "page": 174,
+      "page_display": "175",
+      "level": 2,
+      "end_page": 174,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.19.1",
+      "title": "Visit 201– Asymptomatic SARS-CoV-2 Infection Surveillance Consent: From Approval of Protocol Amendment 11",
+      "page": 175,
+      "page_display": "176",
+      "level": 3,
+      "end_page": 175,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.19.2",
+      "title": "Visit 202 Onward – Asymptomatic SARS-CoV-2 Infection Surveillance Swab: Repeating Every 10 to 18 Days After Each Previous Surveillance Swab Collection",
+      "page": 176,
+      "page_display": "177",
+      "level": 3,
+      "end_page": 176,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.20",
+      "title": "Administration of a Third Dose of BNT162b2 to Participants Who Have Not Previously Received a Third Dose",
+      "page": 176,
+      "page_display": "177",
+      "level": 2,
+      "end_page": 176,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.20.1",
+      "title": "Visit 501 – Third Dose of BNT162b2",
+      "page": 177,
+      "page_display": "178",
+      "level": 3,
+      "end_page": 177,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.20.2",
+      "title": "Visit 502 – 1-Month Follow-up Telephone Contact: (28 to 35 Days After Visit 501)",
+      "page": 178,
+      "page_display": "179",
+      "level": 3,
+      "end_page": 178,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.20.3",
+      "title": "Visit 503 – 6-Month Follow-up Telephone Contact: (175 to 189 Days After Visit 501)",
+      "page": 179,
+      "page_display": "180",
+      "level": 3,
+      "end_page": 179,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.20.4",
+      "title": "Visit 504 – 12-Month Follow-up Visit: (350 to 378 Days After Visit 501):",
+      "page": 179,
+      "page_display": "180",
+      "level": 3,
+      "end_page": 179,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.21",
+      "title": "Administration of a Fourth (or Fifth) Dose of BNT162b2 to Eligible Participants From Protocol Amendments 13, 14, and 15",
+      "page": 180,
+      "page_display": "181",
+      "level": 2,
+      "end_page": 180,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.21.1",
+      "title": "Visit 601 – Dose 4: (At Least 175 Days After Visit 301 or Visit 8a): Only For Those Participants Who Received Dose 3 at Visit 8a or Visit 301",
+      "page": 180,
+      "page_display": "181",
+      "level": 3,
+      "end_page": 181,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.21.2",
+      "title": "Visit 602 – 1-Month Follow-up Telephone Contact: (28 to 35 Days After Visit 601)",
+      "page": 182,
+      "page_display": "183",
+      "level": 3,
+      "end_page": 182,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.21.3",
+      "title": "Visit 603 – 6-Month Follow-up Telephone Contact: (175 to 189 Days After Visit 601)",
+      "page": 182,
+      "page_display": "183",
+      "level": 3,
+      "end_page": 182,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.21.4",
+      "title": "Visit 604 – Dose 5: (At Least 175 Days After Visit 303): Only for the Subset of Participants Who Receive Dose 4 at Visit 303",
+      "page": 183,
+      "page_display": "184",
+      "level": 3,
+      "end_page": 183,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.21.5",
+      "title": "Visit 605 – 1-Month Follow-up Telephone Contact: (28 to 35 Days After Visit 604)",
+      "page": 184,
+      "page_display": "185",
+      "level": 3,
+      "end_page": 184,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.21.6",
+      "title": "Visit 606 – 6-Month Follow-up Telephone Contact: (175 to 189 Days After Visit 601)",
+      "page": 185,
+      "page_display": "186",
+      "level": 3,
+      "end_page": 185,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.22",
+      "title": "Additional Procedures for Monitoring of Potential Myocarditis or Pericarditis",
+      "page": 185,
+      "page_display": "186",
+      "level": 2,
+      "end_page": 185,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9",
+      "title": "STATISTICAL CONSIDERATIONS",
+      "page": 186,
+      "page_display": "187",
+      "level": 1,
+      "end_page": 186,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1",
+      "title": "Estimands and Statistical Hypotheses",
+      "page": 186,
+      "page_display": "187",
+      "level": 2,
+      "end_page": 186,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.1",
+      "title": "Estimands",
+      "page": 186,
+      "page_display": "187",
+      "level": 3,
+      "end_page": 186,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.2",
+      "title": "Statistical Hypotheses",
+      "page": 186,
+      "page_display": "187",
+      "level": 3,
+      "end_page": 186,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.2.1",
+      "title": "Statistical Hypothesis Evaluation for Efficacy",
+      "page": 186,
+      "page_display": "187",
+      "level": 4,
+      "end_page": 186,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.2.2",
+      "title": "Statistical Hypothesis Evaluation for Immunogenicity",
+      "page": 187,
+      "page_display": "188",
+      "level": 4,
+      "end_page": 187,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.2.2.1",
+      "title": "Hypothesis for Immunogenicity Bridging of 12 to 15 Years to 16 to 25 Years",
+      "page": 187,
+      "page_display": "188",
+      "level": 5,
+      "end_page": 187,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.2.2.2",
+      "title": "Hypotheses for Boostability and Protection Against Emerging SARS-CoV-2 VOCs",
+      "page": 187,
+      "page_display": "188",
+      "level": 5,
+      "end_page": 187,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Figure 1. Multiplicity Schema",
+      "page": 188,
+      "page_display": "189",
+      "level": 2,
+      "end_page": 188,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "9.1.2.2.2.1. Multiplicity Control for the Boostability and Protection-Against-VOCs Objectives",
+      "page": 188,
+      "page_display": "189",
+      "level": 6,
+      "end_page": 188,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2",
+      "title": "Sample Size Determination",
+      "page": 188,
+      "page_display": "189",
+      "level": 2,
+      "end_page": 188,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.1",
+      "title": "Phase 1",
+      "page": 188,
+      "page_display": "189",
+      "level": 3,
+      "end_page": 188,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2",
+      "title": "Efficacy Against COVID-19",
+      "page": 189,
+      "page_display": "190",
+      "level": 3,
+      "end_page": 189,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.3",
+      "title": "Efficacy Against Asymptomatic Infection",
+      "page": 189,
+      "page_display": "190",
+      "level": 3,
+      "end_page": 189,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.4",
+      "title": "Immunogenicity Bridging of 12 to 15 Years to 16 to 25 Years",
+      "page": 189,
+      "page_display": "190",
+      "level": 3,
+      "end_page": 189,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 4. Power Analysis for Noninferiority Assessment",
+      "page": 190,
+      "page_display": "191",
+      "level": 2,
+      "end_page": 190,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.5",
+      "title": "Boostability and Protection Against Emerging SARS-CoV-2 VOCs",
+      "page": 190,
+      "page_display": "191",
+      "level": 3,
+      "end_page": 190,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 5. Probability of Observing at Least 1 AE by Assumed True Event Rates With Different Sample Sizes",
+      "page": 191,
+      "page_display": "192",
+      "level": 2,
+      "end_page": 191,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.6",
+      "title": "Safety",
+      "page": 191,
+      "page_display": "192",
+      "level": 3,
+      "end_page": 191,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.3",
+      "title": "Analysis Sets",
+      "page": 192,
+      "page_display": "193",
+      "level": 2,
+      "end_page": 193,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4",
+      "title": "Statistical Analyses",
+      "page": 194,
+      "page_display": "195",
+      "level": 2,
+      "end_page": 194,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.1",
+      "title": "Immunogenicity Analyses",
+      "page": 194,
+      "page_display": "195",
+      "level": 3,
+      "end_page": 204,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.2",
+      "title": "Efficacy Analyses",
+      "page": 205,
+      "page_display": "206",
+      "level": 3,
+      "end_page": 208,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.3",
+      "title": "Safety Analyses",
+      "page": 209,
+      "page_display": "210",
+      "level": 3,
+      "end_page": 211,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.4",
+      "title": "Other Analyses",
+      "page": 212,
+      "page_display": "213",
+      "level": 3,
+      "end_page": 212,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5",
+      "title": "Interim Analyses",
+      "page": 212,
+      "page_display": "213",
+      "level": 2,
+      "end_page": 212,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 6. Interim Analysis Plan and Boundaries for Efficacy and Futility",
+      "page": 213,
+      "page_display": "214",
+      "level": 2,
+      "end_page": 213,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 7. Statistical Design Operating Characteristics: Probability of Success or Failure for Interim Analyses",
+      "page": 214,
+      "page_display": "215",
+      "level": 2,
+      "end_page": 214,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 8. Statistical Design Operating Characteristics: Probability of Success for Final Analysis and Overall",
+      "page": 214,
+      "page_display": "215",
+      "level": 2,
+      "end_page": 214,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5.1",
+      "title": "Analysis Timing",
+      "page": 215,
+      "page_display": "216",
+      "level": 3,
+      "end_page": 215,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.6",
+      "title": "Data Monitoring Committee or Other Independent Oversight Committee",
+      "page": 216,
+      "page_display": "217",
+      "level": 2,
+      "end_page": 217,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10",
+      "title": "SUPPORTING DOCUMENTATION AND OPERATIONAL CONSIDERATIONS",
+      "page": 218,
+      "page_display": "219",
+      "level": 1,
+      "end_page": 218,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1",
+      "title": "Appendix 1: Regulatory, Ethical, and Study Oversight Considerations",
+      "page": 218,
+      "page_display": "219",
+      "level": 2,
+      "end_page": 218,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1.1",
+      "title": "Regulatory and Ethical Considerations",
+      "page": 218,
+      "page_display": "219",
+      "level": 3,
+      "end_page": 218,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1.1.1",
+      "title": "Reporting of Safety Issues and Serious Breaches of the Protocol or ICH GCP",
+      "page": 218,
+      "page_display": "219",
+      "level": 4,
+      "end_page": 218,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1.2",
+      "title": "Informed Consent Process",
+      "page": 219,
+      "page_display": "220",
+      "level": 3,
+      "end_page": 219,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1.3",
+      "title": "Data Protection",
+      "page": 220,
+      "page_display": "221",
+      "level": 3,
+      "end_page": 220,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1.4",
+      "title": "Dissemination of Clinical Study Data",
+      "page": 220,
+      "page_display": "221",
+      "level": 3,
+      "end_page": 220,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1.5",
+      "title": "Data Quality Assurance",
+      "page": 221,
+      "page_display": "222",
+      "level": 3,
+      "end_page": 222,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1.6",
+      "title": "Source Documents",
+      "page": 223,
+      "page_display": "224",
+      "level": 3,
+      "end_page": 223,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1.7",
+      "title": "Study and Site Start and Closure",
+      "page": 223,
+      "page_display": "224",
+      "level": 3,
+      "end_page": 223,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1.8",
+      "title": "Sponsor’s Qualified Medical Personnel",
+      "page": 224,
+      "page_display": "225",
+      "level": 3,
+      "end_page": 224,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 9. Laboratory Abnormality Grading Scale",
+      "page": 225,
+      "page_display": "226",
+      "level": 2,
+      "end_page": 225,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.2",
+      "title": "Appendix 2: Clinical Laboratory Tests",
+      "page": 225,
+      "page_display": "226",
+      "level": 2,
+      "end_page": 226,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3",
+      "title": "Appendix 3: Adverse Events: Definitions and Procedures for Recording, Evaluating, Follow-up, and Reporting",
+      "page": 227,
+      "page_display": "228",
+      "level": 2,
+      "end_page": 227,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.1",
+      "title": "Definition of AE",
+      "page": 227,
+      "page_display": "228",
+      "level": 3,
+      "end_page": 227,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.2",
+      "title": "Definition of SAE",
+      "page": 228,
+      "page_display": "229",
+      "level": 3,
+      "end_page": 229,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.3",
+      "title": "Recording/Reporting and Follow-up of AEs and/or SAEs",
+      "page": 230,
+      "page_display": "231",
+      "level": 3,
+      "end_page": 232,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.4",
+      "title": "Reporting of SAEs",
+      "page": 233,
+      "page_display": "234",
+      "level": 3,
+      "end_page": 233,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.4",
+      "title": "Appendix 4: Contraceptive Guidance",
+      "page": 234,
+      "page_display": "235",
+      "level": 2,
+      "end_page": 234,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.4.1",
+      "title": "Male Participant Reproductive Inclusion Criteria",
+      "page": 234,
+      "page_display": "235",
+      "level": 3,
+      "end_page": 234,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.4.2",
+      "title": "Female Participant Reproductive Inclusion Criteria",
+      "page": 234,
+      "page_display": "235",
+      "level": 3,
+      "end_page": 234,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.4.3",
+      "title": "Woman of Childbearing Potential",
+      "page": 235,
+      "page_display": "236",
+      "level": 3,
+      "end_page": 235,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.4.4",
+      "title": "Contraception Methods",
+      "page": 236,
+      "page_display": "237",
+      "level": 3,
+      "end_page": 237,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.5",
+      "title": "Appendix 5: Liver Safety: Suggested Actions and Follow-up Assessments",
+      "page": 238,
+      "page_display": "239",
+      "level": 2,
+      "end_page": 239,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.6",
+      "title": "Appendix 6: Abbreviations",
+      "page": 240,
+      "page_display": "241",
+      "level": 2,
+      "end_page": 243,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.7",
+      "title": "Appendix 7: Stopping and Alert Rules for Enhanced COVID-19",
+      "page": 244,
+      "page_display": "245",
+      "level": 2,
+      "end_page": 244,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 10. Stopping Rule: Enrollment Is Stopped if the Number of Severe Cases in the Vaccine Group Is Greater Than or Equal to the Prespecified Stopping Rule Value (S)",
+      "page": 245,
+      "page_display": "246",
+      "level": 2,
+      "end_page": 245,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table 11. Alert Rule: Further Action Is Taken if the Number of Severe Cases in the Vaccine Group Is Greater Than or Equal to the Prespecified Alert Rule Value (A)",
+      "page": 246,
+      "page_display": "247",
+      "level": 2,
+      "end_page": 246,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.8",
+      "title": "Appendix 8: Criteria for Allowing Inclusion of Participants With Chronic Stable HIV, HCV, or HBV Infection",
+      "page": 247,
+      "page_display": "248",
+      "level": 2,
+      "end_page": 247,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.9",
+      "title": "Appendix 9: Genetics",
+      "page": 248,
+      "page_display": "249",
+      "level": 2,
+      "end_page": 248,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11",
+      "title": "REFERENCES",
+      "page": 249,
+      "page_display": "250",
+      "level": 1,
+      "end_page": 251,
+      "start_y": 0.0,
+      "children": []
+    }
+  ]
+}

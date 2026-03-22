@@ -1,0 +1,1238 @@
+{
+  "protocol": "P-09",
+  "file": "P-09.pdf",
+  "total_sections": 123,
+  "max_depth": 4,
+  "sections": [
+    {
+      "number": "",
+      "title": "Protocol I8F-JE-GPGO(a) A Phase 3 Study of Tirzepatide Monotherapy Compared to Dulaglutide 0.75 mg in Patients with Type 2 Diabetes Mellitus (SURPASS J-mono)",
+      "page": 1,
+      "page_display": "2",
+      "level": 1,
+      "end_page": 1,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table of Contents",
+      "page": 2,
+      "page_display": "3",
+      "level": 1,
+      "end_page": 8,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "1",
+      "title": "Synopsis",
+      "page": 9,
+      "page_display": "10",
+      "level": 1,
+      "end_page": 12,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2",
+      "title": "Schedule of Activities",
+      "page": 13,
+      "page_display": "14",
+      "level": 1,
+      "end_page": 13,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Tables",
+      "page": 14,
+      "page_display": "15",
+      "level": 1,
+      "end_page": 14,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table GPGO.1. Schedule of Activities",
+      "page": 14,
+      "page_display": "15",
+      "level": 2,
+      "end_page": 16,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3",
+      "title": "Introduction",
+      "page": 17,
+      "page_display": "18",
+      "level": 1,
+      "end_page": 17,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3.1",
+      "title": "Study Rationale",
+      "page": 17,
+      "page_display": "18",
+      "level": 2,
+      "end_page": 17,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3.2",
+      "title": "Background",
+      "page": 17,
+      "page_display": "18",
+      "level": 2,
+      "end_page": 17,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3.3",
+      "title": "Benefit/Risk Assessment",
+      "page": 18,
+      "page_display": "19",
+      "level": 2,
+      "end_page": 19,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table GPGO.2. Objectives and Endpoints",
+      "page": 20,
+      "page_display": "21",
+      "level": 2,
+      "end_page": 20,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4",
+      "title": "Objectives and Endpoints",
+      "page": 20,
+      "page_display": "21",
+      "level": 1,
+      "end_page": 21,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5",
+      "title": "Study Design",
+      "page": 22,
+      "page_display": "23",
+      "level": 1,
+      "end_page": 22,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1",
+      "title": "Overall Design",
+      "page": 22,
+      "page_display": "23",
+      "level": 2,
+      "end_page": 23,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Figures",
+      "page": 24,
+      "page_display": "25",
+      "level": 1,
+      "end_page": 24,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Figure GPGO.1. Illustration of study design for Clinical Protocol I8F-JE-GPGO.",
+      "page": 24,
+      "page_display": "25",
+      "level": 2,
+      "end_page": 24,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.2",
+      "title": "Number of Participants",
+      "page": 24,
+      "page_display": "25",
+      "level": 2,
+      "end_page": 24,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.3",
+      "title": "End of Study Definition",
+      "page": 25,
+      "page_display": "26",
+      "level": 2,
+      "end_page": 25,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.4",
+      "title": "Scientific Rationale for Study Design",
+      "page": 25,
+      "page_display": "26",
+      "level": 2,
+      "end_page": 25,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.5",
+      "title": "Justification for Dose",
+      "page": 25,
+      "page_display": "26",
+      "level": 2,
+      "end_page": 26,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6",
+      "title": "Study Population",
+      "page": 27,
+      "page_display": "28",
+      "level": 1,
+      "end_page": 27,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1",
+      "title": "Inclusion Criteria",
+      "page": 27,
+      "page_display": "28",
+      "level": 2,
+      "end_page": 27,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2",
+      "title": "Exclusion Criteria",
+      "page": 28,
+      "page_display": "29",
+      "level": 2,
+      "end_page": 30,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.3",
+      "title": "Lifestyle Restrictions",
+      "page": 31,
+      "page_display": "32",
+      "level": 2,
+      "end_page": 31,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.4",
+      "title": "Screen Failures",
+      "page": 31,
+      "page_display": "32",
+      "level": 2,
+      "end_page": 31,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table GPGO.3. Treatment RegimensName of Drug  Dosage  Frequency  Drug Formulation  Route of Administration",
+      "page": 32,
+      "page_display": "33",
+      "level": 2,
+      "end_page": 32,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7",
+      "title": "Treatments",
+      "page": 32,
+      "page_display": "33",
+      "level": 1,
+      "end_page": 32,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.1",
+      "title": "Treatments Administered",
+      "page": 32,
+      "page_display": "33",
+      "level": 2,
+      "end_page": 32,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.1.1",
+      "title": "Packaging and Labeling",
+      "page": 32,
+      "page_display": "33",
+      "level": 3,
+      "end_page": 32,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.1.2",
+      "title": "Medical Devices",
+      "page": 32,
+      "page_display": "33",
+      "level": 3,
+      "end_page": 32,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.2",
+      "title": "Method of Treatment Assignment",
+      "page": 33,
+      "page_display": "34",
+      "level": 2,
+      "end_page": 33,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.2.1",
+      "title": "Selection and Timing of Doses",
+      "page": 33,
+      "page_display": "34",
+      "level": 3,
+      "end_page": 33,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.3",
+      "title": "Blinding",
+      "page": 33,
+      "page_display": "34",
+      "level": 2,
+      "end_page": 33,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.4",
+      "title": "Dosage Modification",
+      "page": 34,
+      "page_display": "35",
+      "level": 2,
+      "end_page": 34,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.5",
+      "title": "Preparation/Handling/Storage/Accountability",
+      "page": 34,
+      "page_display": "35",
+      "level": 2,
+      "end_page": 34,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.6",
+      "title": "Treatment Compliance",
+      "page": 34,
+      "page_display": "35",
+      "level": 2,
+      "end_page": 34,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.7",
+      "title": "Concomitant Therapy",
+      "page": 35,
+      "page_display": "36",
+      "level": 2,
+      "end_page": 35,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.7.1",
+      "title": "Management of Patients with Gastrointestinal Symptoms",
+      "page": 35,
+      "page_display": "36",
+      "level": 3,
+      "end_page": 35,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.8",
+      "title": "Treatment after the End of the Study",
+      "page": 36,
+      "page_display": "37",
+      "level": 2,
+      "end_page": 36,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.8.1",
+      "title": "Treatment after Study Completion",
+      "page": 36,
+      "page_display": "37",
+      "level": 3,
+      "end_page": 36,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.8.2",
+      "title": "Special Treatment Considerations",
+      "page": 36,
+      "page_display": "37",
+      "level": 3,
+      "end_page": 36,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8",
+      "title": "Discontinuation Criteria",
+      "page": 37,
+      "page_display": "38",
+      "level": 1,
+      "end_page": 37,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1",
+      "title": "Discontinuation from Study Treatment",
+      "page": 37,
+      "page_display": "38",
+      "level": 2,
+      "end_page": 37,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.1",
+      "title": "Permanent Discontinuation from Study Treatment",
+      "page": 37,
+      "page_display": "38",
+      "level": 3,
+      "end_page": 37,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.2",
+      "title": "Temporary Interruption of Study Treatment",
+      "page": 38,
+      "page_display": "39",
+      "level": 3,
+      "end_page": 38,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1.3",
+      "title": "Discontinuation of Inadvertently Enrolled Patients",
+      "page": 38,
+      "page_display": "39",
+      "level": 3,
+      "end_page": 38,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2",
+      "title": "Discontinuation from the Study",
+      "page": 38,
+      "page_display": "39",
+      "level": 2,
+      "end_page": 38,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3",
+      "title": "Lost to Follow-Up",
+      "page": 39,
+      "page_display": "40",
+      "level": 2,
+      "end_page": 39,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9",
+      "title": "Study Assessments and Procedures",
+      "page": 40,
+      "page_display": "41",
+      "level": 1,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1",
+      "title": "Efficacy Assessments",
+      "page": 40,
+      "page_display": "41",
+      "level": 2,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.1",
+      "title": "Primary Efficacy Assessments",
+      "page": 40,
+      "page_display": "41",
+      "level": 3,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.2",
+      "title": "Secondary Efficacy Assessments",
+      "page": 40,
+      "page_display": "41",
+      "level": 3,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.2.1",
+      "title": "7-Point Self-Monitored Blood Glucose Profiles",
+      "page": 40,
+      "page_display": "41",
+      "level": 4,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.3",
+      "title": "Appropriateness of Assessments",
+      "page": 40,
+      "page_display": "41",
+      "level": 3,
+      "end_page": 40,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2",
+      "title": "Adverse Events",
+      "page": 41,
+      "page_display": "42",
+      "level": 2,
+      "end_page": 41,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.1",
+      "title": "Serious Adverse Events",
+      "page": 41,
+      "page_display": "42",
+      "level": 3,
+      "end_page": 41,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.1.1",
+      "title": "Suspected Unexpected Serious Adverse Reactions",
+      "page": 42,
+      "page_display": "43",
+      "level": 4,
+      "end_page": 42,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2",
+      "title": "Adverse Events of Special Interest",
+      "page": 43,
+      "page_display": "44",
+      "level": 3,
+      "end_page": 43,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.1",
+      "title": "Hypoglycemia",
+      "page": 43,
+      "page_display": "44",
+      "level": 4,
+      "end_page": 43,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.2",
+      "title": "Severe, Persistent Hyperglycemia",
+      "page": 44,
+      "page_display": "45",
+      "level": 4,
+      "end_page": 44,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.3",
+      "title": "Pancreatitis",
+      "page": 45,
+      "page_display": "46",
+      "level": 4,
+      "end_page": 45,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.4",
+      "title": "Thyroid Malignancies and C-Cell Hyperplasia",
+      "page": 46,
+      "page_display": "47",
+      "level": 4,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.5",
+      "title": "Major Adverse Cardiovascular Events",
+      "page": 46,
+      "page_display": "47",
+      "level": 4,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.6",
+      "title": "Supraventricular Arrhythmias and Cardiac Conduction Disorders",
+      "page": 46,
+      "page_display": "47",
+      "level": 4,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.7",
+      "title": "Hypersensitivity Events",
+      "page": 46,
+      "page_display": "47",
+      "level": 4,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.10",
+      "title": "Severe Gastrointestinal Adverse Events",
+      "page": 47,
+      "page_display": "48",
+      "level": 4,
+      "end_page": 47,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.11",
+      "title": "Acute Renal Events",
+      "page": 47,
+      "page_display": "48",
+      "level": 4,
+      "end_page": 47,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.12",
+      "title": "Amputation/Peripheral Revascularization",
+      "page": 47,
+      "page_display": "48",
+      "level": 4,
+      "end_page": 47,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.8",
+      "title": "Diabetic Retinopathy Complications",
+      "page": 47,
+      "page_display": "48",
+      "level": 4,
+      "end_page": 47,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.9",
+      "title": "Hepatobiliary Disorders",
+      "page": 47,
+      "page_display": "48",
+      "level": 4,
+      "end_page": 47,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.13",
+      "title": "Major Depressive Disorder/Suicidal Ideation",
+      "page": 48,
+      "page_display": "49",
+      "level": 4,
+      "end_page": 48,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.2.14",
+      "title": "Individual Clinical Events Adjudication",
+      "page": 48,
+      "page_display": "49",
+      "level": 4,
+      "end_page": 48,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2.3",
+      "title": "Complaint Handling",
+      "page": 48,
+      "page_display": "49",
+      "level": 3,
+      "end_page": 48,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.3",
+      "title": "Treatment of Overdose",
+      "page": 48,
+      "page_display": "49",
+      "level": 2,
+      "end_page": 48,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4",
+      "title": "Safety",
+      "page": 48,
+      "page_display": "49",
+      "level": 2,
+      "end_page": 48,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.1",
+      "title": "Electrocardiograms",
+      "page": 48,
+      "page_display": "49",
+      "level": 3,
+      "end_page": 48,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.2",
+      "title": "Vital Signs",
+      "page": 49,
+      "page_display": "50",
+      "level": 3,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.3",
+      "title": "Laboratory Tests",
+      "page": 49,
+      "page_display": "50",
+      "level": 3,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.4",
+      "title": "Immunogenicity Assessments",
+      "page": 49,
+      "page_display": "50",
+      "level": 3,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.5",
+      "title": "Safety Monitoring",
+      "page": 50,
+      "page_display": "51",
+      "level": 3,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4.5.1",
+      "title": "Hepatic Safety Monitoring",
+      "page": 50,
+      "page_display": "51",
+      "level": 4,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5",
+      "title": "Pharmacokinetics",
+      "page": 51,
+      "page_display": "52",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.6",
+      "title": "Pharmacodynamics",
+      "page": 51,
+      "page_display": "52",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.7",
+      "title": "Pharmacogenomics",
+      "page": 51,
+      "page_display": "52",
+      "level": 2,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.7.1",
+      "title": "Whole Blood Samples for Pharmacogenetic Research",
+      "page": 51,
+      "page_display": "52",
+      "level": 3,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.8",
+      "title": "Biomarkers",
+      "page": 52,
+      "page_display": "53",
+      "level": 2,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.9",
+      "title": "Health Economics",
+      "page": 52,
+      "page_display": "53",
+      "level": 2,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.9.1",
+      "title": "European Quality of Life (EQ-5D-5L)",
+      "page": 52,
+      "page_display": "53",
+      "level": 3,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.9.2",
+      "title": "Diabetes Treatment Satisfaction Questionnaire (DTSQ)",
+      "page": 53,
+      "page_display": "54",
+      "level": 3,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10",
+      "title": "Statistical Considerations",
+      "page": 54,
+      "page_display": "55",
+      "level": 1,
+      "end_page": 54,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1",
+      "title": "Sample Size Determination",
+      "page": 54,
+      "page_display": "55",
+      "level": 2,
+      "end_page": 54,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.2",
+      "title": "Populations for Analyses",
+      "page": 54,
+      "page_display": "55",
+      "level": 2,
+      "end_page": 54,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3",
+      "title": "Statistical Analyses",
+      "page": 55,
+      "page_display": "56",
+      "level": 2,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.1",
+      "title": "General Statistical Considerations",
+      "page": 55,
+      "page_display": "56",
+      "level": 3,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.2",
+      "title": "Treatment Group Comparability",
+      "page": 56,
+      "page_display": "57",
+      "level": 3,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.2.1",
+      "title": "Patient Disposition",
+      "page": 56,
+      "page_display": "57",
+      "level": 4,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.2.2",
+      "title": "Patient Characteristics",
+      "page": 56,
+      "page_display": "57",
+      "level": 4,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.2.3",
+      "title": "Concomitant Therapy",
+      "page": 56,
+      "page_display": "57",
+      "level": 4,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.2.4",
+      "title": "Treatment Compliance",
+      "page": 56,
+      "page_display": "57",
+      "level": 4,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.3",
+      "title": "Efficacy Analyses",
+      "page": 56,
+      "page_display": "57",
+      "level": 3,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.3.1",
+      "title": "Primary Analyses",
+      "page": 56,
+      "page_display": "57",
+      "level": 4,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.3.2",
+      "title": "Secondary Analyses",
+      "page": 57,
+      "page_display": "58",
+      "level": 4,
+      "end_page": 57,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.3.3",
+      "title": "Tertiary/Exploratory Analyses",
+      "page": 57,
+      "page_display": "58",
+      "level": 4,
+      "end_page": 57,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.4",
+      "title": "Safety Analyses",
+      "page": 57,
+      "page_display": "58",
+      "level": 3,
+      "end_page": 57,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.4.1",
+      "title": "Hypoglycemic Events",
+      "page": 58,
+      "page_display": "59",
+      "level": 4,
+      "end_page": 58,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.4.2",
+      "title": "Gastrointestinal Events",
+      "page": 58,
+      "page_display": "59",
+      "level": 4,
+      "end_page": 58,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.4.3",
+      "title": "Adjudicated Cardiovascular Events",
+      "page": 58,
+      "page_display": "59",
+      "level": 4,
+      "end_page": 58,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.4.4",
+      "title": "Central Laboratory Measures, Vital Signs, and Electrocardiograms",
+      "page": 58,
+      "page_display": "59",
+      "level": 4,
+      "end_page": 58,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.5",
+      "title": "Evaluation of Immunogenicity",
+      "page": 59,
+      "page_display": "60",
+      "level": 3,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.6",
+      "title": "Other Analyses",
+      "page": 59,
+      "page_display": "60",
+      "level": 3,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.6.1",
+      "title": "Health Economics",
+      "page": 59,
+      "page_display": "60",
+      "level": 4,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.6.2",
+      "title": "Subgroup Analyses",
+      "page": 59,
+      "page_display": "60",
+      "level": 4,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.3.7",
+      "title": "Interim Analyses",
+      "page": 59,
+      "page_display": "60",
+      "level": 3,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11",
+      "title": "References",
+      "page": 60,
+      "page_display": "61",
+      "level": 1,
+      "end_page": 61,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12",
+      "title": "Appendices",
+      "page": 62,
+      "page_display": "63",
+      "level": 1,
+      "end_page": 62,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix 1. Abbreviations and Definitions",
+      "page": 63,
+      "page_display": "64",
+      "level": 2,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix 2. Clinical Laboratory Tests",
+      "page": 68,
+      "page_display": "69",
+      "level": 2,
+      "end_page": 69,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix 3. Study Governance Considerations",
+      "page": 70,
+      "page_display": "71",
+      "level": 2,
+      "end_page": 73,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix 4. Hepatic Monitoring Tests for Treatment Emergent Abnormality",
+      "page": 74,
+      "page_display": "75",
+      "level": 2,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix 5. World Health Organization Classification of Diabetes and Diagnostic Criteria",
+      "page": 75,
+      "page_display": "76",
+      "level": 2,
+      "end_page": 75,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix 6. Classification of Contraceptive Methods",
+      "page": 76,
+      "page_display": "77",
+      "level": 2,
+      "end_page": 76,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix 7. Management of Patients with Severe, Persistent Hyperglycemia during the Treatment Period",
+      "page": 77,
+      "page_display": "78",
+      "level": 2,
+      "end_page": 77,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix 8. Protocol Amendment I8F-JE-GPGO(a) Summary A Phase 3 Study of Tirzepatide Monotherapy Compared to Dulaglutide 0.75 mg in Patients with Type 2 Diabetes Mellitus (SURPASS J-mono)",
+      "page": 78,
+      "page_display": "79",
+      "level": 2,
+      "end_page": 82,
+      "start_y": 0.0,
+      "children": []
+    }
+  ]
+}

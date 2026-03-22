@@ -1,0 +1,1488 @@
+{
+  "protocol": "P-27",
+  "file": "P-27.pdf",
+  "total_sections": 148,
+  "max_depth": 4,
+  "sections": [
+    {
+      "number": "1",
+      "title": "TITLE PAGE",
+      "page": 1,
+      "page_display": "2",
+      "level": 1,
+      "end_page": 2,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "SPONSOR SIGNATURE PAGE",
+      "page": 3,
+      "page_display": "4",
+      "level": 1,
+      "end_page": 3,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Investigator’s Agreement",
+      "page": 4,
+      "page_display": "5",
+      "level": 1,
+      "end_page": 4,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Study Contact Information",
+      "page": 5,
+      "page_display": "6",
+      "level": 1,
+      "end_page": 5,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "2",
+      "title": "Synopsis",
+      "page": 6,
+      "page_display": "7",
+      "level": 1,
+      "end_page": 15,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Table of Contents",
+      "page": 16,
+      "page_display": "17",
+      "level": 1,
+      "end_page": 16,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "3",
+      "title": "Table of Contents, List of Tables, and List of Figures",
+      "page": 16,
+      "page_display": "17",
+      "level": 1,
+      "end_page": 20,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "List of Tables",
+      "page": 21,
+      "page_display": "22",
+      "level": 1,
+      "end_page": 21,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "List of Figures",
+      "page": 21,
+      "page_display": "22",
+      "level": 1,
+      "end_page": 21,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "4",
+      "title": "List of Abbreviations and Definitions of Terms",
+      "page": 22,
+      "page_display": "23",
+      "level": 1,
+      "end_page": 23,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5",
+      "title": "Introduction",
+      "page": 24,
+      "page_display": "25",
+      "level": 1,
+      "end_page": 24,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1",
+      "title": "Benefits and Risks Assessment",
+      "page": 25,
+      "page_display": "26",
+      "level": 2,
+      "end_page": 25,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1.1",
+      "title": "Potential Benefits",
+      "page": 25,
+      "page_display": "26",
+      "level": 3,
+      "end_page": 25,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1.2",
+      "title": "Identified and Potential Risks",
+      "page": 25,
+      "page_display": "26",
+      "level": 3,
+      "end_page": 25,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1.2.1",
+      "title": "Meningococcal Infection",
+      "page": 25,
+      "page_display": "26",
+      "level": 4,
+      "end_page": 25,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1.2.2",
+      "title": "Immunogenicity",
+      "page": 25,
+      "page_display": "26",
+      "level": 4,
+      "end_page": 25,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "5.1.2.3",
+      "title": "Pregnancy Exposure",
+      "page": 26,
+      "page_display": "27",
+      "level": 4,
+      "end_page": 26,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6",
+      "title": "Study Objectives and Endpoints",
+      "page": 27,
+      "page_display": "28",
+      "level": 1,
+      "end_page": 27,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1",
+      "title": "Study Objectives",
+      "page": 27,
+      "page_display": "28",
+      "level": 2,
+      "end_page": 27,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1.1",
+      "title": "Primary Objective",
+      "page": 27,
+      "page_display": "28",
+      "level": 3,
+      "end_page": 27,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.1.2",
+      "title": "Secondary Objectives",
+      "page": 27,
+      "page_display": "28",
+      "level": 3,
+      "end_page": 27,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2",
+      "title": "Endpoints",
+      "page": 28,
+      "page_display": "29",
+      "level": 2,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.1",
+      "title": "Primary Efficacy Endpoint",
+      "page": 28,
+      "page_display": "29",
+      "level": 3,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.2",
+      "title": "Secondary Efficacy Endpoints",
+      "page": 28,
+      "page_display": "29",
+      "level": 3,
+      "end_page": 28,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.3",
+      "title": "Pharmacokinetic and Pharmacodynamic Endpoints",
+      "page": 29,
+      "page_display": "30",
+      "level": 3,
+      "end_page": 29,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.4",
+      "title": "Safety Endpoints",
+      "page": 29,
+      "page_display": "30",
+      "level": 3,
+      "end_page": 29,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.5",
+      "title": "Exploratory Endpoints",
+      "page": 29,
+      "page_display": "30",
+      "level": 3,
+      "end_page": 29,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.5.1",
+      "title": "Biomarkers",
+      "page": 29,
+      "page_display": "30",
+      "level": 4,
+      "end_page": 29,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.5.2",
+      "title": "Genetics Endpoints",
+      "page": 30,
+      "page_display": "31",
+      "level": 4,
+      "end_page": 30,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "6.2.5.3",
+      "title": "Extra-renal Signs or Symptoms of aHUS",
+      "page": 30,
+      "page_display": "31",
+      "level": 4,
+      "end_page": 30,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7",
+      "title": "Investigational Plan",
+      "page": 31,
+      "page_display": "32",
+      "level": 1,
+      "end_page": 31,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.1",
+      "title": "Summary of Study Design",
+      "page": 31,
+      "page_display": "32",
+      "level": 2,
+      "end_page": 31,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.2",
+      "title": "Discussion of Design",
+      "page": 32,
+      "page_display": "33",
+      "level": 2,
+      "end_page": 32,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "7.3",
+      "title": "Schedule of Assessments",
+      "page": 32,
+      "page_display": "33",
+      "level": 2,
+      "end_page": 45,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8",
+      "title": "Study Population",
+      "page": 46,
+      "page_display": "47",
+      "level": 1,
+      "end_page": 46,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.1",
+      "title": "Inclusion Criteria",
+      "page": 46,
+      "page_display": "47",
+      "level": 2,
+      "end_page": 47,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.2",
+      "title": "Exclusion Criteria",
+      "page": 48,
+      "page_display": "49",
+      "level": 2,
+      "end_page": 49,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3",
+      "title": "Discontinuation",
+      "page": 50,
+      "page_display": "51",
+      "level": 2,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.1",
+      "title": "Early Termination of Patients From the Study",
+      "page": 50,
+      "page_display": "51",
+      "level": 3,
+      "end_page": 50,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.2",
+      "title": "Discontinuation of ALXN1210 Treatment in the Extension Period and Continuation in the Study",
+      "page": 51,
+      "page_display": "52",
+      "level": 3,
+      "end_page": 51,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.2.1",
+      "title": "Retreatment of Patients Who Discontinue ALXN1210 Treatment in the Extension Period",
+      "page": 51,
+      "page_display": "52",
+      "level": 4,
+      "end_page": 52,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.3",
+      "title": "Discontinuation of Study/Site Termination by Sponsor or Health Authority",
+      "page": 53,
+      "page_display": "54",
+      "level": 3,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.4",
+      "title": "Replacements",
+      "page": 53,
+      "page_display": "54",
+      "level": 3,
+      "end_page": 53,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "8.3.5",
+      "title": "End of Study Definition",
+      "page": 54,
+      "page_display": "55",
+      "level": 3,
+      "end_page": 54,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9",
+      "title": "Study Treatment",
+      "page": 55,
+      "page_display": "56",
+      "level": 1,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1",
+      "title": "Materials and Supplies",
+      "page": 55,
+      "page_display": "56",
+      "level": 2,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.1",
+      "title": "Description of Study Drugs",
+      "page": 55,
+      "page_display": "56",
+      "level": 3,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.2",
+      "title": "Study Drug Packaging and Labeling",
+      "page": 55,
+      "page_display": "56",
+      "level": 3,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.3",
+      "title": "Study Drug Storage",
+      "page": 55,
+      "page_display": "56",
+      "level": 3,
+      "end_page": 55,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.4",
+      "title": "Study Drug Preparation and Infusion",
+      "page": 56,
+      "page_display": "57",
+      "level": 3,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.1.5",
+      "title": "Study Drug Handling and Disposal",
+      "page": 56,
+      "page_display": "57",
+      "level": 3,
+      "end_page": 56,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.2",
+      "title": "Treatments Administered",
+      "page": 57,
+      "page_display": "58",
+      "level": 2,
+      "end_page": 57,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.3",
+      "title": "Method of Assignment to Treatment",
+      "page": 58,
+      "page_display": "59",
+      "level": 2,
+      "end_page": 58,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.4",
+      "title": "Rationale for Selection of Doses in the Study",
+      "page": 59,
+      "page_display": "60",
+      "level": 2,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.5",
+      "title": "Special Treatment Considerations",
+      "page": 59,
+      "page_display": "60",
+      "level": 2,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.6",
+      "title": "Prior and Concomitant Medications and Nonpharmacologic Procedures",
+      "page": 59,
+      "page_display": "60",
+      "level": 2,
+      "end_page": 59,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.7",
+      "title": "Prohibited Medications and Procedures",
+      "page": 60,
+      "page_display": "61",
+      "level": 2,
+      "end_page": 60,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.8",
+      "title": "Vaccination",
+      "page": 60,
+      "page_display": "61",
+      "level": 2,
+      "end_page": 60,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.10",
+      "title": "Contraception Guidance",
+      "page": 61,
+      "page_display": "62",
+      "level": 2,
+      "end_page": 61,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "9.9",
+      "title": "Treatment Compliance",
+      "page": 61,
+      "page_display": "62",
+      "level": 2,
+      "end_page": 62,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10",
+      "title": "Efficacy assessments",
+      "page": 63,
+      "page_display": "64",
+      "level": 1,
+      "end_page": 63,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.1",
+      "title": "Primary Efficacy Assessment",
+      "page": 63,
+      "page_display": "64",
+      "level": 2,
+      "end_page": 63,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "10.2",
+      "title": "Secondary Efficacy Assessments",
+      "page": 63,
+      "page_display": "64",
+      "level": 2,
+      "end_page": 64,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11",
+      "title": "Safety assessments",
+      "page": 65,
+      "page_display": "66",
+      "level": 1,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.1",
+      "title": "Demographic/Medical History",
+      "page": 65,
+      "page_display": "66",
+      "level": 2,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.1.1",
+      "title": "Demographics and Baseline Characteristics",
+      "page": 65,
+      "page_display": "66",
+      "level": 3,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.1.2",
+      "title": "Disease Characteristics",
+      "page": 65,
+      "page_display": "66",
+      "level": 3,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.1.3",
+      "title": "Medical History",
+      "page": 65,
+      "page_display": "66",
+      "level": 3,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.2",
+      "title": "Physical Examinations",
+      "page": 65,
+      "page_display": "66",
+      "level": 2,
+      "end_page": 65,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.3",
+      "title": "Vital Signs",
+      "page": 66,
+      "page_display": "67",
+      "level": 2,
+      "end_page": 66,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4",
+      "title": "Laboratory Assessments",
+      "page": 66,
+      "page_display": "67",
+      "level": 2,
+      "end_page": 66,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4.1",
+      "title": "Pregnancy Screen",
+      "page": 67,
+      "page_display": "68",
+      "level": 3,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4.2",
+      "title": "Hematology",
+      "page": 67,
+      "page_display": "68",
+      "level": 3,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4.3",
+      "title": "Serum Chemistry",
+      "page": 67,
+      "page_display": "68",
+      "level": 3,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4.4",
+      "title": "Coagulation",
+      "page": 67,
+      "page_display": "68",
+      "level": 3,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.4.5",
+      "title": "Urinalysis and Urine Chemistry",
+      "page": 67,
+      "page_display": "68",
+      "level": 3,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.5",
+      "title": "Electrocardiograms",
+      "page": 67,
+      "page_display": "68",
+      "level": 2,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.6",
+      "title": "Immunogenicity",
+      "page": 67,
+      "page_display": "68",
+      "level": 2,
+      "end_page": 67,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7",
+      "title": "Adverse Event Management",
+      "page": 68,
+      "page_display": "69",
+      "level": 2,
+      "end_page": 68,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.1",
+      "title": "Targeted Adverse Events",
+      "page": 68,
+      "page_display": "69",
+      "level": 3,
+      "end_page": 68,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.2",
+      "title": "Severity Assessment",
+      "page": 68,
+      "page_display": "69",
+      "level": 3,
+      "end_page": 68,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.3",
+      "title": "Causality Assessment",
+      "page": 69,
+      "page_display": "70",
+      "level": 3,
+      "end_page": 69,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.4",
+      "title": "Serious Adverse Events",
+      "page": 70,
+      "page_display": "71",
+      "level": 3,
+      "end_page": 70,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.5",
+      "title": "Suspected Unexpected Serious Adverse Reactions",
+      "page": 70,
+      "page_display": "71",
+      "level": 3,
+      "end_page": 70,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.6",
+      "title": "Collection and Reporting of Adverse Events",
+      "page": 70,
+      "page_display": "71",
+      "level": 3,
+      "end_page": 70,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.6.1",
+      "title": "All Adverse Events",
+      "page": 70,
+      "page_display": "71",
+      "level": 4,
+      "end_page": 70,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.6.2",
+      "title": "Serious Adverse Events",
+      "page": 71,
+      "page_display": "72",
+      "level": 4,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.7",
+      "title": "Sponsor Reporting Requirements",
+      "page": 71,
+      "page_display": "72",
+      "level": 3,
+      "end_page": 71,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.7.8",
+      "title": "Investigator Reporting Requirements",
+      "page": 72,
+      "page_display": "73",
+      "level": 3,
+      "end_page": 72,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.8",
+      "title": "Exposure During Pregnancy and Breastfeeding",
+      "page": 72,
+      "page_display": "73",
+      "level": 2,
+      "end_page": 72,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "11.9",
+      "title": "Safety Monitoring",
+      "page": 72,
+      "page_display": "73",
+      "level": 2,
+      "end_page": 72,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "12",
+      "title": "Pharmacokinetics and Pharmacodynamics Assessments",
+      "page": 73,
+      "page_display": "74",
+      "level": 1,
+      "end_page": 73,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "13",
+      "title": "Exploratory Assessments",
+      "page": 74,
+      "page_display": "75",
+      "level": 1,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "13.1",
+      "title": "Biomarker Assessments",
+      "page": 74,
+      "page_display": "75",
+      "level": 2,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "13.2",
+      "title": "Genetics",
+      "page": 74,
+      "page_display": "75",
+      "level": 2,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "13.3",
+      "title": "Extra-renal Signs or Symptoms of aHUS",
+      "page": 74,
+      "page_display": "75",
+      "level": 2,
+      "end_page": 74,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "14",
+      "title": "Data Quality Assurance",
+      "page": 75,
+      "page_display": "76",
+      "level": 1,
+      "end_page": 75,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "14.1",
+      "title": "Data Collection and Storage",
+      "page": 75,
+      "page_display": "76",
+      "level": 2,
+      "end_page": 75,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "14.2",
+      "title": "Records Retention",
+      "page": 76,
+      "page_display": "77",
+      "level": 2,
+      "end_page": 76,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15",
+      "title": "Statistical Methods and Planned Analyses",
+      "page": 77,
+      "page_display": "78",
+      "level": 1,
+      "end_page": 77,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.1",
+      "title": "General Considerations",
+      "page": 77,
+      "page_display": "78",
+      "level": 2,
+      "end_page": 77,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.2",
+      "title": "Determination of Sample Size",
+      "page": 78,
+      "page_display": "79",
+      "level": 2,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.3",
+      "title": "Analysis Sets",
+      "page": 78,
+      "page_display": "79",
+      "level": 2,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.4",
+      "title": "Demographics and Baseline Characteristics",
+      "page": 78,
+      "page_display": "79",
+      "level": 2,
+      "end_page": 78,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.5",
+      "title": "Patient Disposition",
+      "page": 79,
+      "page_display": "80",
+      "level": 2,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.6",
+      "title": "Prior and Concomitant Medications and Nonpharmacologic Therapies and Procedures",
+      "page": 79,
+      "page_display": "80",
+      "level": 2,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.7",
+      "title": "Treatment Compliance",
+      "page": 79,
+      "page_display": "80",
+      "level": 2,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8",
+      "title": "Efficacy Analyses",
+      "page": 79,
+      "page_display": "80",
+      "level": 2,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.1",
+      "title": "Primary Efficacy Analysis",
+      "page": 79,
+      "page_display": "80",
+      "level": 3,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.2",
+      "title": "Key Secondary Efficacy Analyses",
+      "page": 79,
+      "page_display": "80",
+      "level": 3,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.2.1",
+      "title": "Dialysis Requirement Status",
+      "page": 79,
+      "page_display": "80",
+      "level": 4,
+      "end_page": 79,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.2.2",
+      "title": "Time to Complete TMA Response",
+      "page": 80,
+      "page_display": "81",
+      "level": 4,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.2.3",
+      "title": "Complete TMA Response Status Over Time",
+      "page": 80,
+      "page_display": "81",
+      "level": 4,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.2.4",
+      "title": "eGFR Value and Change from Baseline",
+      "page": 80,
+      "page_display": "81",
+      "level": 4,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.2.5",
+      "title": "CKD Stage",
+      "page": 80,
+      "page_display": "81",
+      "level": 4,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.2.6",
+      "title": "Hematologic Parameters",
+      "page": 80,
+      "page_display": "81",
+      "level": 4,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.2.7",
+      "title": "Hemoglobin Response",
+      "page": 80,
+      "page_display": "81",
+      "level": 4,
+      "end_page": 80,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.8.2.8",
+      "title": "Quality of Life",
+      "page": 81,
+      "page_display": "82",
+      "level": 4,
+      "end_page": 81,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.9",
+      "title": "Safety Analyses",
+      "page": 81,
+      "page_display": "82",
+      "level": 2,
+      "end_page": 81,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.9.1",
+      "title": "Adverse Events",
+      "page": 81,
+      "page_display": "82",
+      "level": 3,
+      "end_page": 81,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.9.2",
+      "title": "Physical Examination and Vital Signs",
+      "page": 81,
+      "page_display": "82",
+      "level": 3,
+      "end_page": 81,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.10",
+      "title": "Pharmacokinetic/ Pharmacodynamic Analyses",
+      "page": 82,
+      "page_display": "83",
+      "level": 2,
+      "end_page": 82,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.9.3",
+      "title": "Clinical Laboratory Tests",
+      "page": 82,
+      "page_display": "83",
+      "level": 3,
+      "end_page": 82,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.9.4",
+      "title": "Electrocardiograms",
+      "page": 82,
+      "page_display": "83",
+      "level": 3,
+      "end_page": 82,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.9.5",
+      "title": "Immunogenicity",
+      "page": 82,
+      "page_display": "83",
+      "level": 3,
+      "end_page": 82,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.11",
+      "title": "Exploratory Analyses",
+      "page": 83,
+      "page_display": "84",
+      "level": 2,
+      "end_page": 83,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.11.1",
+      "title": "Biomarker Analyses",
+      "page": 83,
+      "page_display": "84",
+      "level": 3,
+      "end_page": 83,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.11.2",
+      "title": "Genetics",
+      "page": 83,
+      "page_display": "84",
+      "level": 3,
+      "end_page": 83,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.11.3",
+      "title": "Extra-renal Signs or Symptoms of aHUS",
+      "page": 83,
+      "page_display": "84",
+      "level": 3,
+      "end_page": 83,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.12",
+      "title": "Other Statistical Issues",
+      "page": 83,
+      "page_display": "84",
+      "level": 2,
+      "end_page": 83,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.12.1",
+      "title": "Missing or Invalid Data",
+      "page": 83,
+      "page_display": "84",
+      "level": 3,
+      "end_page": 83,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "15.13",
+      "title": "Interim Analyses",
+      "page": 83,
+      "page_display": "84",
+      "level": 2,
+      "end_page": 84,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "16",
+      "title": "Informed Consent, Ethical Review, and Regulatory Considerations",
+      "page": 85,
+      "page_display": "86",
+      "level": 1,
+      "end_page": 85,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "16.1",
+      "title": "Informed Consent and Assent",
+      "page": 85,
+      "page_display": "86",
+      "level": 2,
+      "end_page": 85,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "16.2",
+      "title": "Data Monitoring Committee",
+      "page": 85,
+      "page_display": "86",
+      "level": 2,
+      "end_page": 85,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "16.3",
+      "title": "Ethical Review",
+      "page": 86,
+      "page_display": "87",
+      "level": 2,
+      "end_page": 86,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "16.4",
+      "title": "Regulatory Considerations",
+      "page": 86,
+      "page_display": "87",
+      "level": 2,
+      "end_page": 86,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "16.4.1",
+      "title": "Changes/Deviations to Protocol",
+      "page": 86,
+      "page_display": "87",
+      "level": 3,
+      "end_page": 86,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "16.5",
+      "title": "Publication Policy",
+      "page": 86,
+      "page_display": "87",
+      "level": 2,
+      "end_page": 86,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "17",
+      "title": "List of References",
+      "page": 87,
+      "page_display": "88",
+      "level": 1,
+      "end_page": 87,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "18",
+      "title": "Appendices",
+      "page": 88,
+      "page_display": "89",
+      "level": 1,
+      "end_page": 88,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix A. BLOOD SAMPLING VOLUMES",
+      "page": 89,
+      "page_display": "90",
+      "level": 1,
+      "end_page": 89,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix B. Common Creatinine reference intervals",
+      "page": 90,
+      "page_display": "91",
+      "level": 1,
+      "end_page": 90,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix C. Antibody mediated rejection criteria",
+      "page": 91,
+      "page_display": "92",
+      "level": 1,
+      "end_page": 91,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix D. Management of Potential Drug Infusion Reactions",
+      "page": 92,
+      "page_display": "93",
+      "level": 1,
+      "end_page": 93,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix E. Protocol laboratory tests",
+      "page": 94,
+      "page_display": "95",
+      "level": 1,
+      "end_page": 94,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix F. PEDIATRIC FACIT-FATIGUE",
+      "page": 95,
+      "page_display": "96",
+      "level": 1,
+      "end_page": 95,
+      "start_y": 0.0,
+      "children": []
+    },
+    {
+      "number": "",
+      "title": "Appendix G. glomerular filtration rate category/stage in chronic kidney disease",
+      "page": 96,
+      "page_display": "97",
+      "level": 1,
+      "end_page": 96,
+      "start_y": 0.0,
+      "children": []
+    }
+  ]
+}
