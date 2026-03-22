@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -19,6 +19,8 @@ import { SectionContent } from "@/components/protocol/SectionContent";
 import { ProtocolMetaCard } from "@/components/protocol/ProtocolMetaCard";
 import { ProcedureTable } from "@/components/protocol/ProcedureTable";
 import { KEBadge } from "@/components/protocol/KEBadge";
+import { AssistantPanel, type AssistantMode } from "@/components/protocol/AssistantPanel";
+import { ReviewFilter, type ReviewFilterType } from "@/components/protocol/ReviewFilter";
 import { cn } from "@/lib/utils";
 
 function findSection(sections: SectionNode[], number: string): SectionNode | null {
@@ -49,6 +51,8 @@ export default function ProtocolWorkspacePage() {
   const [activeTab, setActiveTab] = useState("content");
   const [knowledgeElements, setKnowledgeElements] = useState<KnowledgeElement[]>([]);
   const [keLoading, setKeLoading] = useState(false);
+  const [assistantMode, setAssistantMode] = useState<AssistantMode>({ kind: "closed" });
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilterType>("all");
 
   useEffect(() => {
     getProtocol(protocolId)
@@ -78,6 +82,26 @@ export default function ProtocolWorkspacePage() {
   }, [activeTab, loadKEs]);
 
   const currentSection = protocol ? findSection(protocol.sections, selectedSection) : null;
+
+  const cellStats = useMemo(() => {
+    if (!protocol) return { totalCells: 0, verifiedCells: 0, flaggedCells: 0, lowConfidenceCells: 0 };
+    const allCells = protocol.tables.flatMap(t => t.cells);
+    return {
+      totalCells: allCells.length,
+      verifiedCells: allCells.filter(c => c.confidence >= 0.95).length,
+      flaggedCells: protocol.tables.reduce((sum, t) => sum + t.flagged_cells.length, 0),
+      lowConfidenceCells: allCells.filter(c => c.confidence < 0.7).length,
+    };
+  }, [protocol]);
+
+  const handleAskAboutSection = useCallback((section: SectionNode) => {
+    setAssistantMode({
+      kind: "ask",
+      sectionNumber: section.number,
+      sectionTitle: section.title,
+      sectionContent: section.content_html,
+    });
+  }, []);
 
   if (loading) {
     return (
@@ -168,10 +192,22 @@ export default function ProtocolWorkspacePage() {
             <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} className="border-b-0" />
           </div>
 
+          {/* Review filter for tables tab */}
+          {activeTab === "tables" && protocol.tables.length > 0 && (
+            <ReviewFilter
+              totalCells={cellStats.totalCells}
+              verifiedCells={cellStats.verifiedCells}
+              flaggedCells={cellStats.flaggedCells}
+              lowConfidenceCells={cellStats.lowConfidenceCells}
+              activeFilter={reviewFilter}
+              onFilterChange={setReviewFilter}
+            />
+          )}
+
           {/* Tab content */}
           <div className="flex-1 overflow-y-auto">
             {activeTab === "content" && (
-              <SectionContent section={currentSection} />
+              <SectionContent section={currentSection} onAsk={handleAskAboutSection} />
             )}
 
             {activeTab === "tables" && (
@@ -358,6 +394,15 @@ export default function ProtocolWorkspacePage() {
           </div>
         </div>
       </div>
+
+      <AssistantPanel
+        mode={assistantMode}
+        protocolId={protocolId}
+        onClose={() => setAssistantMode({ kind: "closed" })}
+        onAcceptCell={(row, col) => { /* TODO: call submitCellReview */ }}
+        onCorrectCell={(row, col, value) => { /* TODO: call submitCellReview */ }}
+        onFlagCell={(row, col, reason) => { /* TODO: call submitCellReview */ }}
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { Card, CardBody } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
+import { listProcedures, updateProcedure } from "@/lib/api";
 import type { ProcedureEntry } from "@/lib/api";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -27,70 +28,6 @@ const COST_LABELS: Record<string, string> = {
   VERY_HIGH: "$$$$",
 };
 
-// ─── Mock data ──────────────────────────────────────────────────────────────
-
-function generateMockProcedures(): ProcedureEntry[] {
-  const procedures: ProcedureEntry[] = [
-    { canonical_name: "Complete Blood Count", cpt_code: "85025", code_system: "CPT", category: "Laboratory", cost_tier: "LOW", aliases: ["CBC", "FBC", "Full blood count", "Hemogram"], used_in_protocols: 42 },
-    { canonical_name: "Comprehensive Metabolic Panel", cpt_code: "80053", code_system: "CPT", category: "Laboratory", cost_tier: "LOW", aliases: ["CMP", "Chem-14", "Chemistry panel"], used_in_protocols: 38 },
-    { canonical_name: "Electrocardiogram", cpt_code: "93000", code_system: "CPT", category: "Cardiology", cost_tier: "MEDIUM", aliases: ["ECG", "EKG", "12-lead ECG"], used_in_protocols: 35 },
-    { canonical_name: "Physical Examination", cpt_code: "99213", code_system: "CPT", category: "General", cost_tier: "MEDIUM", aliases: ["PE", "Physical exam", "Clinical examination"], used_in_protocols: 48 },
-    { canonical_name: "Vital Signs", cpt_code: null, code_system: null, category: "General", cost_tier: "LOW", aliases: ["VS", "Vitals", "TPR", "Temp/pulse/resp"], used_in_protocols: 50 },
-    { canonical_name: "Urinalysis", cpt_code: "81003", code_system: "CPT", category: "Laboratory", cost_tier: "LOW", aliases: ["UA", "Urine analysis", "Dipstick urine"], used_in_protocols: 28 },
-    { canonical_name: "Chest X-Ray", cpt_code: "71046", code_system: "CPT", category: "Imaging", cost_tier: "MEDIUM", aliases: ["CXR", "Chest radiograph", "PA chest"], used_in_protocols: 15 },
-    { canonical_name: "MRI Brain", cpt_code: "70553", code_system: "CPT", category: "Imaging", cost_tier: "VERY_HIGH", aliases: ["Brain MRI", "Cranial MRI", "MRI head"], used_in_protocols: 8 },
-    { canonical_name: "CT Scan Abdomen", cpt_code: "74178", code_system: "CPT", category: "Imaging", cost_tier: "HIGH", aliases: ["Abdominal CT", "CT abdomen/pelvis"], used_in_protocols: 12 },
-    { canonical_name: "Echocardiogram", cpt_code: "93306", code_system: "CPT", category: "Cardiology", cost_tier: "HIGH", aliases: ["Echo", "TTE", "Transthoracic echo"], used_in_protocols: 18 },
-    { canonical_name: "Liver Function Test", cpt_code: "80076", code_system: "CPT", category: "Laboratory", cost_tier: "LOW", aliases: ["LFT", "Hepatic panel", "Liver panel"], used_in_protocols: 32 },
-    { canonical_name: "Thyroid Function Test", cpt_code: "84443", code_system: "CPT", category: "Laboratory", cost_tier: "LOW", aliases: ["TFT", "TSH", "Thyroid panel"], used_in_protocols: 14 },
-    { canonical_name: "Informed Consent", cpt_code: null, code_system: null, category: "General", cost_tier: "LOW", aliases: ["ICF", "Consent process", "Written consent"], used_in_protocols: 50 },
-    { canonical_name: "Adverse Event Assessment", cpt_code: null, code_system: null, category: "Safety", cost_tier: "LOW", aliases: ["AE assessment", "Safety assessment", "AE collection"], used_in_protocols: 47 },
-    { canonical_name: "Concomitant Medication Review", cpt_code: null, code_system: null, category: "Safety", cost_tier: "LOW", aliases: ["ConMed", "Med review", "Medication reconciliation"], used_in_protocols: 44 },
-    { canonical_name: "Study Drug Administration", cpt_code: null, code_system: null, category: "Treatment", cost_tier: "MEDIUM", aliases: ["Drug dosing", "IP administration", "Investigational product"], used_in_protocols: 40 },
-    { canonical_name: "Pharmacokinetic Sampling", cpt_code: "80299", code_system: "CPT", category: "Efficacy", cost_tier: "MEDIUM", aliases: ["PK sample", "Blood PK", "PK draw"], used_in_protocols: 22 },
-    { canonical_name: "Quality of Life Questionnaire", cpt_code: null, code_system: null, category: "Efficacy", cost_tier: "LOW", aliases: ["QoL", "PRO", "Patient questionnaire", "EQ-5D"], used_in_protocols: 16 },
-    { canonical_name: "Pregnancy Test", cpt_code: "81025", code_system: "CPT", category: "Safety", cost_tier: "LOW", aliases: ["Serum HCG", "Urine pregnancy", "Beta-HCG"], used_in_protocols: 30 },
-    { canonical_name: "Coagulation Panel", cpt_code: "85610", code_system: "CPT", category: "Laboratory", cost_tier: "LOW", aliases: ["PT/INR", "Coag panel", "Clotting studies"], used_in_protocols: 20 },
-  ];
-
-  // Pad to ~264 with generated entries
-  const additionalNames = [
-    "Bone Density Scan", "Spirometry", "Ophthalmologic Exam", "Dermatologic Assessment",
-    "Neurological Exam", "Body Weight", "Body Mass Index", "Height Measurement",
-    "Waist Circumference", "Blood Pressure", "Heart Rate Assessment", "Pulse Oximetry",
-    "Respiratory Rate", "Temperature Measurement", "Skin Biopsy", "Bone Marrow Biopsy",
-    "Lumbar Puncture", "Arthrocentesis", "Colonoscopy", "Endoscopy",
-    "Holter Monitor", "Stress Test", "Cardiac Catheterization", "PET Scan",
-    "Bone Scan", "Ultrasound Abdomen", "Doppler Ultrasound", "Mammography",
-    "DEXA Scan", "Audiometry", "Visual Acuity Test", "Slit Lamp Exam",
-    "Fundoscopy", "Tonometry", "C-Reactive Protein", "Erythrocyte Sedimentation Rate",
-    "Hemoglobin A1c", "Fasting Glucose", "Lipid Panel", "Troponin",
-    "BNP/NT-proBNP", "D-Dimer", "Fibrinogen", "Serum Creatinine",
-    "Blood Urea Nitrogen", "Electrolyte Panel", "Calcium Level", "Magnesium Level",
-    "Phosphate Level", "Iron Studies", "Ferritin", "Vitamin D Level",
-    "Vitamin B12 Level", "Folate Level", "Albumin", "Total Protein",
-    "Bilirubin", "Alkaline Phosphatase", "GGT", "Amylase",
-    "Lipase", "Lactate Dehydrogenase", "Uric Acid", "Procalcitonin",
-  ];
-
-  for (let i = 0; i < additionalNames.length; i++) {
-    const name = additionalNames[i];
-    const catIdx = i % CATEGORIES.length;
-    const tierIdx = i % COST_TIERS.length;
-    procedures.push({
-      canonical_name: name,
-      cpt_code: i % 3 === 0 ? `${80000 + i * 13}` : null,
-      code_system: i % 3 === 0 ? "CPT" : null,
-      category: CATEGORIES[catIdx],
-      cost_tier: COST_TIERS[tierIdx],
-      aliases: [name.split(" ")[0]],
-      used_in_protocols: Math.floor(Math.random() * 30) + 1,
-    });
-  }
-
-  return procedures;
-}
-
 // ─── Page Component ─────────────────────────────────────────────────────────
 
 export default function ProcedureLibraryPage() {
@@ -110,11 +47,17 @@ export default function ProcedureLibraryPage() {
     used_in_protocols: 0,
   });
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const editInputRef = useRef<HTMLInputElement>(null);
 
-  // Load mock data
+  // Load procedures from API
   useEffect(() => {
-    setProcedures(generateMockProcedures());
+    listProcedures()
+      .then(setProcedures)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
   }, []);
 
   // Focus edit input when editing
@@ -246,16 +189,40 @@ export default function ProcedureLibraryPage() {
     });
   }, [newProcedure]);
 
-  const savePending = useCallback(() => {
-    // In production: batch update via API
-    setPendingChanges(0);
-  }, []);
+  const savePending = useCallback(async () => {
+    try {
+      // Batch update all modified procedures
+      for (const proc of procedures) {
+        await updateProcedure(proc.canonical_name, proc);
+      }
+      setPendingChanges(0);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Save failed");
+    }
+  }, [procedures]);
 
   return (
     <div>
       <TopBar title="Procedure Library" subtitle="Manage canonical names, CPT codes, and aliases" />
 
       <div className="p-6 space-y-4">
+        {/* Loading state */}
+        {loading && (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+              <p className="text-sm text-neutral-400">Loading procedures...</p>
+            </div>
+          </div>
+        )}
+
+        {/* Error state */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+            {error}
+          </div>
+        )}
+
         {/* Stats bar */}
         <div className="flex items-center gap-6 text-sm">
           <StatChip label="Procedures" value={totalProcedures} />
