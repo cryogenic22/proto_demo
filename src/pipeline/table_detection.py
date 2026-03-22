@@ -213,6 +213,35 @@ class TableDetector:
         deterministic_pages: dict[int, str] = {}
         if pdf_bytes:
             deterministic_pages = _deterministic_soa_prescreen(pdf_bytes)
+
+            # Also use section parser to find SoA page ranges — catches
+            # synopsis tables and appendix SoA tables that text patterns miss
+            try:
+                from src.pipeline.section_parser import SectionParser
+                sp = SectionParser()
+                sections = sp.parse(pdf_bytes)
+                flat = sp._flatten(sections)
+                for s in flat:
+                    title_lower = s.title.lower()
+                    if any(kw in title_lower for kw in [
+                        "schedule of", "soa", "schedule of events",
+                        "schedule of assessments", "schedule of activities",
+                    ]):
+                        end = s.end_page if s.end_page is not None else s.page
+                        for p in range(s.page, end + 1):
+                            if p not in deterministic_pages:
+                                deterministic_pages[p] = "section_parser_soa"
+                    # Also catch appendix tables (common in Roche format)
+                    if "appendix" in title_lower and any(
+                        kw in title_lower for kw in ["schedule", "event", "activit"]
+                    ):
+                        end = s.end_page if s.end_page is not None else s.page
+                        for p in range(s.page, end + 1):
+                            if p not in deterministic_pages:
+                                deterministic_pages[p] = "appendix_soa"
+            except Exception as e:
+                logger.debug(f"Section parser SoA detection failed: {e}")
+
             if deterministic_pages:
                 logger.info(
                     f"SOA detection Phase 0 (deterministic): {len(deterministic_pages)} "
