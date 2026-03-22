@@ -263,7 +263,102 @@ class OutputValidator:
                     "footnote_markers": new_markers,
                 })
 
+        # Filter non-procedure noise from col 0 TEXT cells
+        # The pipeline sometimes extracts amendment names, section references,
+        # endpoints, abbreviations, and body text as "procedures."
+        if cell.col == 0 and cell.data_type == CellDataType.TEXT:
+            if _is_procedure_noise(cell.raw_value):
+                return cell.model_copy(update={
+                    "raw_value": "",
+                    "data_type": CellDataType.EMPTY,
+                    "confidence": 0.1,
+                })
+
         return cell
+
+
+# Procedure noise detection — rejects entries that are clearly not
+# clinical procedures (amendment names, section references, endpoints,
+# abbreviations, body text, table metadata).
+_NOISE_PATTERNS = [
+    re.compile(r"^Amendment \d+", re.IGNORECASE),
+    re.compile(r"^Original Protocol", re.IGNORECASE),
+    re.compile(r"^Section \d+", re.IGNORECASE),
+    re.compile(r"^Sections? \d+\.\d+", re.IGNORECASE),
+    re.compile(r"^Appendix \d+", re.IGNORECASE),
+    re.compile(r"^Synopsis", re.IGNORECASE),
+    re.compile(r"^Table \d+", re.IGNORECASE),
+    re.compile(r"^Title Page", re.IGNORECASE),
+    re.compile(r"^Header$", re.IGNORECASE),
+    re.compile(r"^Abbreviation", re.IGNORECASE),
+    re.compile(r"^Estimand", re.IGNORECASE),
+    re.compile(r"^Objective", re.IGNORECASE),
+    re.compile(r"^Primary endpoint", re.IGNORECASE),
+    re.compile(r"^Secondary endpoint", re.IGNORECASE),
+    re.compile(r"^Exploratory Objective", re.IGNORECASE),
+    re.compile(r"^Long-term endpoint", re.IGNORECASE),
+    re.compile(r"^To evaluate", re.IGNORECASE),
+    re.compile(r"^To assess", re.IGNORECASE),
+    re.compile(r"^To demonstrate", re.IGNORECASE),
+    re.compile(r"^To conduct", re.IGNORECASE),
+    re.compile(r"^To infer", re.IGNORECASE),
+    re.compile(r"^Cases of", re.IGNORECASE),
+    re.compile(r"^Regardless of evidence", re.IGNORECASE),
+    re.compile(r"^Part [A-Z]:", re.IGNORECASE),
+    re.compile(r"^Part [A-Z]\d?:", re.IGNORECASE),
+    re.compile(r"^All participants", re.IGNORECASE),
+    re.compile(r"^Blinded Participants", re.IGNORECASE),
+    re.compile(r"^Unblinded Participants", re.IGNORECASE),
+    re.compile(r"^Placebo participants", re.IGNORECASE),
+    re.compile(r"^mRNA-\d+ participants", re.IGNORECASE),
+    re.compile(r"^Participants who", re.IGNORECASE),
+    re.compile(r"^Supplemental Schedule", re.IGNORECASE),
+    re.compile(r"^Modified Supplemental", re.IGNORECASE),
+    re.compile(r"^Section # and Name", re.IGNORECASE),
+    re.compile(r"^Continue with original", re.IGNORECASE),
+    re.compile(r"^Counselling the importance", re.IGNORECASE),
+    re.compile(r"^True VE", re.IGNORECASE),
+    re.compile(r"^Target VE", re.IGNORECASE),
+    re.compile(r"^Header placeholder", re.IGNORECASE),
+    re.compile(r"^\d+%$"),  # Standalone percentages like "60%"
+]
+
+# Short abbreviation noise — common non-procedure abbreviations
+_ABBREVIATION_NOISE = {
+    "cci", "psrt", "sae", "sap", "srr", "soe", "teae", "uloq", "usp",
+    "ve", "who", "s", "s-2p", "mild", "moderate", "severe", "none",
+    "header", "fold rise", "ia1 35%", "ia2 70%",
+}
+
+
+def _is_procedure_noise(value: str) -> bool:
+    """Check if a col-0 value is noise rather than a clinical procedure."""
+    v = value.strip()
+    if not v:
+        return False
+
+    # Pattern-based noise
+    for pat in _NOISE_PATTERNS:
+        if pat.match(v):
+            return True
+
+    # Short abbreviation noise
+    if v.lower() in _ABBREVIATION_NOISE:
+        return True
+
+    # Very long text (>150 chars) is body text, not a procedure name
+    if len(v) > 150:
+        return True
+
+    # Section reference patterns: "Section 1.1 / 4.1.2 / ..."
+    if v.startswith("Section ") and "/" in v:
+        return True
+
+    # "Vaccine efficacy of..." — endpoint description, not procedure
+    if v.lower().startswith("vaccine efficacy"):
+        return True
+
+    return False
 
 
 # Superscript contamination cleanup
