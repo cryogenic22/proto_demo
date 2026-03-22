@@ -1,0 +1,96 @@
+# Domain Configuration: Moderna Vaccines
+# Protocol: mRNA-1273-P301 (P-14)
+# Therapeutic Area: Vaccines
+# Multi-arm study: Part A (Blinded), Part B (Open-Label), Part C (Booster)
+
+domain:
+  name: "Vaccines"
+  sponsor: "Moderna"
+  sub_domain: "mRNA Vaccines"
+  visit_structure: "fixed_duration"
+
+# ── Visit Counting Rules ──────────────────────────────────────────────
+visit_counting:
+  marker_patterns:
+    - "X"
+    - "x"
+    - "Y"
+    - "YES"
+    - "✓"
+    - "✔"
+    - "●"
+
+  text_indicators:
+    - "Required"
+    - "Perform"
+    - "Assess"
+    - "Collect"
+
+  continuous_range_patterns:
+    - pattern: "Day\\s+(\\d+)\\s+through\\s+Day\\s+(\\d+)"
+      frequency_unit: "daily"
+    - pattern: "Week\\s+(\\d+)\\s+through\\s+Week\\s+(\\d+)"
+      frequency_unit: "weekly"
+
+  periodic_procedure_keywords:
+    - "eDiary"
+    - "diary"
+    - "weekly prompt"
+    - "daily recording"
+
+# ── Cost Tiers ────────────────────────────────────────────────────────
+cost_tiers:
+  LOW: 75
+  MEDIUM: 350
+  HIGH: 1200
+  VERY_HIGH: 3500
+  PHONE_CALL: 35
+  EDIARY: 10
+
+# ── Procedure Cost Overrides ──────────────────────────────────────────
+procedure_cost_overrides:
+  "SARS-CoV-2 NAAT": "MEDIUM"
+  "Nasopharyngeal Swab": "LOW"
+  "Serology Panel": "MEDIUM"
+  "Immunogenicity Sample": "MEDIUM"
+  "Post-Dose Observation": "LOW"
+  "Reactogenicity Assessment": "LOW"
+  "e-Diary": "EDIARY"
+
+# ── Footnote Rules ────────────────────────────────────────────────────
+footnote_rules:
+  conditional_handling: "range"
+  phone_call_keywords:
+    - "call"
+    - "telephone"
+    - "phone"
+    - "remote"
+    - "contact"
+  unscheduled_visit_rate: 0.10
+
+# ── Moderna-Specific Rules ────────────────────────────────────────────
+ta_specific:
+  # P-14 is multi-arm — each SoA table maps to an arm/phase
+  multi_arm: true
+  arm_mapping:
+    # Table title patterns → arm labels
+    "Part A": "Part A (Blinded Phase)"
+    "Part B": "Part B (Open-Label Observational)"
+    "Part C": "Part C (Booster Dose)"
+    "Supplemental": "Supplemental Schedule"
+
+  reactogenicity_window_days: 7
+  combined_blood_draw_procedures:
+    - "Immunogenicity Sample"
+    - "Serology Panel"
+    - "SARS-CoV-2 NAAT"
+    - "Blood Collection"
+  combined_blood_draw_cost_tier: "MEDIUM"
+
+# ── Budget Output Format ──────────────────────────────────────────────
+output:
+  show_conditional_range: true
+  show_phone_call_savings: true
+  group_by: "category"
+  per_arm_budget: true  # Show separate totals per arm
+  currency: "USD"

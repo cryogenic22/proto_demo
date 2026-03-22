@@ -1,0 +1,148 @@
+# Domain Configuration: Oncology
+# Covers: solid tumors, hematology, immunotherapy
+# Key difference: cycle-based visits, treatment-to-progression
+
+domain:
+  name: "Oncology"
+  visit_structure: "cycle_based"  # Most oncology protocols use cycles
+
+# ── Visit Counting Rules ──────────────────────────────────────────────
+visit_counting:
+  marker_patterns:
+    - "X"
+    - "x"
+    - "Y"
+    - "YES"
+    - "✓"
+    - "✔"
+    - "●"
+
+  # Oncology SoAs often use text descriptions instead of X marks
+  text_indicators:
+    - "Required"
+    - "Perform"
+    - "Assess"
+    - "Collect"
+    - "Administer"
+    - "Draw"
+    - "Obtain"
+    - "Record"
+    - "Review"
+    - "Monitor"
+
+  # Cycle detection patterns in column headers
+  cycle_patterns:
+    - "C\\d+D\\d+"        # C1D1, C2D8
+    - "Cycle\\s*\\d+"     # Cycle 1, Cycle 2
+    - "Day\\s*\\d+.*Cycle" # Day 1 of Cycle 1
+
+  # Default number of cycles if not specified in protocol
+  default_cycles: 6
+  # Max cycles for cost estimation
+  max_cycles: 12
+
+  continuous_range_patterns:
+    - pattern: "Day\\s+(\\d+)\\s+through\\s+Day\\s+(\\d+)"
+      frequency_unit: "daily"
+    - pattern: "Cycle\\s+(\\d+)\\s+through\\s+Cycle\\s+(\\d+)"
+      frequency_unit: "per_cycle"
+
+  periodic_procedure_keywords:
+    - "every 3 weeks"
+    - "every 2 weeks"
+    - "q3w"
+    - "q2w"
+    - "weekly"
+    - "biweekly"
+
+# ── Cost Tiers ────────────────────────────────────────────────────────
+cost_tiers:
+  LOW: 75
+  MEDIUM: 350
+  HIGH: 1200
+  VERY_HIGH: 3500
+  INFUSION: 2500         # IV infusion (drug admin + monitoring)
+  PHONE_CALL: 35
+  BIOPSY: 4000           # Tissue biopsy (procedure + pathology)
+
+# ── Procedure Cost Overrides ──────────────────────────────────────────
+procedure_cost_overrides:
+  # Imaging
+  "CT Scan": "HIGH"
+  "CT Scan Abdomen": "HIGH"
+  "CT Scan Chest": "HIGH"
+  "PET Scan": "VERY_HIGH"
+  "PET/CT": "VERY_HIGH"
+  "MRI": "VERY_HIGH"
+  "MRI Brain": "VERY_HIGH"
+  "Bone Scan": "HIGH"
+
+  # Biopsies
+  "Tumor Biopsy": "BIOPSY"
+  "Bone Marrow Biopsy": "BIOPSY"
+  "Skin Biopsy": "HIGH"
+  "Lymph Node Biopsy": "BIOPSY"
+
+  # Oncology-specific assessments
+  "RECIST Assessment": "HIGH"          # Requires imaging review
+  "ECOG Performance Status": "LOW"     # Clinical observation
+  "Tumor Marker": "MEDIUM"
+  "Pharmacokinetic Sampling": "MEDIUM"
+  "Biomarker Analysis": "HIGH"
+
+  # Infusions
+  "Study Drug Administration": "INFUSION"
+  "IV Infusion": "INFUSION"
+  "Chemotherapy Administration": "INFUSION"
+
+  # Labs (oncology panels tend to be larger)
+  "Complete Blood Count": "LOW"
+  "Comprehensive Metabolic Panel": "LOW"
+  "Coagulation Panel": "LOW"
+  "Liver Function Test": "LOW"
+  "Thyroid Function Test": "LOW"
+
+# ── Footnote Rules ────────────────────────────────────────────────────
+footnote_rules:
+  conditional_handling: "range"
+  phone_call_keywords:
+    - "call"
+    - "telephone"
+    - "phone"
+    - "remote"
+  unscheduled_visit_rate: 0.15  # Higher for oncology (dose modifications, AEs)
+
+# ── Oncology-Specific Rules ───────────────────────────────────────────
+ta_specific:
+  # Cycle-based budgeting
+  cycle_based: true
+  # Treatment until progression — estimate duration
+  treat_to_progression:
+    enabled: true
+    default_median_months: 9  # Industry median for immunotherapy
+    range_months: [3, 18]     # P10-P90 range
+
+  # Dose modifications reduce infusion frequency
+  dose_modification_rate: 0.20  # 20% of patients have dose reductions
+
+  # Imaging schedule (typically every 6-12 weeks)
+  imaging_cycle_interval: 3  # Every 3 cycles for response assessment
+
+  # Oncology labs are often more frequent in early cycles
+  early_cycle_lab_multiplier: 1.5  # 50% more labs in cycles 1-2
+
+  # Supportive care procedures (antiemetics, growth factors)
+  supportive_care_procedures:
+    - "Antiemetic Administration"
+    - "Growth Factor (G-CSF)"
+    - "Blood Transfusion"
+    - "IV Hydration"
+  supportive_care_rate: 0.30  # 30% of patients need supportive care
+
+# ── Budget Output Format ──────────────────────────────────────────────
+output:
+  show_conditional_range: true
+  show_cycle_breakdown: true   # Show per-cycle costs
+  show_duration_estimate: true # Show total based on estimated duration
+  group_by: "category"
+  currency: "USD"

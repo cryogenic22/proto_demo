@@ -32,6 +32,9 @@ class BudgetLine:
     total_occurrences: int
     estimated_unit_cost: float  # Pre-filled from cost tier
     avg_confidence: float = 1.0  # Average confidence across cells for this procedure
+    firm_occurrences: int = 0  # Visits without CONDITIONAL footnotes
+    conditional_occurrences: int = 0  # Visits with CONDITIONAL footnotes
+    is_phone_call: bool = False  # Detected as phone-based from footnotes
     source_pages: list[int] = field(default_factory=list)  # Protocol pages where this appears
     issues: list[str] = field(default_factory=list)  # Specific issues for hover tooltip
     notes: str = ""
@@ -50,6 +53,10 @@ COST_TIER_ESTIMATES = {
     "MEDIUM": 350,
     "HIGH": 1200,
     "VERY_HIGH": 3500,
+    "PHONE_CALL": 35,
+    "EDIARY": 10,
+    "INFUSION": 2500,
+    "BIOPSY": 4000,
 }
 
 
@@ -110,20 +117,67 @@ def _extract_budget_lines(table: ExtractedTable) -> list[BudgetLine]:
         elif cell.row_header and cell.row not in row_headers:
             row_headers[cell.row] = cell.row_header
 
+    # Load domain config for TA-specific rules
+    from src.domain.config import (
+        load_domain_config,
+        get_marker_patterns,
+        get_text_indicators,
+        get_procedure_cost_override,
+        is_phone_call,
+        get_cost_tiers,
+    )
+    domain_config = load_domain_config()  # Will be overridden per-protocol later
+
+    marker_patterns = get_marker_patterns(domain_config)
+    text_indicators = get_text_indicators(domain_config)
+    cost_tier_map = get_cost_tiers(domain_config)
+    # Merge with base tiers
+    COST_TIER_ESTIMATES.update(cost_tier_map)
+
+    # Build footnote type lookup for conditional detection
+    footnote_types: dict[str, str] = {}
+    for fn in table.footnotes:
+        for ref in fn.applies_to:
+            key = f"{ref.row}-{ref.col}"
+            footnote_types[key] = fn.footnote_type
+
     # For each procedure row, count visits where it's required
     for row_num, proc_name in sorted(row_headers.items()):
         cells_in_row = row_cells.get(row_num, [])
 
-        # Find visits with markers (X, checkmark, etc.)
-        required_visits = []
+        # Find visits with markers (X, checkmark, text indicators)
+        firm_visits = []
+        conditional_visits = []
         for cell in cells_in_row:
             if cell.col == 0:
                 continue
-            val = cell.raw_value.strip().upper()
-            if val in ("X", "Y", "YES") or "X" in val or "\u2713" in val or "\u2714" in val:
-                visit = visit_names.get(cell.col, cell.col_header or f"Visit {cell.col}")
-                required_visits.append(visit)
+            val = cell.raw_value.strip()
+            val_upper = val.upper()
 
+            # Check marker patterns
+            is_marker = any(
+                p == val_upper or p in val_upper
+                for p in marker_patterns
+            )
+            # Check text indicators
+            is_text = any(
+                ind.lower() in val.lower()
+                for ind in text_indicators
+            ) if not is_marker and val else False
+
+            if is_marker or is_text:
+                visit = visit_names.get(
+                    cell.col, cell.col_header or f"Visit {cell.col}"
+                )
+                # HIGH FIX 1: Check if this cell has a CONDITIONAL footnote
+                cell_key = f"{cell.row}-{cell.col}"
+                fn_type = footnote_types.get(cell_key, "")
+                if fn_type == "CONDITIONAL":
+                    conditional_visits.append(visit)
+                else:
+                    firm_visits.append(visit)
+
+        required_visits = firm_visits + conditional_visits
         if not required_visits:
             continue
 
@@ -162,6 +216,19 @@ def _extract_budget_lines(table: ExtractedTable) -> list[BudgetLine]:
         if notes_parts:
             issues.append(f"Conditional: {'; '.join(notes_parts[:2])}")
 
+        # Check for domain-specific cost override
+        override_tier = get_procedure_cost_override(domain_config, canonical)
+        if override_tier:
+            cost_tier = override_tier
+
+        # MEDIUM FIX 4: Detect phone call procedures from footnote text
+        is_phone = False
+        for note in notes_parts:
+            if is_phone_call(domain_config, note):
+                is_phone = True
+                cost_tier = "PHONE_CALL"
+                break
+
         lines.append(BudgetLine(
             procedure=proc_name,
             canonical_name=canonical,
@@ -170,6 +237,9 @@ def _extract_budget_lines(table: ExtractedTable) -> list[BudgetLine]:
             cost_tier=cost_tier,
             visits_required=required_visits,
             total_occurrences=len(required_visits),
+            firm_occurrences=len(firm_visits),
+            conditional_occurrences=len(conditional_visits),
+            is_phone_call=is_phone,
             estimated_unit_cost=COST_TIER_ESTIMATES.get(cost_tier, 100),
             avg_confidence=avg_conf,
             source_pages=table.source_pages,

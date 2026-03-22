@@ -1,0 +1,101 @@
+# Domain Configuration: Pfizer Vaccines
+# Protocol: BNT162b2 COVID-19 Vaccine (C4591001)
+# Therapeutic Area: Vaccines
+# This YAML defines TA-specific rules for budget calculation,
+# procedure classification, and visit frequency logic.
+# Override defaults per therapeutic area.
+
+domain:
+  name: "Vaccines"
+  sponsor: "Pfizer"
+  sub_domain: "mRNA Vaccines"
+  visit_structure: "fixed_duration"  # fixed_duration | cycle_based | treat_to_progression
+
+# ── Visit Counting Rules ──────────────────────────────────────────────
+visit_counting:
+  # How to detect a "procedure performed" marker in SoA cells
+  marker_patterns:
+    - "X"
+    - "x"
+    - "Y"
+    - "YES"
+    - "✓"
+    - "✔"
+    - "●"
+
+  # Text values that also indicate procedure is performed
+  text_indicators:
+    - "Required"
+    - "Perform"
+    - "Assess"
+    - "Collect"
+    - "Administer"
+
+  # Continuous range detection (e.g., "Day 64 through Day 759")
+  continuous_range_patterns:
+    - pattern: "Day\\s+(\\d+)\\s+through\\s+Day\\s+(\\d+)"
+      frequency_unit: "daily"
+    - pattern: "Week\\s+(\\d+)\\s+through\\s+Week\\s+(\\d+)"
+      frequency_unit: "weekly"
+
+  # Weekly/daily prompts
+  periodic_procedure_keywords:
+    - "eDiary"
+    - "diary"
+    - "weekly prompt"
+    - "daily recording"
+
+# ── Cost Tiers ────────────────────────────────────────────────────────
+cost_tiers:
+  LOW: 75
+  MEDIUM: 350
+  HIGH: 1200
+  VERY_HIGH: 3500
+  PHONE_CALL: 35         # Phone-based follow-up
+  EDIARY: 10             # Per-prompt eDiary cost
+
+# ── Procedure Cost Overrides ──────────────────────────────────────────
+# Override the default vocabulary cost tier for specific procedures
+procedure_cost_overrides:
+  "SARS-CoV-2 NAAT": "MEDIUM"           # RT-PCR test ~$100-200
+  "Serology Panel": "MEDIUM"             # Antibody panel ~$150-300
+  "Immunogenicity Sample": "MEDIUM"      # Blood draw + lab processing
+  "Post-Dose Observation": "LOW"         # 30-min monitoring, nurse time
+  "Reactogenicity Assessment": "LOW"     # eDiary self-report
+  "e-Diary": "EDIARY"                    # Automated per-prompt
+
+# ── Footnote Rules ────────────────────────────────────────────────────
+footnote_rules:
+  # How to handle CONDITIONAL footnotes in budget
+  conditional_handling: "range"  # "range" (show min-max) | "exclude" | "include"
+  # How to detect phone call procedures from footnote text
+  phone_call_keywords:
+    - "call"
+    - "telephone"
+    - "phone"
+    - "remote"
+    - "contact"
+
+  # Unscheduled visit estimation
+  unscheduled_visit_rate: 0.10  # 10% of participants
+
+# ── Vaccine-Specific Rules ────────────────────────────────────────────
+ta_specific:
+  # Vaccine trials have reactogenicity windows — don't count as separate visits
+  reactogenicity_window_days: 7
+  # Blood draws for serology are often combined — don't double-count
+  combined_blood_draw_procedures:
+    - "Immunogenicity Sample"
+    - "Serology Panel"
+    - "SARS-CoV-2 NAAT"
+    - "Blood Collection"
+  # These are collected in the same draw — count as 1 blood draw cost
+  combined_blood_draw_cost_tier: "MEDIUM"
+
+# ── Budget Output Format ──────────────────────────────────────────────
+output:
+  show_conditional_range: true    # Show "$0 - $700" for conditional procedures
+  show_phone_call_savings: true   # Highlight phone vs in-person cost difference
+  group_by: "category"            # category | cost_tier | visit_phase
+  include_overhead: false         # Site management overhead (future)
+  currency: "USD"
