@@ -632,10 +632,11 @@ function SmartGrid({
                             onClick={() => cell && onCellClick({ row, col: colIdx })}
                             className={cn(
                               "px-1.5 py-1 text-center border border-neutral-200 font-mono text-[11px] cursor-pointer transition-colors relative",
+                              acted === "accepted" ? "bg-emerald-50 ring-1 ring-emerald-300" :
+                              acted === "corrected" ? "bg-sky-50 ring-1 ring-sky-300" :
+                              acted === "flagged" ? "bg-red-50 ring-1 ring-red-300" :
                               cell ? confBg(cell.confidence) : "",
-                              isFlagged && "ring-2 ring-amber-400",
-                              acted === "accepted" && "ring-2 ring-emerald-400",
-                              acted === "flagged" && "ring-2 ring-red-400",
+                              isFlagged && !acted && "ring-2 ring-amber-400",
                             )}
                             title={cell ? `${cell.raw_value} (${(cell.confidence * 100).toFixed(0)}%)` : ""}
                           >
@@ -647,6 +648,17 @@ function SmartGrid({
                                   <span className="text-amber-500">\u26A1</span>
                                 )}
                               </sup>
+                            )}
+                            {/* Human verified badge */}
+                            {acted && (
+                              <span className={cn(
+                                "absolute top-0 right-0 w-3 h-3 flex items-center justify-center text-[7px] font-bold rounded-bl",
+                                acted === "accepted" ? "bg-emerald-500 text-white" :
+                                acted === "corrected" ? "bg-sky-500 text-white" :
+                                "bg-red-500 text-white"
+                              )}>
+                                {acted === "accepted" ? "\u2713" : acted === "corrected" ? "\u270E" : "\u2691"}
+                              </span>
                             )}
                           </td>
                         );

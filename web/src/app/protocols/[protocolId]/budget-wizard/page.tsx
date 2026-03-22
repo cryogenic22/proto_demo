@@ -158,6 +158,11 @@ export default function BudgetWizardPage() {
     URL.revokeObjectURL(url);
   }, [budgetLines, protocolId]);
 
+  const exportToXLSX = useCallback(() => {
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    window.open(`${API_BASE}/api/protocols/${protocolId}/budget/export`, "_blank");
+  }, [protocolId]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -252,6 +257,7 @@ export default function BudgetWizardPage() {
             issues={validationIssues}
             onRunValidation={runValidation}
             onExport={exportToCSV}
+            onExportXLSX={exportToXLSX}
             grandTotal={grandTotal}
           />
         )}
@@ -598,12 +604,14 @@ function Step4Validate({
   issues,
   onRunValidation,
   onExport,
+  onExportXLSX,
   grandTotal,
 }: {
   budgetLines: EditableBudgetLine[];
   issues: ValidationIssue[];
   onRunValidation: () => void;
   onExport: () => void;
+  onExportXLSX?: () => void;
   grandTotal: number;
 }) {
   const errors = issues.filter((i) => i.severity === "error");
@@ -696,15 +704,25 @@ function Step4Validate({
               {budgetLines.length} procedures · {formatCurrency(grandTotal)} per patient
             </p>
           </div>
-          <button
-            onClick={onExport}
-            className="px-5 py-2.5 text-sm font-medium bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
-            Export to CSV
-          </button>
+          <div className="flex items-center gap-2">
+            {onExportXLSX && (
+              <button
+                onClick={onExportXLSX}
+                className="px-5 py-2.5 text-sm font-medium bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Export XLSX
+              </button>
+            )}
+            <button
+              onClick={onExport}
+              className="px-4 py-2.5 text-sm font-medium border border-neutral-200 text-neutral-700 rounded-lg hover:bg-neutral-50 flex items-center gap-2"
+            >
+              Export CSV
+            </button>
+          </div>
         </CardBody>
       </Card>
     </div>

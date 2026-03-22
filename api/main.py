@@ -792,6 +792,162 @@ async def get_procedures_library():
     ]
 
 
+@app.get("/api/protocols/{protocol_id}/budget/export")
+async def export_budget_xlsx(protocol_id: str):
+    """Export site budget as a formatted XLSX file."""
+    from fastapi.responses import Response
+
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(status_code=404, detail="Protocol not found")
+
+    try:
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Site Budget"
+
+        # Styles
+        header_font = Font(bold=True, size=11, color="FFFFFF")
+        header_fill = PatternFill(start_color="0093D0", fill_type="solid")
+        cat_fill = PatternFill(start_color="F1F5F9", fill_type="solid")
+        cat_font = Font(bold=True, size=10)
+        total_fill = PatternFill(start_color="1E293B", fill_type="solid")
+        total_font = Font(bold=True, size=11, color="FFFFFF")
+        currency_fmt = '"$"#,##0.00'
+        pct_fmt = "0%"
+        thin_border = Border(
+            left=Side(style="thin", color="E2E8F0"),
+            right=Side(style="thin", color="E2E8F0"),
+            top=Side(style="thin", color="E2E8F0"),
+            bottom=Side(style="thin", color="E2E8F0"),
+        )
+
+        # Title
+        meta = protocol.metadata
+        ws.merge_cells("A1:I1")
+        ws["A1"] = f"Site Budget — {meta.short_title or meta.title or protocol.document_name}"
+        ws["A1"].font = Font(bold=True, size=14)
+        ws["A2"] = f"Protocol: {meta.protocol_number or protocol_id} | Phase: {meta.phase} | Sponsor: {meta.sponsor}"
+        ws["A2"].font = Font(size=10, color="64748B")
+        ws.append([])
+
+        # Headers
+        headers = [
+            "Procedure", "Canonical Name", "CPT Code", "Category",
+            "Cost Tier", "Visits", "Firm Occ.", "Cond. Occ.",
+            "Unit Cost", "Line Total", "Confidence",
+        ]
+        ws.append(headers)
+        header_row = ws.max_row
+        for col_idx, _ in enumerate(headers, 1):
+            cell = ws.cell(row=header_row, column=col_idx)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = Alignment(horizontal="center", wrap_text=True)
+            cell.border = thin_border
+
+        # Budget lines grouped by category
+        budget_lines = protocol.budget_lines or []
+        categories: dict[str, list] = {}
+        for bl in budget_lines:
+            cat = bl.get("category", "Uncategorized") if isinstance(bl, dict) else getattr(bl, "category", "Uncategorized")
+            if cat not in categories:
+                categories[cat] = []
+            categories[cat].append(bl)
+
+        grand_total = 0
+        for cat_name in sorted(categories.keys()):
+            lines = categories[cat_name]
+            # Category header
+            ws.append([cat_name.upper()])
+            cat_row = ws.max_row
+            ws.merge_cells(f"A{cat_row}:K{cat_row}")
+            ws.cell(row=cat_row, column=1).font = cat_font
+            ws.cell(row=cat_row, column=1).fill = cat_fill
+
+            cat_total = 0
+            for bl in lines:
+                if isinstance(bl, dict):
+                    proc = bl.get("procedure", "")
+                    canonical = bl.get("canonical_name", "")
+                    cpt = bl.get("cpt_code", "")
+                    category = bl.get("category", "")
+                    tier = bl.get("cost_tier", "")
+                    visits = len(bl.get("visits_required", []))
+                    firm = bl.get("firm_occurrences", visits)
+                    cond = bl.get("conditional_occurrences", 0)
+                    unit_cost = bl.get("estimated_unit_cost", 0)
+                    conf = bl.get("avg_confidence", 0)
+                else:
+                    proc = bl.procedure
+                    canonical = bl.canonical_name
+                    cpt = bl.cpt_code
+                    category = bl.category
+                    tier = bl.cost_tier
+                    visits = len(bl.visits_required)
+                    firm = getattr(bl, "firm_occurrences", visits)
+                    cond = getattr(bl, "conditional_occurrences", 0)
+                    unit_cost = bl.estimated_unit_cost
+                    conf = bl.avg_confidence
+
+                total_occ = firm + cond
+                line_total = unit_cost * total_occ
+                cat_total += line_total
+
+                ws.append([
+                    proc, canonical, cpt, category, tier,
+                    total_occ, firm, cond, unit_cost, line_total, conf,
+                ])
+                row = ws.max_row
+                ws.cell(row=row, column=9).number_format = currency_fmt
+                ws.cell(row=row, column=10).number_format = currency_fmt
+                ws.cell(row=row, column=11).number_format = pct_fmt
+                for c in range(1, 12):
+                    ws.cell(row=row, column=c).border = thin_border
+
+            # Category subtotal
+            ws.append(["", "", "", "", "", "", "", "Subtotal:", "", cat_total, ""])
+            sub_row = ws.max_row
+            ws.cell(row=sub_row, column=10).number_format = currency_fmt
+            ws.cell(row=sub_row, column=10).font = Font(bold=True)
+            grand_total += cat_total
+
+        # Grand total
+        ws.append([])
+        ws.append(["", "", "", "", "", "", "", "GRAND TOTAL (Per Patient):", "", grand_total, ""])
+        total_row = ws.max_row
+        for c in range(1, 12):
+            ws.cell(row=total_row, column=c).fill = total_fill
+            ws.cell(row=total_row, column=c).font = total_font
+        ws.cell(row=total_row, column=10).number_format = currency_fmt
+
+        # Column widths
+        widths = [30, 25, 10, 12, 10, 8, 8, 8, 12, 12, 10]
+        for i, w in enumerate(widths, 1):
+            ws.column_dimensions[chr(64 + i)].width = w
+
+        # Save to bytes
+        from io import BytesIO
+        buf = BytesIO()
+        wb.save(buf)
+        buf.seek(0)
+
+        fname = f"{protocol_id}_site_budget.xlsx"
+        return Response(
+            content=buf.getvalue(),
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.document",
+            headers={"Content-Disposition": f'attachment; filename="{fname}"'},
+        )
+    except ImportError:
+        raise HTTPException(status_code=500, detail="openpyxl not installed")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Export failed: {e}")
+
+
 @app.put("/api/procedures/{canonical_name}")
 async def update_procedure(canonical_name: str, updates: dict):
     """Update a procedure's CPT code, category, or cost tier."""
