@@ -156,16 +156,63 @@ class PipelineOrchestrator:
 
         # Stage 3b: SoA Table Validation — reject non-SoA tables
         if self.config.soa_only:
+            # Layer 1: Section-parser page-range gate
+            soa_page_range: set[int] = set()
+            try:
+                from src.pipeline.section_parser import SectionParser
+                sp = SectionParser()
+                parsed_sections = sp.parse(pdf_bytes, filename=document_name)
+                flat_sections = sp._flatten(parsed_sections)
+                for s in flat_sections:
+                    title_lower = s.title.lower()
+                    if any(kw in title_lower for kw in [
+                        "schedule of activities", "schedule of assessments",
+                        "schedule of evaluations", "schedule of events",
+                        "schedule of procedures",
+                    ]):
+                        start = s.page
+                        end = s.end_page or (s.page + 30)
+                        soa_page_range.update(range(start, end + 1))
+                if soa_page_range:
+                    logger.info(
+                        f"SoA page range: {min(soa_page_range)}-{max(soa_page_range)}"
+                    )
+            except Exception as e:
+                logger.warning(f"Section parser page-range gate failed: {e}")
+
             validated_regions = []
             for region in regions:
+                # Layer 1: Page-range gate
+                if soa_page_range:
+                    in_range = any(p in soa_page_range for p in region.pages)
+                    if not in_range:
+                        logger.info(
+                            f"REJECTED (page range): '{region.title}' on pages "
+                            f"{region.pages} — outside SoA range "
+                            f"{min(soa_page_range)}-{max(soa_page_range)}"
+                        )
+                        warnings.append(
+                            f"Rejected non-SoA table (outside SoA pages): "
+                            f"{region.title or region.table_id}"
+                        )
+                        continue
+
+                # Layer 2: Title + content validation
                 if self._is_likely_soa(region, pdf_bytes):
                     validated_regions.append(region)
                 else:
                     logger.info(
-                        f"Rejected non-SoA table '{region.title}' on pages {region.pages}"
+                        f"REJECTED (content): '{region.title}' on pages {region.pages}"
                     )
                     warnings.append(f"Rejected non-SoA table: {region.title}")
+
+            before = len(regions)
             regions = validated_regions
+            if before != len(regions):
+                logger.info(
+                    f"SoA filter: {before} → {len(regions)} tables "
+                    f"({before - len(regions)} rejected)"
+                )
 
         if not regions:
             warnings.append("No tables detected in document")
@@ -194,6 +241,27 @@ class PipelineOrchestrator:
             _progress(pct, f"Extracting table {i+1}/{len(regions)}: {region.title or region.table_id}...")
             try:
                 table = await self._process_table(region, pages, pdf_bytes)
+
+                # Layer 3: Post-extraction marker validation
+                # A real SoA table has X/checkmark MARKER cells.
+                # Tables with 0 markers and >5 cells are not SoA.
+                if self.config.soa_only:
+                    marker_count = sum(
+                        1 for c in table.cells
+                        if c.data_type.value == "MARKER"
+                    )
+                    if marker_count == 0 and len(table.cells) > 5:
+                        logger.info(
+                            f"REJECTED (post-extraction): '{table.title}' "
+                            f"has {len(table.cells)} cells but 0 MARKER — "
+                            f"not an SoA table"
+                        )
+                        warnings.append(
+                            f"Rejected after extraction: {table.title} "
+                            f"(0 markers in {len(table.cells)} cells)"
+                        )
+                        continue
+
                 tables.append(table)
                 # Save checkpoint after each successful table
                 checkpoint.save_table(table, i + 1, len(regions))
@@ -451,13 +519,23 @@ class PipelineOrchestrator:
         - No X marks
         - Titles like "Synopsis", "Amendment", "Objectives"
         """
-        # Title-based rejection
+        # Title-based rejection (expanded keyword list)
         if region.title:
             title_lower = region.title.lower()
             reject_keywords = [
                 "synopsis", "amendment", "objective", "endpoint",
                 "abbreviation", "definition", "reference", "figure",
                 "dosing schedule", "grading scale", "stopping rule",
+                # Added from rough_notes analysis:
+                "intercurrent event", "estimand", "statistical method",
+                "statistical analysis", "sensitivity analys",
+                "adverse events of special interest",
+                "populations for analys", "sample size",
+                "power of demonstrating", "conditions and sample",
+                "document history", "blood sampling volume",
+                "grading of", "long-term efficacy",
+                "immunogenicity endpoint", "summary of major changes",
+                "protocol amendment", "schema",
             ]
             if any(kw in title_lower for kw in reject_keywords):
                 return False
@@ -466,7 +544,9 @@ class PipelineOrchestrator:
             accept_keywords = [
                 "schedule of activities", "schedule of assessments",
                 "schedule of evaluations", "schedule of procedures",
-                "soa", "s.o.a.",
+                "schedule of events", "supplemental soe",
+                "supplemental schedule",
+                "soa", "s.o.a.", "soe",
             ]
             if any(kw in title_lower for kw in accept_keywords):
                 return True
@@ -486,10 +566,15 @@ class PipelineOrchestrator:
             if x_count >= 5:
                 return True
             if x_count == 0 and len(region.pages) <= 2:
-                return False  # Likely not an SoA table
+                return False
 
-        # Default: accept (don't over-filter)
-        return True
+        # Default: REJECT unknown tables (was: accept)
+        # If we can't determine it's SoA, don't show it to the user
+        logger.info(
+            f"Rejecting ambiguous table '{region.title or region.table_id}' "
+            f"— could not confirm as SoA"
+        )
+        return False
 
     @staticmethod
     def _build_cost_map(cells, procedures) -> dict:
