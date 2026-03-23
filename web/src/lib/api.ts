@@ -448,6 +448,23 @@ export async function extractVerbatim(
   return res.json();
 }
 
+export async function extractVerbatimFromProtocol(
+  protocolId: string,
+  instruction: string,
+  outputFormat: "text" | "html" = "html",
+): Promise<VerbatimResult> {
+  const res = await fetch(`${API_BASE}/api/protocols/${protocolId}/verbatim`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ instruction, output_format: outputFormat }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: "Extraction failed" }));
+    throw new Error(err.detail || "Verbatim extraction failed");
+  }
+  return res.json();
+}
+
 // ─── PDF Page Image ──────────────────────────────────────────────────────────
 
 export function getPageImageUrl(protocolId: string, pageNumber: number): string {

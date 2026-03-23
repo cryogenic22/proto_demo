@@ -357,6 +357,75 @@ async def extract_verbatim(
     }
 
 
+@app.post("/api/protocols/{protocol_id}/verbatim")
+async def extract_verbatim_from_protocol(
+    protocol_id: str,
+    body: dict,
+):
+    """Extract verbatim content from a stored protocol's PDF.
+
+    No file upload needed — uses the PDF stored on the server.
+    Body: {"instruction": "Copy Section 5.1", "output_format": "html"}
+    """
+    instruction = body.get("instruction", "")
+    output_format = body.get("output_format", "html")
+
+    if not instruction:
+        raise HTTPException(status_code=400, detail="Provide an 'instruction'")
+
+    # Find the PDF for this protocol
+    import re as _re
+
+    num_match = _re.match(r"^[pP][-_]?(\d+)", protocol_id)
+    pid_dash = f"P-{num_match.group(1).zfill(2)}" if num_match else protocol_id
+
+    pdf_path = None
+    for d in [Path("data/pdfs"), Path("golden_set/cached_pdfs")]:
+        if not d.exists():
+            continue
+        for pattern in [f"{protocol_id}.pdf", f"{pid_dash}.pdf"]:
+            candidate = d / pattern
+            if candidate.exists():
+                pdf_path = candidate
+                break
+        if not pdf_path:
+            for p in d.glob("*.pdf"):
+                stem_clean = _re.sub(r"[^a-zA-Z0-9]", "", p.stem).lower()
+                pid_clean = _re.sub(r"[^a-zA-Z0-9]", "", protocol_id).lower()
+                if stem_clean == pid_clean or stem_clean.startswith(pid_clean):
+                    pdf_path = p
+                    break
+        if pdf_path:
+            break
+
+    if not pdf_path:
+        raise HTTPException(
+            status_code=404,
+            detail=f"PDF not found for {protocol_id}. Upload the document to use verbatim extraction.",
+        )
+
+    from src.pipeline.verbatim_extractor import VerbatimExtractor
+
+    file_bytes = pdf_path.read_bytes()
+    config = _build_config()
+    extractor = VerbatimExtractor(config)
+    result = await extractor.extract(
+        file_bytes, instruction, filename=pdf_path.name,
+        output_format=output_format,
+    )
+
+    return {
+        "instruction": result.instruction,
+        "sections_found": result.sections_found,
+        "content_type": result.content_type,
+        "text": result.text,
+        "tables": result.tables,
+        "source_pages": result.source_pages,
+        "explanation": result.explanation,
+        "is_verbatim": result.is_verbatim,
+    }
+
+
 @app.post("/api/procedures/check")
 async def check_procedure_mapping(names: list[str]):
     """Check which procedure names can/cannot be mapped."""

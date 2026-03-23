@@ -32,12 +32,7 @@ const NAV_ITEMS = [
       { name: "Extraction Jobs", href: "/history", icon: "clock" },
     ],
   },
-  {
-    label: "Evaluate",
-    items: [
-      { name: "Quality Dashboard", href: "/quality", icon: "chart" },
-    ],
-  },
+  // Quality Dashboard removed — not providing value in current state
   {
     label: "Manage",
     items: [
