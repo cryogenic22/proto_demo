@@ -463,14 +463,169 @@ function Step2CostConfig({
   budgetLines: EditableBudgetLine[];
   onUpdate: (index: number, field: string, value: string | number) => void;
 }) {
+  const [lookupOpen, setLookupOpen] = useState(false);
+  const [lookupIndex, setLookupIndex] = useState<number | null>(null);
+  const [lookupQuery, setLookupQuery] = useState("");
+  const [lookupResults, setLookupResults] = useState<{ canonical_name: string; cpt_code: string; category: string; cost_tier: string; aliases: string[] }[]>([]);
+  const [hierarchies, setHierarchies] = useState<{ parent_name: string; children: { canonical_name: string; cpt_code: string; site_or_technique: string; cost_tier: string }[] }[]>([]);
+
+  // Load hierarchies on mount
+  useEffect(() => {
+    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    fetch(`${API}/api/procedures/library/hierarchies`).then(r => r.json()).then(setHierarchies).catch(() => {});
+  }, []);
+
+  const handleSearch = useCallback(async (q: string) => {
+    setLookupQuery(q);
+    if (!q.trim()) { setLookupResults([]); return; }
+    try {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const res = await fetch(`${API}/api/procedures/library/search?q=${encodeURIComponent(q)}&limit=10`);
+      const data = await res.json();
+      setLookupResults(data);
+    } catch { setLookupResults([]); }
+  }, []);
+
+  const handleSelectProcedure = (result: { canonical_name: string; cpt_code: string; category: string; cost_tier: string }) => {
+    if (lookupIndex !== null) {
+      if (result.cpt_code) onUpdate(lookupIndex, "cpt_code", result.cpt_code);
+      setLookupOpen(false);
+      setLookupIndex(null);
+    }
+  };
+
+  const openLookup = (index: number) => {
+    setLookupIndex(index);
+    setLookupQuery(budgetLines[index]?.canonical_name || "");
+    setLookupOpen(true);
+    handleSearch(budgetLines[index]?.canonical_name || "");
+  };
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div>
         <h2 className="text-lg font-bold text-neutral-800">Step 2: Configure Costs & CPT Codes</h2>
         <p className="text-sm text-neutral-500 mt-1">
-          Review and update unit costs, CPT codes, and visit frequencies. Changes are highlighted in blue.
+          Review and update unit costs, CPT codes, and visit frequencies. Click the search icon to look up CPT codes.
         </p>
       </div>
+
+      {/* CPT Lookup Panel */}
+      {lookupOpen && (
+        <Card className="border-brand-primary/30 shadow-lg">
+          <CardBody className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-neutral-800">CPT Code Lookup</h3>
+              <button onClick={() => setLookupOpen(false)} className="text-neutral-400 hover:text-neutral-600 text-xs">Close</button>
+            </div>
+            <input
+              type="text"
+              value={lookupQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Search by procedure name, CPT code, or category..."
+              className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+              autoFocus
+            />
+
+            {/* Search results */}
+            {lookupResults.length > 0 && (
+              <div className="max-h-[200px] overflow-auto border border-neutral-100 rounded-lg divide-y divide-neutral-50">
+                {lookupResults.map((r, i) => (
+                  <button key={i} onClick={() => handleSelectProcedure(r)} className="w-full text-left px-3 py-2 hover:bg-sky-50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-medium text-neutral-800">{r.canonical_name}</span>
+                      <span className="text-xs font-mono text-brand-primary">{r.cpt_code || "—"}</span>
+                    </div>
+                    <div className="text-[10px] text-neutral-400">{r.category} · {r.cost_tier}</div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Hierarchy families */}
+            {hierarchies.length > 0 && (
+              <div className="mt-3">
+                <h4 className="text-[10px] font-semibold text-neutral-500 uppercase tracking-wide mb-2">Procedure Families (site-specific CPT)</h4>
+                <div className="space-y-2">
+                  {hierarchies.map((fam, i) => (
+                    <details key={i} className="text-xs">
+                      <summary className="cursor-pointer text-neutral-700 font-medium hover:text-brand-primary">{fam.parent_name}</summary>
+                      <div className="ml-4 mt-1 space-y-0.5">
+                        {fam.children.map((child, j) => (
+                          <button
+                            key={j}
+                            onClick={() => handleSelectProcedure({ canonical_name: child.canonical_name, cpt_code: child.cpt_code, category: "", cost_tier: child.cost_tier })}
+                            className="w-full text-left flex items-center justify-between py-1 px-2 rounded hover:bg-sky-50"
+                          >
+                            <span className="text-neutral-600">{child.site_or_technique}: {child.canonical_name}</span>
+                            <span className="font-mono text-brand-primary">{child.cpt_code}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Add new procedure */}
+            <details className="mt-3">
+              <summary className="text-[11px] text-brand-primary cursor-pointer hover:underline font-medium">
+                + Add new procedure to library
+              </summary>
+              <div className="mt-2 space-y-2 p-3 bg-neutral-50 rounded-lg">
+                <input type="text" placeholder="Procedure name" id="new-proc-name"
+                  className="w-full px-2 py-1.5 text-xs border border-neutral-200 rounded bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary" />
+                <div className="flex gap-2">
+                  <input type="text" placeholder="CPT code" id="new-proc-cpt"
+                    className="w-24 px-2 py-1.5 text-xs font-mono border border-neutral-200 rounded bg-white" />
+                  <input type="text" placeholder="Category" id="new-proc-cat"
+                    className="flex-1 px-2 py-1.5 text-xs border border-neutral-200 rounded bg-white" />
+                  <select id="new-proc-tier" className="px-2 py-1.5 text-xs border border-neutral-200 rounded bg-white">
+                    <option value="LOW">LOW</option>
+                    <option value="MEDIUM">MEDIUM</option>
+                    <option value="HIGH">HIGH</option>
+                    <option value="VERY_HIGH">VERY_HIGH</option>
+                  </select>
+                </div>
+                <button
+                  onClick={async () => {
+                    const name = (document.getElementById("new-proc-name") as HTMLInputElement)?.value;
+                    const cpt = (document.getElementById("new-proc-cpt") as HTMLInputElement)?.value;
+                    const cat = (document.getElementById("new-proc-cat") as HTMLInputElement)?.value;
+                    const tier = (document.getElementById("new-proc-tier") as HTMLSelectElement)?.value;
+                    if (!name?.trim()) return;
+                    try {
+                      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+                      // Check for duplicate first
+                      const check = await fetch(`${API}/api/procedures/library/search?q=${encodeURIComponent(name)}&limit=3`);
+                      const existing = await check.json();
+                      if (existing.some((e: { canonical_name: string }) => e.canonical_name.toLowerCase() === name.toLowerCase())) {
+                        alert(`"${name}" already exists in the library.`);
+                        return;
+                      }
+                      // Import as single-row CSV
+                      const csv = `canonical_name,cpt_code,code_system,category,cost_tier,aliases\n"${name}","${cpt || ""}","CPT","${cat || "Unknown"}","${tier || "LOW"}",""`;
+                      const blob = new Blob([csv], { type: "text/csv" });
+                      const form = new FormData();
+                      form.append("file", blob, "new_procedure.csv");
+                      const res = await fetch(`${API}/api/procedures/library/import`, { method: "POST", body: form });
+                      const result = await res.json();
+                      if (result.added > 0) {
+                        alert(`Added "${name}" to the procedure library.`);
+                        if (lookupIndex !== null && cpt) onUpdate(lookupIndex, "cpt_code", cpt);
+                      }
+                    } catch (e) { alert("Failed to add procedure"); }
+                  }}
+                  className="w-full py-1.5 text-xs font-medium bg-brand-primary text-white rounded hover:bg-brand-french transition-colors"
+                >
+                  Add to Library
+                </button>
+              </div>
+            </details>
+          </CardBody>
+        </Card>
+      )}
 
       <Card>
         <div className="overflow-auto">
@@ -496,12 +651,23 @@ function Step2CostConfig({
                     )}
                   </td>
                   <td className="px-3 py-2">
-                    <input
-                      type="text"
-                      value={bl.cpt_code || ""}
-                      onChange={(e) => onUpdate(i, "cpt_code", e.target.value)}
-                      className="w-full px-2 py-1 text-xs font-mono border border-neutral-200 rounded bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary"
-                    />
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="text"
+                        value={bl.cpt_code || ""}
+                        onChange={(e) => onUpdate(i, "cpt_code", e.target.value)}
+                        className="flex-1 px-2 py-1 text-xs font-mono border border-neutral-200 rounded bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                      />
+                      <button
+                        onClick={() => openLookup(i)}
+                        className="p-1 rounded hover:bg-neutral-100 text-neutral-400 hover:text-brand-primary"
+                        title="Look up CPT code"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                      </button>
+                    </div>
                   </td>
                   <td className="px-3 py-2"><Badge variant="neutral">{bl.category}</Badge></td>
                   {/* Visits — firm + conditional breakdown */}
