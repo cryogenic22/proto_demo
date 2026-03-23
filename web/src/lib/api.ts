@@ -381,13 +381,21 @@ export async function listProcedures(): Promise<ProcedureEntry[]> {
   return res.json();
 }
 
-export async function updateProcedure(canonicalName: string, updates: Partial<ProcedureEntry>): Promise<ProcedureEntry> {
+export async function updateProcedure(canonicalName: string, updates: Partial<ProcedureEntry>): Promise<{ status: string }> {
   const res = await fetch(`${API_BASE}/api/procedures/${encodeURIComponent(canonicalName)}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
   });
   if (!res.ok) throw new Error('Failed to update procedure');
+  return res.json();
+}
+
+export async function deleteProcedure(canonicalName: string): Promise<{ status: string }> {
+  const res = await fetch(`${API_BASE}/api/procedures/${encodeURIComponent(canonicalName)}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Failed to delete procedure');
   return res.json();
 }
 

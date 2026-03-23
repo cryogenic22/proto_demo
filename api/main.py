@@ -841,23 +841,31 @@ def _log_annotation(
     )
 
 
-@app.get("/api/procedures/library", response_model=list[ProcedureLibraryEntry])
-async def get_procedures_library():
-    """Return the full canonical procedure library with CPT codes."""
-    from src.pipeline.procedure_normalizer import ProcedureNormalizer
+@app.get("/api/procedures/library")
+async def get_procedures_library(category: str = "", q: str = ""):
+    """Return the procedure library with optional filtering."""
+    from src.domain.vocabulary import get_procedure_vocab
 
-    normalizer = ProcedureNormalizer()
-    rows = normalizer.get_mapping_table()
+    vocab = get_procedure_vocab()
+
+    if q.strip():
+        entries = vocab.search(q.strip())
+    elif category.strip():
+        entries = vocab.list_by_category(category.strip())
+    else:
+        entries = vocab.list_all()
+
     return [
-        ProcedureLibraryEntry(
-            canonical_name=r["canonical_name"],
-            cpt_code=r.get("cpt_code", ""),
-            code_system=r.get("code_system", ""),
-            category=r.get("category", ""),
-            cost_tier=r.get("cost_tier", ""),
-            aliases=r.get("aliases", ""),
-        )
-        for r in rows
+        {
+            "canonical_name": e.canonical_name,
+            "cpt_code": e.cpt_code,
+            "code_system": e.code_system,
+            "category": e.category,
+            "cost_tier": e.cost_tier,
+            "aliases": e.aliases,
+            "used_in_protocols": e.used_in_protocols,
+        }
+        for e in entries
     ]
 
 
@@ -1136,39 +1144,59 @@ async def export_budget_xlsx(protocol_id: str):
 
 @app.put("/api/procedures/{canonical_name}")
 async def update_procedure(canonical_name: str, updates: dict):
-    """Update a procedure's CPT code, category, or cost tier."""
-    import csv
-    from pathlib import Path
+    """Update a procedure's CPT code, category, cost tier, or aliases."""
+    from src.domain.vocabulary import get_procedure_vocab
 
-    csv_path = Path("data/procedure_mapping.csv")
-    if not csv_path.exists():
-        raise HTTPException(status_code=404, detail="Procedure mapping file not found")
+    vocab = get_procedure_vocab()
+    entry = vocab.lookup(canonical_name)
+    if not entry:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Procedure '{canonical_name}' not found",
+        )
 
-    lines = csv_path.read_text(encoding="utf-8").splitlines()
-    updated = False
-    new_lines = []
+    if "cpt_code" in updates:
+        entry.cpt_code = str(updates["cpt_code"])
+    if "category" in updates:
+        entry.category = str(updates["category"])
+    if "cost_tier" in updates:
+        entry.cost_tier = str(updates["cost_tier"])
+    if "aliases" in updates:
+        if isinstance(updates["aliases"], list):
+            entry.aliases = updates["aliases"]
+        elif isinstance(updates["aliases"], str):
+            entry.aliases = [
+                a.strip() for a in updates["aliases"].split(",") if a.strip()
+            ]
 
-    for line in lines:
-        if line.startswith("#") or not line.strip():
-            new_lines.append(line)
-            continue
-        reader = csv.reader([line])
-        for parts in reader:
-            if len(parts) >= 6 and parts[0].strip().lower() == canonical_name.lower():
-                if "cpt_code" in updates:
-                    parts[1] = str(updates["cpt_code"])
-                if "category" in updates:
-                    parts[3] = str(updates["category"])
-                if "cost_tier" in updates:
-                    parts[4] = str(updates["cost_tier"])
-                updated = True
-            new_lines.append(",".join(f'"{p}"' if "," in p else p for p in parts))
+    vocab._save()
+    return {"status": "updated", "canonical_name": entry.canonical_name}
 
-    if not updated:
-        raise HTTPException(status_code=404, detail=f"Procedure '{canonical_name}' not found")
 
-    csv_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
-    return {"status": "updated", "canonical_name": canonical_name}
+@app.delete("/api/procedures/{canonical_name}")
+async def delete_procedure(canonical_name: str):
+    """Delete a procedure from the library."""
+    from src.domain.vocabulary import get_procedure_vocab
+
+    vocab = get_procedure_vocab()
+    key = canonical_name.lower()
+    if key not in vocab._entries:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Procedure '{canonical_name}' not found",
+        )
+
+    del vocab._entries[key]
+    # Remove from alias index
+    to_remove = [
+        alias for alias, canon in vocab._alias_index.items()
+        if canon == key
+    ]
+    for alias in to_remove:
+        del vocab._alias_index[alias]
+
+    vocab._save()
+    return {"status": "deleted", "canonical_name": canonical_name}
 
 
 # ---------------------------------------------------------------------------
