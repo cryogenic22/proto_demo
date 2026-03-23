@@ -48,7 +48,7 @@ Cardiac MRI,75561,CPT,Cardiac,VERY_HIGH,"cardiac mri, cmr, cardiac magnetic reso
 Cardiac MRI with Contrast,75561,CPT,Cardiac,VERY_HIGH,"cmr with gad, cardiac mri w/contrast, lge mri, cardiac mri with gadolinium"
 Cardiac MRI with Stress,75563,CPT,Cardiac,VERY_HIGH,"stress cmr, dobutamine cmr, stress cardiac mri"
 Echocardiogram,93306,CPT,Cardiac,HIGH,"echocardiogram, echo, cardiac echo, transthoracic echo, tte, transthoracic echocardiogram, cardiac ultrasound"
-"Electrocardiogram, 12-lead",93000,CPT,Cardiac,MEDIUM,"12-lead ecg, ecg (12l), ecg, 12 lead ecg, electrocardiogram, ekg, 12-lead electrocardiogram, standard ecg, resting ecg, single ecg"
+"Electrocardiogram, 12-lead",93000,CPT,Cardiac,MEDIUM,"12-lead ecg, ecg (12l), ecg, 12 lead ecg, electrocardiogram, ekg, 12-lead electrocardiogram, standard ecg, resting ecg, single ecg, ECG^e, 12-lead ECGl,m"
 "Electrocardiogram, triplicate",93000,CPT,Cardiac,MEDIUM,"triplicate ecg, ecg triplicate, 3x ecg, ecg (triplicate), serial ecg"
 Holter Monitor,93224,CPT,Cardiac,MEDIUM,"holter, holter monitor, 24-hour ecg, ambulatory ecg, 24h holter, 48h holter, continuous ecg"
 LVEF Assessment,93306,CPT,Cardiac,HIGH,"lvef, lvef assessment, ejection fraction, left ventricular ejection fraction, muga, muga scan"
@@ -68,7 +68,7 @@ DAS28,,CPT,Efficacy,LOW,"das28, disease activity score, das28-crp, das28-esr, da
 DLQI,,CPT,Efficacy,LOW,"dlqi, dermatology life quality index, dermatology qol"
 Disease Progression Assessment,,CPT,Efficacy,LOW,"disease progression, pd assessment, progressive disease assessment"
 EASI Score,,CPT,Efficacy,LOW,"easi, eczema area and severity index, easi score, easi-50, easi-75"
-ECOG Performance Status,,CPT,Efficacy,LOW,"ecog, ecog ps, performance status"
+ECOG Performance Status,,CPT,Efficacy,LOW,"ecog, ecog ps, performance status, WHO/ECOG performance status, WHO/ECOG performance statusn"
 HAQ-DI,,CPT,Efficacy,LOW,"haq-di, haq, health assessment questionnaire, haq disability index"
 IGA Score,,CPT,Efficacy,LOW,"iga, investigator global assessment, iga score, iga 0/1"
 KCCQ (Kansas City Cardiomyopathy),,CPT,Efficacy,LOW,"kccq, kansas city cardiomyopathy questionnaire, kccq-12, kccq-os, kccq-tss"
@@ -88,24 +88,27 @@ Free T3,84481,CPT,Endocrinology,LOW,"triiodothyronine free T3, FT3, free triiodo
 Free T4,84439,CPT,Endocrinology,LOW,"thyroxine free T4, FT4, free thyroxine, T4 free, 84439, 84436"
 OGTT,82951,CPT,Endocrinology,LOW,"oral glucose tolerance test, glucose tolerance test, GTT, 2-hour OGTT, 75g OGTT, 82951, 82952, glucose challenge test"
 TSH,84443,CPT,Endocrinology,LOW,"thyroid stimulating hormone, TSH test, thyrotropin, thyroid function TSH, 84443, serum TSH"
-Adverse Event Assessment,,CPT,General,LOW,"adverse events, ae, aes, ae assessment, adverse event assessment, adverse event review, safety assessment"
+Adverse Event Assessment,,CPT,General,LOW,"adverse events, ae, aes, ae assessment, adverse event assessment, adverse event review, safety assessment, Recording of AEs, Recording of unsolicited AEs, Safety Assessments, Collection of COVID-19–related clinical and laboratory
+information (including local diagnosis), Collection of COVID-19–related clinical and laboratory information (including local diagnosis), Collect AEs and SAEs as appropriate, Collect AEs and SAEs as appropriateb, Collect AEs and SAEs as appropriated"
 Body Mass Index,,General,General,LOW,"bmi, body mass index"
 Body Surface Area,,General,General,LOW,"bsa, body surface area, bsa calculation"
-Body Weight,,General,General,LOW,"body weight, weight, body mass, weight measurement"
+Body Weight,,General,General,LOW,"body weight, weight, body mass, weight measurement, Weight and height, Weight and height^d, Weight and heightd"
 Compliance Assessment,,CPT,General,LOW,"compliance, adherence, medication compliance, treatment compliance, drug compliance, medication adherence"
-Concomitant Medications Review,,CPT,General,LOW,"concomitant medications, con meds, conmeds, prior/concomitant medications, medications review, prior medications, concomitant medication review"
+Concomitant Medications Review,,CPT,General,LOW,"concomitant medications, con meds, conmeds, prior/concomitant medications, medications review, prior medications, concomitant medication review, Concomitant medications and procedures, Concomitant medications and proceduresz, Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE⁸, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE⁸, Recording of concomitant medications and non-study vaccinations⁸, Recording of MAAEs, AESIs (Part C), AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE³, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE³, Recording of concomitant medications and non-study vaccinations³, Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE8, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE8, Recording of concomitant medications and non-study vaccinations8, Recording of MAAEs, AESIs, AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE11, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE11, Recording of concomitant medications and non-study vaccinations11, Recording of MAAEs, AESIs (Part C), AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE⁶, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE⁶, Recording of concomitant medications and non-study vaccinations⁶˒⁷, Recording of MAAEs, AESIs (Part C), AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE3, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE3, Recording of concomitant medications and non-study vaccinations3, Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE, Recording of concomitant medications and non-study vaccinations, Collect prohibited medication use, Collect nonstudy vaccine informationd, Collect prohibited medication used"
 Demographics,,General,General,LOW,"demographics, demographic data, demographic assessment"
 Drug Accountability,,CPT,General,LOW,"drug accountability, medication accountability, pill count, drug reconciliation, ip accountability"
-Eligibility Assessment,,General,General,LOW,"eligibility assessment, eligibility review, inclusion/exclusion, i/e criteria, eligibility, ie criteria"
+Eligibility Assessment,,General,General,LOW,"eligibility assessment, eligibility review, inclusion/exclusion, i/e criteria, eligibility, ie criteria, Inclusion/exclusion criteria, Eligibility criteria, Review and consider eligibility, Confirm participant originally received placebo, Confirm participant has only received 2 doses of BNT162 as part of the study and not outside the study"
 Height,,General,General,LOW,"height, stature, body height"
-Informed Consent,,General,General,LOW,"informed consent, consent, icf, signed consent, written consent"
-Medical History,,General,General,LOW,"medical history, history, med history, past medical history, pmh"
-Physical Examination,99213,CPT,General,LOW,"physical exam, physical examination, pe, full physical, complete physical, targeted physical, targeted pe, symptom-directed pe, abbreviated physical"
-Randomization,,General,General,LOW,"randomization, randomisation, treatment assignment, randomize, stratification"
+Informed Consent,,General,General,LOW,"informed consent, consent, icf, signed consent, written consent, Written Informed Consent, Written Informed Consent for DNA analysis (for subjects from N01358), ICF, demographics, concomitant medications, medical history, Sign revised informed consent form, Confirm signing of ICF, concomitant medications, medical history, Consent: genetic sample and analysis (optional), Informed consent: study procedures, Informed consent: study proceduresb, Obtain informed consent, Obtain informed consent for asymptomatic SARS-CoV-2 infection surveillance"
+Medical History,,General,General,LOW,"medical history, history, med history, past medical history, pmh, Epilepsy history, General medical and procedures history"
+Physical Examination,99213,CPT,General,LOW,"physical exam, physical examination, pe, full physical, complete physical, targeted physical, targeted pe, symptom-directed pe, abbreviated physical, Physical examinationn, Physical examination², Physical examination2, Physical examination (full), Physical exam (full), Targeted physical exam c, Tumor radiological assessments (RECIST 1.1) -AND- Physical exam including a pelvic examination, Tumor radiological assessments (RECIST 1.1)y -AND- Physical exam including a pelvic examination, Tumor radiological assessment (RECIST 1.1) / Physical exam including a pelvic examination, Tumor radiological assessment (RECIST 1.1)k
+-AND-
+Physical exam including a pelvic examination"
+Randomization,,General,General,LOW,"randomization, randomisation, treatment assignment, randomize, stratification, Obtain vaccine vial allocation via IRT, Obtain randomization number and study intervention allocation using the IRT system, Obtain the participant's vaccine vial allocation using the IRT system"
 Study Completion,,General,General,LOW,"study completion, study completion/early termination, end of study procedures"
-Survival Follow-up,,General,General,LOW,"survival follow-up, survival status, long-term follow-up, ltfu"
-Telephone Contact,,CPT,General,LOW,"telephone contact, phone contact, phone call, telephone visit, phone visit"
-Vital Signs,99000,CPT,General,LOW,"vital signs, vitals, vs, vital sign assessment, vital sign measurement"
+Survival Follow-up,,General,General,LOW,"survival follow-up, survival status, long-term follow-up, ltfu, Survival statuse"
+Telephone Contact,,CPT,General,LOW,"telephone contact, phone contact, phone call, telephone visit, phone visit, Contact the participant by telephone"
+Vital Signs,99000,CPT,General,LOW,"vital signs, vitals, vs, vital sign assessment, vital sign measurement, Vital signsj,k, Vital signs (temperature, respiratory rate, blood pressure, and pulse), Vital signsd"
 Waist Circumference,,General,General,LOW,"waist circumference, waist measurement, abdominal circumference"
 Genetic Testing,81479,CPT,Genetics,VERY_HIGH,"genetic testing, genomic testing, genotyping, pharmacogenomics, dna sequencing, ngs, next-generation sequencing, whole exome"
 NGS Panel (5-50 genes),81445,CPT,Genetics,VERY_HIGH,"ngs panel, next-generation sequencing panel, molecular panel, tumor profiling, f1cdx, foundationone"
@@ -122,7 +125,7 @@ Mammography,77067,CPT,Imaging,MEDIUM,"mammogram, mammography, bilateral mammogra
 PET/CT Scan,78816,CPT,Imaging,VERY_HIGH,"pet/ct, pet scan, pet/ct scan, pet-ct, positron emission tomography, fdg-pet"
 Ultrasound,76700,CPT,Imaging,MEDIUM,"ultrasound, us, sonography, doppler, abdominal ultrasound"
 Volumetric Brain MRI,0865T,CPT,Imaging,HIGH,"volumetric mri, brain volumetrics, neuroquant"
-X-Ray,71046,CPT,Imaging,MEDIUM,"x-ray, xray, radiograph, chest x-ray, cxr, chest radiograph"
+X-Ray,71046,CPT,Imaging,MEDIUM,"x-ray, xray, radiograph, chest x-ray, cxr, chest radiograph, Chest X-rayd"
 ANA,86038,CPT,Immunology,LOW,"antinuclear antibody, ANA test, antinuclear antibody screen, fluorescent ANA, FANA, 86038, 86039"
 Anti-CCP antibodies,86200,CPT,Immunology,LOW,"anti-cyclic citrullinated peptide, CCP antibody, anti-CCP, cyclic citrullinated peptide antibody, 86200, ACPA"
 Anti-drug antibody testing,,CPT,Immunology,MEDIUM,"ADA testing, anti-drug antibody assay, ADA assay, immunogenicity assay, anti-biologic antibody, ADA titer, drug antibody testing"
@@ -135,7 +138,7 @@ Fecal calprotectin,83993,CPT,Immunology,LOW,"calprotectin stool, fecal calprotec
 Flow cytometry immunophenotyping,86355,CPT,Immunology,HIGH,"flow cytometry, immunophenotyping, lymphocyte subsets, B-cell T-cell NK-cell, 86355, 86356, 86357"
 Hepatitis B surface antigen,87340,CPT,Immunology,LOW,"HBsAg, HBs Ag, Hepatitis B surface antigen test, HBsAg test, 87340"
 Hepatitis C antibody,86803,CPT,Immunology,LOW,"HCV antibody, anti-HCV, hepatitis C antibody test, HCV Ab, 86803, 86804"
-Immunogenicity sampling,,CPT,Immunology,LOW,"immunogenicity sample, immunogenicity assessment, ADA sample, immunogenicity blood draw, immunogenicity specimen"
+Immunogenicity sampling,,CPT,Immunology,LOW,"immunogenicity sample, immunogenicity assessment, ADA sample, immunogenicity blood draw, immunogenicity specimen, Immunogenicity assessment (ADA sampling) to identify ADA responsesg, Immunogenicity assessment (ADA sampling to identify ADA responses in patient circulation), Immunogenicity assessment (ADA sampling to identify ADA responses), Immunogenicity assessment (ADA sampling to identify ADA responses^g"
 Rheumatoid factor,86430,CPT,Immunology,LOW,"RF, rheumatoid factor screen, RF titer, 86430, 86431, rheumatoid factor quantitative"
 Serum protein electrophoresis,84165,CPT,Immunology,MEDIUM,"SPEP, serum protein electrophoresis, protein electrophoresis, 84165, M-protein"
 Upper GI endoscopy,43239,CPT,Immunology,HIGH,"EGD, esophagogastroduodenoscopy, upper endoscopy, upper GI scope, gastroscopy, esophagoscopy, 43239, 43235"
@@ -154,22 +157,23 @@ Stool culture,,CPT,Infectious Disease,LOW,"fecal culture, stool bacterial cultur
 AFP,82105,CPT,Laboratory,LOW,"afp, alpha-fetoprotein"
 Anti-AAV Antibody,,CPT,Laboratory,HIGH,"anti-aav, anti-aav antibody, anti-aav9, aav antibody, pre-existing antibody"
 Basic Metabolic Panel,80048,CPT,Laboratory,LOW,"basic metabolic panel, bmp"
-Biomarker Sample,,CPT,Laboratory,MEDIUM,"biomarker, biomarker sample, exploratory biomarker, translational biomarker"
-Blood Draw/Phlebotomy,,CPT,Laboratory,LOW,"blood draw, blood sample, phlebotomy, venipuncture, blood collection, venous blood draw"
+Biomarker Sample,,CPT,Laboratory,MEDIUM,"biomarker, biomarker sample, exploratory biomarker, translational biomarker, Biomarkers blood sample, Biomarkers blood sampley, Biomarker Assessment"
+Blood Draw/Phlebotomy,,CPT,Laboratory,LOW,"blood draw, blood sample, phlebotomy, venipuncture, blood collection, venous blood draw, Blood sample for immunologic assessment of SARS-CoV-2 infection6, Blood sample for potential biomarker analysis5, Collect blood sample for immunogenicity
+assessmente, Collect blood sample for HLA typingc, Collect blood sample for PBMC isolationc"
 Blood Smear,85060,CPT,Laboratory,LOW,"blood smear, peripheral blood smear, peripheral smear, blood film"
 Bone Marrow MRD,81479,CPT,Laboratory,VERY_HIGH,"mrd, minimal residual disease, mrd assessment, measurable residual disease"
-C-Reactive Protein,86140,CPT,Laboratory,LOW,"crp, c-reactive protein, hs-crp, high-sensitivity crp"
+C-Reactive Protein,86140,CPT,Laboratory,LOW,"crp, c-reactive protein, hs-crp, high-sensitivity crp, Laboratory tests including hs-CRP"
 CA-125,86304,CPT,Laboratory,LOW,"ca-125, ca125, cancer antigen 125"
-CD4 Count,86359,CPT,Laboratory,LOW,"cd4, cd4 count, cd4+ t-cell, cd4 cell count, t-cell subset"
+CD4 Count,86359,CPT,Laboratory,LOW,"cd4, cd4 count, cd4+ t-cell, cd4 cell count, t-cell subset, For participants who are HIV-positive, record latest CD4 count and HIV viral load"
 CEA,82378,CPT,Laboratory,LOW,"cea, carcinoembryonic antigen"
 CK/CPK,82550,CPT,Laboratory,LOW,"ck, cpk, creatine kinase, creatine phosphokinase"
-Calprotectin,83993,CPT,Laboratory,LOW,"calprotectin, fecal calprotectin, stool calprotectin"
+Calprotectin,83993,CPT,Laboratory,LOW,"calprotectin, fecal calprotectin, stool calprotectin, Stool sample/fecal calprotectin"
 Coagulation Panel,85610,CPT,Laboratory,LOW,"coagulation, coag panel, pt/inr, coagulation panel, pt, aptt, inr, prothrombin time, activated partial thromboplastin"
-Complete Blood Count,85025,CPT,Laboratory,LOW,"complete blood count, cbc, full blood count, fbc, blood count, cbc with differential, cbc w/diff"
+Complete Blood Count,85025,CPT,Laboratory,LOW,"complete blood count, cbc, full blood count, fbc, blood count, cbc with differential, cbc w/diff, CBC with differential and platelets"
 Comprehensive Metabolic Panel,80053,CPT,Laboratory,LOW,"comprehensive metabolic panel, cmp, metabolic panel, chemistry panel, serum chemistry, blood chemistry"
 Cortisol,82533,CPT,Laboratory,LOW,"cortisol, serum cortisol, am cortisol, morning cortisol"
 Cytokine Panel,83519,CPT,Laboratory,HIGH,"cytokine panel, cytokine storm panel, inflammatory panel, luminex, multiplex cytokine"
-Drug Screen,,CPT,Laboratory,LOW,"drug screen, urine drug screen, uds, drug of abuse screen, toxicology screen"
+Drug Screen,,CPT,Laboratory,LOW,"drug screen, urine drug screen, uds, drug of abuse screen, toxicology screen, Urine drug screens"
 ESR,85652,CPT,Laboratory,LOW,"esr, erythrocyte sedimentation rate, sed rate"
 Electrolytes,80051,CPT,Laboratory,LOW,"electrolytes, serum electrolytes, lytes, sodium potassium chloride bicarbonate"
 FSH/LH,83001,CPT,Laboratory,LOW,"fsh, lh, fsh/lh, follicle stimulating hormone, luteinizing hormone, gonadotropins"
@@ -179,7 +183,7 @@ Free Light Chains,83883,CPT,Laboratory,MEDIUM,"flc, free light chains, sflc, kap
 HIV Test,86701,CPT,Laboratory,LOW,"hiv test, hiv screening, hiv antibody, hiv-1/2, hiv serology"
 HLA Typing,81370,CPT,Laboratory,HIGH,"hla typing, hla, human leukocyte antigen, tissue typing"
 HbA1c,83036,CPT,Laboratory,LOW,"hba1c, glycated hemoglobin, a1c, hemoglobin a1c, glycosylated hemoglobin"
-Hepatitis Panel,86709,CPT,Laboratory,LOW,"hepatitis panel, hep panel, hepatitis b, hepatitis c, hbsag, anti-hcv, hbv, hcv, hepatitis serology"
+Hepatitis Panel,86709,CPT,Laboratory,LOW,"hepatitis panel, hep panel, hepatitis b, hepatitis c, hbsag, anti-hcv, hbv, hcv, hepatitis serology, Virology screen (HIV, HBV, HCV), Virology screen (HIV, HBV, HCV)f, Hepatitis B and C and HIV"
 IL-6,83519,CPT,Laboratory,MEDIUM,"il-6, interleukin-6, interleukin 6"
 Immunofixation Electrophoresis,86334,CPT,Laboratory,MEDIUM,"ife, immunofixation, serum ife, immunofixation electrophoresis"
 Insulin Level,83525,CPT,Laboratory,LOW,"insulin, fasting insulin, insulin level, serum insulin"
@@ -190,9 +194,9 @@ Liver Function Tests,80076,CPT,Laboratory,LOW,"liver function tests, lft, lfts, 
 MRD by Flow Cytometry,88184,CPT,Laboratory,HIGH,"mrd flow, mrd by flow, minimal residual disease flow"
 MRD by NGS (clonoSEQ),81479,CPT,Laboratory,VERY_HIGH,"mrd ngs, clonoseq, molecular mrd, ngs mrd"
 NT-proBNP,83880,CPT,Laboratory,LOW,"nt-probnp, nt pro-bnp, n-terminal pro-bnp, brain natriuretic peptide, bnp"
-Nasal Swab,87635,CPT,Laboratory,LOW,"nasal swab, nasal sample, nasal midturbinate, midturbinate swab, nasopharyngeal swab, np swab, nasal specimen"
+Nasal Swab,87635,CPT,Laboratory,LOW,"nasal swab, nasal sample, nasal midturbinate, midturbinate swab, nasopharyngeal swab, np swab, nasal specimen, Nasopharyngeal swab5, Nasopharyngeal swab8, Obtain nasal (midturbinate) swab, Obtain nasal (midturbinate) swab(s), Obtain nasal (midturbinate) swab (self-swab at home or by site staff at an in-person visit)"
 PSA,84153,CPT,Laboratory,LOW,"psa, prostate specific antigen, total psa"
-Pregnancy Test,81025,CPT,Laboratory,LOW,"pregnancy test, serum pregnancy, urine pregnancy, bhcg, b-hcg, hcg, serum hcg, urine hcg, pregnancy test (serum), pregnancy test (urine)"
+Pregnancy Test,81025,CPT,Laboratory,LOW,"pregnancy test, serum pregnancy, urine pregnancy, bhcg, b-hcg, hcg, serum hcg, urine hcg, pregnancy test (serum), pregnancy test (urine), Pregnancy testt, Pregnancy testing³, Pregnancy testing3, Pregnancy testa, Pregnancy testk, Perform urine pregnancy test (if appropriate)"
 Renal Function Tests,80069,CPT,Laboratory,LOW,"renal function, renal panel, kidney function, bun, creatinine, egfr, estimated gfr"
 Reticulocyte Count,85044,CPT,Laboratory,LOW,"reticulocyte count, reticulocytes, retic count"
 SPEP,86316,CPT,Laboratory,MEDIUM,"spep, serum protein electrophoresis, m-spike, serum electrophoresis"
@@ -202,14 +206,15 @@ Serum Pregnancy Test (Quantitative),84703,CPT,Laboratory,LOW,"serum hcg, beta-hc
 T-Cell Immune Response (ELISPOT),86353,CPT,Laboratory,HIGH,"elispot, cellular immunity, t-cell assay, cmi, ics, intracellular cytokine staining"
 TB Screening (QuantiFERON),86480,CPT,Laboratory,MEDIUM,"tb test, qft, quantiferon, igra, tb gold, tuberculosis screening"
 Testosterone,84403,CPT,Laboratory,LOW,"testosterone, total testosterone, free testosterone, serum testosterone"
-Thyroid Function Tests,84443,CPT,Laboratory,LOW,"thyroid function, tft, tfts, tsh, thyroid panel, free t4, ft4, t3"
+Thyroid Function Tests,84443,CPT,Laboratory,LOW,"thyroid function, tft, tfts, tsh, thyroid panel, free t4, ft4, t3, TSH (reflex free T3 or free T4f), TSH (reflex free T3 or free T4), TSHi (reflex free T3 or free T4)j"
 Troponin,84484,CPT,Laboratory,LOW,"troponin, troponin i, troponin t, hs-troponin, high-sensitivity troponin"
 Tumor Marker Assessment,,CPT,Laboratory,LOW,"tumor marker, tumor markers, serum tumor markers"
 Urinalysis,81003,CPT,Laboratory,LOW,"urinalysis, ua, urine analysis, urine dipstick, urine test"
 Urine Protein-to-Creatinine Ratio,84156,CPT,Laboratory,LOW,"upcr, urine protein, urine protein-to-creatinine, spot urine protein"
 Venipuncture,36415,CPT,Laboratory,LOW,"venipuncture, blood draw procedure, phlebotomy procedure"
-Viral Load,,CPT,Laboratory,MEDIUM,"viral load, hiv viral load, hbv dna, hcv rna, pcr viral load"
-ctDNA,,CPT,Laboratory,HIGH,"ctdna, circulating tumor dna, cell-free dna, cfdna, liquid biopsy"
+Viral Load,,CPT,Laboratory,MEDIUM,"viral load, hiv viral load, hbv dna, hcv rna, pcr viral load, For participants who are HIV-positive, record latest
+CD4 count and HIV viral load"
+ctDNA,,CPT,Laboratory,HIGH,"ctdna, circulating tumor dna, cell-free dna, cfdna, liquid biopsy, ctDNA (plasma)"
 hs-CRP,86141,CPT,Laboratory,LOW,"hs-crp, high-sensitivity crp, cardiac crp"
 EMG,95860,CPT,Neurology,MEDIUM,"emg, needle emg, electromyography"
 MoCA,96127,CPT,Neurology,LOW,"moca, montreal cognitive assessment, cognitive screen"
@@ -231,7 +236,7 @@ Comprehensive Eye Exam (New),92004,CPT,Ophthalmology,MEDIUM,"comprehensive eye e
 Corneal Pachymetry,76514,CPT,Ophthalmology,LOW,"pachymetry, corneal thickness, cct"
 Electroretinography,92273,CPT,Ophthalmology,MEDIUM,"erg, fferg, full-field erg, electroretinogram"
 Fluorescein Angiography,92235,CPT,Ophthalmology,MEDIUM,"fa, ffa, fluorescein angio, angiography, fluorescein angiography"
-Fundoscopy,92250,CPT,Ophthalmology,MEDIUM,"fundoscopy, fundus exam, fundus photography, dilated fundus exam, ophthalmoscopy"
+Fundoscopy,92250,CPT,Ophthalmology,MEDIUM,"fundoscopy, fundus exam, fundus photography, dilated fundus exam, ophthalmoscopy, Ophthalmoscopy with OCT, Ophthalmoscopy with OCTr"
 ICG Angiography,92240,CPT,Ophthalmology,MEDIUM,"icg, icga, icg angio, indocyanine green angiography"
 IOP Measurement,92100,CPT,Ophthalmology,LOW,"iop, intraocular pressure, tonometry, iop measurement"
 Intravitreal Injection,67028,CPT,Ophthalmology,HIGH,"intravitreal injection, ivt, intravitreal, ivt injection"
@@ -239,16 +244,16 @@ OCT Angiography,92242,CPT,Ophthalmology,MEDIUM,"octa, oct-a, oct angiography"
 OCT Scan,92134,CPT,Ophthalmology,MEDIUM,"oct, optical coherence tomography, retinal oct, macular oct"
 Slit Lamp Exam,92012,CPT,Ophthalmology,LOW,"slit lamp, slit lamp examination, slit lamp exam, anterior segment exam"
 Visual Field Testing,92083,CPT,Ophthalmology,MEDIUM,"vf, humphrey vf, perimetry, automated perimetry, hvf, visual field"
-Immunogenicity Sample,,CPT,PK,LOW,"immunogenicity, ada, anti-drug antibody, ada sample, immunogenicity sample, anti-drug antibody sample"
+Immunogenicity Sample,,CPT,PK,LOW,"immunogenicity, ada, anti-drug antibody, ada sample, immunogenicity sample, anti-drug antibody sample, Immunogenicity (ADAs), Immunogenicity (ADAs)l, Collect blood sample for immunogenicity assessmente, Collect blood sample for immunogenicity assessment, Collect blood sample for immunogenicity assessment^e, Collect blood sample for immunogenicity assessmenta"
 PD Sample,,CPT,PK,LOW,"pd sample, pharmacodynamic sample, pd biomarker"
-PK Sample,,CPT,PK,LOW,"pk sample, pharmacokinetic sample, pk blood sample, pk sampling, pk blood draw"
+PK Sample,,CPT,PK,LOW,"pk sample, pharmacokinetic sample, pk blood sample, pk sampling, pk blood draw, PK sample for immunogenicity, PK sample for immunogenicitym, PK sample (serum)"
 PK Sample (Dense),,CPT,PK,MEDIUM,"dense pk, dense pk sampling, dense pharmacokinetic, intensive pk, serial pk"
 PK Sample (Sparse/Trough),,CPT,PK,LOW,"sparse pk, pk trough, trough sample, trough level, ctrough, pre-dose pk, pre-dose sample, trough pk"
 ACR response criteria,,CPT,PRO,LOW,"ACR20, ACR50, ACR70, American College of Rheumatology response criteria, ACR response, rheumatology response criteria"
 ADAS-Cog,,CPT,PRO,LOW,"Alzheimer's Disease Assessment Scale Cognitive, ADAS-Cog score, cognitive assessment ADAS, ADAS cognitive subscale"
 BPI,,CPT,PRO,LOW,"Brief Pain Inventory, BPI score, brief pain inventory short, pain assessment BPI"
 EORTC QLQ-BR23,,CPT,PRO,LOW,"QLQ-BR23, breast cancer quality of life, EORTC breast module, breast cancer QoL"
-EORTC QLQ-C30,,CPT,PRO,LOW,"QLQ-C30, EORTC QoL questionnaire, quality of life QLQ-C30, cancer quality of life, EORTC C30"
+EORTC QLQ-C30,,CPT,PRO,LOW,"QLQ-C30, EORTC QoL questionnaire, quality of life QLQ-C30, cancer quality of life, EORTC C30, EORTC QLQ-C30 and CX24, PGIS, EQ-5Dt, EORTC QLQ-C30 and CX24, PGIS, EQ-5Di"
 EORTC QLQ-CX24,,CPT,PRO,LOW,"QLQ-CX24, cervical cancer quality of life, EORTC cervical module"
 EORTC QLQ-LC13,,CPT,PRO,LOW,"QLQ-LC13, lung cancer quality of life, EORTC lung module, lung cancer QoL"
 EORTC QLQ-OV28,,CPT,PRO,LOW,"QLQ-OV28, ovarian cancer quality of life, EORTC ovarian module"
@@ -270,28 +275,175 @@ PRO-CTCAE,,CPT,PRO,LOW,"Patient-Reported Outcomes CTCAE, PRO-CTCAE, patient-repo
 PROMIS instruments,,CPT,PRO,LOW,"PROMIS, Patient-Reported Outcomes Measurement Information System, PROMIS CAT, PROMIS global health, PROMIS fatigue, PROMIS pain"
 PSQI,,CPT,PRO,LOW,"Pittsburgh Sleep Quality Index, sleep quality index, PSQI score, sleep assessment PSQI"
 Pain Assessment,,CPT,PRO,LOW,"pain assessment, vas, visual analog scale, nrs, numeric rating scale, pain score, pain nrs"
-Quality of Life Questionnaire,,CPT,PRO,LOW,"qol, quality of life, eq-5d, eq5d, sf-36, sf36, whoqol"
+Quality of Life Questionnaire,,CPT,PRO,LOW,"qol, quality of life, eq-5d, eq5d, sf-36, sf36, whoqol, IBDQ, UC-PRO/SS, SF-36, WPAI-UC, and abdominal pain and urgency NRS, EORTC QLQ-C30 and CX24, PGIS, EQ-5D"
 SF-36,,CPT,PRO,LOW,"Short Form 36, SF-36 health survey, SF36, 36-Item Short Form Survey, RAND-36"
 UPDRS,,CPT,PRO,LOW,"Unified Parkinson's Disease Rating Scale, MDS-UPDRS, UPDRS score, Parkinson disease rating scale, MDS UPDRS"
 VAS pain scale,,CPT,PRO,LOW,"Visual Analog Scale, VAS, pain VAS, visual analogue scale pain, 100mm VAS, pain visual analog scale"
 WPAI,,CPT,PRO,LOW,"Work Productivity and Activity Impairment, WPAI questionnaire, work productivity impairment, work activity impairment"
-e-Diary,,CPT,PRO,LOW,"e-diary, ediary, electronic diary, patient diary, daily diary"
+e-Diary,,CPT,PRO,LOW,"e-diary, ediary, electronic diary, patient diary, daily diary, eDiary instructiong, Review of eDiary, eDiary activation for recording solicited adverse reactions (7 days)⁶, eDiary activation for recording solicited adverse reactions (7 days)6, eDiary Weekly prompts for safety follow-up, eDiary Weekly prompts for surveillance for COVID-19, eDiary activation for safety follow-up, eDiary activation for surveillance for COVID-19/Unscheduled Visit, Collect e-diary or assist the participant to delete application, Request the participant return the e-diary or assist the participant to delete the application, Explain participant communication methods (including for e-diary completion), assist the participant with downloading the app, or issue provisioned device, if required, Request the participant return the e-diary device or assist the participant to delete the application"
 Bone Marrow Aspirate,38220,CPT,Procedure,MEDIUM,"bone marrow aspirate, bm aspirate, marrow aspirate"
 Bone Marrow Biopsy,38221,CPT,Procedure,VERY_HIGH,"bone marrow biopsy, bone marrow aspirate, bma, bone marrow aspirate and biopsy"
 Bone Marrow Biopsy and Aspirate,38222,CPT,Procedure,VERY_HIGH,"bone marrow biopsy and aspirate, bm bx and asp, trephine biopsy, bone marrow biopsy"
 Bronchoscopy,31622,CPT,Procedure,VERY_HIGH,"bronchoscopy, bronchial biopsy, bal, bronchoalveolar lavage"
-Endoscopy,43239,CPT,Procedure,VERY_HIGH,"endoscopy, upper endoscopy, colonoscopy, egd, esophagogastroduodenoscopy, flexible sigmoidoscopy"
+Endoscopy,43239,CPT,Procedure,VERY_HIGH,"endoscopy, upper endoscopy, colonoscopy, egd, esophagogastroduodenoscopy, flexible sigmoidoscopy, Flexible proctosigmoidoscopy/ colonoscopy and biopsyw"
 Lumbar Puncture,62270,CPT,Procedure,VERY_HIGH,"lumbar puncture, lp, spinal tap, csf collection, cerebrospinal fluid"
 Skin Punch Biopsy,11104,CPT,Procedure,HIGH,"skin punch biopsy, punch biopsy, 4mm punch, skin biopsy"
 Skin Shave Biopsy,11102,CPT,Procedure,MEDIUM,"shave biopsy, shave bx, tangential biopsy, skin shave"
-Tumor Biopsy,20206,CPT,Procedure,VERY_HIGH,"tumor biopsy, biopsy, tissue biopsy, core biopsy, skin biopsy, punch biopsy, core needle biopsy, fresh biopsy, archival biopsy, tumor tissue collection"
+Tumor Biopsy,20206,CPT,Procedure,VERY_HIGH,"tumor biopsy, biopsy, tissue biopsy, core biopsy, skin biopsy, punch biopsy, core needle biopsy, fresh biopsy, archival biopsy, tumor tissue collection, Flexible proctosigmoidoscopy/ colonoscopy and biopsy, Optional newly acquired tumor biopsy collected upon progression, Optional newly acquired tumor biopsy collected upon progressionv"
 FeNO Measurement,95012,CPT,Respiratory,MEDIUM,"feno, fractional exhaled nitric oxide, exhaled no"
-Spirometry,94010,CPT,Respiratory,MEDIUM,"spirometry, pulmonary function, pft, lung function, pulmonary function test, fev1, fvc"
+Spirometry,94010,CPT,Respiratory,MEDIUM,"spirometry, pulmonary function, pft, lung function, pulmonary function test, fev1, fvc, Pulmonary function testp"
 DLT Assessment,,CPT,Safety,LOW,"dlt, dose limiting toxicity, dlt assessment, dlt evaluation"
 Injection Site Assessment,,CPT,Safety,LOW,"injection site, local reactions, injection site exam, isr, local reaction assessment"
-Post-Dose Observation,,CPT,Safety,LOW,"post-dose observation, 30-minute observation, acute reaction monitoring, post-injection observation, assess acute reactions"
-Reactogenicity Assessment,,CPT,Safety,LOW,"reactogenicity, solicited adverse events, solicited ae, local reactions, systemic reactions, reactogenicity assessment"
+Post-Dose Observation,,CPT,Safety,LOW,"post-dose observation, 30-minute observation, acute reaction monitoring, post-injection observation, assess acute reactions, Assess acute reactions for at least 30 minutes after
+study intervention administration, Assess acute reactions for at least 30 minutes after study intervention administration"
+Reactogenicity Assessment,,CPT,Safety,LOW,"reactogenicity, solicited adverse events, solicited ae, local reactions, systemic reactions, reactogenicity assessment, Review ongoing reactogenicity e-diary symptoms and obtain stop dates, Review reactogenicity e-diary data (daily review is optimal during the active diary period), Provide/ensure the participant has a thermometer (all participants) and measuring device (reactogenicity subset participants only)"
 Dose Modification Assessment,,CPT,Treatment,LOW,"dose modification, dose reduction, dose adjustment, dose delay assessment"
-Study Drug Administration,,CPT,Treatment,MEDIUM,"study drug, ip administration, investigational product, drug administration, dosing, study drug administration, imp administration, study treatment"
-Vaccination,,CPT,Treatment,MEDIUM,"vaccination, vaccine administration, immunization, vaccine dose, dose 1, dose 2, booster"
+Study Drug Administration,,CPT,Treatment,MEDIUM,"study drug, ip administration, investigational product, drug administration, dosing, study drug administration, imp administration, study treatment, Study treatment administration, Study treatment administrationbb, Study injection (including 30-minute post-dosing observation period), Study injection (including 30-minute post-dosing observation period6), Study injection (including 30-minute post-dosing observation period5), Study injection (including 30-minute post-dosing observation period⁵), Administer BNT162b2, Administer study intervention, Administer BNT162b2SA"
+Vaccination,,CPT,Treatment,MEDIUM,"vaccination, vaccine administration, immunization, vaccine dose, dose 1, dose 2, booster, Days Since Most Recent Vaccination, Days Since Most Recent Vaccination (in Part C, if applicable), Confirm use of contraceptives (if appropriate), Review temporary delay criteria, Confirm participant meets local/national recommending criteria or is at least 175 days after Vaccination 2 (Visit 4/Visit 2), Confirm participant originally received BNT162b2 at Dose 1 and Dose 2"
 Vaccine Administration,90471,CPT,Treatment,LOW,"vaccine admin, injection administration, im injection"
+<------------------------------------------------------------------------------------------------------------------------------>,,CPT,Unknown,LOW,
+AE/SAE assessment,,CPT,Unknown,LOW,
+AE/SAE assessmento,,CPT,Unknown,LOW,
+ASSESSMENTS,,CPT,Unknown,LOW,
+As clinically indicated,,CPT,Unknown,LOW,
+"At timepoints consistent with tumor assessments; at 30, 60, and 90 days; and then at initiation of subsequent anticancer therapyb",,CPT,Unknown,LOW,
+Blood for immunologic analysis,,CPT,Unknown,LOW,
+Blood for immunologic analysis4,,CPT,Unknown,LOW,
+Blood for immunologic analysis5,,CPT,Unknown,LOW,
+Blood for immunologic analysis⁴,,CPT,Unknown,LOW,
+Blood sampling for the DNA analysis,,CPT,Unknown,LOW,
+Blood sampling for the DNA analysis^i,,CPT,Unknown,LOW,
+Blood sampling for the DNA analysisⁱ,,CPT,Unknown,LOW,
+Childbearing potential,,CPT,Unknown,LOW,
+Clinical Study Protocol - 4.0,,CPT,Unknown,LOW,
+Clinical chemistry,,CPT,Unknown,LOW,
+Clinical chemistryg,,CPT,Unknown,LOW,
+Concomitant AED,,CPT,Unknown,LOW,
+Concomitant non-AED,,CPT,Unknown,LOW,
+Confirm participant meets inclusion and exclusion criteria,,CPT,Unknown,LOW,
+Confirm participant's request to be unblinded or not to be unblinded,,CPT,Unknown,LOW,
+Confirm participant's request to be unblinded or not to be unblinded1,,CPT,Unknown,LOW,
+Confirm participant's request to be unblinded or not to be unblinded¹,,CPT,Unknown,LOW,
+"Continue with original schedules of events, as applicable",,CPT,Unknown,LOW,
+"Continue with original schedules of events, as applicable (Table 16, Table 17, Table 18, and Table 19)",,CPT,Unknown,LOW,
+Counselling the importance of public health measures,,CPT,Unknown,LOW,
+Counselling the importance of public health measures2,,CPT,Unknown,LOW,
+Counselling the importance of public health measures²,,CPT,Unknown,LOW,
+DTSQc,,CPT,Unknown,LOW,
+DTSQs,,CPT,Unknown,LOW,
+Daily Timepoint,,CPT,Unknown,LOW,
+Daily record card dispensed,,CPT,Unknown,LOW,
+Daily record card retrieved,,CPT,Unknown,LOW,
+Daily telemedicine visit4,,CPT,Unknown,LOW,
+Day,,CPT,Unknown,LOW,
+"Demography, including baseline characteristics and tobacco use",,CPT,Unknown,LOW,
+Drug dispensation/accountability,,CPT,Unknown,LOW,
+Drug dispensation/accountabilityaa,,CPT,Unknown,LOW,
+Drug dispensing,,CPT,Unknown,LOW,
+Drug return/accountability,,CPT,Unknown,LOW,
+Durvalumab,,CPT,Unknown,LOW,
+Durvalumab/placebo,,CPT,Unknown,LOW,
+"Durvalumab/placebop,q",,CPT,Unknown,LOW,
+ECGe,,CPT,Unknown,LOW,
+Efficacy Assessment,,CPT,Unknown,LOW,
+Evaluation,,CPT,Unknown,LOW,
+Extraintestinal manifestations,,CPT,Unknown,LOW,
+Extraintestinal manifestationso,,CPT,Unknown,LOW,
+FFPE tumor sample,,CPT,Unknown,LOW,
+"FFPE tumor sample (mandatory; a newly acquired sample is preferred if available per site's routine clinical practice; otherwise, archival sample ≤3 months old can be provided)v",,CPT,Unknown,LOW,
+Fasting Visit,,CPT,Unknown,LOW,
+Fasting Visit d,,CPT,Unknown,LOW,
+Follow-up safety,,CPT,Unknown,LOW,
+Follow-up safety2,,CPT,Unknown,LOW,
+Follow-up safety7,,CPT,Unknown,LOW,
+"Follow-up safety9,10",,CPT,Unknown,LOW,
+Follow-up safety²,,CPT,Unknown,LOW,
+Follow-up safety⁵,,CPT,Unknown,LOW,
+Follow-up safety⁷,,CPT,Unknown,LOW,
+Genetics research sample (optional DNA element for long-term storage/future use),,CPT,Unknown,LOW,
+Genetics research sample (optional DNA element for long-term storage/future use) w,,CPT,Unknown,LOW,
+"HPV genotype, if available",,CPT,Unknown,LOW,
+Healthcare resource use (HOSPAD),,CPT,Unknown,LOW,
+Healthcare resource use (HOSPAD)j,,CPT,Unknown,LOW,
+Healthcare resource use (HOSPAD)u,,CPT,Unknown,LOW,
+Hematology,,CPT,Unknown,LOW,
+Hematologyh,,CPT,Unknown,LOW,
+IVRS call,,CPT,Unknown,LOW,
+Laboratory Tests,,CPT,Unknown,LOW,
+Laboratory assessments,,CPT,Unknown,LOW,
+Laboratory tests including hs-CRPu,,CPT,Unknown,LOW,
+MMS,,CPT,Unknown,LOW,
+MMS^h,,CPT,Unknown,LOW,
+Medical procedures,,CPT,Unknown,LOW,
+Modified Supplemental Schedule of Events: Open-Label Days 1-57,,CPT,Unknown,LOW,
+Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)3,,CPT,Unknown,LOW,
+Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)³,,CPT,Unknown,LOW,
+Monitoring,,CPT,Unknown,LOW,
+Month,,CPT,Unknown,LOW,
+Month (M)/Weekly (W) Timepoint,,CPT,Unknown,LOW,
+Neurological examination,,CPT,Unknown,LOW,
+Nonpharmacogenetic samples for storage,,CPT,Unknown,LOW,
+PGA for total Mayo Clinic Score,,CPT,Unknown,LOW,
+PGICj,,CPT,Unknown,LOW,
+PGICt,,CPT,Unknown,LOW,
+PK assessment,,CPT,Unknown,LOW,
+PK assessment^g,,CPT,Unknown,LOW,
+PK assessmentg,,CPT,Unknown,LOW,
+PK assessments,,CPT,Unknown,LOW,
+PK assessmentsx,,CPT,Unknown,LOW,
+Patient follow-up contact/Patient review for safety,,CPT,Unknown,LOW,
+Pharmacogenetics sample,,CPT,Unknown,LOW,
+Pharmacogenetics samplek,,CPT,Unknown,LOW,
+Pharmacokinetics,,CPT,Unknown,LOW,
+Radiation plan collection,,CPT,Unknown,LOW,
+Recording of seizures,,CPT,Unknown,LOW,
+Recording of unsolicited AEs10,,CPT,Unknown,LOW,
+Respiratory illness sample5,,CPT,Unknown,LOW,
+Saliva sample,,CPT,Unknown,LOW,
+SoC cisplatin chemotherapy,,CPT,Unknown,LOW,
+SoC radiation therapy,,CPT,Unknown,LOW,
+Stool frequency and rectal bleeding subscore,,CPT,Unknown,LOW,
+Stool frequency and rectal bleeding subscore^i,,CPT,Unknown,LOW,
+Stool sample for microbiome,,CPT,Unknown,LOW,
+Stool sample/fecal calprotectinv,,CPT,Unknown,LOW,
+Study Visit,,CPT,Unknown,LOW,
+Study Visit Day,,CPT,Unknown,LOW,
+Study Visit Day / Assessment,,CPT,Unknown,LOW,
+Subject identification card dispensing,,CPT,Unknown,LOW,
+Subsequent anticancer therapy,,CPT,Unknown,LOW,
+"Subsequent anticancer therapyc,d",,CPT,Unknown,LOW,
+Supplemental Schedule of Events: Open-Label Days 1-57,,CPT,Unknown,LOW,
+Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)c,,CPT,Unknown,LOW,
+Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)ᶜ,,CPT,Unknown,LOW,
+Surveillance for COVID-19/Unscheduled Visit4,,CPT,Unknown,LOW,
+Surveillance for COVID-19/Unscheduled Visit6,,CPT,Unknown,LOW,
+Surveillance for COVID-19/Unscheduled Visit7,,CPT,Unknown,LOW,
+Surveillance for COVID-19/Unscheduled Visit³,,CPT,Unknown,LOW,
+Symptom-directed physical examination1,,CPT,Unknown,LOW,
+Symptom-directed physical examination¹,,CPT,Unknown,LOW,
+TBNK,,CPT,Unknown,LOW,
+Tuberculosis questionnaire,,CPT,Unknown,LOW,
+Tuberculosis questionnairee,,CPT,Unknown,LOW,
+Tuberculosis test,,CPT,Unknown,LOW,
+Tuberculosis teste,,CPT,Unknown,LOW,
+Type of Visit,,CPT,Unknown,LOW,
+Unscheduled Visit,,CPT,Unknown,LOW,
+Verification inclusion/ exclusion criteria,,CPT,Unknown,LOW,
+Visit,,CPT,Unknown,LOW,
+Visit Description,,CPT,Unknown,LOW,
+Visit Number,,CPT,Unknown,LOW,
+Visit Window (days),,CPT,Unknown,LOW,
+Week,,CPT,Unknown,LOW,
+Week of Treatment,,CPT,Unknown,LOW,
+Whole blood for gene expression (PAXgene RNA tubes),,CPT,Unknown,LOW,
+Whole blood for gene expression (PaxGene-RNA tubes),,CPT,Unknown,LOW,
+Window Allowance (Days),,CPT,Unknown,LOW,
+World Health Organization.,,CPT,Unknown,LOW,
+X at Day 30,,CPT,Unknown,LOW,
+"X at Day 30, X at Month 2",,CPT,Unknown,LOW,
+"X at Day 30, X at Month 2, X at Month 3",,CPT,Unknown,LOW,
+"X at Day 30, X at Month 2, X at Month 6",,CPT,Unknown,LOW,
+X at Day 30; As clinically indicated,,CPT,Unknown,LOW,
+X at Month 3,,CPT,Unknown,LOW,
+"X at Month 3, X at Month 6, X at Month 9, X at Month 12, X at Month 15, X at 21 months and every 6 months",,CPT,Unknown,LOW,
+"X at Month 3, Xh at Month 6",,CPT,Unknown,LOW,

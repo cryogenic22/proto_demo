@@ -792,6 +792,109 @@ async def get_procedures_library():
     ]
 
 
+@app.get("/api/procedures/library/stats")
+async def get_procedure_stats():
+    """Return procedure library statistics."""
+    from src.domain.vocabulary import get_procedure_vocab
+    vocab = get_procedure_vocab()
+    return vocab.get_stats()
+
+
+@app.post("/api/procedures/library/import")
+async def import_procedures_csv(file: UploadFile = File(...)):
+    """Import procedures from a CSV file.
+
+    Expected CSV format (header row required):
+    canonical_name,cpt_code,code_system,category,cost_tier,aliases
+
+    Existing procedures are updated, new ones are added.
+    """
+    from src.domain.vocabulary import get_procedure_vocab
+    from src.domain.vocabulary.procedure_vocab import ProcedureEntry
+    import csv
+    from io import StringIO
+
+    content = (await file.read()).decode("utf-8")
+    reader = csv.DictReader(StringIO(content))
+
+    vocab = get_procedure_vocab()
+    added = 0
+    updated = 0
+
+    for row in reader:
+        name = (row.get("canonical_name") or "").strip()
+        if not name:
+            continue
+
+        existing = vocab.lookup(name)
+        if existing:
+            # Update fields if provided
+            if row.get("cpt_code"):
+                existing.cpt_code = row["cpt_code"].strip()
+            if row.get("category"):
+                existing.category = row["category"].strip()
+            if row.get("cost_tier"):
+                existing.cost_tier = row["cost_tier"].strip()
+            if row.get("aliases"):
+                new_aliases = [
+                    a.strip() for a in row["aliases"].split(",") if a.strip()
+                ]
+                for alias in new_aliases:
+                    if alias.lower() not in [
+                        a.lower() for a in existing.aliases
+                    ]:
+                        existing.aliases.append(alias)
+            updated += 1
+        else:
+            aliases = []
+            if row.get("aliases"):
+                aliases = [
+                    a.strip() for a in row["aliases"].split(",") if a.strip()
+                ]
+            entry = ProcedureEntry(
+                canonical_name=name,
+                cpt_code=(row.get("cpt_code") or "").strip(),
+                code_system=(row.get("code_system") or "CPT").strip(),
+                category=(row.get("category") or "Unknown").strip(),
+                cost_tier=(row.get("cost_tier") or "LOW").strip(),
+                aliases=aliases,
+            )
+            vocab.add_procedure(entry)
+            added += 1
+
+    vocab._save()
+    return {
+        "added": added,
+        "updated": updated,
+        "total": len(vocab.list_all()),
+    }
+
+
+@app.get("/api/procedures/library/export")
+async def export_procedures_csv():
+    """Export the full procedure library as CSV."""
+    from fastapi.responses import Response
+    from src.domain.vocabulary import get_procedure_vocab
+
+    vocab = get_procedure_vocab()
+    lines = ["canonical_name,cpt_code,code_system,category,cost_tier,aliases"]
+    for entry in vocab.list_all():
+        aliases = ", ".join(entry.aliases)
+        lines.append(
+            f'"{entry.canonical_name}","{entry.cpt_code}",'
+            f'"{entry.code_system}","{entry.category}",'
+            f'"{entry.cost_tier}","{aliases}"'
+        )
+
+    return Response(
+        content="\n".join(lines),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": 'attachment; filename="procedure_library.csv"'
+        },
+    )
+
+
 @app.get("/api/protocols/{protocol_id}/budget/export")
 async def export_budget_xlsx(protocol_id: str):
     """Export site budget as a formatted XLSX file."""
