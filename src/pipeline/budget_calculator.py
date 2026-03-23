@@ -143,6 +143,11 @@ def _extract_budget_lines(table: ExtractedTable) -> list[BudgetLine]:
 
     # For each procedure row, count visits where it's required
     for row_num, proc_name in sorted(row_headers.items()):
+        # Skip non-procedure rows (labels, instructions, etc.)
+        if normalizer.is_not_procedure(proc_name):
+            logger.debug(f"Skipping non-procedure: '{proc_name}'")
+            continue
+
         cells_in_row = row_cells.get(row_num, [])
 
         # Find visits with markers (X, checkmark, text indicators)

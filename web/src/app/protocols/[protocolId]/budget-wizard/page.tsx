@@ -501,7 +501,7 @@ function Step2CostConfig({
                   </td>
                   <td className="px-3 py-2"><Badge variant="neutral">{bl.category}</Badge></td>
                   <td className="px-3 py-2 text-center">
-                    <span className="text-[10px] text-neutral-500" title={(bl.visits_required || []).join(", ")}>
+                    <span className="text-[10px] text-neutral-500 cursor-help underline decoration-dotted" title={`${(bl.visits_required || []).length} visits where X mark detected:\n${(bl.visits_required || []).join(", ")}\n\nCalculation: ${(bl.visits_required || []).length} occurrences × ${formatCurrency(bl.estimated_unit_cost)} = ${formatCurrency(bl.estimated_unit_cost * bl.total_occurrences)}`}>
                       {(bl.visits_required || []).length} visits
                     </span>
                   </td>

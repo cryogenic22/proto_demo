@@ -154,9 +154,39 @@ class ProcedureNormalizer:
 
         return vocabulary
 
+    # Row labels that are NOT clinical procedures — exclude from budget
+    NOT_PROCEDURES = {
+        "visit number", "daily timepoint", "assessments", "study day",
+        "study visit", "visit", "timepoint", "window",
+        "continue with original schedules",
+        "counselling the importance",
+        "confirm participant meets inclusion",
+        "confirm participant's request",
+        "childbearing potential",
+        "protocol deviations",
+        "unscheduled visit",
+        "end of study",
+        "early termination",
+        "screening failure",
+    }
+
+    def is_not_procedure(self, raw_name: str) -> bool:
+        """Check if a raw name is a non-procedure SoA label."""
+        key = raw_name.strip().lower()
+        if len(key) < 3:
+            return True
+        return any(excl in key for excl in self.NOT_PROCEDURES)
+
     def normalize(self, raw_name: str) -> NormalizedProcedure:
         """Normalize a single procedure name. Deterministic."""
-        cleaned = raw_name.strip()
+        # Strip trailing footnote markers — only standalone superscript chars
+        # e.g., "Physical examination²" → "Physical examination"
+        # e.g., "ECGe" → "ECG" (but careful not to strip real words)
+        cleaned = re.sub(r'[²³⁴⁵⁶⁷⁸⁹¹⁰]+$', '', raw_name.strip()).strip()
+        # Strip trailing digit-only footnote refs like "Blood analysis5"
+        cleaned = re.sub(r'(\w)(\d)$', r'\1', cleaned)
+        if not cleaned:
+            cleaned = raw_name.strip()
         lookup_key = cleaned.lower()
 
         # 1. Exact match

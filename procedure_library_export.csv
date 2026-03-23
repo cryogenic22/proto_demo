@@ -1,0 +1,205 @@
+canonical_name,cpt_code,code_system,category,cost_tier,used_in_protocols,protocol_ids,raw_names_from_protocols,vocabulary_aliases,has_cpt,needs_attention
+<------------------------------------------------------------------------------------------------------------------------------>,,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+AE/SAE assessment,,CPT,Unknown,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+AE/SAE assessmento,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+ASSESSMENTS,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY; LIKELY_NOT_PROCEDURE
+Adverse Event Assessment,,CPT,General,LOW,6,p01_brivaracetam; p08; p14; p_14_690eb522; pfizer_bnt162; prot_0001_1_3a3bae33,"Adverse event assessment; Collect AEs and SAEs as appropriate; Collect AEs and SAEs as appropriateb; Collect AEs and SAEs as appropriated; Collection of COVID-19–related clinical and laboratory
+information (including local diagnosis)","adverse events, ae, aes, ae assessment, adverse event assessment, adverse event review, safety assessment, Recording of AEs, Recording of unsolicited AEs, Safety Assessments, Collection of COVID-19–related clinical and laboratory
+information (including local diagnosis), Collection of COVID-19–related clinical and laboratory information (including local diagnosis), Collect AEs and SAEs as appropriate, Collect AEs and SAEs as appropriateb, Collect AEs and SAEs as appropriated",NO,MISSING_CPT
+As clinically indicated,,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"At timepoints consistent with tumor assessments; at 30, 60, and 90 days; and then at initiation of subsequent anticancer therapyb",,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Biomarker Sample,,CPT,Laboratory,MEDIUM,3,p08; p14; p_14_690eb522,Biomarker Assessment; Biomarkers blood sample; Biomarkers blood sampley,"biomarker, biomarker sample, exploratory biomarker, translational biomarker, Biomarkers blood sample, Biomarkers blood sampley, Biomarker Assessment",NO,MISSING_CPT
+Blood Draw/Phlebotomy,,CPT,Laboratory,LOW,4,p14; p_14_690eb522; pfizer_bnt162; prot_0001_1_3a3bae33,"Blood sample for immunologic assessment of SARS-CoV-2 infection6; Blood sample for potential biomarker analysis5; Collect blood sample for HLA typingc; Collect blood sample for PBMC isolationc; Collect blood sample for immunogenicity
+assessmente","blood draw, blood sample, phlebotomy, venipuncture, blood collection, venous blood draw, Blood sample for immunologic assessment of SARS-CoV-2 infection6, Blood sample for potential biomarker analysis5, Collect blood sample for immunogenicity
+assessmente, Collect blood sample for HLA typingc, Collect blood sample for PBMC isolationc",NO,MISSING_CPT
+Blood for immunologic analysis,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Blood for immunologic analysis4,,CPT,Unknown,LOW,1,p14,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Blood for immunologic analysis5,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Blood for immunologic analysis⁴,,CPT,Unknown,LOW,1,p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Blood sampling for the DNA analysis,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Blood sampling for the DNA analysis^i,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Blood sampling for the DNA analysisⁱ,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Body Weight,,General,General,LOW,3,p01_brivaracetam; p17_durvalumab; p17_durvalumab_bb172274,Weight; Weight and height; Weight and height^d; Weight and heightd,"body weight, weight, body mass, weight measurement, Weight and height, Weight and height^d, Weight and heightd",NO,MISSING_CPT
+C-Reactive Protein,86140,CPT,Laboratory,LOW,1,p08,Laboratory tests including hs-CRP,"crp, c-reactive protein, hs-crp, high-sensitivity crp, Laboratory tests including hs-CRP",YES,
+CD4 Count,86359,CPT,Laboratory,LOW,2,pfizer_bnt162; prot_0001_1_3a3bae33,"For participants who are HIV-positive, record latest CD4 count and HIV viral load","cd4, cd4 count, cd4+ t-cell, cd4 cell count, t-cell subset, For participants who are HIV-positive, record latest CD4 count and HIV viral load",YES,
+Calprotectin,83993,CPT,Laboratory,LOW,1,p08,Stool sample/fecal calprotectin,"calprotectin, fecal calprotectin, stool calprotectin, Stool sample/fecal calprotectin",YES,
+Childbearing potential,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Clinical Study Protocol - 4.0,,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Clinical chemistry,,CPT,Unknown,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Clinical chemistryg,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Columbia Suicide Severity Rating,,CPT,Efficacy,LOW,1,p01_brivaracetam,C-SSRS,"c-ssrs, columbia suicide, cssrs, columbia suicide severity rating scale, suicidality assessment",NO,MISSING_CPT
+Complete Blood Count,85025,CPT,Laboratory,LOW,1,p08,CBC with differential and platelets,"complete blood count, cbc, full blood count, fbc, blood count, cbc with differential, cbc w/diff, CBC with differential and platelets",YES,
+Concomitant AED,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Concomitant Medications Review,,CPT,General,LOW,7,p08; p14; p17_durvalumab; p17_durvalumab_bb172274; p_14_690eb522; pfizer_bnt162; prot_0001_1_3a3bae33,Collect nonstudy vaccine informationd; Collect prohibited medication use; Collect prohibited medication used; Concomitant medications; Concomitant medications and procedures,"concomitant medications, con meds, conmeds, prior/concomitant medications, medications review, prior medications, concomitant medication review, Concomitant medications and procedures, Concomitant medications and proceduresz, Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE⁸, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE⁸, Recording of concomitant medications and non-study vaccinations⁸, Recording of MAAEs, AESIs (Part C), AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE³, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE³, Recording of concomitant medications and non-study vaccinations³, Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE8, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE8, Recording of concomitant medications and non-study vaccinations8, Recording of MAAEs, AESIs, AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE11, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE11, Recording of concomitant medications and non-study vaccinations11, Recording of MAAEs, AESIs (Part C), AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE⁶, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE⁶, Recording of concomitant medications and non-study vaccinations⁶˒⁷, Recording of MAAEs, AESIs (Part C), AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE3, Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE3, Recording of concomitant medications and non-study vaccinations3, Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE, Recording of concomitant medications and non-study vaccinations, Collect prohibited medication use, Collect nonstudy vaccine informationd, Collect prohibited medication used",NO,MISSING_CPT
+Concomitant non-AED,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Confirm participant meets inclusion and exclusion criteria,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Confirm participant's request to be unblinded or not to be unblinded,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Confirm participant's request to be unblinded or not to be unblinded1,,CPT,Unknown,LOW,1,p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Confirm participant's request to be unblinded or not to be unblinded¹,,CPT,Unknown,LOW,1,p14,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"Continue with original schedules of events, as applicable",,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"Continue with original schedules of events, as applicable (Table 16, Table 17, Table 18, and Table 19)",,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Counselling the importance of public health measures,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Counselling the importance of public health measures2,,CPT,Unknown,LOW,1,p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Counselling the importance of public health measures²,,CPT,Unknown,LOW,1,p14,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+DTSQc,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+DTSQs,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Daily Timepoint,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Daily record card dispensed,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Daily record card retrieved,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Daily telemedicine visit4,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Day,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY; LIKELY_NOT_PROCEDURE
+Demographics,,General,General,LOW,2,p01_brivaracetam; p08,Demographic data,"demographics, demographic data, demographic assessment",NO,MISSING_CPT
+"Demography, including baseline characteristics and tobacco use",,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Drug Screen,,CPT,Laboratory,LOW,1,p08,Urine drug screen; Urine drug screens,"drug screen, urine drug screen, uds, drug of abuse screen, toxicology screen, Urine drug screens",NO,MISSING_CPT
+Drug dispensation/accountability,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Drug dispensation/accountabilityaa,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Drug dispensing,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Drug return/accountability,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Durvalumab,,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Durvalumab/placebo,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"Durvalumab/placebop,q",,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+ECGe,,CPT,Unknown,LOW,2,p01_brivaracetam; p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+ECOG Performance Status,,CPT,Efficacy,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,WHO/ECOG performance status; WHO/ECOG performance statusn,"ecog, ecog ps, performance status, WHO/ECOG performance status, WHO/ECOG performance statusn",NO,MISSING_CPT
+EORTC QLQ-C30,,CPT,PRO,LOW,1,p17_durvalumab_bb172274,"EORTC QLQ-C30 and CX24, PGIS, EQ-5Di; EORTC QLQ-C30 and CX24, PGIS, EQ-5Dt","QLQ-C30, EORTC QoL questionnaire, quality of life QLQ-C30, cancer quality of life, EORTC C30, EORTC QLQ-C30 and CX24, PGIS, EQ-5Dt, EORTC QLQ-C30 and CX24, PGIS, EQ-5Di",NO,MISSING_CPT
+EQ-5D,,CPT,PRO,LOW,1,p09,EQ-5D-5L,"EuroQol 5 Dimension, EQ-5D-3L, EQ-5D-5L, EQ5D, EuroQol, EQ-5D questionnaire",NO,MISSING_CPT
+Efficacy Assessment,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"Electrocardiogram, 12-lead",93000,CPT,Cardiac,MEDIUM,2,p01_brivaracetam; p08,"12-lead ECG; 12-lead ECGl,m; ECG; ECG^e","12-lead ecg, ecg (12l), ecg, 12 lead ecg, electrocardiogram, ekg, 12-lead electrocardiogram, standard ecg, resting ecg, single ecg, ECG^e, 12-lead ECGl, m",YES,
+Eligibility Assessment,,General,General,LOW,4,p08; p17_durvalumab_bb172274; pfizer_bnt162; prot_0001_1_3a3bae33,Confirm participant has only received 2 doses of BNT162 as part of the study and not outside the study; Confirm participant originally received placebo; Eligibility criteria; Inclusion/exclusion criteria; Review and consider eligibility,"eligibility assessment, eligibility review, inclusion/exclusion, i/e criteria, eligibility, ie criteria, Inclusion/exclusion criteria, Eligibility criteria, Review and consider eligibility, Confirm participant originally received placebo, Confirm participant has only received 2 doses of BNT162 as part of the study and not outside the study",NO,MISSING_CPT
+Endoscopy,43239,CPT,Procedure,VERY_HIGH,1,p08,Flexible proctosigmoidoscopy/ colonoscopy and biopsyw,"endoscopy, upper endoscopy, colonoscopy, egd, esophagogastroduodenoscopy, flexible sigmoidoscopy, Flexible proctosigmoidoscopy/ colonoscopy and biopsyw",YES,
+Evaluation,,CPT,Unknown,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Extraintestinal manifestations,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Extraintestinal manifestationso,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+FFPE tumor sample,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"FFPE tumor sample (mandatory; a newly acquired sample is preferred if available per site's routine clinical practice; otherwise, archival sample ≤3 months old can be provided)v",,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Fasting Visit,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Fasting Visit d,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Follow-up safety,,CPT,Unknown,LOW,1,p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Follow-up safety2,,CPT,Unknown,LOW,1,p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Follow-up safety7,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"Follow-up safety9,10",,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Follow-up safety²,,CPT,Unknown,LOW,1,p14,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Follow-up safety⁵,,CPT,Unknown,LOW,1,p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Follow-up safety⁷,,CPT,Unknown,LOW,1,p14,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Fundoscopy,92250,CPT,Ophthalmology,MEDIUM,1,p08,Ophthalmoscopy with OCT; Ophthalmoscopy with OCTr,"fundoscopy, fundus exam, fundus photography, dilated fundus exam, ophthalmoscopy, Ophthalmoscopy with OCT, Ophthalmoscopy with OCTr",YES,
+Genetics research sample (optional DNA element for long-term storage/future use),,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Genetics research sample (optional DNA element for long-term storage/future use) w,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"HPV genotype, if available",,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Healthcare resource use (HOSPAD),,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Healthcare resource use (HOSPAD)j,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Healthcare resource use (HOSPAD)u,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Hematology,,CPT,Unknown,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Hematologyh,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Hepatitis Panel,86709,CPT,Laboratory,LOW,2,p08; p17_durvalumab_bb172274,"Hepatitis B and C and HIV; Virology screen (HIV, HBV, HCV); Virology screen (HIV, HBV, HCV)f","hepatitis panel, hep panel, hepatitis b, hepatitis c, hbsag, anti-hcv, hbv, hcv, hepatitis serology, Virology screen (HIV, HBV, HCV), Virology screen (HIV, HBV, HCV)f, Hepatitis B and C and HIV",YES,
+IVRS call,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Immunogenicity Sample,,CPT,PK,LOW,3,p09; pfizer_bnt162; prot_0001_1_3a3bae33,Collect blood sample for immunogenicity assessment; Collect blood sample for immunogenicity assessment^e; Collect blood sample for immunogenicity assessmenta; Collect blood sample for immunogenicity assessmente; Immunogenicity (ADAs),"immunogenicity, ada, anti-drug antibody, ada sample, immunogenicity sample, anti-drug antibody sample, Immunogenicity (ADAs), Immunogenicity (ADAs)l, Collect blood sample for immunogenicity assessmente, Collect blood sample for immunogenicity assessment, Collect blood sample for immunogenicity assessment^e, Collect blood sample for immunogenicity assessmenta",NO,MISSING_CPT
+Immunogenicity sampling,,CPT,Immunology,LOW,4,p14; p17_durvalumab; p17_durvalumab_bb172274; p_14_690eb522,Immunogenicity Assessment; Immunogenicity assessment (ADA sampling to identify ADA responses in patient circulation); Immunogenicity assessment (ADA sampling to identify ADA responses); Immunogenicity assessment (ADA sampling to identify ADA responses^g; Immunogenicity assessment (ADA sampling) to identify ADA responsesg,"immunogenicity sample, immunogenicity assessment, ADA sample, immunogenicity blood draw, immunogenicity specimen, Immunogenicity assessment (ADA sampling) to identify ADA responsesg, Immunogenicity assessment (ADA sampling to identify ADA responses in patient circulation), Immunogenicity assessment (ADA sampling to identify ADA responses), Immunogenicity assessment (ADA sampling to identify ADA responses^g",NO,MISSING_CPT
+Informed Consent,,General,General,LOW,7,p01_brivaracetam; p08; p14; p17_durvalumab_bb172274; p_14_690eb522; pfizer_bnt162; prot_0001_1_3a3bae33,"Confirm signing of ICF, concomitant medications, medical history; Consent: genetic sample and analysis (optional); ICF, demographics, concomitant medications, medical history; Informed consent; Informed consent: study procedures","informed consent, consent, icf, signed consent, written consent, Written Informed Consent, Written Informed Consent for DNA analysis (for subjects from N01358), ICF, demographics, concomitant medications, medical history, Sign revised informed consent form, Confirm signing of ICF, concomitant medications, medical history, Consent: genetic sample and analysis (optional), Informed consent: study procedures, Informed consent: study proceduresb, Obtain informed consent, Obtain informed consent for asymptomatic SARS-CoV-2 infection surveillance",NO,MISSING_CPT
+Laboratory Tests,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Laboratory assessments,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Laboratory tests including hs-CRPu,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+MMS,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY; LIKELY_NOT_PROCEDURE
+MMS^h,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Medical History,,General,General,LOW,1,p01_brivaracetam,Epilepsy history; General medical and procedures history,"medical history, history, med history, past medical history, pmh, Epilepsy history, General medical and procedures history",NO,MISSING_CPT
+Medical procedures,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Modified Supplemental Schedule of Events: Open-Label Days 1-57,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)3,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)³,,CPT,Unknown,LOW,1,p14,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Monitoring,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Month,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Month (M)/Weekly (W) Timepoint,,CPT,Unknown,LOW,1,p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Nasal Swab,87635,CPT,Laboratory,LOW,4,p14; p_14_690eb522; pfizer_bnt162; prot_0001_1_3a3bae33,Nasopharyngeal swab; Nasopharyngeal swab5; Nasopharyngeal swab8; Obtain nasal (midturbinate) swab; Obtain nasal (midturbinate) swab (self-swab at home or by site staff at an in-person visit),"nasal swab, nasal sample, nasal midturbinate, midturbinate swab, nasopharyngeal swab, np swab, nasal specimen, Nasopharyngeal swab5, Nasopharyngeal swab8, Obtain nasal (midturbinate) swab, Obtain nasal (midturbinate) swab(s), Obtain nasal (midturbinate) swab (self-swab at home or by site staff at an in-person visit)",YES,
+Neurological examination,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Nonpharmacogenetic samples for storage,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+PGA for total Mayo Clinic Score,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+PGIC,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,"Patient Global Impression of Change, PGI-C, global impression change, patient global assessment change",NO,MISSING_CPT; UNKNOWN_CATEGORY
+PGICj,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+PGICt,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+PK Sample,,CPT,PK,LOW,2,p09; p17_durvalumab_bb172274,PK sample (serum); PK sample for immunogenicity; PK sample for immunogenicitym,"pk sample, pharmacokinetic sample, pk blood sample, pk sampling, pk blood draw, PK sample for immunogenicity, PK sample for immunogenicitym, PK sample (serum)",NO,MISSING_CPT
+PK assessment,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+PK assessment^g,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+PK assessmentg,,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+PK assessments,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+PK assessmentsx,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+PRO-CTCAE,,CPT,PRO,LOW,1,p17_durvalumab_bb172274,,"Patient-Reported Outcomes CTCAE, PRO-CTCAE, patient-reported adverse events, CTCAE patient reported",NO,MISSING_CPT
+Patient follow-up contact/Patient review for safety,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Pharmacogenetics sample,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Pharmacogenetics samplek,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Pharmacokinetics,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Physical Examination,99213,CPT,General,LOW,6,p01_brivaracetam; p08; p14; p17_durvalumab; p17_durvalumab_bb172274; p_14_690eb522,Physical exam (full); Physical examination; Physical examination (full); Physical examination2; Physical examinationn,"physical exam, physical examination, pe, full physical, complete physical, targeted physical, targeted pe, symptom-directed pe, abbreviated physical, Physical examinationn, Physical examination², Physical examination2, Physical examination (full), Physical exam (full), Targeted physical exam c, Tumor radiological assessments (RECIST 1.1) -AND- Physical exam including a pelvic examination, Tumor radiological assessments (RECIST 1.1)y -AND- Physical exam including a pelvic examination, Tumor radiological assessment (RECIST 1.1) / Physical exam including a pelvic examination, Tumor radiological assessment (RECIST 1.1)k
+-AND-
+Physical exam including a pelvic examination",YES,
+Post-Dose Observation,,CPT,Safety,LOW,2,pfizer_bnt162; prot_0001_1_3a3bae33,"Assess acute reactions for at least 30 minutes after
+study intervention administration; Assess acute reactions for at least 30 minutes after study intervention administration","post-dose observation, 30-minute observation, acute reaction monitoring, post-injection observation, assess acute reactions, Assess acute reactions for at least 30 minutes after
+study intervention administration, Assess acute reactions for at least 30 minutes after study intervention administration",NO,MISSING_CPT
+Pregnancy Test,81025,CPT,Laboratory,LOW,7,p08; p14; p17_durvalumab; p17_durvalumab_bb172274; p_14_690eb522; pfizer_bnt162; prot_0001_1_3a3bae33,Perform urine pregnancy test (if appropriate); Pregnancy test; Pregnancy testa; Pregnancy testing3; Pregnancy testing³,"pregnancy test, serum pregnancy, urine pregnancy, bhcg, b-hcg, hcg, serum hcg, urine hcg, pregnancy test (serum), pregnancy test (urine), Pregnancy testt, Pregnancy testing³, Pregnancy testing3, Pregnancy testa, Pregnancy testk, Perform urine pregnancy test (if appropriate)",YES,
+Quality of Life Questionnaire,,CPT,PRO,LOW,2,p08; p17_durvalumab_bb172274,"EORTC QLQ-C30 and CX24, PGIS, EQ-5D; IBDQ, UC-PRO/SS, SF-36, WPAI-UC, and abdominal pain and urgency NRS","qol, quality of life, eq-5d, eq5d, sf-36, sf36, whoqol, IBDQ, UC-PRO/SS, SF-36, WPAI-UC, and abdominal pain and urgency NRS, EORTC QLQ-C30 and CX24, PGIS, EQ-5D",NO,MISSING_CPT
+Radiation plan collection,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Randomization,,General,General,LOW,5,p08; p14; p_14_690eb522; pfizer_bnt162; prot_0001_1_3a3bae33,Obtain randomization number and study intervention allocation using the IRT system; Obtain the participant's vaccine vial allocation using the IRT system; Obtain vaccine vial allocation via IRT,"randomization, randomisation, treatment assignment, randomize, stratification, Obtain vaccine vial allocation via IRT, Obtain randomization number and study intervention allocation using the IRT system, Obtain the participant's vaccine vial allocation using the IRT system",NO,MISSING_CPT
+Reactogenicity Assessment,,CPT,Safety,LOW,1,prot_0001_1_3a3bae33,Provide/ensure the participant has a thermometer (all participants) and measuring device (reactogenicity subset participants only); Review ongoing reactogenicity e-diary symptoms and obtain stop dates; Review reactogenicity e-diary data (daily review is optimal during the active diary period),"reactogenicity, solicited adverse events, solicited ae, local reactions, systemic reactions, reactogenicity assessment, Review ongoing reactogenicity e-diary symptoms and obtain stop dates, Review reactogenicity e-diary data (daily review is optimal during the active diary period), Provide/ensure the participant has a thermometer (all participants) and measuring device (reactogenicity subset participants only)",NO,MISSING_CPT
+Recording of seizures,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Recording of unsolicited AEs10,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Respiratory illness sample5,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Saliva sample,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+SoC cisplatin chemotherapy,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+SoC radiation therapy,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Spirometry,94010,CPT,Respiratory,MEDIUM,1,p08,Pulmonary function test; Pulmonary function testp,"spirometry, pulmonary function, pft, lung function, pulmonary function test, fev1, fvc, Pulmonary function testp",YES,
+Stool frequency and rectal bleeding subscore,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Stool frequency and rectal bleeding subscore^i,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Stool sample for microbiome,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Stool sample/fecal calprotectinv,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Study Drug Administration,,CPT,Treatment,MEDIUM,6,p08; p14; p17_durvalumab_bb172274; p_14_690eb522; pfizer_bnt162; prot_0001_1_3a3bae33,Administer BNT162b2; Administer BNT162b2SA; Administer study intervention; Dosing; IP administration,"study drug, ip administration, investigational product, drug administration, dosing, study drug administration, imp administration, study treatment, Study treatment administration, Study treatment administrationbb, Study injection (including 30-minute post-dosing observation period), Study injection (including 30-minute post-dosing observation period6), Study injection (including 30-minute post-dosing observation period5), Study injection (including 30-minute post-dosing observation period⁵), Administer BNT162b2, Administer study intervention, Administer BNT162b2SA",NO,MISSING_CPT
+Study Visit,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Study Visit Day,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Study Visit Day / Assessment,,CPT,Unknown,LOW,1,p14,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Subject identification card dispensing,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Subsequent anticancer therapy,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"Subsequent anticancer therapyc,d",,CPT,Unknown,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Supplemental Schedule of Events: Open-Label Days 1-57,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)c,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)ᶜ,,CPT,Unknown,LOW,1,p14,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Surveillance for COVID-19/Unscheduled Visit4,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Surveillance for COVID-19/Unscheduled Visit6,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Surveillance for COVID-19/Unscheduled Visit7,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Surveillance for COVID-19/Unscheduled Visit³,,CPT,Unknown,LOW,1,p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Survival Follow-up,,General,General,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,Survival status; Survival statuse,"survival follow-up, survival status, long-term follow-up, ltfu, Survival statuse",NO,MISSING_CPT
+Symptom-directed physical examination1,,CPT,Unknown,LOW,1,p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Symptom-directed physical examination¹,,CPT,Unknown,LOW,1,p14,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+TBNK,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Telephone Contact,,CPT,General,LOW,1,prot_0001_1_3a3bae33,Contact the participant by telephone,"telephone contact, phone contact, phone call, telephone visit, phone visit, Contact the participant by telephone",NO,MISSING_CPT
+Thyroid Function Tests,84443,CPT,Laboratory,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,TSH (reflex free T3 or free T4); TSH (reflex free T3 or free T4f); TSHi (reflex free T3 or free T4)j,"thyroid function, tft, tfts, tsh, thyroid panel, free t4, ft4, t3, TSH (reflex free T3 or free T4f), TSH (reflex free T3 or free T4), TSHi (reflex free T3 or free T4)j",YES,
+Tuberculosis questionnaire,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Tuberculosis questionnairee,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Tuberculosis test,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Tuberculosis teste,,CPT,Unknown,LOW,1,p08,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Tumor Biopsy,20206,CPT,Procedure,VERY_HIGH,2,p08; p17_durvalumab_bb172274,Flexible proctosigmoidoscopy/ colonoscopy and biopsy; Optional newly acquired tumor biopsy collected upon progression; Optional newly acquired tumor biopsy collected upon progressionv,"tumor biopsy, biopsy, tissue biopsy, core biopsy, skin biopsy, punch biopsy, core needle biopsy, fresh biopsy, archival biopsy, tumor tissue collection, Flexible proctosigmoidoscopy/ colonoscopy and biopsy, Optional newly acquired tumor biopsy collected upon progression, Optional newly acquired tumor biopsy collected upon progressionv",YES,
+Type of Visit,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Unscheduled Visit,,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Urinalysis,81003,CPT,Laboratory,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,,"urinalysis, ua, urine analysis, urine dipstick, urine test",YES,
+Vaccination,,CPT,Treatment,MEDIUM,4,p14; p_14_690eb522; pfizer_bnt162; prot_0001_1_3a3bae33,"Confirm participant meets local/national recommending criteria or is at least 175 days after Vaccination 2 (Visit 4/Visit 2); Confirm participant originally received BNT162b2 at Dose 1 and Dose 2; Confirm use of contraceptives (if appropriate); Days Since Most Recent Vaccination; Days Since Most Recent Vaccination (in Part C, if applicable)","vaccination, vaccine administration, immunization, vaccine dose, dose 1, dose 2, booster, Days Since Most Recent Vaccination, Days Since Most Recent Vaccination (in Part C, if applicable), Confirm use of contraceptives (if appropriate), Review temporary delay criteria, Confirm participant meets local/national recommending criteria or is at least 175 days after Vaccination 2 (Visit 4/Visit 2), Confirm participant originally received BNT162b2 at Dose 1 and Dose 2",NO,MISSING_CPT
+Verification inclusion/ exclusion criteria,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Viral Load,,CPT,Laboratory,MEDIUM,1,pfizer_bnt162,"For participants who are HIV-positive, record latest
+CD4 count and HIV viral load","viral load, hiv viral load, hbv dna, hcv rna, pcr viral load, For participants who are HIV-positive, record latest
+CD4 count and HIV viral load",NO,MISSING_CPT
+Visit,,CPT,Unknown,LOW,1,p01_brivaracetam,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Visit Description,,CPT,Unknown,LOW,2,pfizer_bnt162; prot_0001_1_3a3bae33,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Visit Number,,CPT,Unknown,LOW,3,p14; p_14_690eb522; prot_0001_1_3a3bae33,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Visit Window (Days),,CPT,Unknown,LOW,2,pfizer_bnt162; prot_0001_1_3a3bae33,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Visit Window (days),,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Vital Signs,99000,CPT,General,LOW,3,p08; p17_durvalumab; p17_durvalumab_bb172274,"Vital signs; Vital signs (temperature, respiratory rate, blood pressure, and pulse); Vital signsd; Vital signsj,k","vital signs, vitals, vs, vital sign assessment, vital sign measurement, Vital signsj, k, Vital signs (temperature, respiratory rate, blood pressure, and pulse), Vital signsd",YES,
+Week,,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Week of Treatment,,CPT,Unknown,LOW,1,p09,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Whole blood for gene expression (PAXgene RNA tubes),,CPT,Unknown,LOW,1,p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Whole blood for gene expression (PaxGene-RNA tubes),,CPT,Unknown,LOW,2,p17_durvalumab; p17_durvalumab_bb172274,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+Window Allowance (Days),,CPT,Unknown,LOW,2,p14; p_14_690eb522,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+World Health Organization.,,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+X at Day 30,,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"X at Day 30, X at Month 2",,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"X at Day 30, X at Month 2, X at Month 3",,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"X at Day 30, X at Month 2, X at Month 6",,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+X at Day 30; As clinically indicated,,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+X at Month 3,,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"X at Month 3, X at Month 6, X at Month 9, X at Month 12, X at Month 15, X at 21 months and every 6 months",,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+"X at Month 3, Xh at Month 6",,CPT,Unknown,LOW,1,p17_durvalumab,,,NO,MISSING_CPT; UNKNOWN_CATEGORY
+X-Ray,71046,CPT,Imaging,MEDIUM,1,p08,Chest X-ray; Chest X-rayd,"x-ray, xray, radiograph, chest x-ray, cxr, chest radiograph, Chest X-rayd",YES,
+ctDNA,,CPT,Laboratory,HIGH,2,p17_durvalumab; p17_durvalumab_bb172274,ctDNA (plasma),"ctdna, circulating tumor dna, cell-free dna, cfdna, liquid biopsy, ctDNA (plasma)",NO,MISSING_CPT
+e-Diary,,CPT,PRO,LOW,4,p08; p14; p_14_690eb522; prot_0001_1_3a3bae33,"Collect e-diary or assist the participant to delete application; Explain participant communication methods (including for e-diary completion), assist the participant with downloading the app, or issue provisioned device, if required; Request the participant return the e-diary device or assist the participant to delete the application; Request the participant return the e-diary or assist the participant to delete the application; Review of eDiary","e-diary, ediary, electronic diary, patient diary, daily diary, eDiary instructiong, Review of eDiary, eDiary activation for recording solicited adverse reactions (7 days)⁶, eDiary activation for recording solicited adverse reactions (7 days)6, eDiary Weekly prompts for safety follow-up, eDiary Weekly prompts for surveillance for COVID-19, eDiary activation for safety follow-up, eDiary activation for surveillance for COVID-19/Unscheduled Visit, Collect e-diary or assist the participant to delete application, Request the participant return the e-diary or assist the participant to delete the application, Explain participant communication methods (including for e-diary completion), assist the participant with downloading the app, or issue provisioned device, if required, Request the participant return the e-diary device or assist the participant to delete the application",NO,MISSING_CPT
