@@ -8303,7 +8303,54 @@
       "estimated_cost_tier": "LOW"
     }
   ],
-  "budget_lines": [],
+  "budget_lines": [
+    {
+      "procedure": "Written Informed Consent for DNA analysis (for subjects from N01358)",
+      "canonical_name": "Informed Consent",
+      "cpt_code": "",
+      "category": "Administrative",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Visit column 1"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        68
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Blood sampling for the DNA analysis\u2071",
+      "canonical_name": "Blood Draw/Phlebotomy",
+      "cpt_code": "36415",
+      "category": "Specimen Collection",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Visit column 1"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        68
+      ],
+      "issues": [
+        "Conditional: Blood sampling for the DNA analysis"
+      ],
+      "notes": "Blood sampling for the DNA analysis"
+    }
+  ],
   "quality_summary": {
     "total_tables": 2,
     "total_cells": 367,

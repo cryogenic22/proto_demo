@@ -96,8 +96,13 @@ export default function BudgetWizardPage() {
                 cost_tier: proc.estimated_cost_tier,
                 visits_required: markerCells.map((_: unknown, i: number) => `Visit ${i + 1}`),
                 total_occurrences: Math.max(markerCells.length, 1),
+                firm_occurrences: Math.max(markerCells.length, 1),
+                conditional_occurrences: 0,
+                is_phone_call: false,
                 estimated_unit_cost: COST_MAP[proc.estimated_cost_tier] || 75,
                 avg_confidence: 0.85,
+                source_pages: [],
+                issues: [],
                 notes: "",
                 _edited: false,
               });
@@ -475,11 +480,10 @@ function Step2CostConfig({
                 <th className="px-3 py-2.5 text-left font-semibold text-neutral-600">Procedure</th>
                 <th className="px-3 py-2.5 text-left font-semibold text-neutral-600 w-[100px]">CPT Code</th>
                 <th className="px-3 py-2.5 text-left font-semibold text-neutral-600">Category</th>
-                <th className="px-3 py-2.5 text-center font-semibold text-neutral-600">Visits</th>
-                <th className="px-3 py-2.5 text-center font-semibold text-neutral-600 w-[80px]">Occurrences</th>
+                <th className="px-3 py-2.5 text-center font-semibold text-neutral-600" title="Firm visits + conditional (footnote-dependent)">Visits</th>
                 <th className="px-3 py-2.5 text-right font-semibold text-neutral-600 w-[110px]">Unit Cost</th>
-                <th className="px-3 py-2.5 text-right font-semibold text-neutral-600">Line Total</th>
-                <th className="px-3 py-2.5 text-center font-semibold text-neutral-600">Conf.</th>
+                <th className="px-3 py-2.5 text-right font-semibold text-neutral-600" title="Shows range if conditional visits apply">Line Total</th>
+                <th className="px-3 py-2.5 text-center font-semibold text-neutral-600">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -500,34 +504,62 @@ function Step2CostConfig({
                     />
                   </td>
                   <td className="px-3 py-2"><Badge variant="neutral">{bl.category}</Badge></td>
+                  {/* Visits — firm + conditional breakdown */}
                   <td className="px-3 py-2 text-center">
-                    <span className="text-[10px] text-neutral-500 cursor-help underline decoration-dotted" title={`${(bl.visits_required || []).length} visits where X mark detected:\n${(bl.visits_required || []).join(", ")}\n\nCalculation: ${(bl.visits_required || []).length} occurrences × ${formatCurrency(bl.estimated_unit_cost)} = ${formatCurrency(bl.estimated_unit_cost * bl.total_occurrences)}`}>
-                      {(bl.visits_required || []).length} visits
-                    </span>
+                    <div className="cursor-help" title={`Firm: ${bl.firm_occurrences || bl.total_occurrences} visits (guaranteed)\nConditional: ${bl.conditional_occurrences || 0} visits (footnote-dependent)\n\nVisits: ${(bl.visits_required || []).join(", ")}`}>
+                      <span className="text-xs font-mono text-neutral-800">{bl.firm_occurrences || bl.total_occurrences}</span>
+                      {(bl.conditional_occurrences || 0) > 0 && (
+                        <span className="text-[10px] text-amber-600 ml-0.5" title="Conditional visits — may not occur based on footnotes">
+                          +{bl.conditional_occurrences}?
+                        </span>
+                      )}
+                    </div>
                   </td>
-                  <td className="px-3 py-2 text-center">
-                    <input
-                      type="number"
-                      value={bl.total_occurrences}
-                      onChange={(e) => onUpdate(i, "total_occurrences", e.target.value)}
-                      className="w-16 px-2 py-1 text-xs text-center font-mono border border-neutral-200 rounded bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary"
-                    />
-                  </td>
+                  {/* Unit Cost — with phone call indicator */}
                   <td className="px-3 py-2 text-right">
-                    <input
-                      type="number"
-                      value={bl.estimated_unit_cost}
-                      onChange={(e) => onUpdate(i, "estimated_unit_cost", e.target.value)}
-                      className="w-24 px-2 py-1 text-xs text-right font-mono border border-neutral-200 rounded bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary"
-                    />
+                    <div className="flex items-center gap-1 justify-end">
+                      {bl.is_phone_call && (
+                        <span className="text-[9px] bg-sky-100 text-sky-600 px-1 py-0.5 rounded" title="Phone/remote — lower cost than in-person">
+                          Phone
+                        </span>
+                      )}
+                      <input
+                        type="number"
+                        value={bl.estimated_unit_cost}
+                        onChange={(e) => onUpdate(i, "estimated_unit_cost", e.target.value)}
+                        className="w-20 px-2 py-1 text-xs text-right font-mono border border-neutral-200 rounded bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                      />
+                    </div>
                   </td>
-                  <td className="px-3 py-2 text-right font-mono font-medium text-neutral-800">
-                    {formatCurrency(bl.estimated_unit_cost * bl.total_occurrences)}
+                  {/* Line Total — show range if conditional */}
+                  <td className="px-3 py-2 text-right">
+                    {(bl.conditional_occurrences || 0) > 0 ? (
+                      <div className="cursor-help" title={`Firm: ${formatCurrency(bl.estimated_unit_cost * (bl.firm_occurrences || 0))}\nIf all conditional occur: ${formatCurrency(bl.estimated_unit_cost * bl.total_occurrences)}`}>
+                        <div className="font-mono font-medium text-neutral-800 text-xs">
+                          {formatCurrency(bl.estimated_unit_cost * (bl.firm_occurrences || bl.total_occurrences))}
+                        </div>
+                        <div className="text-[9px] text-amber-600 font-mono">
+                          up to {formatCurrency(bl.estimated_unit_cost * bl.total_occurrences)}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="font-mono font-medium text-neutral-800 text-xs">
+                        {formatCurrency(bl.estimated_unit_cost * bl.total_occurrences)}
+                      </span>
+                    )}
                   </td>
-                  <td className="px-3 py-2 text-center">
-                    <span className={cn("text-[10px] font-medium px-1.5 py-0.5 rounded-full", confidenceColor(bl.avg_confidence))}>
-                      {(bl.avg_confidence * 100).toFixed(0)}%
-                    </span>
+                  {/* Confidence + Issues */}
+                  <td className="px-3 py-2">
+                    <div className="flex items-center gap-1 justify-center">
+                      <span className={cn("text-[10px] font-medium px-1.5 py-0.5 rounded-full", confidenceColor(bl.avg_confidence))}>
+                        {(bl.avg_confidence * 100).toFixed(0)}%
+                      </span>
+                      {(bl.issues || []).length > 0 && (
+                        <span className="text-amber-500 cursor-help text-[10px]" title={(bl.issues || []).join("\n")}>
+                          {(bl.issues || []).length} issues
+                        </span>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

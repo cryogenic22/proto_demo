@@ -15920,7 +15920,343 @@
     }
   ],
   "procedures": [],
-  "budget_lines": [],
+  "budget_lines": [
+    {
+      "procedure": "Collect prohibited medication use",
+      "canonical_name": "Concomitant Medications Review",
+      "cpt_code": "",
+      "category": "Administrative",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "301 / Vax 3a / 150 to 210 Days After Visit 2",
+        "302 / 1-Week Follow-up Visit (After Vax 3) / 6 to 8 Days After Visit 301",
+        "303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301",
+        "304 / 1-Week Follow-up Visit (After Vax 4)b / 6 to 8 Days After Visit 303",
+        "305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303",
+        "306 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 301",
+        "307 / 18-Month Follow-up Visitc / 532 to 560 Days After Visit 301",
+        "Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset"
+      ],
+      "total_occurrences": 8,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 8,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Obtain informed consent",
+      "canonical_name": "Informed Consent",
+      "cpt_code": "",
+      "category": "Administrative",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "301 / Vax 3a / 150 to 210 Days After Visit 2"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Obtain randomization number and study intervention allocation using the IRT system",
+      "canonical_name": "Randomization",
+      "cpt_code": "",
+      "category": "Administrative",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "301 / Vax 3a / 150 to 210 Days After Visit 2"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.8937499999999999,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Perform urine pregnancy test (if appropriate)",
+      "canonical_name": "Pregnancy Test (Urine)",
+      "cpt_code": "81025",
+      "category": "Laboratory",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "301 / Vax 3a / 150 to 210 Days After Visit 2",
+        "303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.8937499999999999,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "Low confidence at: 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301 (50%)",
+        "Conditional: Only for those participants who will receive Dose 4."
+      ],
+      "notes": "Only for those participants who will receive Dose 4."
+    },
+    {
+      "procedure": "Collect e-diary or assist the participant to delete application",
+      "canonical_name": "e-Diary",
+      "cpt_code": "",
+      "category": "PRO",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "307 / 18-Month Follow-up Visitc / 532 to 560 Days After Visit 301"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 0,
+      "conditional_occurrences": 1,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Conditional: If protocol amendment 20 is approved and participants are informed of early study completion, e-diary device return should be arranged by the site."
+      ],
+      "notes": "If protocol amendment 20 is approved and participants are informed of early study completion, e-diary device return should be arranged by the site."
+    },
+    {
+      "procedure": "Assess acute reactions for at least 30 minutes after study intervention administration",
+      "canonical_name": "Post-Dose Observation",
+      "cpt_code": "",
+      "category": "Safety",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "301 / Vax 3a / 150 to 210 Days After Visit 2",
+        "303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.8937499999999999,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "Low confidence at: 303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301 (50%)",
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Conditional: Only for those participants who will receive Dose 4."
+      ],
+      "notes": "Only for those participants who will receive Dose 4."
+    },
+    {
+      "procedure": "Collect AEs and SAEs as appropriate",
+      "canonical_name": "Adverse Event Assessment",
+      "cpt_code": "",
+      "category": "Safety",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301",
+        "301 / Vax 3a / 150 to 210 Days After Visit 2",
+        "306 / 6-Month Follow-up Visit / 175 to 189 Days After Visit 301",
+        "Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset",
+        "305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303",
+        "304 / 1-Week Follow-up Visit (After Vax 4)b / 6 to 8 Days After Visit 303",
+        "302 / 1-Week Follow-up Visit (After Vax 3) / 6 to 8 Days After Visit 301",
+        "307 / 18-Month Follow-up Visitc / 532 to 560 Days After Visit 301"
+      ],
+      "total_occurrences": 8,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 8,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Conditional: Any AEs occurring up to 48 hours after the blood draw must be recorded (see Section 8.3.1)."
+      ],
+      "notes": "Any AEs occurring up to 48 hours after the blood draw must be recorded (see Section 8.3.1)."
+    },
+    {
+      "procedure": "Review ongoing reactogenicity e-diary symptoms and obtain stop dates",
+      "canonical_name": "Reactogenicity Assessment",
+      "cpt_code": "",
+      "category": "Safety",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301",
+        "305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Administer study intervention",
+      "canonical_name": "Administer study intervention",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "301 / Vax 3a / 150 to 210 Days After Visit 2",
+        "303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Administer study intervention' not in vocabulary \u2014 verify mapping",
+        "Conditional: Only for those participants who will receive Dose 4."
+      ],
+      "notes": "Only for those participants who will receive Dose 4."
+    },
+    {
+      "procedure": "Confirm participant originally received BNT162b2 at Dose 1 and Dose 2",
+      "canonical_name": "Confirm participant originally received BNT162b2 at Dose 1 and Dose 2",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "301 / Vax 3a / 150 to 210 Days After Visit 2"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Confirm participant originally' not in vocabulary \u2014 verify mapping"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Confirm use of contraceptives (if appropriate)",
+      "canonical_name": "Confirm use of contraceptives (if appropriate)",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "301 / Vax 3a / 150 to 210 Days After Visit 2",
+        "302 / 1-Week Follow-up Visit (After Vax 3) / 6 to 8 Days After Visit 301",
+        "303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301",
+        "304 / 1-Week Follow-up Visit (After Vax 4)b / 6 to 8 Days After Visit 303",
+        "305 / 1-Month Follow-up Visit (After Vax 4)b / 28 to 35 Days After Visit 303"
+      ],
+      "total_occurrences": 5,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 5,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Confirm use of contraceptives ' not in vocabulary \u2014 verify mapping"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Obtain nasal (midturbinate) swab(s)",
+      "canonical_name": "Obtain nasal (midturbinate) swab(s)",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "301 / Vax 3a / 150 to 210 Days After Visit 2",
+        "303 / 1-Month Follow-up Visit (After Vax 3) / 28 to 35 Days After Visit 301",
+        "Unplanned / Potential COVID-19 Illness Visitd / Optimally Within 3 Days After Potential COVID-19 Illness Onset"
+      ],
+      "total_occurrences": 3,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 3,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        53,
+        54,
+        55
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Obtain nasal (midturbinate) sw' not in vocabulary \u2014 verify mapping",
+        "Conditional: Only for those participants who will receive Dose 4."
+      ],
+      "notes": "Only for those participants who will receive Dose 4."
+    }
+  ],
   "quality_summary": {},
   "knowledge_elements": [],
   "created_at": "2026-03-22T15:19:40.097717+00:00",

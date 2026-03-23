@@ -7254,7 +7254,369 @@
       "estimated_cost_tier": "LOW"
     }
   ],
-  "budget_lines": [],
+  "budget_lines": [
+    {
+      "procedure": "Demographics",
+      "canonical_name": "Demographics Collection",
+      "cpt_code": "",
+      "category": "Administrative",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Screening Period \u221228 to \u22121"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Inclusion/exclusion criteria",
+      "canonical_name": "Eligibility Assessment",
+      "cpt_code": "",
+      "category": "Administrative",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "W0/D1",
+        "Screening Period \u221228 to \u22121"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Informed consent",
+      "canonical_name": "Informed Consent",
+      "cpt_code": "",
+      "category": "Administrative",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Screening Period \u221228 to \u22121"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Randomization",
+      "canonical_name": "Randomization",
+      "cpt_code": "",
+      "category": "Administrative",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "W0/D1"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "PGA for total Mayo Clinic Score",
+      "canonical_name": "Physician Global Assessment (PhGA)",
+      "cpt_code": "",
+      "category": "Clinical Assessment",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "W0/D1",
+        "W12/D85 / Early Termination^a \u00b1 3 Days"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.78125,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Chest X-rayd",
+      "canonical_name": "Chest X-Ray (2 Views)",
+      "cpt_code": "71046",
+      "category": "Imaging",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "\u221228 to \u22121"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "Conditional: Chest X-ray"
+      ],
+      "notes": "Chest X-ray"
+    },
+    {
+      "procedure": "IBDQ, UC-PRO/SS, SF-36, WPAI-UC, and abdominal pain and urgency NRS",
+      "canonical_name": "Numeric Rating Scale for Pain (NRS)",
+      "cpt_code": "",
+      "category": "Neurology",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "W0/D1",
+        "W12/D85 / Early Termination^a \u00b1 3 Days"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "eDiary instructiong",
+      "canonical_name": "e-Diary",
+      "cpt_code": "",
+      "category": "PRO",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Screening Period \u221228 to \u22121"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Conditional: eDiary instruction"
+      ],
+      "notes": "eDiary instruction"
+    },
+    {
+      "procedure": "Adverse event assessment",
+      "canonical_name": "Adverse Event Assessment",
+      "cpt_code": "",
+      "category": "Safety",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "W8/D57 \u00b1 3 Days",
+        "W12/D85 / Early Termination^a \u00b1 3 Days",
+        "W2/D15 \u00b1 3 Days",
+        "Screening Period \u221228 to \u22121",
+        "4-Week Follow-Up Visit \u00b1 3 Days",
+        "2-Week Follow-Up Visit \u00b1 3 Days",
+        "W12/D85 / Early Termination \u00b1 3 Days",
+        "W0/D1",
+        "4-Week Follow-Up Visit^b \u00b1 3 Days",
+        "W4/D29 \u00b1 3 Days",
+        "2-Week Follow-Up Visit^b \u00b1 3 Days"
+      ],
+      "total_occurrences": 8,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.6125,
+      "firm_occurrences": 8,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "Low confidence at: Col 1 (50%), Col 3 (50%), Col 4 (50%), Col 5 (50%), Col 7 (50%)",
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "MMS^h",
+      "canonical_name": "MMS^h",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "W0/D1",
+        "W12/D85 / Early Termination^a \u00b1 3 Days"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.78125,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'MMS^h' not in vocabulary \u2014 verify mapping",
+        "Conditional: MMS"
+      ],
+      "notes": "MMS"
+    },
+    {
+      "procedure": "Stool frequency and rectal bleeding subscore^i",
+      "canonical_name": "Stool frequency and rectal bleeding subscore^i",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "W0/D1",
+        "W2/D15 \u00b1 3 Days",
+        "W4/D29 \u00b1 3 Days",
+        "W8/D57 \u00b1 3 Days",
+        "W12/D85 / Early Termination^a \u00b1 3 Days"
+      ],
+      "total_occurrences": 5,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.78125,
+      "firm_occurrences": 5,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "Low confidence at: Col 3 (50%), Col 4 (50%), Col 5 (50%)",
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Stool frequency and rectal ble' not in vocabulary \u2014 verify mapping",
+        "Conditional: Stool frequency and rectal bleeding subscore"
+      ],
+      "notes": "Stool frequency and rectal bleeding subscore"
+    },
+    {
+      "procedure": "Tuberculosis questionnairee",
+      "canonical_name": "Tuberculosis questionnairee",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "\u221228 to \u22121",
+        "W0/D1",
+        "W2/D15 \u00b1 3 Days",
+        "W4/D29 \u00b1 3 Days",
+        "W8/D57 \u00b1 3 Days",
+        "W12/D85 / Early Termination \u00b1 3 Days",
+        "2-Week Follow-Up Visit \u00b1 3 Days",
+        "4-Week Follow-Up Visit \u00b1 3 Days"
+      ],
+      "total_occurrences": 8,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 8,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Tuberculosis questionnairee' not in vocabulary \u2014 verify mapping",
+        "Conditional: Tuberculosis test and questionnaire"
+      ],
+      "notes": "Tuberculosis test and questionnaire"
+    },
+    {
+      "procedure": "Tuberculosis teste",
+      "canonical_name": "Tuberculosis teste",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "\u221228 to \u22121"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Tuberculosis teste' not in vocabulary \u2014 verify mapping",
+        "Conditional: Tuberculosis test and questionnaire"
+      ],
+      "notes": "Tuberculosis test and questionnaire"
+    },
+    {
+      "procedure": "Virology screen (HIV, HBV, HCV)f",
+      "canonical_name": "Virology screen (HIV, HBV, HCV)f",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "\u221228 to \u22121",
+        "Screening Period \u221228 to \u22121"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.95,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        85
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Virology screen (HIV, HBV, HCV' not in vocabulary \u2014 verify mapping",
+        "Conditional: Virology screen (HIV, HBV, HCV)"
+      ],
+      "notes": "Virology screen (HIV, HBV, HCV)"
+    }
+  ],
   "quality_summary": {
     "total_tables": 2,
     "total_cells": 369,

@@ -11424,7 +11424,475 @@
     }
   ],
   "procedures": [],
-  "budget_lines": [],
+  "budget_lines": [
+    {
+      "procedure": "Survival statuse",
+      "canonical_name": "Survival Follow-up",
+      "cpt_code": "",
+      "category": "Administrative",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Months (\u00b12 week) 3",
+        "Months (\u00b12 week) 6",
+        "Months (\u00b12 week) 9",
+        "Months (\u00b12 week) 12",
+        "Months (\u00b12 week) 15",
+        "21 months and every 6 months (\u00b12 weeks)"
+      ],
+      "total_occurrences": 6,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.947361111111111,
+      "firm_occurrences": 6,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Conditional: Patients may be contacted in the week following data cutoffs to confirm survival status. Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF."
+      ],
+      "notes": "Patients may be contacted in the week following data cutoffs to confirm survival status. Details of any treatment for cervical cancer (including surgery) after the last dose of IP must be recorded in the eCRF."
+    },
+    {
+      "procedure": "WHO/ECOG performance status",
+      "canonical_name": "ECOG Performance Status Assessment",
+      "cpt_code": "",
+      "category": "Clinical Assessments",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2",
+        "Months (\u00b12 week) 3",
+        "Months (\u00b12 week) 6",
+        "Months (\u00b12 week) 9",
+        "Months (\u00b12 week) 12",
+        "Months (\u00b12 week) 15",
+        "21 months and every 6 months (\u00b12 weeks)"
+      ],
+      "total_occurrences": 8,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 0,
+      "conditional_occurrences": 8,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Conditional: WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible."
+      ],
+      "notes": "WHO/ECOG performance status should also be collected at other site visits that the patient attends, if appropriate site staff are available to collect such information. In addition, WHO/ECOG performance status should be provided when information on subsequent anticancer therapy is provided, where possible."
+    },
+    {
+      "procedure": "Immunogenicity assessment (ADA sampling to identify ADA responses^g",
+      "canonical_name": "Anti-Drug Antibody Assessment",
+      "cpt_code": "86235",
+      "category": "Laboratory",
+      "cost_tier": "MEDIUM",
+      "visits_required": [
+        "Months (\u00b12 week) 3",
+        "Months (\u00b12 week) 6"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 350,
+      "avg_confidence": 0.8999999999999999,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "Low confidence at: Col 4 (50%)",
+        "Conditional: PK and immunogenicity samples are collected 90 days (3 months) (\u00b17 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (\u00b17 days) after study treatment ends.; Immunogenicity sample and ctDNA sample should be obtained at a scheduled study tumor assessments visit"
+      ],
+      "notes": "PK and immunogenicity samples are collected 90 days (3 months) (\u00b17 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (\u00b17 days) after study treatment ends.; Immunogenicity sample and ctDNA sample should be obtained at a scheduled study tumor assessments visit"
+    },
+    {
+      "procedure": "TSH (reflex free T3 or free T4f)",
+      "canonical_name": "Thyroid Stimulating Hormone",
+      "cpt_code": "84443",
+      "category": "Laboratory",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2",
+        "Months (\u00b12 week) 3"
+      ],
+      "total_occurrences": 3,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 3,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "Conditional: Free T3 or free T4 will only be measured if TSH is abnormal or if there is clinical suspicion of an AE related to the endocrine system."
+      ],
+      "notes": "Free T3 or free T4 will only be measured if TSH is abnormal or if there is clinical suspicion of an AE related to the endocrine system."
+    },
+    {
+      "procedure": "Urinalysis",
+      "canonical_name": "Urinalysis",
+      "cpt_code": "81003",
+      "category": "Laboratory",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2",
+        "Months (\u00b12 week) 3",
+        "Months (\u00b12 week) 6",
+        "Months (\u00b12 week) 9",
+        "Months (\u00b12 week) 12",
+        "Months (\u00b12 week) 15",
+        "21 months and every 6 months (\u00b12 weeks)"
+      ],
+      "total_occurrences": 8,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 8,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [],
+      "notes": ""
+    },
+    {
+      "procedure": "ctDNA (plasma)",
+      "canonical_name": "Liquid Biopsy / Circulating Tumor DNA (ctDNA)",
+      "cpt_code": "81479",
+      "category": "Molecular and Genomic Testing",
+      "cost_tier": "VERY_HIGH",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2",
+        "Months (\u00b12 week) 6"
+      ],
+      "total_occurrences": 3,
+      "estimated_unit_cost": 3500,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 3,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [],
+      "notes": ""
+    },
+    {
+      "procedure": "Clinical chemistry",
+      "canonical_name": "Comprehensive Metabolic Panel",
+      "cpt_code": "80053",
+      "category": "Oncology-Specific Labs",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2",
+        "Months (\u00b12 week) 3"
+      ],
+      "total_occurrences": 3,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 3,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [],
+      "notes": ""
+    },
+    {
+      "procedure": "EORTC QLQ-C30 and CX24, PGIS, EQ-5Di",
+      "canonical_name": "Patient Global Impression of Severity",
+      "cpt_code": "",
+      "category": "PRO",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Months (\u00b12 week) / Day (\u00b13) / 21 months and every 6 months (\u00b12 weeks)"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.8666666666666666,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Conditional: Will be administered using a site-based, ePRO device. The PRO questionnaires must be administered and completed at the clinic prior to treatment administration performed at the site and ideally before any discussions of health status to avoid biasing the participant's responses to the questions. As feasible, site staff should also"
+      ],
+      "notes": "Will be administered using a site-based, ePRO device. The PRO questionnaires must be administered and completed at the clinic prior to treatment administration performed at the site and ideally before any discussions of health status to avoid biasing the participant's responses to the questions. As feasible, site staff should also"
+    },
+    {
+      "procedure": "Physical examination (full)",
+      "canonical_name": "Physical Examination - Full",
+      "cpt_code": "99214",
+      "category": "Physical Examination",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30 / Months (\u00b12 week) 2, 3, 6, 9, 12, 15 / 21 months and every 6 months (\u00b12 weeks)",
+        "Day (\u00b13) 30"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.8999999999999999,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "Low confidence at: Col 9 (50%)"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Vital signs (temperature, respiratory rate, blood pressure, and pulse)",
+      "canonical_name": "Vital Signs",
+      "cpt_code": "",
+      "category": "Physical Examination",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.85,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Weight",
+      "canonical_name": "Body Weight",
+      "cpt_code": "",
+      "category": "Physical Examination",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2",
+        "Months (\u00b12 week) 3"
+      ],
+      "total_occurrences": 3,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.55,
+      "firm_occurrences": 3,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "Low confidence at: Col 2 (50%), Col 3 (50%), Col 9 (50%)",
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "AE/SAE assessment",
+      "canonical_name": "Serious Adverse Event Reporting",
+      "cpt_code": "",
+      "category": "Safety",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2",
+        "Months (\u00b12 week) 3"
+      ],
+      "total_occurrences": 3,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 3,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Concomitant medications",
+      "canonical_name": "Concomitant medications",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2",
+        "Months (\u00b12 week) 3"
+      ],
+      "total_occurrences": 3,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 3,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Concomitant medications' not in vocabulary \u2014 verify mapping"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Evaluation",
+      "canonical_name": "Evaluation",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "21 months and every 6 months (\u00b12 weeks)"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.5,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "Low confidence at: Col 1 (50%), Col 2 (50%), Col 3 (50%), Col 4 (50%), Col 5 (50%)",
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Evaluation' not in vocabulary \u2014 verify mapping"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "Hematology",
+      "canonical_name": "Hematology",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2",
+        "Months (\u00b12 week) 3"
+      ],
+      "total_occurrences": 3,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 3,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Hematology' not in vocabulary \u2014 verify mapping"
+      ],
+      "notes": ""
+    },
+    {
+      "procedure": "PK assessment^g",
+      "canonical_name": "PK assessment^g",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Months (\u00b12 week) 3"
+      ],
+      "total_occurrences": 1,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'PK assessment^g' not in vocabulary \u2014 verify mapping",
+        "Conditional: PK and immunogenicity samples are collected 90 days (3 months) (\u00b17 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (\u00b17 days) after study treatment ends."
+      ],
+      "notes": "PK and immunogenicity samples are collected 90 days (3 months) (\u00b17 days) after study treatment ends. In addition, a final immunogenicity sample is taken 6 months (\u00b17 days) after study treatment ends."
+    },
+    {
+      "procedure": "Whole blood for gene expression (PaxGene-RNA tubes)",
+      "canonical_name": "Whole blood for gene expression (PaxGene-RNA tubes)",
+      "cpt_code": "",
+      "category": "Unknown",
+      "cost_tier": "LOW",
+      "visits_required": [
+        "Day (\u00b13) 30",
+        "Months (\u00b12 week) 2"
+      ],
+      "total_occurrences": 2,
+      "estimated_unit_cost": 75,
+      "avg_confidence": 0.9499999999999998,
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "source_pages": [
+        21,
+        22,
+        23
+      ],
+      "issues": [
+        "No CPT code mapped \u2014 needs manual assignment",
+        "Procedure 'Whole blood for gene expressio' not in vocabulary \u2014 verify mapping"
+      ],
+      "notes": ""
+    }
+  ],
   "quality_summary": {},
   "knowledge_elements": [],
   "created_at": "2026-03-22T14:50:37.521599+00:00",

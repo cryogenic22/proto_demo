@@ -281,8 +281,13 @@ export interface BudgetLine {
   cost_tier: string;
   visits_required: string[];
   total_occurrences: number;
+  firm_occurrences: number;
+  conditional_occurrences: number;
+  is_phone_call: boolean;
   estimated_unit_cost: number;
   avg_confidence: number;
+  source_pages: number[];
+  issues: string[];
   notes: string;
 }
 

@@ -2275,7 +2275,12 @@
       "total_occurrences": 4,
       "estimated_unit_cost": 75,
       "avg_confidence": 0.95,
-      "notes": ""
+      "notes": "",
+      "firm_occurrences": 4,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "issues": [],
+      "source_pages": []
     },
     {
       "procedure": "Vital Signs",
@@ -2296,7 +2301,12 @@
       "total_occurrences": 8,
       "estimated_unit_cost": 75,
       "avg_confidence": 0.97,
-      "notes": ""
+      "notes": "",
+      "firm_occurrences": 8,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "issues": [],
+      "source_pages": []
     },
     {
       "procedure": "12-Lead ECG",
@@ -2310,7 +2320,12 @@
       "total_occurrences": 1,
       "estimated_unit_cost": 350,
       "avg_confidence": 0.92,
-      "notes": "Phase 1 only"
+      "notes": "Phase 1 only",
+      "firm_occurrences": 1,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "issues": [],
+      "source_pages": []
     },
     {
       "procedure": "Blood draw",
@@ -2327,7 +2342,12 @@
       "total_occurrences": 4,
       "estimated_unit_cost": 75,
       "avg_confidence": 0.96,
-      "notes": ""
+      "notes": "",
+      "firm_occurrences": 4,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "issues": [],
+      "source_pages": []
     },
     {
       "procedure": "Vaccine Administration",
@@ -2342,7 +2362,12 @@
       "total_occurrences": 2,
       "estimated_unit_cost": 75,
       "avg_confidence": 0.98,
-      "notes": "Two doses: Day 1 and Day 21"
+      "notes": "Two doses: Day 1 and Day 21",
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "issues": [],
+      "source_pages": []
     },
     {
       "procedure": "SARS-CoV-2 NAAT",
@@ -2357,7 +2382,12 @@
       "total_occurrences": 2,
       "estimated_unit_cost": 350,
       "avg_confidence": 0.94,
-      "notes": "Nasal swab before each vaccination"
+      "notes": "Nasal swab before each vaccination",
+      "firm_occurrences": 2,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "issues": [],
+      "source_pages": []
     },
     {
       "procedure": "Serology Panel",
@@ -2374,7 +2404,12 @@
       "total_occurrences": 4,
       "estimated_unit_cost": 350,
       "avg_confidence": 0.91,
-      "notes": ""
+      "notes": "",
+      "firm_occurrences": 4,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "issues": [],
+      "source_pages": []
     },
     {
       "procedure": "Adverse Event Collection",
@@ -2394,7 +2429,12 @@
       "total_occurrences": 7,
       "estimated_unit_cost": 75,
       "avg_confidence": 0.99,
-      "notes": ""
+      "notes": "",
+      "firm_occurrences": 7,
+      "conditional_occurrences": 0,
+      "is_phone_call": false,
+      "issues": [],
+      "source_pages": []
     }
   ],
   "quality_summary": {
