@@ -1,0 +1,103 @@
+raw_name,normalized_to,cpt_code,category,count,protocols
+Biomarker Assessment,Biomarker Assessment,,Unknown,2,p14; p_14_690eb522
+Follow-up safety7,Follow-up safety7,,Unknown,2,p14; p_14_690eb522
+"Follow-up safety9,10","Follow-up safety9,10",,Unknown,2,p14; p_14_690eb522
+Modified Supplemental Schedule of Events: Open-Label Days 1-57,Modified Supplemental Schedule of Events: Open-Label Days 1-57,,Unknown,2,p14; p_14_690eb522
+Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)3,Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)3,,Unknown,2,p14; p_14_690eb522
+Obtain nasal (midturbinate) swab,Obtain nasal (midturbinate) swab,,Unknown,2,pfizer_bnt162; prot_0001_1_3a3bae33
+Saliva sample,Saliva sample,,Unknown,2,p14; p_14_690eb522
+"Subsequent anticancer therapyc,d","Subsequent anticancer therapyc,d",,Unknown,2,p17_durvalumab; p17_durvalumab_bb172274
+Supplemental Schedule of Events: Open-Label Days 1-57,Supplemental Schedule of Events: Open-Label Days 1-57,,Unknown,2,p14; p_14_690eb522
+Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)c,Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)c,,Unknown,2,p14; p_14_690eb522
+Whole blood for gene expression (PaxGene-RNA tubes),Whole blood for gene expression (PaxGene-RNA tubes),,Unknown,2,p17_durvalumab; p17_durvalumab_bb172274
+<------------------------------------------------------------------------------------------------------------------------------>,<------------------------------------------------------------------------------------------------------------------------------>,,Unknown,1,p17_durvalumab
+As clinically indicated,As clinically indicated,,Unknown,1,p17_durvalumab
+Biomarkers blood sampley,Biomarkers blood sampley,,Unknown,1,p08
+Clinical Study Protocol - 4.0,Clinical Study Protocol - 4.0,,Unknown,1,p17_durvalumab
+Confirm participant originally received BNT162b2 at Dose 1 and Dose 2,Confirm participant originally received BNT162b2 at Dose 1 and Dose 2,,Unknown,1,prot_0001_1_3a3bae33
+Consent: genetic sample and analysis (optional),Consent: genetic sample and analysis (optional),,Unknown,1,p17_durvalumab_bb172274
+DTSQc,DTSQc,,Unknown,1,p09
+DTSQs,DTSQs,,Unknown,1,p09
+Day,Day,,Unknown,1,p17_durvalumab_bb172274
+Drug dispensation/accountability,Drug dispensation/accountability,,Unknown,1,p08
+Drug dispensation/accountabilityaa,Drug dispensation/accountabilityaa,,Unknown,1,p08
+Durvalumab,Durvalumab,,Unknown,1,p17_durvalumab
+Durvalumab/placebo,Durvalumab/placebo,,Unknown,1,p17_durvalumab_bb172274
+"Durvalumab/placebop,q","Durvalumab/placebop,q",,Unknown,1,p17_durvalumab_bb172274
+Epilepsy history,Epilepsy history,,Unknown,1,p01_brivaracetam
+Extraintestinal manifestations,Extraintestinal manifestations,,Unknown,1,p08
+Extraintestinal manifestationso,Extraintestinal manifestationso,,Unknown,1,p08
+FFPE tumor sample,FFPE tumor sample,,Unknown,1,p17_durvalumab_bb172274
+"FFPE tumor sample (mandatory; a newly acquired sample is preferred if available per site's routine clinical practice; otherwise, archival sample ≤3 months old can be provided)v","FFPE tumor sample (mandatory; a newly acquired sample is preferred if available per site's routine clinical practice; otherwise, archival sample ≤3 months old can be provided)v",,Unknown,1,p17_durvalumab_bb172274
+Follow-up safety,Follow-up safety,,Unknown,1,p_14_690eb522
+Follow-up safety2,Follow-up safety2,,Unknown,1,p_14_690eb522
+Follow-up safety²,Follow-up safety,,Unknown,1,p14
+Follow-up safety⁵,Follow-up safety,,Unknown,1,p_14_690eb522
+Follow-up safety⁷,Follow-up safety,,Unknown,1,p14
+General medical and procedures history,General medical and procedures history,,Unknown,1,p01_brivaracetam
+Genetics research sample (optional DNA element for long-term storage/future use),Genetics research sample (optional DNA element for long-term storage/future use),,Unknown,1,p17_durvalumab_bb172274
+Genetics research sample (optional DNA element for long-term storage/future use) w,Genetics research sample (optional DNA element for long-term storage/future use) w,,Unknown,1,p17_durvalumab_bb172274
+Healthcare resource use (HOSPAD),Healthcare resource use (HOSPAD),,Unknown,1,p17_durvalumab_bb172274
+Healthcare resource use (HOSPAD)j,Healthcare resource use (HOSPAD)j,,Unknown,1,p17_durvalumab_bb172274
+Healthcare resource use (HOSPAD)u,Healthcare resource use (HOSPAD)u,,Unknown,1,p17_durvalumab_bb172274
+Hepatitis B and C and HIV,Hepatitis B and C and HIV,,Unknown,1,p17_durvalumab_bb172274
+Laboratory Tests,Laboratory Tests,,Unknown,1,p09
+Laboratory tests including hs-CRPu,Laboratory tests including hs-CRPu,,Unknown,1,p08
+MMS,MMS,,Unknown,1,p08
+MMS^h,MMS^h,,Unknown,1,p08
+Medical procedures,Medical procedures,,Unknown,1,p01_brivaracetam
+Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)³,Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22),,Unknown,1,p14
+Monitoring,Monitoring,,Unknown,1,p17_durvalumab_bb172274
+Month,Month,,Unknown,1,p01_brivaracetam
+Nonpharmacogenetic samples for storage,Nonpharmacogenetic samples for storage,,Unknown,1,p09
+Obtain nasal (midturbinate) swab(s),Obtain nasal (midturbinate) swab(s),,Unknown,1,prot_0001_1_3a3bae33
+Ophthalmoscopy with OCTr,Ophthalmoscopy with OCTr,,Unknown,1,p08
+Optional newly acquired tumor biopsy collected upon progression,Optional newly acquired tumor biopsy collected upon progression,,Unknown,1,p17_durvalumab_bb172274
+Optional newly acquired tumor biopsy collected upon progressionv,Optional newly acquired tumor biopsy collected upon progressionv,,Unknown,1,p17_durvalumab_bb172274
+PGICj,PGICj,,Unknown,1,p17_durvalumab_bb172274
+PGICt,PGICt,,Unknown,1,p17_durvalumab_bb172274
+PK assessment,PK assessment,,Unknown,1,p17_durvalumab_bb172274
+PK assessment^g,PK assessment^g,,Unknown,1,p17_durvalumab_bb172274
+PK assessmentg,PK assessmentg,,Unknown,1,p17_durvalumab
+PRO-CTCAE,PRO-CTCAE,,Unknown,1,p17_durvalumab_bb172274
+Patient follow-up contact/Patient review for safety,Patient follow-up contact/Patient review for safety,,Unknown,1,p17_durvalumab_bb172274
+Pharmacogenetics sample,Pharmacogenetics sample,,Unknown,1,p09
+Pharmacogenetics samplek,Pharmacogenetics samplek,,Unknown,1,p09
+Pulmonary function test,Pulmonary function test,,Unknown,1,p08
+Pulmonary function testp,Pulmonary function testp,,Unknown,1,p08
+Radiation plan collection,Radiation plan collection,,Unknown,1,p17_durvalumab_bb172274
+Recording of AEs,Recording of AEs,,Unknown,1,p01_brivaracetam
+Recording of seizures,Recording of seizures,,Unknown,1,p01_brivaracetam
+SoC cisplatin chemotherapy,SoC cisplatin chemotherapy,,Unknown,1,p17_durvalumab_bb172274
+SoC radiation therapy,SoC radiation therapy,,Unknown,1,p17_durvalumab_bb172274
+Stool frequency and rectal bleeding subscore,Stool frequency and rectal bleeding subscore,,Unknown,1,p08
+Stool frequency and rectal bleeding subscore^i,Stool frequency and rectal bleeding subscore^i,,Unknown,1,p08
+Stool sample for microbiome,Stool sample for microbiome,,Unknown,1,p08
+Stool sample/fecal calprotectinv,Stool sample/fecal calprotectinv,,Unknown,1,p08
+Study treatment administration,Study treatment administration,,Unknown,1,p08
+Study treatment administrationbb,Study treatment administrationbb,,Unknown,1,p08
+Subject identification card dispensing,Subject identification card dispensing,,Unknown,1,p01_brivaracetam
+Subsequent anticancer therapy,Subsequent anticancer therapy,,Unknown,1,p17_durvalumab_bb172274
+Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)ᶜ,Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)ᶜ,,Unknown,1,p14
+TBNK,TBNK,,Unknown,1,p08
+Tuberculosis questionnaire,Tuberculosis questionnaire,,Unknown,1,p08
+Tuberculosis questionnairee,Tuberculosis questionnairee,,Unknown,1,p08
+Tuberculosis test,Tuberculosis test,,Unknown,1,p08
+Tuberculosis teste,Tuberculosis teste,,Unknown,1,p08
+Urine drug screen,Urine drug screen,,Unknown,1,p08
+Urine drug screens,Urine drug screens,,Unknown,1,p08
+Verification inclusion/ exclusion criteria,Verification inclusion/ exclusion criteria,,Unknown,1,p01_brivaracetam
+"Virology screen (HIV, HBV, HCV)","Virology screen (HIV, HBV, HCV)",,Unknown,1,p08
+"Virology screen (HIV, HBV, HCV)f","Virology screen (HIV, HBV, HCV)f",,Unknown,1,p08
+Week,Week,,Unknown,1,p17_durvalumab_bb172274
+Week of Treatment,Week of Treatment,,Unknown,1,p09
+Whole blood for gene expression (PAXgene RNA tubes),Whole blood for gene expression (PAXgene RNA tubes),,Unknown,1,p17_durvalumab_bb172274
+World Health Organization.,World Health Organization.,,Unknown,1,p17_durvalumab
+X at Day 30,X at Day 30,,Unknown,1,p17_durvalumab
+"X at Day 30, X at Month 2","X at Day 30, X at Month 2",,Unknown,1,p17_durvalumab
+"X at Day 30, X at Month 2, X at Month 3","X at Day 30, X at Month 2, X at Month 3",,Unknown,1,p17_durvalumab
+"X at Day 30, X at Month 2, X at Month 6","X at Day 30, X at Month 2, X at Month 6",,Unknown,1,p17_durvalumab
+X at Day 30; As clinically indicated,X at Day 30; As clinically indicated,,Unknown,1,p17_durvalumab
+X at Month 3,X at Month 3,,Unknown,1,p17_durvalumab
+"X at Month 3, X at Month 6, X at Month 9, X at Month 12, X at Month 15, X at 21 months and every 6 months","X at Month 3, X at Month 6, X at Month 9, X at Month 12, X at Month 15, X at 21 months and every 6 months",,Unknown,1,p17_durvalumab
+"X at Month 3, Xh at Month 6","X at Month 3, Xh at Month 6",,Unknown,1,p17_durvalumab

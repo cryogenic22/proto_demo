@@ -160,10 +160,10 @@ class ProcedureNormalizer:
 
         return vocabulary
 
-    # Row labels that are NOT clinical procedures — exclude from budget
-    NOT_PROCEDURES = {
+    # Default exclusion patterns — loaded from config if available
+    _DEFAULT_NOT_PROCEDURES = {
         "visit number", "daily timepoint", "assessments", "study day",
-        "study visit", "visit", "timepoint", "window",
+        "study visit", "timepoint", "window",
         "continue with original schedules",
         "counselling the importance",
         "confirm participant meets inclusion",
@@ -174,23 +174,64 @@ class ProcedureNormalizer:
         "end of study",
         "early termination",
         "screening failure",
+        "efficacy assessment",
+        "blood for immunologic analysis",
+        "evaluation",
+        "daily record card",
+        "concomitant aed",
+        "concomitant non-aed",
+        "recording of maaes",
+        "recording of saes",
+        "recording of concomitant",
+        "recording of unsolicited",
+        "days since most recent",
+        "confirm use of contraceptives",
+        "review temporary delay",
+        "for participants who are hiv",
+        "concomitant medications",
     }
 
+    @staticmethod
+    def _load_exclusion_patterns() -> set[str]:
+        """Load exclusion patterns from config file if available."""
+        import json
+        config_path = Path(__file__).parent.parent.parent / "data" / "procedure_exclusions.json"
+        if config_path.exists():
+            try:
+                with open(config_path, encoding="utf-8") as f:
+                    data = json.load(f)
+                return set(data.get("not_procedure_patterns", []))
+            except Exception:
+                pass
+        return ProcedureNormalizer._DEFAULT_NOT_PROCEDURES
+
     def is_not_procedure(self, raw_name: str) -> bool:
-        """Check if a raw name is a non-procedure SoA label."""
+        """Check if a raw name is a non-procedure SoA label.
+
+        Exclusion patterns loaded from data/procedure_exclusions.json
+        if available, otherwise uses built-in defaults.
+        """
+        if not hasattr(self, '_not_procedures'):
+            self._not_procedures = self._load_exclusion_patterns()
         key = raw_name.strip().lower()
         if len(key) < 3:
             return True
-        return any(excl in key for excl in self.NOT_PROCEDURES)
+        return any(excl in key for excl in self._not_procedures)
 
     def normalize(self, raw_name: str) -> NormalizedProcedure:
         """Normalize a single procedure name. Deterministic."""
-        # Strip trailing footnote markers — only standalone superscript chars
+        # Strip trailing Unicode superscript markers
         # e.g., "Physical examination²" → "Physical examination"
-        # e.g., "ECGe" → "ECG" (but careful not to strip real words)
         cleaned = re.sub(r'[²³⁴⁵⁶⁷⁸⁹¹⁰]+$', '', raw_name.strip()).strip()
-        # Strip trailing digit-only footnote refs like "Blood analysis5"
-        cleaned = re.sub(r'(\w)(\d)$', r'\1', cleaned)
+
+        # Strip trailing single digit footnote ONLY if preceded by a
+        # non-digit letter and the stripped version exists in vocabulary.
+        # This prevents "BNT162b2" → "BNT162b" (wrong) while fixing
+        # "Blood analysis5" → "Blood analysis" (correct).
+        digit_stripped = re.sub(r'([a-zA-Z])(\d)$', r'\1', cleaned)
+        if digit_stripped != cleaned and digit_stripped.lower() in self._alias_map:
+            cleaned = digit_stripped
+
         if not cleaned:
             cleaned = raw_name.strip()
         lookup_key = cleaned.lower()
