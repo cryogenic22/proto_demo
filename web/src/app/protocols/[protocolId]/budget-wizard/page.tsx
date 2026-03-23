@@ -62,58 +62,22 @@ export default function BudgetWizardPage() {
   const [validationIssues, setValidationIssues] = useState<ValidationIssue[]>([]);
 
   useEffect(() => {
-    getProtocol(protocolId)
-      .then((p) => {
+    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+    Promise.all([
+      getProtocol(protocolId),
+      fetch(`${API}/api/protocols/${protocolId}/budget/lines`).then(r => r.json()),
+    ])
+      .then(([p, budgetData]) => {
         setProtocol(p);
-
-        // Use existing budget lines if available, otherwise generate from tables
-        let lines = (p.budget_lines || []).map((bl: BudgetLine) => ({ ...bl, _edited: false }));
-
-        if (lines.length === 0 && p.tables.length > 0) {
-          // Generate budget lines from procedures in tables
-          const seen = new Set<string>();
-          const generated: EditableBudgetLine[] = [];
-          const COST_MAP: Record<string, number> = { LOW: 75, MEDIUM: 350, HIGH: 1200, VERY_HIGH: 3500 };
-
-          for (const table of p.tables) {
-            for (const proc of (table.procedures || [])) {
-              const key = proc.canonical_name.toLowerCase();
-              if (seen.has(key)) continue;
-              seen.add(key);
-
-              // Count visits (cells with MARKER type)
-              const markerCells = (table.cells || []).filter(
-                (c: { row_header: string; data_type: string }) =>
-                  c.row_header?.toLowerCase().includes(proc.raw_name.toLowerCase().slice(0, 20)) &&
-                  c.data_type === "MARKER"
-              );
-
-              generated.push({
-                procedure: proc.raw_name,
-                canonical_name: proc.canonical_name,
-                cpt_code: proc.code || "",
-                category: proc.category,
-                cost_tier: proc.estimated_cost_tier,
-                visits_required: markerCells.map((_: unknown, i: number) => `Visit ${i + 1}`),
-                total_occurrences: Math.max(markerCells.length, 1),
-                firm_occurrences: Math.max(markerCells.length, 1),
-                conditional_occurrences: 0,
-                is_phone_call: false,
-                estimated_unit_cost: COST_MAP[proc.estimated_cost_tier] || 75,
-                avg_confidence: 0.85,
-                source_pages: [],
-                issues: [],
-                notes: "",
-                _edited: false,
-              });
-            }
-          }
-          lines = generated;
-        }
-
+        // Budget lines come from the backend, re-normalized with current vocabulary
+        const lines = (budgetData || []).map((bl: BudgetLine) => ({
+          ...bl,
+          _edited: false,
+        }));
         setBudgetLines(lines);
       })
-      .catch((e) => setError(e.message))
+      .catch((e) => setError(e instanceof Error ? e.message : "Failed to load"))
       .finally(() => setLoading(false));
   }, [protocolId]);
 

@@ -995,6 +995,98 @@ async def export_procedures_csv():
     )
 
 
+@app.get("/api/protocols/{protocol_id}/budget/lines")
+async def get_budget_lines(protocol_id: str):
+    """Get budget lines re-normalized with the current procedure vocabulary.
+
+    This ensures CPT codes and categories reflect the latest vocabulary,
+    not the stale values from extraction time.
+    """
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(status_code=404, detail="Protocol not found")
+
+    from src.pipeline.procedure_normalizer import ProcedureNormalizer
+
+    normalizer = ProcedureNormalizer()
+    COST_MAP = {"LOW": 75, "MEDIUM": 350, "HIGH": 1200, "VERY_HIGH": 3500}
+
+    # If protocol has pre-computed budget lines, re-normalize them
+    if protocol.budget_lines:
+        lines = []
+        for bl in protocol.budget_lines:
+            if isinstance(bl, dict):
+                raw = bl.get("procedure", bl.get("canonical_name", ""))
+            else:
+                raw = getattr(bl, "procedure", getattr(bl, "canonical_name", ""))
+
+            # Skip non-procedures
+            if normalizer.is_not_procedure(raw):
+                continue
+
+            # Re-normalize with current vocabulary
+            norm = normalizer.normalize(raw)
+
+            if isinstance(bl, dict):
+                bl_out = dict(bl)
+            else:
+                bl_out = bl.__dict__ if hasattr(bl, "__dict__") else {}
+
+            bl_out["cpt_code"] = norm.code or bl_out.get("cpt_code", "")
+            bl_out["canonical_name"] = norm.canonical_name
+            bl_out["category"] = norm.category if norm.category != "Unknown" else bl_out.get("category", "Unknown")
+            bl_out["cost_tier"] = norm.estimated_cost_tier.value if norm.category != "Unknown" else bl_out.get("cost_tier", "LOW")
+            bl_out["estimated_unit_cost"] = COST_MAP.get(bl_out["cost_tier"], bl_out.get("estimated_unit_cost", 75))
+            lines.append(bl_out)
+        return lines
+
+    # Generate from table data if no pre-computed lines
+    lines = []
+    seen: set[str] = set()
+    for table in protocol.tables:
+        if not isinstance(table, dict):
+            continue
+        for proc in table.get("procedures", []):
+            raw = proc.get("raw_name", "")
+            if not raw or normalizer.is_not_procedure(raw):
+                continue
+
+            norm = normalizer.normalize(raw)
+            key = norm.canonical_name.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+
+            # Count marker cells
+            markers = sum(
+                1 for c in table.get("cells", [])
+                if c.get("row_header", "").lower()[:20] == raw.lower()[:20]
+                and c.get("data_type") == "MARKER"
+            )
+
+            tier = norm.estimated_cost_tier.value
+            lines.append({
+                "procedure": raw,
+                "canonical_name": norm.canonical_name,
+                "cpt_code": norm.code or "",
+                "category": norm.category,
+                "cost_tier": tier,
+                "visits_required": [],
+                "total_occurrences": max(markers, 1),
+                "firm_occurrences": max(markers, 1),
+                "conditional_occurrences": 0,
+                "is_phone_call": False,
+                "estimated_unit_cost": COST_MAP.get(tier, 75),
+                "avg_confidence": 0.85,
+                "source_pages": table.get("source_pages", []),
+                "issues": [],
+                "notes": "",
+            })
+
+    return lines
+
+
 @app.get("/api/protocols/{protocol_id}/budget/export")
 async def export_budget_xlsx(protocol_id: str):
     """Export site budget as a formatted XLSX file."""
