@@ -1,5 +1,6 @@
 canonical_name,cpt_code,code_system,category,cost_tier,aliases
 Concomitant Medications Review,,CPT,Administrative,LOW,"ConMeds, Con Meds, Concomitant Meds, Prior Medications, Prior Meds, Medication Review, Prior/Concomitant Medications, concomitant medication assessment, medication history, concurrent medications, background medications"
+Consent: genetic sample,,,Administrative,LOW,
 Demographics Collection,,CPT,Administrative,LOW,"Demographics, Demographic Data, Patient Demographics, Subject Demographics, Baseline Demographics, Demo, Demographic Information, demographic form, demography"
 Eligibility Assessment,,CPT,Administrative,LOW,"I/E Criteria, Inclusion/Exclusion, Eligibility, Eligibility Screening, I/E Assessment, Inclusion Exclusion, Screening Assessment, eligibility check, eligibility review, eligibility determination, qualification assessment"
 Genetic Counseling,96040,CPT,Administrative,LOW,"Genetic Counseling, Genetic Counselling, Genetics Counseling, 96040, genetic consultation, genetics consultation, genetic advisor, genetic counselor visit"
@@ -181,9 +182,12 @@ Esophageal Manometry (High-Resolution),91010,CPT,GI Motility,MEDIUM,"esophageal 
 Gastric Emptying Study (GES),78264,CPT,GI Motility,MEDIUM,"GES, gastric emptying scintigraphy, gastric emptying scan, scintigraphic gastric emptying"
 Hydrogen Breath Test,91065,CPT,GI Motility,LOW,"HBT, hydrogen breath test, SIBO breath test, lactulose breath test, glucose breath test"
 Carrier Screening,81443,CPT,Genetic Testing,HIGH,"expanded carrier screening, ECS, genetic carrier testing, carrier status"
+Genetics research sample,,,Genetic Testing,LOW,
+Pharmacogenetics sample,,,Genetic Testing,LOW,
 Targeted Gene Panel (Disease-Specific),81479,CPT,Genetic Testing,HIGH,"gene panel, NGS panel, multigene panel, targeted sequencing, disease gene panel"
 Whole Exome Sequencing (WES),81415,CPT,Genetic Testing,VERY_HIGH,"WES, whole exome, exome sequencing, clinical exome, trio WES"
 Whole Genome Sequencing (WGS),81425,CPT,Genetic Testing,VERY_HIGH,"WGS, whole genome, genome sequencing, short-read WGS, long-read WGS"
+Whole blood for gene expression,,,Genetic Testing,LOW,
 Bone Scan (Technetium-99m),78300,CPT,Imaging,MEDIUM,"Bone scintigraphy, nuclear bone scan, Tc-99m MDP bone scan, whole body bone scan, skeletal scintigraphy"
 Bone Scan Whole Body,78306,CPT,Imaging,MEDIUM,"Whole body bone scan, nuclear medicine bone scan, skeletal survey nuclear, bone scan 3-phase"
 CT Scan Abdomen With Contrast,74160,CPT,Imaging,MEDIUM,"CT abdomen w/ contrast, CECT abdomen, enhanced abdominal CT"
@@ -249,6 +253,7 @@ Anti-Drug Antibody Assessment,86235,CPT,Laboratory,MEDIUM,"ADA, Anti-Drug Antibo
 Anti-dsDNA Antibody,86225,CPT,Laboratory,LOW,"anti-double-stranded DNA, anti-native DNA, dsDNA antibody, anti-dsDNA IgG"
 Antinuclear Antibody (ANA),86038,CPT,Laboratory,LOW,"ANA, antinuclear antibody screen, FANA, fluorescent ANA, Hep-2 ANA, ANA IFA"
 Antiphospholipid Antibodies Panel,86147,CPT,Laboratory,MEDIUM,"aPL panel, anticardiolipin antibodies, anti-beta2-GPI, lupus anticoagulant, APS antibodies, phospholipid antibodies"
+Biomarker Assessment,,,Laboratory,LOW,
 Biomarker Blood Sample,36415,CPT,Laboratory,LOW,"Biomarker Sample, Biomarker Blood, Exploratory Biomarkers, Translational Sample, Biomarker Collection, biomarker blood draw, biomarker analysis, translational medicine sample, exploratory blood sample"
 Blood Urea Nitrogen,84520,CPT,Laboratory,LOW,"BUN, Urea, Blood Urea, Urea Nitrogen, 84520, BUN level, urea blood test, BUN test"
 C-Reactive Protein,86140,CPT,Laboratory,LOW,"CRP, C Reactive Protein, 86140, CRP level, inflammatory marker, CRP test, c-reactive protein test"
@@ -269,10 +274,12 @@ Liver Function Tests,80076,CPT,Laboratory,LOW,"LFTs, LFT, Hepatic Panel, Liver P
 Pharmacokinetic Blood Sampling,36415,CPT,Laboratory,LOW,"PK Sampling, PK Blood Draw, PK Sample, Pharmacokinetics, PK Collection, Drug Level, Trough Level, PK blood, PK draw, pharmacokinetic sample, drug concentration, PK timepoints, sparse PK, intensive PK"
 Pregnancy Test (Urine),81025,CPT,Laboratory,LOW,"UPT, Urine hCG, Urine Pregnancy, Pregnancy Screen, hCG Urine, Preg Test, Beta-hCG Urine, urine pregnancy screen, WOCBP pregnancy test, pregnancy screening, 81025, urine beta hCG, Pregnancy testing, pregnancy test"
 Rheumatoid Factor (RF),86431,CPT,Laboratory,LOW,"RF, rheumatoid factor, RF titer, latex agglutination RF, nephelometry RF"
+Saliva sample,,,Laboratory,LOW,
 Serum Albumin,82040,CPT,Laboratory,LOW,"Albumin, ALB, Serum Alb, 82040, albumin level, blood albumin, albumin test"
 Serum Creatinine,82565,CPT,Laboratory,LOW,"Creatinine, SCr, Serum Cr, Creatinine Level, Blood Creatinine, 82565, renal function, creatinine blood test, kidney function test, serum creatinine level"
 Serum Pregnancy Test (Beta-hCG),84702,CPT,Laboratory,LOW,"Serum hCG, Beta-hCG, Serum Pregnancy, Quantitative hCG, Blood Pregnancy Test, serum beta-hCG, 84702, serum pregnancy screen, blood hCG"
 Specific IgE Testing (Allergen Panel),86003,CPT,Laboratory,MEDIUM,"specific IgE, allergen IgE, RAST, ImmunoCAP, radioallergosorbent test, allergen-specific IgE, IgE allergen panel"
+Stool sample,,,Laboratory,LOW,
 Thyroid Stimulating Hormone,84443,CPT,Laboratory,LOW,"TSH, Thyroid Function, TSH Level, Thyroid Test, Thyrotropin, 84443, TSH blood test, thyroid stimulating hormone test, TSH screen"
 Total IgE,82785,CPT,Laboratory,LOW,"total IgE, serum IgE, IgE level, immunoglobulin E"
 Urinalysis,81003,CPT,Laboratory,LOW,"UA, Urine Analysis, Dipstick UA, Urine Dipstick, Urine Test, U/A, urinalysis dipstick, urine screening, urine dip, urine examination, urine sample test, 81003"
@@ -294,7 +301,7 @@ Stool Culture,87045,CPT,Microbiology Cultures,LOW,"stool culture, fecal culture,
 Throat Culture,87070,CPT,Microbiology Cultures,LOW,"throat swab culture, pharyngeal culture, Group A Strep culture, GAS culture"
 Urine Culture,87086,CPT,Microbiology Cultures,LOW,"urine culture, UC, urine bacterial culture, colony count urine, UTI culture"
 Respiratory Viral Panel (Multiplex PCR),87633,CPT,Molecular Diagnostics,MEDIUM,"respiratory panel, FilmArray RP, BioFire respiratory panel, multiplex respiratory PCR, RVP"
-SARS-CoV-2 PCR (Nasopharyngeal),87635,CPT,Molecular Diagnostics,LOW,"COVID-19 PCR, SARS-CoV-2 NAAT, COVID PCR, coronavirus PCR, COVID-19 test, Nasopharyngeal swab, NP swab, Respiratory illness sample"
+SARS-CoV-2 PCR (Nasopharyngeal),87635,CPT,Molecular Diagnostics,LOW,"COVID-19 PCR, SARS-CoV-2 NAAT, COVID PCR, coronavirus PCR, COVID-19 test, Nasopharyngeal swab, NP swab, Respiratory illness sample, Obtain nasal (midturbinate) swab"
 Xpert MTB/RIF (GeneXpert TB),87556,CPT,Molecular Diagnostics,MEDIUM,"GeneXpert, Xpert MTB RIF, Xpert Ultra, TB NAAT, GeneXpert MTB/RIF"
 BRCA Somatic Testing,81479,CPT,Molecular and Genomic Testing,HIGH,"Somatic BRCA, BRCA tumor testing, tumor BRCA mutation, somatic BRCA1/2"
 BRCA1/BRCA2 Comprehensive Testing,81162,CPT,Molecular and Genomic Testing,HIGH,"BRCA testing, BRCA1/2 comprehensive, BRCA germline testing, hereditary breast ovarian cancer testing, HBOC testing"
@@ -491,6 +498,7 @@ Muscle MRI (for Myopathies),73221,CPT,Specialized Rare Disease Procedures,HIGH,"
 Nerve Biopsy,64795,CPT,Specialized Rare Disease Procedures,HIGH,"sural nerve biopsy, nerve biopsy, peripheral nerve biopsy, nerve histology"
 Skin Fibroblast Culture,88230,CPT,Specialized Rare Disease Procedures,HIGH,"fibroblast culture, skin biopsy fibroblasts, primary fibroblasts, dermal fibroblast culture"
 Blood Draw/Phlebotomy,36415,CPT,Specimen Collection,LOW,"Phlebotomy, Venipuncture, Blood Collection, Blood Sample, Blood Sampling, Venous Blood Draw, Blood Work, bloods, blood draw, blood specimen collection, venous access, blood letting"
+Nonpharmacogenetic samples for storage,,,Specimen Collection,LOW,
 Specimen Handling,99000,CPT,Specimen Collection,LOW,"Sample Handling, Specimen Processing, Sample Processing, Lab Specimen Handling, Biospecimen Handling, sample management, specimen transport, sample shipping, specimen storage, biospecimen management, sample preparation"
 Central Venous Access Device Repair/Maintenance,36575,CPT,Supportive Care,LOW,"Central line repair, CVC maintenance, port maintenance, catheter repair"
 Central Venous Catheter Placement Tunneled,36560,CPT,Supportive Care,MEDIUM,"Tunneled CVC, Hickman line, Broviac catheter, tunneled central line, central venous access"
