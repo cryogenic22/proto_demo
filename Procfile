@@ -1,1 +1,1 @@
-web: /opt/venv/bin/python start.py
+web: python start.py
