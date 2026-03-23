@@ -17,5 +17,15 @@ from src.domain.vocabulary.procedure_vocab import (
     ProcedureEntry,
     get_procedure_vocab,
 )
+from src.domain.vocabulary.procedure_hierarchy import (
+    ProcedureHierarchyManager,
+    ProcedureFamily,
+    ProcedureChild,
+    get_procedure_hierarchy,
+)
 
-__all__ = ["ProcedureVocab", "ProcedureEntry", "get_procedure_vocab"]
+__all__ = [
+    "ProcedureVocab", "ProcedureEntry", "get_procedure_vocab",
+    "ProcedureHierarchyManager", "ProcedureFamily", "ProcedureChild",
+    "get_procedure_hierarchy",
+]

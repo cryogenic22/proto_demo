@@ -883,6 +883,15 @@ async def search_procedures(q: str = "", limit: int = 20):
     return [e.to_dict() for e in entries]
 
 
+@app.get("/api/procedures/library/hierarchies")
+async def get_procedure_hierarchies():
+    """Return procedure family hierarchies (parent-child relationships)."""
+    from src.domain.vocabulary import get_procedure_hierarchy
+
+    mgr = get_procedure_hierarchy()
+    return [f.to_dict() for f in mgr.list_families()]
+
+
 @app.get("/api/procedures/library/stats")
 async def get_procedure_stats():
     """Return procedure library statistics."""

@@ -1,0 +1,248 @@
+{
+  "families": [
+    {
+      "parent_name": "Tumor Biopsy (Core Needle)",
+      "category": "Biopsy",
+      "description": "Core needle biopsy \u2014 CPT varies by anatomical site",
+      "resolution_required": true,
+      "default_cost_tier": "HIGH",
+      "children": [
+        {
+          "canonical_name": "Core Needle Biopsy Breast",
+          "cpt_code": "19081",
+          "site_or_technique": "Breast",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "Core Needle Biopsy Liver",
+          "cpt_code": "47000",
+          "site_or_technique": "Liver",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "Lung Biopsy (Percutaneous)",
+          "cpt_code": "32408",
+          "site_or_technique": "Lung",
+          "cost_tier": "HIGH"
+        },
+        {
+          "canonical_name": "Kidney Biopsy (Percutaneous)",
+          "cpt_code": "50200",
+          "site_or_technique": "Kidney",
+          "cost_tier": "HIGH"
+        },
+        {
+          "canonical_name": "Lymph Node Biopsy (Needle)",
+          "cpt_code": "38505",
+          "site_or_technique": "Lymph Node",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "Bone Marrow Biopsy",
+          "cpt_code": "38221",
+          "site_or_technique": "Bone Marrow",
+          "cost_tier": "HIGH"
+        },
+        {
+          "canonical_name": "Soft Tissue Biopsy (Needle)",
+          "cpt_code": "20206",
+          "site_or_technique": "Soft Tissue",
+          "cost_tier": "LOW"
+        },
+        {
+          "canonical_name": "Thyroid Biopsy (FNA)",
+          "cpt_code": "60100",
+          "site_or_technique": "Thyroid",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "Prostate Biopsy (Needle)",
+          "cpt_code": "55700",
+          "site_or_technique": "Prostate",
+          "cost_tier": "MEDIUM"
+        }
+      ],
+      "generic_aliases": [
+        "core needle biopsy",
+        "tumor biopsy",
+        "tissue biopsy",
+        "biopsy at progression",
+        "mandatory tumor biopsy",
+        "optional tumor biopsy",
+        "FFPE tumor sample",
+        "newly acquired tumor biopsy"
+      ]
+    },
+    {
+      "parent_name": "CT Scan (Generic)",
+      "category": "Imaging",
+      "description": "Computed tomography \u2014 CPT varies by body region",
+      "resolution_required": true,
+      "default_cost_tier": "HIGH",
+      "children": [
+        {
+          "canonical_name": "CT Scan Chest",
+          "cpt_code": "71260",
+          "site_or_technique": "Chest",
+          "cost_tier": "HIGH"
+        },
+        {
+          "canonical_name": "CT Scan Abdomen/Pelvis",
+          "cpt_code": "74178",
+          "site_or_technique": "Abdomen/Pelvis",
+          "cost_tier": "HIGH"
+        },
+        {
+          "canonical_name": "CT Scan Brain/Head",
+          "cpt_code": "70553",
+          "site_or_technique": "Brain/Head",
+          "cost_tier": "HIGH"
+        },
+        {
+          "canonical_name": "CT Scan Neck",
+          "cpt_code": "70491",
+          "site_or_technique": "Neck",
+          "cost_tier": "HIGH"
+        }
+      ],
+      "generic_aliases": [
+        "CT scan",
+        "CT",
+        "computed tomography",
+        "CAT scan"
+      ]
+    },
+    {
+      "parent_name": "Endoscopy (Generic)",
+      "category": "Procedure",
+      "description": "Endoscopic examination \u2014 CPT varies by type",
+      "resolution_required": true,
+      "default_cost_tier": "HIGH",
+      "children": [
+        {
+          "canonical_name": "Esophagogastroduodenoscopy (EGD)",
+          "cpt_code": "43239",
+          "site_or_technique": "Upper GI",
+          "cost_tier": "HIGH"
+        },
+        {
+          "canonical_name": "Colonoscopy",
+          "cpt_code": "45378",
+          "site_or_technique": "Colon",
+          "cost_tier": "HIGH"
+        },
+        {
+          "canonical_name": "Flexible Sigmoidoscopy",
+          "cpt_code": "45330",
+          "site_or_technique": "Sigmoid",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "ERCP",
+          "cpt_code": "43260",
+          "site_or_technique": "Biliary/Pancreatic",
+          "cost_tier": "VERY_HIGH"
+        },
+        {
+          "canonical_name": "Bronchoscopy",
+          "cpt_code": "31622",
+          "site_or_technique": "Airway",
+          "cost_tier": "HIGH"
+        }
+      ],
+      "generic_aliases": [
+        "endoscopy",
+        "endoscopic examination"
+      ]
+    },
+    {
+      "parent_name": "Study Drug Administration (Generic)",
+      "category": "Drug Administration",
+      "description": "Drug administration \u2014 CPT varies by route",
+      "resolution_required": true,
+      "default_cost_tier": "MEDIUM",
+      "children": [
+        {
+          "canonical_name": "IV Infusion (Initial Hour)",
+          "cpt_code": "96365",
+          "site_or_technique": "IV Infusion",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "SC Injection",
+          "cpt_code": "96372",
+          "site_or_technique": "Subcutaneous",
+          "cost_tier": "LOW"
+        },
+        {
+          "canonical_name": "IM Injection",
+          "cpt_code": "96372",
+          "site_or_technique": "Intramuscular",
+          "cost_tier": "LOW"
+        },
+        {
+          "canonical_name": "Oral Administration",
+          "cpt_code": "99211",
+          "site_or_technique": "Oral",
+          "cost_tier": "LOW"
+        },
+        {
+          "canonical_name": "Intrathecal Administration",
+          "cpt_code": "62322",
+          "site_or_technique": "Intrathecal",
+          "cost_tier": "VERY_HIGH"
+        }
+      ],
+      "generic_aliases": [
+        "study drug administration",
+        "drug administration",
+        "IP administration",
+        "dosing"
+      ]
+    },
+    {
+      "parent_name": "Ultrasound (Generic)",
+      "category": "Imaging",
+      "description": "Ultrasound examination \u2014 CPT varies by body region",
+      "resolution_required": true,
+      "default_cost_tier": "MEDIUM",
+      "children": [
+        {
+          "canonical_name": "Ultrasound Abdomen",
+          "cpt_code": "76700",
+          "site_or_technique": "Abdomen",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "Ultrasound Pelvis",
+          "cpt_code": "76856",
+          "site_or_technique": "Pelvis",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "Vascular Duplex Ultrasound",
+          "cpt_code": "93880",
+          "site_or_technique": "Vascular",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "Thyroid Ultrasound",
+          "cpt_code": "76536",
+          "site_or_technique": "Thyroid",
+          "cost_tier": "MEDIUM"
+        },
+        {
+          "canonical_name": "Echocardiogram (TTE)",
+          "cpt_code": "93306",
+          "site_or_technique": "Cardiac",
+          "cost_tier": "HIGH"
+        }
+      ],
+      "generic_aliases": [
+        "ultrasound",
+        "US",
+        "sonography"
+      ]
+    }
+  ]
+}
