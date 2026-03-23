@@ -861,6 +861,20 @@ async def get_procedures_library():
     ]
 
 
+@app.get("/api/procedures/library/search")
+async def search_procedures(q: str = "", limit: int = 20):
+    """Fuzzy search the procedure library by name, alias, or CPT code."""
+    from src.domain.vocabulary import get_procedure_vocab
+
+    vocab = get_procedure_vocab()
+    if not q.strip():
+        entries = vocab.list_all()[:limit]
+    else:
+        entries = vocab.search(q.strip())[:limit]
+
+    return [e.to_dict() for e in entries]
+
+
 @app.get("/api/procedures/library/stats")
 async def get_procedure_stats():
     """Return procedure library statistics."""

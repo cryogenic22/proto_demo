@@ -92,8 +92,14 @@ class ProcedureNormalizer:
 
         # Build lookup: lowercase alias → ProcedureEntry
         # Deterministic ordering: first match wins
+        # Also index the canonical name itself as an alias
         self._alias_map: dict[str, ProcedureEntry] = {}
         for entry in vocabulary:
+            # Index canonical name
+            canon_key = entry.canonical_name.lower()
+            if canon_key not in self._alias_map:
+                self._alias_map[canon_key] = entry
+            # Index all aliases
             for alias in entry.aliases:
                 key = alias.lower()
                 if key not in self._alias_map:
