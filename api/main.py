@@ -791,6 +791,9 @@ async def review_protocol_cell(protocol_id: str, body: ReviewRequest):
         col_header=cell.get("col_header", "") if cell else "",
     )
 
+    # Invalidate trust cache for this protocol
+    _trust_cache.pop(protocol_id, None)
+
     return ReviewResponse(success=True)
 
 
@@ -1322,6 +1325,156 @@ async def get_protocol(protocol_id: str):
             status_code=404, detail=f"Protocol {protocol_id} not found"
         )
     return protocol.model_dump(mode="json")
+
+
+# ── Trust Endpoints ──────────────────────────────────────────────────────
+
+_trust_cache: dict[str, dict] = {}  # protocol_id → ProtocolTrust dict
+
+
+@app.get("/api/protocols/{protocol_id}/trust")
+async def get_protocol_trust(protocol_id: str):
+    """Compute and return protocol-level trust dashboard."""
+    from src.trust.engine import compute_protocol_trust
+    from src.models.schema import ExtractedTable
+
+    # Check cache (invalidated on review actions)
+    if protocol_id in _trust_cache:
+        return _trust_cache[protocol_id]
+
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(status_code=404, detail=f"Protocol {protocol_id} not found")
+
+    # Extract tables from protocol data
+    protocol_data = protocol.model_dump(mode="json") if hasattr(protocol, "model_dump") else protocol
+    tables_data = protocol_data.get("tables", [])
+
+    # Reconstruct ExtractedTable objects for trust computation
+    tables = []
+    for td in tables_data:
+        try:
+            tables.append(ExtractedTable.model_validate(td))
+        except Exception:
+            continue
+
+    trust = compute_protocol_trust(tables)
+    result = trust.model_dump(mode="json")
+    _trust_cache[protocol_id] = result
+    return result
+
+
+@app.get("/api/protocols/{protocol_id}/trust/rows")
+async def get_protocol_trust_rows(protocol_id: str):
+    """Get row-level trust breakdown for all procedures."""
+    from src.trust.engine import compute_row_trust
+
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(status_code=404, detail=f"Protocol {protocol_id} not found")
+
+    protocol_data = protocol.model_dump(mode="json") if hasattr(protocol, "model_dump") else protocol
+    tables_data = protocol_data.get("tables", [])
+
+    row_trusts = []
+    for td in tables_data:
+        procedures = {p.get("raw_name", ""): p for p in td.get("procedures", [])}
+        cells = td.get("cells", [])
+        footnotes = td.get("footnotes", [])
+
+        # Group cells by row_header
+        row_groups: dict[str, list[dict]] = {}
+        for cell in cells:
+            rh = cell.get("row_header", "")
+            if rh:
+                row_groups.setdefault(rh, []).append(cell)
+
+        for proc_name, proc_cells in row_groups.items():
+            proc_info = procedures.get(proc_name, {})
+            confs = [c.get("confidence", 0.5) for c in proc_cells if c.get("col", 0) > 0]
+            flagged = sum(1 for c in confs if c < 0.75)
+
+            # Count footnote markers
+            fn_total = sum(len(c.get("footnote_markers", [])) for c in proc_cells)
+            fn_resolved = sum(len(c.get("resolved_footnotes", [])) for c in proc_cells)
+
+            cpt = proc_info.get("code")
+            category = proc_info.get("category", "")
+            is_effort = category in ("Administrative", "Safety", "PRO")
+
+            rt = compute_row_trust(
+                procedure_name=proc_name,
+                cell_confidences=confs if confs else [0.5],
+                match_method="exact" if proc_info.get("canonical_name") else "unmatched",
+                match_score=1.0 if proc_info.get("canonical_name") else 0.0,
+                cpt_code=cpt,
+                footnotes_total=fn_total,
+                footnotes_resolved=fn_resolved,
+                is_effort_based=is_effort,
+                flagged_count=flagged,
+            )
+            row_trusts.append(rt.model_dump(mode="json"))
+
+    return row_trusts
+
+
+@app.get("/api/protocols/{protocol_id}/cells/{row}/{col}/evidence")
+async def get_cell_evidence(protocol_id: str, row: int, col: int):
+    """Get per-cell evidence chain for trust display."""
+    from src.trust.models import CellEvidence
+
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(status_code=404, detail=f"Protocol {protocol_id} not found")
+
+    protocol_data = protocol.model_dump(mode="json") if hasattr(protocol, "model_dump") else protocol
+
+    # Search all tables for this cell
+    for td in protocol_data.get("tables", []):
+        for cell in td.get("cells", []):
+            if cell.get("row") == row and cell.get("col") == col:
+                evidence_data = cell.get("evidence")
+                if evidence_data:
+                    ev = CellEvidence.model_validate(evidence_data)
+                    return {
+                        "cell": {
+                            "row": row, "col": col,
+                            "raw_value": cell.get("raw_value", ""),
+                            "data_type": cell.get("data_type", "TEXT"),
+                            "confidence": cell.get("confidence", 0.5),
+                            "row_header": cell.get("row_header", ""),
+                            "col_header": cell.get("col_header", ""),
+                            "footnote_markers": cell.get("footnote_markers", []),
+                            "resolved_footnotes": cell.get("resolved_footnotes", []),
+                        },
+                        "evidence": ev.model_dump(mode="json"),
+                        "verification_steps": [
+                            s.model_dump(mode="json") for s in ev.verification_steps
+                        ],
+                        "challenger_issues": ev.challenger_issues,
+                    }
+                else:
+                    # Legacy cell without evidence — return minimal response
+                    return {
+                        "cell": {
+                            "row": row, "col": col,
+                            "raw_value": cell.get("raw_value", ""),
+                            "data_type": cell.get("data_type", "TEXT"),
+                            "confidence": cell.get("confidence", 0.5),
+                            "row_header": cell.get("row_header", ""),
+                            "col_header": cell.get("col_header", ""),
+                            "footnote_markers": cell.get("footnote_markers", []),
+                            "resolved_footnotes": cell.get("resolved_footnotes", []),
+                        },
+                        "evidence": None,
+                        "verification_steps": [],
+                        "challenger_issues": [],
+                    }
+
+    raise HTTPException(status_code=404, detail=f"Cell ({row},{col}) not found")
 
 
 @app.get("/api/protocols/{protocol_id}/page-image/{page_number}")

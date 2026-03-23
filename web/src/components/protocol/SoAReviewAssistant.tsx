@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import type {
   ExtractedTable,
   ExtractedCell,
@@ -857,6 +857,9 @@ function CellDetailPanel({
           </div>
         )}
 
+        {/* Verification Chain — trust evidence from API */}
+        <CellTrustEvidence protocolId={protocolId} row={cell.row} col={cell.col} />
+
         {/* Expandable technical details */}
         <ExpandableSection title="Cell Details" defaultOpen={false}>
           <div className="space-y-2 text-xs">
@@ -1078,5 +1081,80 @@ function ExpandableSection({ title, defaultOpen, children }: { title: string; de
       </button>
       {open && <div className="mt-2">{children}</div>}
     </div>
+  );
+}
+
+// ─── Cell Trust Evidence (fetches from /api/.../evidence) ─────────────────
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+
+interface VerificationStepData {
+  method: string;
+  status: string;
+  detail: string;
+  value: string;
+  confidence: number;
+}
+
+function CellTrustEvidence({ protocolId, row, col }: { protocolId: string; row: number; col: number }) {
+  const [steps, setSteps] = useState<VerificationStepData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [pass1, setPass1] = useState("");
+  const [pass2, setPass2] = useState<string | null>(null);
+  const [resolution, setResolution] = useState("");
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`${API_URL}/api/protocols/${protocolId}/cells/${row}/${col}/evidence`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.evidence) {
+          setSteps(data.verification_steps || []);
+          setPass1(data.evidence.pass1_value || "");
+          setPass2(data.evidence.pass2_value ?? null);
+          setResolution(data.evidence.resolution_method || "");
+        } else {
+          setSteps([]);
+        }
+      })
+      .catch(() => setSteps([]))
+      .finally(() => setLoading(false));
+  }, [protocolId, row, col]);
+
+  if (loading) return <div className="text-[10px] text-neutral-400 py-2">Loading evidence...</div>;
+  if (steps.length === 0) return null;
+
+  return (
+    <ExpandableSection title="Verification Chain" defaultOpen={true}>
+      <div className="space-y-1">
+        {steps.map((step, i) => (
+          <div key={i} className={cn(
+            "flex items-start gap-2 px-2.5 py-1.5 rounded-lg text-xs",
+            step.status === "FAIL" && "bg-red-50/60",
+            step.status === "PASS" && "bg-emerald-50/40",
+          )}>
+            <span className="mt-0.5 shrink-0">
+              {step.status === "PASS" && <span className="block w-3.5 h-3.5 rounded-full bg-emerald-500/20 border border-emerald-500 text-emerald-600 text-[8px] flex items-center justify-center font-bold">&#10003;</span>}
+              {step.status === "FAIL" && <span className="block w-3.5 h-3.5 rounded-full bg-red-500/20 border border-red-500 text-red-600 text-[8px] flex items-center justify-center font-bold">&#10007;</span>}
+              {step.status === "SKIPPED" && <span className="block w-3.5 h-3.5 rounded-full bg-neutral-300/30 border border-neutral-400 text-[8px] flex items-center justify-center text-neutral-400">&ndash;</span>}
+            </span>
+            <div className="min-w-0">
+              <div className={cn(
+                "text-[11px] font-medium",
+                step.status === "PASS" ? "text-emerald-700" : step.status === "FAIL" ? "text-red-700" : "text-neutral-400"
+              )}>
+                {step.method.replace(/_/g, " ")}
+              </div>
+              <div className="text-[10px] text-neutral-500 leading-snug">{step.detail}</div>
+            </div>
+          </div>
+        ))}
+        {resolution && (
+          <div className="text-[10px] text-neutral-400 px-2.5 pt-1">
+            Resolution: <span className="font-medium text-neutral-600">{resolution.replace(/_/g, " ")}</span>
+          </div>
+        )}
+      </div>
+    </ExpandableSection>
   );
 }

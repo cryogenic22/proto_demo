@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Tabs } from "@/components/ui/Tabs";
 import { ProtocolMetaCard } from "@/components/protocol/ProtocolMetaCard";
 import { SoAReviewAssistant } from "@/components/protocol/SoAReviewAssistant";
+import { ProtocolTrustDashboard } from "@/components/protocol/ProtocolTrustDashboard";
 import { cn } from "@/lib/utils";
 
 function confidenceColor(c: number) {
@@ -32,12 +33,21 @@ export default function ProtocolWorkspacePage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("tables");
   const [expandedTable, setExpandedTable] = useState<ExtractedTable | null>(null);
+  const [pdfAvailable, setPdfAvailable] = useState(false);
+  const [showPdfViewer, setShowPdfViewer] = useState(false);
+  const [pdfPage, setPdfPage] = useState(0);
+
+  const API = process.env.NEXT_PUBLIC_API_URL || "";
 
   useEffect(() => {
     getProtocol(protocolId)
       .then(setProtocol)
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
+    // Check if PDF is available
+    fetch(`${API}/api/protocols/${protocolId}/page-image/0`)
+      .then((r) => setPdfAvailable(r.ok))
+      .catch(() => setPdfAvailable(false));
   }, [protocolId]);
 
   // Stats
@@ -116,9 +126,57 @@ export default function ProtocolWorkspacePage() {
       <TopBar
         title={protocol.metadata.short_title || protocol.metadata.title || protocol.document_name}
         subtitle={`${protocol.metadata.protocol_number || ""} · ${protocol.total_pages} pages`}
-      />
+      >
+        {pdfAvailable && (
+          <button
+            onClick={() => setShowPdfViewer(!showPdfViewer)}
+            className={cn(
+              "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5",
+              showPdfViewer
+                ? "bg-brand-primary text-white"
+                : "border border-neutral-200 text-neutral-600 hover:bg-neutral-50"
+            )}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+            {showPdfViewer ? "Hide PDF" : "View Source PDF"}
+          </button>
+        )}
+      </TopBar>
 
       <div className="flex h-[calc(100vh-3.5rem)]">
+        {/* PDF Viewer panel */}
+        {showPdfViewer && pdfAvailable && (
+          <div className="w-[420px] border-r border-neutral-200 bg-neutral-100 flex flex-col shrink-0">
+            <div className="px-3 py-2 bg-white border-b border-neutral-200 flex items-center justify-between">
+              <span className="text-xs font-semibold text-neutral-700">Source PDF</span>
+              <div className="flex items-center gap-1">
+                <button onClick={() => setPdfPage(Math.max(0, pdfPage - 1))} className="p-1 rounded hover:bg-neutral-100 text-neutral-500 text-xs">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                </button>
+                <span className="text-xs text-neutral-500 font-mono min-w-[50px] text-center">Page {pdfPage}</span>
+                <button onClick={() => setPdfPage(pdfPage + 1)} className="p-1 rounded hover:bg-neutral-100 text-neutral-500 text-xs">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                </button>
+                <button onClick={() => setShowPdfViewer(false)} className="p-1 rounded hover:bg-neutral-100 text-neutral-400 ml-1">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4 4L12 12M12 4L4 12" /></svg>
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-auto p-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                key={pdfPage}
+                src={`${API}/api/protocols/${protocolId}/page-image/${pdfPage}`}
+                alt={`Page ${pdfPage}`}
+                className="w-full rounded shadow-sm bg-white"
+                onError={(e) => (e.currentTarget.src = "")}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Main content */}
         <div className="flex-1 flex flex-col overflow-hidden bg-white min-w-0">
           <div className="px-4 pt-3 border-b border-neutral-200 bg-white">
@@ -246,6 +304,9 @@ export default function ProtocolWorkspacePage() {
                   <StatCard label="Flagged" value={stats.flagged} color={stats.flagged > 0 ? "text-amber-600" : "text-emerald-600"} />
                   <StatCard label="Procedures" value={stats.procedures} color="text-purple-600" />
                 </div>
+
+                {/* Trust Dashboard */}
+                <ProtocolTrustDashboard protocolId={protocolId} />
 
                 {/* Metadata */}
                 <ProtocolMetaCard metadata={protocol.metadata} />

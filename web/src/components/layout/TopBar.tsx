@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 interface TopBarProps {
   title: string;
   subtitle?: string;
+  children?: React.ReactNode;
 }
 
-export function TopBar({ title, subtitle }: TopBarProps) {
+export function TopBar({ title, subtitle, children }: TopBarProps) {
   const [apiHealthy, setApiHealthy] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export function TopBar({ title, subtitle }: TopBarProps) {
       </div>
 
       <div className="flex items-center gap-4">
+        {children}
         {/* API Status */}
         <div className="flex items-center gap-2 text-xs text-neutral-500">
           <span
