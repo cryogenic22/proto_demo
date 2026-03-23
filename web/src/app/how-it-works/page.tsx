@@ -17,8 +17,8 @@ export default function HowItWorksPage() {
         <div className="max-w-5xl mx-auto px-6 py-10">
           <h1 className="text-2xl font-bold text-neutral-800">How ProtoExtract Works</h1>
           <p className="text-sm text-neutral-500 mt-2 max-w-2xl">
-            A multi-stage AI pipeline that digitizes clinical trial protocols with zero hallucination.
-            The LLM reads and locates — PyMuPDF extracts the exact bytes. Every output is traceable to a source page.
+            A multi-stage AI pipeline that digitizes clinical trial protocols with deterministic extraction.
+            The LLM reads and locates — PyMuPDF extracts the exact text. Every output is traceable to a source page.
           </p>
         </div>
       </div>
@@ -96,7 +96,7 @@ function ExtractionPipeline() {
             "VLM (Vision Language Model) pre-screens each page for table structure",
             "Non-SoA pages (amendment history, synopsis, appendices) are rejected at $0 cost",
           ]}
-          detail="5-layer filter: (1) page-range gate, (2) title rejection (30+ keywords), (3) marker validation, (4) flagged-rate check, (5) column header validation. Zero false positives reaching the user."
+          detail="5-layer filter ensures only real SoA tables reach the user: (1) section-parser page-range gate, (2) title rejection with 30+ keywords, (3) post-extraction marker validation (0 MARKER = reject), (4) high-flagged-rate rejection (>80% = reject), (5) column header validation (must have visit/time patterns)."
         />
         <PipelineConnector />
 
@@ -183,7 +183,7 @@ function ExtractionPipeline() {
             <MetricBox label="Cell Accuracy" value="99.1%" desc="Across 13 benchmark protocols" />
             <MetricBox label="Extraction Cost" value="~$2-5" desc="Per protocol (LLM API calls)" />
             <MetricBox label="Processing Time" value="2-10 min" desc="Depends on table count" />
-            <MetricBox label="Zero Hallucination" value="100%" desc="All text from PyMuPDF, never LLM" />
+            <MetricBox label="Deterministic Output" value="Yes" desc="All text from PyMuPDF, not LLM-generated" />
           </div>
         </CardBody>
       </Card>
@@ -214,7 +214,7 @@ function SectionParsing() {
             "Each line: text content + X position + Y position + font name + bold/italic flags",
             "This gives us the document's visual layout without any LLM interpretation",
           ]}
-          detail="We don't use OCR — PyMuPDF reads the embedded text layer directly. This is 100% accurate for digitally-created PDFs (which all clinical protocols are)."
+          detail="PyMuPDF reads the embedded text layer directly — no OCR needed. This is highly accurate for digitally-created PDFs (which all clinical protocols are)."
         />
         <PipelineConnector />
 
@@ -267,7 +267,7 @@ function SectionParsing() {
         <CardHeader><h3 className="text-sm font-semibold text-neutral-800">Capabilities</h3></CardHeader>
         <CardBody>
           <div className="grid grid-cols-3 gap-4">
-            <MetricBox label="Deterministic" value="100%" desc="Same input → same output, always" />
+            <MetricBox label="Deterministic" value="Yes" desc="Same input → same output, always" />
             <MetricBox label="Cost" value="$0" desc="No LLM calls for standard parsing" />
             <MetricBox label="Sections Parsed" value="50-300" desc="Per protocol, all levels" />
           </div>
@@ -285,7 +285,7 @@ function VerbatimPipeline() {
       <div className="mb-4">
         <h2 className="text-lg font-bold text-neutral-800">Verbatim Extraction</h2>
         <p className="text-sm text-neutral-500 mt-1">
-          The core innovation: LLMs LOCATE content, PyMuPDF EXTRACTS the exact bytes. Zero hallucination by design.
+          The core design: LLMs LOCATE content, PyMuPDF EXTRACTS the exact text. Deterministic output — the LLM never generates the response text.
         </p>
       </div>
 

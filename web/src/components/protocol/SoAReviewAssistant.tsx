@@ -314,7 +314,13 @@ export function SoAReviewAssistant({
         {/* Cell detail slide-out */}
         {selectedCell && (
           <CellDetailPanel
-            cell={cellMap.get(`${selectedCell.row}-${selectedCell.col}`) || null}
+            cell={cellMap.get(`${selectedCell.row}-${selectedCell.col}`) || {
+              row: selectedCell.row, col: selectedCell.col,
+              raw_value: "", normalized_value: null, data_type: "EMPTY" as const,
+              footnote_markers: [], resolved_footnotes: [],
+              confidence: 0, row_header: cellMap.get(`${selectedCell.row}-0`)?.row_header || `Row ${selectedCell.row}`,
+              col_header: (table.schema_info?.column_headers?.[selectedCell.col]?.text) || `Col ${selectedCell.col}`,
+            }}
             footnotes={cellFootnotes.get(`${selectedCell.row}-${selectedCell.col}`) || []}
             reviewItem={reviewItems.find((r) => r.cell_ref?.row === selectedCell.row && r.cell_ref?.col === selectedCell.col)}
             isFlagged={flaggedSet.has(`${selectedCell.row}-${selectedCell.col}`)}
@@ -626,21 +632,27 @@ function SmartGrid({
                         const fns = cellFootnotes.get(key);
                         const acted = cellActions.get(key);
 
+                        // Show corrected value if available
+                        const corrected = cellActions.get(key) === "corrected" ? true : false;
+                        const displayValue = corrected
+                          ? (cellMap.get(key)?.raw_value || "") // Will show original; corrected value shown in panel
+                          : (cell?.raw_value || "");
+
                         return (
                           <td
                             key={colIdx}
-                            onClick={() => cell && onCellClick({ row, col: colIdx })}
+                            onClick={() => onCellClick({ row, col: colIdx })}
                             className={cn(
                               "px-1.5 py-1 text-center border border-neutral-200 font-mono text-[11px] cursor-pointer transition-colors relative",
                               acted === "accepted" ? "bg-emerald-50 ring-1 ring-emerald-300" :
                               acted === "corrected" ? "bg-sky-50 ring-1 ring-sky-300" :
                               acted === "flagged" ? "bg-red-50 ring-1 ring-red-300" :
-                              cell ? confBg(cell.confidence) : "",
+                              cell ? confBg(cell.confidence) : "bg-neutral-50 hover:bg-neutral-100",
                               isFlagged && !acted && "ring-2 ring-amber-400",
                             )}
-                            title={cell ? `${cell.raw_value} (${(cell.confidence * 100).toFixed(0)}%)` : ""}
+                            title={cell ? `${cell.raw_value || "(empty)"} (${(cell.confidence * 100).toFixed(0)}%)` : "Click to add value"}
                           >
-                            {cell?.raw_value || ""}
+                            {displayValue || <span className="text-neutral-300">&middot;</span>}
                             {fns && fns.length > 0 && (
                               <sup className="text-brand-primary text-[8px] ml-0.5">
                                 {fns.map((f) => f.marker).join(",")}
@@ -832,6 +844,18 @@ function CellDetailPanel({
           onViewSource={() => { setShowSource(true); setPdfError(false); }}
           sourcePage={currentPage}
         />
+
+        {/* Correction diff */}
+        {action === "corrected" && correctedValue && (
+          <div className="px-3 py-2 bg-sky-50 rounded-lg border border-sky-200 text-xs">
+            <div className="text-[10px] font-semibold text-sky-700 uppercase tracking-wide mb-1">Correction Applied</div>
+            <div className="flex items-center gap-2">
+              <span className="line-through text-red-500 font-mono">{cell.raw_value || "(empty)"}</span>
+              <span className="text-neutral-400">&rarr;</span>
+              <span className="font-mono font-semibold text-sky-700">{correctedValue}</span>
+            </div>
+          </div>
+        )}
 
         {/* Expandable technical details */}
         <ExpandableSection title="Cell Details" defaultOpen={false}>
