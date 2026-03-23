@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import {
   extractVerbatim,
+  extractVerbatimFromProtocol,
   listProtocols,
   getProtocol,
   type VerbatimResult,
@@ -50,11 +51,15 @@ export default function VerbatimExtractPage() {
     listProtocols().then(setProtocols).catch(() => {});
   }, []);
 
+  const [libVerbatimResult, setLibVerbatimResult] = useState<VerbatimResult | null>(null);
+  const [libVerbatimLoading, setLibVerbatimLoading] = useState(false);
+
   // Load full protocol when selected
   const handleProtocolSelect = useCallback(async (id: string) => {
     setSelectedProtocolId(id);
     setProtocol(null);
     setSelectedSection(null);
+    setLibVerbatimResult(null);
     if (!id) return;
     setLoadingProtocol(true);
     try {
@@ -66,6 +71,27 @@ export default function VerbatimExtractPage() {
       setLoadingProtocol(false);
     }
   }, []);
+
+  // Auto-extract when section selected and has no content_html
+  const handleSectionSelect = useCallback(async (section: SectionNode | null) => {
+    setSelectedSection(section);
+    setLibVerbatimResult(null);
+    if (!section || section.content_html) return;
+    if (!selectedProtocolId) return;
+
+    setLibVerbatimLoading(true);
+    try {
+      const sectionRef = section.number
+        ? `Copy Section ${section.number}`
+        : `Copy the "${section.title}" section`;
+      const result = await extractVerbatimFromProtocol(selectedProtocolId, sectionRef, "html");
+      setLibVerbatimResult(result);
+    } catch {
+      // Fail silently — user sees "no content" message
+    } finally {
+      setLibVerbatimLoading(false);
+    }
+  }, [selectedProtocolId]);
 
   // Extract from uploaded file
   const handleExtract = useCallback(async () => {
@@ -158,7 +184,7 @@ export default function VerbatimExtractPage() {
                       value={selectedSection?.number || ""}
                       onChange={(e) => {
                         const found = sectionOptions.find((o) => o.node.number === e.target.value);
-                        setSelectedSection(found?.node || null);
+                        handleSectionSelect(found?.node || null);
                       }}
                       className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg bg-white font-mono focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary"
                     >
@@ -291,14 +317,26 @@ export default function VerbatimExtractPage() {
               </div>
             </CardHeader>
             <CardBody>
-              {selectedSection.content_html ? (
+              {libVerbatimLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <p className="text-xs text-neutral-500">Extracting content from PDF...</p>
+                  </div>
+                </div>
+              ) : libVerbatimResult?.text ? (
+                <div
+                  className="section-content max-w-none"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(libVerbatimResult.text) }}
+                />
+              ) : selectedSection.content_html ? (
                 <div
                   className="section-content max-w-none"
                   dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedSection.content_html) }}
                 />
               ) : (
                 <p className="text-sm text-neutral-400 italic">
-                  No content available for this section. Try the upload mode for full verbatim extraction.
+                  Content extraction requires the source PDF. The PDF for this protocol may not be available on the server.
                 </p>
               )}
             </CardBody>
