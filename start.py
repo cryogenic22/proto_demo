@@ -40,6 +40,13 @@ if SEED_DIR.exists():
                 shutil.copy2(src, dst)
                 print(f"  Seeded PDF: {src.name}", flush=True)
 
+    # Seed procedure mapping CSV (master vocabulary)
+    PROC_SRC = Path("data_seed/procedure_mapping.csv")
+    PROC_DST = Path("data/procedure_mapping.csv")
+    if PROC_SRC.exists():
+        shutil.copy2(PROC_SRC, PROC_DST)
+        print(f"  Seeded procedure_mapping.csv", flush=True)
+
     # Remove P-27 if it exists (empty protocol, no extraction data)
     p27 = DATA_DIR / "P-27.json"
     if p27.exists():
