@@ -613,6 +613,21 @@ Return ONLY the JSON array."""
         query = title_query.lower()
         return [s for s in self._flatten(sections) if query in s.title.lower()]
 
+    @staticmethod
+    def _next_section_number(number: str) -> str | None:
+        """Get the next sibling section number.
+
+        '2.2.1' → '2.2.2', '3.1' → '3.2', '5' → '6'
+        """
+        if not number:
+            return None
+        parts = number.split(".")
+        try:
+            parts[-1] = str(int(parts[-1]) + 1)
+            return ".".join(parts)
+        except ValueError:
+            return None
+
     def _find_heading_y(
         self, doc: fitz.Document, page_0indexed: int,
         section_number: str, title: str,
@@ -769,6 +784,19 @@ Return ONLY the JSON array."""
                     end = scan_page
                     end_y = found_y
                     break
+
+            # Same-page sibling boundary detection
+            if end_y >= 99999.0:
+                next_num = self._next_section_number(section.number)
+                if next_num:
+                    for scan_page in range(actual_start, end + 1):
+                        sibling_y = self._find_heading_y(
+                            doc, scan_page, next_num, ""
+                        )
+                        if sibling_y > start_y + 5:
+                            end = scan_page
+                            end_y = sibling_y
+                            break
 
         # Extract text with Y-coordinate clipping per page
         lines = []
@@ -928,8 +956,8 @@ Return ONLY the JSON array."""
                 end_y = 99999.0
         else:
             # Scan EACH page from declared_end onward for the next heading.
-            # This prevents bleed: if the next section starts on end_page+1,
-            # we clip there instead of capturing the full +2 buffer.
+            # Use the resolved start_y (not 0.0) to correctly skip
+            # the current section's own heading on a shared page.
             end_y = 99999.0
             for scan_page in range(declared_end, end + 1):
                 after = start_y if scan_page == start else 0.0
@@ -940,6 +968,24 @@ Return ONLY the JSON array."""
                     end = scan_page
                     end_y = found_y
                     break
+
+            # If no next heading found via generic scan, try finding
+            # the specific next sibling section by number pattern.
+            # Handles both same-page (2.2.1→2.2.2) and cross-page boundaries.
+            if end_y >= 99999.0:
+                next_num = self._next_section_number(section.number)
+                if next_num:
+                    for scan_page in range(start, end + 1):
+                        sibling_y = self._find_heading_y(
+                            doc, scan_page, next_num, ""
+                        )
+                        if sibling_y > 0:
+                            # Same page: sibling must be below current heading
+                            if scan_page == start and sibling_y <= start_y + 5:
+                                continue
+                            end = scan_page
+                            end_y = sibling_y
+                            break
 
         # Header/footer patterns to strip (static)
         hf_patterns = [

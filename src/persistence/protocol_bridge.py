@@ -139,8 +139,8 @@ def _parse_sections(pdf_bytes: bytes, filename: str) -> list[SectionNode]:
                     pdf_bytes, s, output="html", include_subsections=False
                 )
                 # Truncate very large sections to keep storage manageable
-                if len(content_html) > 50000:
-                    content_html = content_html[:50000] + "\n<!-- truncated -->"
+                if len(content_html) > 100000:
+                    content_html = content_html[:100000] + "\n<!-- truncated -->"
             except Exception:
                 pass
 
