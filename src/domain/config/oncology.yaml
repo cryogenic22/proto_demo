@@ -55,6 +55,27 @@ visit_counting:
     - "weekly"
     - "biweekly"
 
+# ── Cycle Defaults ────────────────────────────────────────────────────
+# Used by _infer_cycle_multiplier() to estimate total cycles
+# when the SoA only shows representative cycles
+cycle_defaults:
+  cytotoxic_chemo:
+    typical_cycles: 6
+    range: [4, 8]
+    cycle_days: 21
+  immunotherapy:
+    typical_months: 12
+    range_months: [6, 24]
+    cycle_days: 21
+  tki_oral:
+    typical_months: 10
+    range_months: [6, 18]
+    cycle_days: 28
+  adt_hormonal:
+    typical_months: 24
+    range_months: [12, 36]
+    cycle_days: 28
+
 # ── Cost Tiers ────────────────────────────────────────────────────────
 cost_tiers:
   LOW: 75

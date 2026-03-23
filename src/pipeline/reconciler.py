@@ -4,6 +4,8 @@ Reconciler — multi-pass consistency checking and confidence scoring.
 Reconciles results from multiple extraction passes, incorporates
 challenger findings, and produces final per-cell confidence scores.
 Flags cells below threshold for human review.
+
+Now preserves per-cell evidence for the trust module.
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ from src.models.schema import (
     ReviewItem,
     ReviewType,
 )
+from src.trust.engine import build_cell_evidence
 
 logger = logging.getLogger(__name__)
 
@@ -87,10 +90,25 @@ class Reconciler:
             ref = CellRef(row=cell.row, col=cell.col)
             confidence = cell.confidence
 
+            # Collect challenger issues for this cell
+            cell_challenges = challenge_map.get(ref, [])
+            challenge_dicts = [
+                {"severity": c.severity, "challenge_type": c.challenge_type.value,
+                 "description": c.description, "suggested_value": c.suggested_value}
+                for c in cell_challenges
+            ]
+
             # Apply challenger penalty
-            if ref in challenge_map:
-                max_severity = max(c.severity for c in challenge_map[ref])
+            if cell_challenges:
+                max_severity = max(c.severity for c in cell_challenges)
                 confidence *= (1.0 - max_severity * 0.5)
+
+            # Build evidence (single pass, no pass2)
+            evidence = build_cell_evidence(
+                pass1_value=cell.raw_value,
+                pass1_conf=cell.confidence,
+                challenger_issues=challenge_dicts if challenge_dicts else [],
+            )
 
             # Apply cost-weighted threshold
             threshold = self._get_threshold(ref, cost_map)
@@ -105,7 +123,10 @@ class Reconciler:
                     cost_tier=cost_map.get(ref, CostTier.LOW),
                 ))
 
-            result_cells.append(cell.model_copy(update={"confidence": confidence}))
+            result_cells.append(cell.model_copy(update={
+                "confidence": confidence,
+                "evidence": evidence.model_dump(),
+            }))
 
         return ReconciliationResult(
             cells=result_cells,
@@ -120,7 +141,7 @@ class Reconciler:
         challenges: list[ChallengeIssue],
         cost_map: dict[CellRef, CostTier],
     ) -> ReconciliationResult:
-        """Reconcile two extraction passes."""
+        """Reconcile two extraction passes, preserving evidence."""
         # Build lookup maps
         map1 = {(c.row, c.col): c for c in pass1}
         map2 = {(c.row, c.col): c for c in pass2}
@@ -137,29 +158,56 @@ class Reconciler:
             cell2 = map2.get(key)
             ref = CellRef(row=key[0], col=key[1])
 
+            # Collect challenger issues for this cell
+            cell_challenges = challenge_map.get(ref, [])
+            challenge_dicts = [
+                {"severity": c.severity, "challenge_type": c.challenge_type.value,
+                 "description": c.description, "suggested_value": c.suggested_value}
+                for c in cell_challenges
+            ]
+
             if cell1 and cell2:
                 # Both passes have this cell — check agreement
                 if self._values_agree(cell1, cell2):
-                    confidence = 0.95  # High confidence when both agree
+                    confidence = 0.95
                     merged = cell1.model_copy(update={"confidence": confidence})
                 else:
                     conflicts += 1
-                    confidence = 0.50  # Low confidence on disagreement
-                    # Prefer pass 1 value but mark as uncertain
+                    confidence = 0.50
                     merged = cell1.model_copy(update={"confidence": confidence})
+
+                # Build evidence preserving both pass values
+                evidence = build_cell_evidence(
+                    pass1_value=cell1.raw_value,
+                    pass1_conf=cell1.confidence,
+                    pass2_value=cell2.raw_value,
+                    pass2_conf=cell2.confidence,
+                    challenger_issues=challenge_dicts if challenge_dicts else [],
+                )
             elif cell1:
-                # Only in pass 1
                 merged = cell1.model_copy(update={"confidence": 0.70})
+                evidence = build_cell_evidence(
+                    pass1_value=cell1.raw_value,
+                    pass1_conf=cell1.confidence,
+                    challenger_issues=challenge_dicts if challenge_dicts else [],
+                )
             else:
-                # Only in pass 2
                 merged = cell2.model_copy(update={"confidence": 0.70})  # type: ignore
+                evidence = build_cell_evidence(
+                    pass1_value=cell2.raw_value if cell2 else "",  # type: ignore
+                    pass1_conf=cell2.confidence if cell2 else 0.5,  # type: ignore
+                    challenger_issues=challenge_dicts if challenge_dicts else [],
+                )
 
             # Apply challenger penalties
             confidence = merged.confidence
-            if ref in challenge_map:
-                max_severity = max(c.severity for c in challenge_map[ref])
+            if cell_challenges:
+                max_severity = max(c.severity for c in cell_challenges)
                 confidence *= (1.0 - max_severity * 0.5)
                 merged = merged.model_copy(update={"confidence": confidence})
+
+            # Attach evidence
+            merged = merged.model_copy(update={"evidence": evidence.model_dump()})
 
             # Check threshold
             threshold = self._get_threshold(ref, cost_map)

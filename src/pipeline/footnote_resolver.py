@@ -37,10 +37,21 @@ _REFERENCE_PATTERNS = [
     r"\bsee\s+section\b", r"\brefer\s+to\b", r"\bsee\s+table\b",
     r"\bsee\s+appendix\b",
 ]
+_FREQUENCY_MODIFIER_PATTERNS = [
+    r"\bcycles?\s+\d+\s*[-–]\s*\d+\s+only\b",      # "Cycles 1-2 only"
+    r"\bfirst\s+\d+\s+cycles?\s+only\b",            # "first 3 cycles only"
+    r"\bthen\s+(?:only\s+)?(?:on\s+)?day\s+1\b",    # "then Day 1 only"
+    r"\b(?:every|q)\s*\d+\s*(?:cycles?|visits?)\b",  # "every 2 cycles"
+    r"\breduced\s+frequency\s+after\b",              # "reduced frequency after"
+    r"\bevery\s+other\s+(?:visit|cycle)\b",          # "every other visit"
+    r"\bDay\s+\d+\s+and\s+Day\s+\d+\s+of\b",        # "Day 1 and Day 8 of"
+    r"\bonly\s+during\s+(?:cycle|induction|maintenance)\b",
+]
 
 _CONDITIONAL_RE = re.compile("|".join(_CONDITIONAL_PATTERNS), re.IGNORECASE)
 _EXCEPTION_RE = re.compile("|".join(_EXCEPTION_PATTERNS), re.IGNORECASE)
 _REFERENCE_RE = re.compile("|".join(_REFERENCE_PATTERNS), re.IGNORECASE)
+_FREQUENCY_MODIFIER_RE = re.compile("|".join(_FREQUENCY_MODIFIER_PATTERNS), re.IGNORECASE)
 
 
 class FootnoteResolver:
@@ -112,9 +123,16 @@ class FootnoteResolver:
 
     @staticmethod
     def _classify_footnote(text: str) -> FootnoteType:
-        """Classify a footnote based on its text content."""
+        """Classify a footnote based on its text content.
+
+        Order matters: FREQUENCY_MODIFIER before CONDITIONAL because
+        'Cycles 1-2 only, then Day 1 only' is frequency, not conditional.
+        """
         if _EXCEPTION_RE.search(text):
             return FootnoteType.EXCEPTION
+        # Check FREQUENCY_MODIFIER before CONDITIONAL (more specific)
+        if _FREQUENCY_MODIFIER_RE.search(text):
+            return FootnoteType.FREQUENCY_MODIFIER
         if _CONDITIONAL_RE.search(text):
             return FootnoteType.CONDITIONAL
         if _REFERENCE_RE.search(text):

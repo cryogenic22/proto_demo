@@ -37,10 +37,11 @@ class CellDataType(str, Enum):
 
 
 class FootnoteType(str, Enum):
-    CONDITIONAL = "CONDITIONAL"      # modifies when/if procedure is done
-    CLARIFICATION = "CLARIFICATION"  # adds detail
-    EXCEPTION = "EXCEPTION"          # excludes certain cases
-    REFERENCE = "REFERENCE"          # points to another section
+    CONDITIONAL = "CONDITIONAL"              # modifies when/if procedure is done
+    FREQUENCY_MODIFIER = "FREQUENCY_MODIFIER"  # changes visit frequency/count
+    CLARIFICATION = "CLARIFICATION"          # adds detail
+    EXCEPTION = "EXCEPTION"                  # excludes certain cases
+    REFERENCE = "REFERENCE"                  # points to another section
 
 
 class CostTier(str, Enum):
@@ -201,6 +202,7 @@ class ExtractedCell(BaseModel):
     source: BoundingBox | None = None
     row_header: str = Field(default="", description="Procedure/row label for this cell")
     col_header: str = Field(default="", description="Visit/column label for this cell")
+    evidence: dict | None = Field(default=None, description="Serialized CellEvidence from trust module")
 
 
 class ResolvedFootnote(BaseModel):

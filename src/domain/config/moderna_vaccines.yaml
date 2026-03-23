@@ -57,6 +57,20 @@ procedure_cost_overrides:
   "Reactogenicity Assessment": "LOW"
   "e-Diary": "EDIARY"
 
+# ── CPT Code Overrides ───────────────────────────────────────────────
+# Domain-aware CPT: in vaccine trials, drug admin = vaccination (90471)
+# not IV infusion (96365). Applied in budget calculator after normalization.
+cpt_overrides:
+  "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)":
+    cpt: "90471"
+    canonical: "Vaccination Administration"
+  "Study Drug Administration":
+    cpt: "90471"
+    canonical: "Vaccination Administration"
+  "Dosing":
+    cpt: "90471"
+    canonical: "Vaccination Administration"
+
 # ── Footnote Rules ────────────────────────────────────────────────────
 footnote_rules:
   conditional_handling: "range"

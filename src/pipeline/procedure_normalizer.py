@@ -205,6 +205,12 @@ class ProcedureNormalizer:
                 pass
         return ProcedureNormalizer._DEFAULT_NOT_PROCEDURES
 
+    # Single-word labels that are SoA structure, not procedures
+    _EXACT_EXCLUSIONS = {
+        "visit", "month", "week", "day", "year",
+        "notes", "comments", "remarks",
+    }
+
     def is_not_procedure(self, raw_name: str) -> bool:
         """Check if a raw name is a non-procedure SoA label.
 
@@ -215,6 +221,9 @@ class ProcedureNormalizer:
             self._not_procedures = self._load_exclusion_patterns()
         key = raw_name.strip().lower()
         if len(key) < 3:
+            return True
+        # Exact match for single-word labels
+        if key in self._EXACT_EXCLUSIONS:
             return True
         return any(excl in key for excl in self._not_procedures)
 

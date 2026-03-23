@@ -130,3 +130,37 @@ def is_phone_call(
     keywords = config.get("footnote_rules", {}).get("phone_call_keywords", [])
     text_lower = footnote_text.lower()
     return any(kw in text_lower for kw in keywords)
+
+
+def get_cycle_config(config: dict[str, Any]) -> dict[str, Any]:
+    """Extract cycle counting settings from domain config.
+
+    Returns a dict with keys:
+    - cycle_based: bool — whether protocol uses cycle-based visits
+    - default_cycles: int — expected total cycles (default 6)
+    - max_cycles: int — cap for cost estimation
+    - treat_to_progression: dict — median duration, ranges
+    - visit_structure: str — "cycle_based" or "fixed_duration"
+    """
+    domain = config.get("domain", {})
+    vc = config.get("visit_counting", {})
+    ta = config.get("ta_specific", {})
+
+    return {
+        "visit_structure": domain.get("visit_structure", "fixed_duration"),
+        "cycle_based": ta.get("cycle_based", False),
+        "default_cycles": vc.get("default_cycles", ta.get("default_cycles", 6)),
+        "max_cycles": vc.get("max_cycles", 12),
+        "treat_to_progression": ta.get("treat_to_progression", {}),
+        "cycle_patterns": vc.get("cycle_patterns", []),
+    }
+
+
+def get_cpt_overrides(config: dict[str, Any]) -> dict[str, dict[str, str]]:
+    """Get domain-aware CPT code overrides.
+
+    Returns mapping of canonical_name → {"cpt": "...", "canonical": "..."}.
+    Used by budget calculator to remap procedure codes in TA-specific contexts
+    (e.g., "Study Drug Administration" → CPT 90471 in vaccine trials).
+    """
+    return config.get("cpt_overrides", {})

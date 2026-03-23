@@ -1,0 +1,56 @@
+# Domain Configuration: Defaults
+# Fallback values for any therapeutic area not covered by a specific YAML
+
+domain:
+  name: "General"
+  visit_structure: "fixed_duration"
+
+visit_counting:
+  marker_patterns:
+    - "X"
+    - "x"
+    - "Y"
+    - "YES"
+    - "✓"
+    - "✔"
+  text_indicators: []
+  continuous_range_patterns: []
+  periodic_procedure_keywords: []
+  default_cycles: 1
+  max_cycles: 1
+
+cost_tiers:
+  LOW: 75
+  MEDIUM: 350
+  HIGH: 1200
+  VERY_HIGH: 3500
+
+procedure_cost_overrides: {}
+
+footnote_rules:
+  conditional_handling: "include"
+  phone_call_keywords:
+    - "call"
+    - "telephone"
+    - "phone"
+  unscheduled_visit_rate: 0.10
+  conditional_probability: 0.60  # Default probability for "as clinically indicated"
+
+# ── Trust Configuration ──────────────────────────────────────────────
+trust:
+  weights:
+    dual_pass_agreement: 0.35
+    ocr_grounding: 0.20
+    challenger_clear: 0.20
+    procedure_mapping: 0.15
+    footnote_resolution: 0.10
+  thresholds:
+    high: 0.90
+    medium: 0.75
+  review_minutes_per_flagged_cell: 0.5
+  review_minutes_per_unmapped_procedure: 2.0
+
+output:
+  show_conditional_range: false
+  group_by: "category"
+  currency: "USD"
