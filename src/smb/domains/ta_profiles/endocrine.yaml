@@ -1,0 +1,35 @@
+therapeutic_area: endocrine
+visit_structure: fixed_duration
+
+section_extraction:
+  treatment_regimen:
+    search_sections: ["6", "6.1"]
+    search_keywords: ["dose", "treatment", "titration"]
+    extract:
+      - field: treatment_duration
+        patterns: ["(\\d+)\\s*(?:weeks?|months?) treatment", "treatment period.{0,20}(\\d+)"]
+      - field: total_doses
+        patterns: ["(\\d+)\\s*(?:doses?|injections?)"]
+      - field: dose_interval_days
+        patterns: ["every (\\d+) weeks", "once weekly", "Q(\\d+)W"]
+        transform: "weeks_to_days"
+
+  population_subsets:
+    search_sections: ["5", "8"]
+    extract:
+      - field: pk_subset
+        patterns: ["pharmacokinetic.{0,20}(\\d+)\\s*participant"]
+
+  study_design:
+    search_sections: ["1", "4"]
+    search_keywords: ["synopsis", "design"]
+
+inference_defaults:
+  screen_failure_rate: 0.30
+  early_discontinuation_rate: 0.15
+
+expected_procedures:
+  - "HbA1c"
+  - "Fasting Serum Glucose"
+  - "Body Weight"
+  - "Vital Signs"

@@ -1,0 +1,53 @@
+therapeutic_area: vaccines
+visit_structure: fixed_duration
+
+section_extraction:
+  treatment_regimen:
+    search_sections: ["6", "6.1"]
+    search_keywords: ["dose", "vaccination", "injection"]
+    extract:
+      - field: total_doses
+        patterns: ["(\\d+)\\s*dose", "(\\d+)\\s*injection", "(\\d+)\\s*vaccination"]
+      - field: dose_interval_days
+        patterns: ["Day\\s*(\\d+)\\s*and\\s*Day\\s*(\\d+)", "(\\d+)\\s*days apart"]
+      - field: follow_up_duration
+        patterns: ["follow.{0,10}up.{0,20}(\\d+)\\s*(?:months|days|weeks)"]
+
+  population_subsets:
+    search_sections: ["5", "8", "8.1"]
+    extract:
+      - field: reactogenicity_subset
+        patterns: ["reactogenicity.{0,20}subset.{0,20}(\\d+)", "solicited.{0,20}(\\d+)\\s*participant"]
+      - field: immunogenicity_subset
+        patterns: ["immunogenicity.{0,20}subset.{0,20}(\\d+)", "immunogenicity.{0,10}(\\d+)\\s*participant"]
+      - field: total_enrollment
+        patterns: ["approximately\\s*(\\d[\\d,]+)\\s*participant", "(\\d[\\d,]+)\\s*(?:will be|to be)\\s*(?:randomized|enrolled)"]
+
+  procedure_frequency:
+    search_sections: ["8", "11.1"]
+    extract:
+      - field: ediary_span
+        patterns: ["(?:e-?[Dd]iary|diary).{0,30}Day\\s*(\\d+).{0,20}Day\\s*(\\d+)"]
+      - field: surveillance_frequency
+        patterns: ["surveillance.{0,20}(weekly|daily|monthly)"]
+
+  study_design:
+    search_sections: ["1", "4"]
+    search_keywords: ["synopsis", "design", "overview"]
+
+inference_defaults:
+  treat_to_progression:
+    enabled: false
+  screen_failure_rate: 0.20
+  early_discontinuation_rate: 0.05
+
+expected_procedures:
+  - "Vaccination Administration"
+  - "Nasal/Nasopharyngeal Swab"
+  - "Reactogenicity Assessment"
+  - "Immunogenicity Sample"
+  - "e-Diary"
+
+cost_overrides:
+  "Vaccination Administration": "LOW"
+  "Study Drug Administration": "LOW"

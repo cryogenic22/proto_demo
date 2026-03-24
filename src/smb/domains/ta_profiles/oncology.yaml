@@ -1,0 +1,61 @@
+therapeutic_area: oncology
+visit_structure: cycle_based
+
+section_extraction:
+  treatment_regimen:
+    search_sections: ["6", "6.1", "6.2"]
+    search_keywords: ["cycle", "dose", "administer", "infusion", "treatment period"]
+    extract:
+      - field: cycle_length_days
+        patterns: ["every (\\d+) weeks", "Q(\\d+)W", "(\\d+)-day cycle"]
+        transform: "weeks_to_days"
+      - field: expected_duration
+        patterns: ["up to (\\d+) (?:cycles|months)", "maximum of (\\d+)", "approximately (\\d+) months"]
+      - field: expected_cycles
+        patterns: ["(\\d+)\\s*cycles", "up to (\\d+) cycles"]
+      - field: treatment_cap
+        patterns: ["not to exceed (\\d+)", "maximum (\\d+) cycles", "up to (\\d+) months"]
+      - field: treat_to_progression
+        patterns: ["until (?:disease )?progression", "until unacceptable toxicity", "treat to progression"]
+        type: boolean
+
+  population_subsets:
+    search_sections: ["5", "5.1", "8"]
+    extract:
+      - field: biomarker_subset
+        patterns: ["biomarker.{0,20}subset.{0,20}(\\d+)", "PD-L1.{0,20}(\\d+)\\s*participant"]
+      - field: pk_subset
+        patterns: ["pharmacokinetic.{0,20}subset.{0,20}(\\d+)", "PK.{0,10}(\\d+)\\s*participant"]
+
+  procedure_frequency:
+    search_sections: ["8", "8.1", "8.2", "8.3"]
+    extract:
+      - field: imaging_frequency
+        patterns: ["(?:CT|MRI|scan).{0,30}every (\\d+) (?:weeks|cycles)"]
+      - field: lab_frequency_change
+        patterns: ["(?:CBC|chemistry).{0,30}(?:Cycle[s]? )(\\d+).{0,10}(?:through|to).{0,10}(\\d+).{0,20}then"]
+
+  study_design:
+    search_sections: ["1", "4", "5"]
+    search_keywords: ["synopsis", "design", "overview", "study design"]
+
+inference_defaults:
+  treat_to_progression:
+    enabled: true
+    default_median_months: 12
+    p25_months: 6
+    p75_months: 24
+  cycle_length_days: 21
+  screen_failure_rate: 0.45
+  early_discontinuation_rate: 0.30
+
+expected_procedures:
+  - "Tumor Assessment (RECIST)"
+  - "ECOG Performance Status"
+  - "CT Scan"
+  - "Study Drug Administration (IV Infusion)"
+
+cost_overrides:
+  "Study Drug Administration (IV Infusion)": "INFUSION"
+  "CT Scan (Chest)": "HIGH"
+  "Tumor Biopsy": "BIOPSY"
