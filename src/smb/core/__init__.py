@@ -1,1 +1,1 @@
-"""SMB Core — entity model, relationships, engine, inference."""
+"""SMB Core — entity model, relationships, engine, inference, validation."""
