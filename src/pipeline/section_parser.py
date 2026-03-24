@@ -1904,6 +1904,19 @@ Return ONLY the JSON array."""
     def _compute_page_ranges(self, sections: list[Section], total_pages: int):
         """Compute end_page for each section and build parent-child hierarchy."""
         flat = self._flatten(sections)
+
+        # Deduplicate: same section number + page should appear only once.
+        # Duplicates cause wrong end_page (next entry is yourself, not the next section).
+        seen: set[tuple[str, int]] = set()
+        deduped: list[Section] = []
+        for s in flat:
+            key = (s.number, s.page)
+            if key in seen:
+                continue
+            seen.add(key)
+            deduped.append(s)
+        flat = deduped
+
         for i, s in enumerate(flat):
             if i + 1 < len(flat):
                 s.end_page = flat[i + 1].page - 1
