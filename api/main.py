@@ -110,11 +110,41 @@ def _find_protocol_pdf(protocol_id: str) -> Path | None:
 app.add_middleware(
     CORSMiddleware,
     allow_origin_regex=r"https://.*\.up\.railway\.app",
-    allow_origins=["*"],  # Allow all origins — Railway CORS issues with subdomains
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
+
+
+# Ensure CORS headers on ALL responses including errors.
+# FastAPI's CORSMiddleware can miss HTTPException responses in some versions.
+@app.exception_handler(HTTPException)
+async def cors_http_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+        },
+    )
+
+
+@app.exception_handler(Exception)
+async def cors_general_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": str(exc)},
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+        },
+    )
+
 
 # ---------------------------------------------------------------------------
 # Persistent job store — survives server restarts
