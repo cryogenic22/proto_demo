@@ -292,97 +292,277 @@ export default function VerbatimExtractPage() {
           </div>
         )}
 
-        {/* Library mode: show section content */}
+        {/* Library mode: side-by-side comparison */}
         {sourceMode === "library" && selectedSection && (
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded">
-                    {selectedSection.number}
-                  </span>
-                  <h3 className="text-sm font-semibold text-neutral-800">
-                    {selectedSection.title}
-                  </h3>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="success">Verbatim</Badge>
-                  <Badge variant="neutral">
-                    Page {selectedSection.page}
-                    {selectedSection.end_page && selectedSection.end_page !== selectedSection.page
-                      ? `–${selectedSection.end_page}`
-                      : ""}
-                  </Badge>
-                </div>
-              </div>
-            </CardHeader>
-            <CardBody>
-              {libVerbatimLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="text-center">
-                    <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                    <p className="text-xs text-neutral-500">Extracting content from PDF...</p>
-                  </div>
-                </div>
-              ) : libVerbatimResult?.text ? (
-                <div
-                  className="section-content max-w-none"
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(libVerbatimResult.text) }}
-                />
-              ) : selectedSection.content_html ? (
-                <div
-                  className="section-content max-w-none"
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedSection.content_html) }}
-                />
-              ) : (
-                <p className="text-sm text-neutral-400 italic">
-                  Content extraction requires the source PDF. The PDF for this protocol may not be available on the server.
-                </p>
-              )}
-            </CardBody>
-          </Card>
+          <VerbatimComparison
+            protocolId={selectedProtocolId}
+            section={selectedSection}
+            extractedHtml={libVerbatimResult?.text || selectedSection.content_html || ""}
+            explanation={libVerbatimResult?.explanation || ""}
+            sourcePages={libVerbatimResult?.source_pages || [selectedSection.page]}
+            loading={libVerbatimLoading}
+            isVerbatim={true}
+          />
         )}
 
         {/* Upload mode: show extraction result */}
         {sourceMode === "upload" && result && (
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-semibold text-neutral-800">Extraction Result</h3>
-                  <p className="text-xs text-neutral-400 mt-0.5">{result.explanation}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  {result.is_verbatim && <Badge variant="success">Verbatim</Badge>}
-                  <Badge variant="brand">{result.content_type}</Badge>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 mt-2 text-xs text-neutral-400">
-                {result.sections_found.length > 0 && (
-                  <span>Sections: {result.sections_found.join(", ")}</span>
-                )}
-                {result.source_pages.length > 0 && (
-                  <span>Pages: {result.source_pages.join(", ")}</span>
-                )}
-              </div>
-            </CardHeader>
-            <CardBody>
-              {outputFormat === "html" && result.text ? (
-                <div
-                  className="section-content max-w-none"
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(result.text) }}
-                />
-              ) : result.text ? (
-                <pre className="text-xs text-neutral-700 bg-neutral-50 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap font-mono border border-neutral-200">
-                  {result.text}
-                </pre>
-              ) : (
-                <p className="text-sm text-neutral-400 italic">No text content extracted.</p>
-              )}
-            </CardBody>
-          </Card>
+          <VerbatimComparison
+            protocolId=""
+            section={null}
+            extractedHtml={outputFormat === "html" ? result.text : ""}
+            extractedText={outputFormat === "text" ? result.text : ""}
+            explanation={result.explanation}
+            sourcePages={result.source_pages}
+            sectionsFound={result.sections_found}
+            loading={false}
+            isVerbatim={result.is_verbatim}
+            contentType={result.content_type}
+          />
         )}
       </div>
     </div>
+  );
+}
+
+// ─── Side-by-Side Verbatim Comparison ──────────────────────────────────────
+
+const API = process.env.NEXT_PUBLIC_API_URL || "";
+
+function VerbatimComparison({
+  protocolId,
+  section,
+  extractedHtml,
+  extractedText,
+  explanation,
+  sourcePages,
+  sectionsFound,
+  loading,
+  isVerbatim,
+  contentType,
+}: {
+  protocolId: string;
+  section: SectionNode | null;
+  extractedHtml?: string;
+  extractedText?: string;
+  explanation: string;
+  sourcePages: number[];
+  sectionsFound?: string[];
+  loading: boolean;
+  isVerbatim: boolean;
+  contentType?: string;
+}) {
+  const [viewMode, setViewMode] = useState<"side-by-side" | "extracted" | "source">("side-by-side");
+  const [pdfPage, setPdfPage] = useState(sourcePages[0] || 0);
+  const [pdfAvailable, setPdfAvailable] = useState(false);
+
+  // Check PDF availability
+  useEffect(() => {
+    if (!protocolId) { setPdfAvailable(false); return; }
+    fetch(`${API}/api/protocols/${protocolId}/page-image/${sourcePages[0] || 0}`)
+      .then((r) => setPdfAvailable(r.ok))
+      .catch(() => setPdfAvailable(false));
+  }, [protocolId, sourcePages]);
+
+  const hasContent = !!(extractedHtml || extractedText);
+  const extractedContent = extractedHtml || extractedText || "";
+
+  // Compute fidelity indicators
+  const fidelity = computeFidelity(extractedContent);
+
+  return (
+    <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-neutral-200 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {section && (
+            <>
+              <span className="font-mono text-xs text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded">
+                {section.number}
+              </span>
+              <h3 className="text-sm font-semibold text-neutral-800">{section.title}</h3>
+            </>
+          )}
+          {!section && sectionsFound && sectionsFound.length > 0 && (
+            <h3 className="text-sm font-semibold text-neutral-800">
+              Sections {sectionsFound.join(", ")}
+            </h3>
+          )}
+          <div className="flex items-center gap-1.5">
+            {isVerbatim && <Badge variant="success">Verbatim Copy</Badge>}
+            {contentType && <Badge variant="brand">{contentType}</Badge>}
+            {sourcePages.length > 0 && (
+              <Badge variant="neutral">
+                Page{sourcePages.length > 1 ? "s" : ""} {sourcePages.join(", ")}
+              </Badge>
+            )}
+          </div>
+        </div>
+        {/* View mode toggle */}
+        <div className="flex items-center gap-1 bg-neutral-100 rounded-lg p-0.5">
+          {(["side-by-side", "extracted", "source"] as const).map((mode) => (
+            <button
+              key={mode}
+              onClick={() => setViewMode(mode)}
+              disabled={mode === "source" && !pdfAvailable}
+              className={cn(
+                "px-2.5 py-1 text-[10px] font-medium rounded-md transition-colors",
+                viewMode === mode
+                  ? "bg-white text-neutral-800 shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700",
+                mode === "source" && !pdfAvailable && "opacity-40 cursor-not-allowed"
+              )}
+            >
+              {mode === "side-by-side" ? "Compare" : mode === "extracted" ? "Extracted" : "Source PDF"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Fidelity bar */}
+      {hasContent && (
+        <div className="px-4 py-2 bg-neutral-50 border-b border-neutral-100 flex items-center gap-4">
+          <span className="text-[10px] font-semibold text-neutral-500 uppercase tracking-wider">Extraction Fidelity</span>
+          <div className="flex items-center gap-3">
+            <FidelityBadge label="Paragraphs" count={fidelity.paragraphs} icon="P" />
+            <FidelityBadge label="Bold spans" count={fidelity.boldSpans} icon="B" />
+            <FidelityBadge label="Italic spans" count={fidelity.italicSpans} icon="I" />
+            <FidelityBadge label="List items" count={fidelity.listItems} icon="Li" />
+            <FidelityBadge label="Tables" count={fidelity.tables} icon="T" />
+            <FidelityBadge label="Headings" count={fidelity.headings} icon="H" />
+          </div>
+          <div className="ml-auto flex items-center gap-1.5">
+            <span className="text-[10px] text-neutral-400">Method:</span>
+            <Badge variant={isVerbatim ? "success" : "warning"}>
+              {isVerbatim ? "Direct Copy (no LLM)" : "LLM-assisted"}
+            </Badge>
+          </div>
+        </div>
+      )}
+
+      {/* Explanation */}
+      {explanation && (
+        <div className="px-4 py-1.5 border-b border-neutral-100">
+          <p className="text-[11px] text-neutral-400">{explanation}</p>
+        </div>
+      )}
+
+      {/* Content area */}
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+            <p className="text-xs text-neutral-500">Extracting verbatim content...</p>
+          </div>
+        </div>
+      ) : !hasContent ? (
+        <div className="p-8 text-center">
+          <p className="text-sm text-neutral-400 italic">
+            Content extraction requires the source PDF. The PDF for this protocol may not be available on the server.
+          </p>
+        </div>
+      ) : (
+        <div className={cn(
+          "flex",
+          viewMode === "side-by-side" ? "divide-x divide-neutral-200" : ""
+        )}>
+          {/* Source PDF panel */}
+          {(viewMode === "side-by-side" || viewMode === "source") && pdfAvailable && (
+            <div className={cn(
+              "flex flex-col bg-neutral-100",
+              viewMode === "side-by-side" ? "w-1/2" : "w-full"
+            )}>
+              <div className="px-3 py-1.5 bg-white border-b border-neutral-100 flex items-center justify-between shrink-0">
+                <span className="text-[10px] font-semibold text-neutral-600 uppercase tracking-wide">
+                  Source Document
+                </span>
+                <div className="flex items-center gap-1">
+                  <button onClick={() => setPdfPage(Math.max(0, pdfPage - 1))} className="p-0.5 rounded hover:bg-neutral-100 text-neutral-500">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                  </button>
+                  <span className="text-[10px] text-neutral-500 font-mono min-w-[40px] text-center">p.{pdfPage}</span>
+                  <button onClick={() => setPdfPage(pdfPage + 1)} className="p-0.5 rounded hover:bg-neutral-100 text-neutral-500">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                  </button>
+                </div>
+              </div>
+              <div className="overflow-auto p-2" style={{ maxHeight: "600px" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  key={pdfPage}
+                  src={`${API}/api/protocols/${protocolId}/page-image/${pdfPage}`}
+                  alt={`Source page ${pdfPage}`}
+                  className="w-full rounded shadow-sm bg-white"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Extracted content panel */}
+          {(viewMode === "side-by-side" || viewMode === "extracted") && (
+            <div className={cn(
+              "flex flex-col",
+              viewMode === "side-by-side" ? "w-1/2" : "w-full"
+            )}>
+              <div className="px-3 py-1.5 bg-white border-b border-neutral-100 flex items-center justify-between shrink-0">
+                <span className="text-[10px] font-semibold text-neutral-600 uppercase tracking-wide">
+                  Extracted Content
+                </span>
+                <Badge variant="success" className="text-[9px]">
+                  {isVerbatim ? "Zero Hallucination" : "LLM-assisted"}
+                </Badge>
+              </div>
+              <div className="overflow-auto p-4" style={{ maxHeight: "600px" }}>
+                {extractedHtml ? (
+                  <div
+                    className="section-content max-w-none text-sm"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(extractedHtml) }}
+                  />
+                ) : extractedText ? (
+                  <pre className="text-xs text-neutral-700 bg-neutral-50 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap font-mono border border-neutral-200">
+                    {extractedText}
+                  </pre>
+                ) : null}
+              </div>
+            </div>
+          )}
+
+          {/* No PDF available — show only extracted */}
+          {viewMode === "source" && !pdfAvailable && (
+            <div className="w-full p-8 text-center">
+              <p className="text-sm text-neutral-400">
+                Source PDF not available for this protocol. Use the "Extracted" view to see the content.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Fidelity computation ──────────────────────────────────────────────────
+
+function computeFidelity(html: string) {
+  const p = (html.match(/<p[\s>]/gi) || []).length;
+  const bold = (html.match(/<(strong|b)[\s>]/gi) || []).length;
+  const italic = (html.match(/<(em|i)[\s>]/gi) || []).length;
+  const li = (html.match(/<li[\s>]/gi) || []).length;
+  const table = (html.match(/<table[\s>]/gi) || []).length;
+  const heading = (html.match(/<h[1-6][\s>]/gi) || []).length;
+  return { paragraphs: p, boldSpans: bold, italicSpans: italic, listItems: li, tables: table, headings: heading };
+}
+
+function FidelityBadge({ label, count, icon }: { label: string; count: number; icon: string }) {
+  if (count === 0) return null;
+  return (
+    <span
+      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-white border border-neutral-200 text-[10px] text-neutral-600"
+      title={`${count} ${label} detected in extracted content`}
+    >
+      <span className="font-bold text-brand-primary">{icon}</span>
+      <span className="tabular-nums">{count}</span>
+    </span>
   );
 }
