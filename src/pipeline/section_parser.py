@@ -1607,10 +1607,10 @@ Return ONLY the JSON array."""
         html = "\n".join(html_parts)
 
         # M3 fix: merge adjacent identical formatting tags
-        # Replace with a single space to prevent stuck words
-        html = re.sub(r"</strong>\s*<strong>", " ", html)
-        html = re.sub(r"</em>\s*<em>", " ", html)
-        html = re.sub(r"</u>\s*<u>", " ", html)
+        # Handle whitespace, newlines, and zero-width chars between tags
+        html = re.sub(r"</strong>[\s\n\r\t\u200b]*<strong>", " ", html)
+        html = re.sub(r"</em>[\s\n\r\t\u200b]*<em>", " ", html)
+        html = re.sub(r"</u>[\s\n\r\t\u200b]*<u>", " ", html)
 
         return html
 

@@ -173,12 +173,26 @@ def evaluate_protocol(pdf_path: Path) -> dict:
     section_with_numbers = [s for s in deduped if s.number]
 
     # Evaluate a sample of sections (up to 10 diverse sections)
+    # Try fixed numbers first, then search by title keyword for protocols
+    # with non-standard numbering (e.g., inclusion criteria in Section 4.1)
     sample_sections = []
-    # Pick: first section, a mid-level section, inclusion/exclusion, and a few others
     for target in ["1", "2", "3", "4", "5", "5.1", "5.2", "6.1", "6.2", "8"]:
         s = parser.find(sections, target)
         if s:
             sample_sections.append(target)
+
+    # If too few found by number, search by title keywords
+    if len(sample_sections) < 3:
+        title_keywords = ["inclusion", "exclusion", "objective", "endpoint",
+                          "assessment", "design", "background", "rationale"]
+        for kw in title_keywords:
+            for s in deduped:
+                if kw in s.title.lower() and s.number and s.number not in sample_sections:
+                    sample_sections.append(s.number)
+                    break
+            if len(sample_sections) >= 8:
+                break
+
     sample_sections = sample_sections[:10]
 
     results = []
@@ -199,11 +213,12 @@ def evaluate_protocol(pdf_path: Path) -> dict:
             for k in total_elements:
                 total_elements[k] += result["elements"].get(k, 0)
 
-    # Parser failure: <10 sections = score 0 (not 100 from "no issues")
+    # Scoring: honest assessment
     if total_sections < 10:
-        score = 0
+        score = 0  # Parser failure
+    elif len(results) == 0:
+        score = 50  # Parser found sections but none were evaluable
     else:
-        # Start at 100, deduct for issues
         score = 100
         for r in results:
             for issue in r["issues"]:
