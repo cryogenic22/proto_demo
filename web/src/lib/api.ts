@@ -483,3 +483,118 @@ export async function extractVerbatimFromProtocol(
 export function getPageImageUrl(protocolId: string, pageNumber: number): string {
   return `${API_BASE}/api/protocols/${protocolId}/page-image/${pageNumber}`;
 }
+
+// ─── SMB (Structured Model Builder) API Functions ────────────────────────────
+
+export interface SMBGraphNode {
+  id: string;
+  type: string;
+  label: string;
+  properties: Record<string, unknown>;
+  confidence: string;
+}
+
+export interface SMBGraphEdge {
+  id: string;
+  type: string;
+  source: string;
+  target: string;
+  properties: Record<string, unknown>;
+  confidence: number;
+}
+
+export interface SMBGraph {
+  document_id: string;
+  domain: string;
+  nodes: SMBGraphNode[];
+  edges: SMBGraphEdge[];
+  metadata: Record<string, unknown>;
+  entity_counts: Record<string, number>;
+}
+
+export interface SMBSummary {
+  document_id: string;
+  domain: string;
+  total_entities: number;
+  total_relationships: number;
+  entity_types: Record<string, number>;
+  relationship_types: Record<string, number>;
+  version: number;
+}
+
+export interface SMBBuildResult {
+  status: "ready" | "building" | "error";
+  protocol_id: string;
+  summary?: SMBSummary;
+  build_time_seconds?: number;
+  inference_rules_fired?: string[];
+  validation_passed?: boolean;
+}
+
+export interface SMBModelInfo {
+  protocol_id: string;
+  summary: SMBSummary;
+  build_time_seconds: number;
+  inference_rules_fired: string[];
+  validation_passed: boolean;
+  validation_errors: string[];
+  validation_warnings: string[];
+  timeline: SMBVisitTimeline[];
+}
+
+export interface SMBVisitTimeline {
+  visit_name: string;
+  day_number: number | null;
+  window_minus: number;
+  window_plus: number;
+  window_unit: string;
+  is_unscheduled: boolean;
+  cycle: number | null;
+  procedure_count: number;
+}
+
+export interface SMBScheduleEntry {
+  procedure: string;
+  canonical_name: string;
+  cpt_code: string;
+  category: string;
+  cost_tier: string;
+  visits_required: string[];
+  total_occurrences: number;
+  firm_occurrences: number;
+  conditional_occurrences: number;
+  is_phone_call: boolean;
+  cost_multiplier: number;
+  subset_fraction: number;
+  avg_confidence: number;
+  source_pages: number[];
+}
+
+export async function buildSMBModel(protocolId: string): Promise<SMBBuildResult> {
+  const res = await fetch(`${API_BASE}/api/smb/build/${protocolId}`, {
+    method: "POST",
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: "SMB build failed" }));
+    throw new Error(err.detail || "SMB build failed");
+  }
+  return res.json();
+}
+
+export async function getSMBModel(protocolId: string): Promise<SMBModelInfo> {
+  const res = await fetch(`${API_BASE}/api/smb/model/${protocolId}`);
+  if (!res.ok) throw new Error("SMB model not available");
+  return res.json();
+}
+
+export async function getSMBSchedule(protocolId: string): Promise<{ protocol_id: string; schedule: SMBScheduleEntry[] }> {
+  const res = await fetch(`${API_BASE}/api/smb/model/${protocolId}/schedule`);
+  if (!res.ok) throw new Error("SMB schedule not available");
+  return res.json();
+}
+
+export async function getSMBGraph(protocolId: string): Promise<SMBGraph> {
+  const res = await fetch(`${API_BASE}/api/smb/model/${protocolId}/graph`);
+  if (!res.ok) throw new Error("SMB graph not available");
+  return res.json();
+}

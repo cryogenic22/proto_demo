@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, lazy, Suspense } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -16,6 +16,12 @@ import { ProtocolMetaCard } from "@/components/protocol/ProtocolMetaCard";
 import { SoAReviewAssistant } from "@/components/protocol/SoAReviewAssistant";
 import { ProtocolTrustDashboard } from "@/components/protocol/ProtocolTrustDashboard";
 import { cn } from "@/lib/utils";
+
+const KnowledgeGraphView = lazy(() =>
+  import("@/components/protocol/KnowledgeGraphView").then((m) => ({
+    default: m.KnowledgeGraphView,
+  }))
+);
 
 function confidenceColor(c: number) {
   if (c >= 0.95) return "text-emerald-700 bg-emerald-100";
@@ -118,6 +124,7 @@ export default function ProtocolWorkspacePage() {
   const tabs = [
     { key: "tables", label: "SoA Tables", count: protocol.tables.length },
     { key: "procedures", label: "Procedures", count: stats?.procedures },
+    { key: "knowledge-graph", label: "Knowledge Graph" },
     { key: "overview", label: "Overview" },
   ];
 
@@ -292,6 +299,19 @@ export default function ProtocolWorkspacePage() {
                   );
                 })()}
               </div>
+            )}
+
+            {/* Knowledge Graph tab */}
+            {activeTab === "knowledge-graph" && (
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center py-20">
+                    <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
+                  </div>
+                }
+              >
+                <KnowledgeGraphView protocolId={protocolId} />
+              </Suspense>
             )}
 
             {/* Overview tab */}

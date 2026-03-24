@@ -1631,6 +1631,130 @@ async def get_knowledge_elements(
     return [ke.model_dump() for ke in kes]
 
 
+# ---------------------------------------------------------------------------
+# SMB (Structured Model Builder) endpoints
+# ---------------------------------------------------------------------------
+
+_smb_cache: dict[str, dict[str, Any]] = {}  # protocol_id → BuildResult dict
+_smb_building: set[str] = set()  # protocol IDs currently building
+
+
+@app.post("/api/smb/build/{protocol_id}")
+async def smb_build(protocol_id: str):
+    """Build a structured model from a stored protocol."""
+    from src.smb.core.engine import SMBEngine
+
+    if protocol_id in _smb_building:
+        return {"status": "building", "protocol_id": protocol_id}
+
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(
+            status_code=404, detail=f"Protocol {protocol_id} not found"
+        )
+
+    _smb_building.add(protocol_id)
+    try:
+        protocol_data = (
+            protocol.model_dump(mode="json")
+            if hasattr(protocol, "model_dump")
+            else protocol
+        )
+        engine = SMBEngine(domain="protocol")
+        result = engine.build_from_protocol_json(protocol_data)
+
+        # Cache the full result
+        model_dict = result.model.model_dump(mode="json")
+        graph_dict = result.model.to_graph_dict()
+        summary = result.model.summary()
+
+        # Import query functions for budget schedule
+        from src.smb.core.query import (
+            get_budget_schedule,
+            get_visit_timeline,
+        )
+
+        schedule = get_budget_schedule(result.model)
+        timeline = get_visit_timeline(result.model)
+
+        _smb_cache[protocol_id] = {
+            "model": model_dict,
+            "graph": graph_dict,
+            "summary": summary,
+            "schedule": schedule,
+            "timeline": timeline,
+            "build_time_seconds": result.build_time_seconds,
+            "inference_rules_fired": result.inference_rules_fired,
+            "validation_passed": result.validation_passed,
+            "validation_errors": result.validation_errors,
+            "validation_warnings": result.validation_warnings,
+        }
+
+        return {
+            "status": "ready",
+            "protocol_id": protocol_id,
+            "summary": summary,
+            "build_time_seconds": result.build_time_seconds,
+            "inference_rules_fired": result.inference_rules_fired,
+            "validation_passed": result.validation_passed,
+        }
+    except Exception as e:
+        logger.exception(f"SMB build failed for {protocol_id}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"SMB build failed: {str(e)}",
+        )
+    finally:
+        _smb_building.discard(protocol_id)
+
+
+@app.get("/api/smb/model/{protocol_id}")
+async def smb_model_summary(protocol_id: str):
+    """Get structured model summary for a protocol."""
+    if protocol_id not in _smb_cache:
+        raise HTTPException(
+            status_code=404,
+            detail=f"SMB model not built for {protocol_id}. POST /api/smb/build/{protocol_id} first.",
+        )
+    cached = _smb_cache[protocol_id]
+    return {
+        "protocol_id": protocol_id,
+        "summary": cached["summary"],
+        "build_time_seconds": cached["build_time_seconds"],
+        "inference_rules_fired": cached["inference_rules_fired"],
+        "validation_passed": cached["validation_passed"],
+        "validation_errors": cached["validation_errors"],
+        "validation_warnings": cached["validation_warnings"],
+        "timeline": cached["timeline"],
+    }
+
+
+@app.get("/api/smb/model/{protocol_id}/schedule")
+async def smb_model_schedule(protocol_id: str):
+    """Get ScheduleEntry matrix formatted for the budget calculator."""
+    if protocol_id not in _smb_cache:
+        raise HTTPException(
+            status_code=404,
+            detail=f"SMB model not built for {protocol_id}. POST /api/smb/build/{protocol_id} first.",
+        )
+    return {
+        "protocol_id": protocol_id,
+        "schedule": _smb_cache[protocol_id]["schedule"],
+    }
+
+
+@app.get("/api/smb/model/{protocol_id}/graph")
+async def smb_model_graph(protocol_id: str):
+    """Get entity-relationship graph for visualization."""
+    if protocol_id not in _smb_cache:
+        raise HTTPException(
+            status_code=404,
+            detail=f"SMB model not built for {protocol_id}. POST /api/smb/build/{protocol_id} first.",
+        )
+    return _smb_cache[protocol_id]["graph"]
+
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
