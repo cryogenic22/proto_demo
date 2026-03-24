@@ -549,7 +549,8 @@ class PipelineOrchestrator:
         """Validate that a detected region is actually an SoA table.
 
         SoA tables have:
-        - Multiple columns (visits) -- at least 4
+        - Multiple columns (visits) -- at least 3 (continuation pages
+          may have fewer visit columns)
         - Procedure-like row headers in the first column
         - X marks or checkmarks in the data cells
         - Title containing "Schedule", "SoA", or "Activities"
@@ -580,13 +581,16 @@ class PipelineOrchestrator:
             if any(kw in title_lower for kw in reject_keywords):
                 return False
 
-            # Title-based acceptance
+            # Title-based acceptance — if the title explicitly says
+            # "Schedule", "SoA", or "Activities", accept regardless of
+            # other checks (catches image-rendered / sparse-text pages)
             accept_keywords = [
                 "schedule of activities", "schedule of assessments",
                 "schedule of evaluations", "schedule of procedures",
                 "schedule of events", "supplemental soe",
                 "supplemental schedule",
                 "soa", "s.o.a.", "soe",
+                "schedule", "activities",
             ]
             if any(kw in title_lower for kw in accept_keywords):
                 return True
@@ -596,25 +600,68 @@ class PipelineOrchestrator:
             import fitz
             doc = fitz.open(stream=pdf_bytes, filetype="pdf")
             x_count = 0
+            check_count = 0
+            total_cells_text = 0
+            single_char_cells = 0
+            page_has_soa_title = False
             for pg in region.pages:
                 if pg < doc.page_count:
                     text = doc[pg].get_text("text")
                     x_count += len(re.findall(r'\bX\b', text))
+                    check_count += text.count('\u2713') + text.count('\u2714')
+
+                    # Count single-character cell values (X, ✓, ✔, etc.)
+                    # — SoA tables are dominated by these
+                    for line in text.split('\n'):
+                        stripped = line.strip()
+                        if stripped:
+                            total_cells_text += 1
+                            if len(stripped) == 1:
+                                single_char_cells += 1
+
+                    # Fallback: check page text for SoA-like title
+                    title_re = re.compile(
+                        r"schedule\s+of\s+(?:activities|assessments|"
+                        r"evaluations|procedures|events)"
+                        r"|(?:^|\s)soa(?:\s|$)"
+                        r"|(?:^|\s)s\.o\.a\.(?:\s|$)",
+                        re.IGNORECASE,
+                    )
+                    if title_re.search(text):
+                        page_has_soa_title = True
             doc.close()
 
-            # SoA tables have many X marks; non-SoA tables have few or none
-            if x_count >= 5:
+            # Fallback: page text contains SoA-related title — accept it
+            if page_has_soa_title:
                 return True
-            if x_count == 0 and len(region.pages) <= 2:
+
+            # SoA tables have many X marks or checkmarks
+            if (x_count + check_count) >= 5:
+                return True
+
+            # Fallback: if >50% of cell-like text entries are single-char
+            # values (X, ✓), it's very likely an SoA table
+            if total_cells_text >= 10:
+                single_char_rate = single_char_cells / total_cells_text
+                if single_char_rate > 0.50:
+                    logger.info(
+                        f"Accepting '{region.title or region.table_id}' — "
+                        f"{single_char_rate:.0%} single-char cells (likely SoA)"
+                    )
+                    return True
+
+            # Only reject if zero X marks AND very few cells AND small table
+            if (x_count + check_count) == 0 and total_cells_text < 20 and len(region.pages) <= 1:
                 return False
 
-        # Default: REJECT unknown tables (was: accept)
-        # If we can't determine it's SoA, don't show it to the user
+        # Default: ACCEPT uncertain tables (include-then-reject strategy)
+        # Better to show a non-SoA table than miss a real SoA page.
+        # The UI allows users to reject irrelevant tables during review.
         logger.info(
-            f"Rejecting ambiguous table '{region.title or region.table_id}' "
-            f"— could not confirm as SoA"
+            f"Including ambiguous table '{region.title or region.table_id}' "
+            f"— cannot confirm as SoA, included for review"
         )
-        return False
+        return True
 
     @staticmethod
     def _build_cost_map(cells, procedures) -> dict:
