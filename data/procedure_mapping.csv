@@ -1,5 +1,5 @@
 canonical_name,cpt_code,code_system,category,cost_tier,aliases
-Concomitant Medications Review,,CPT,Administrative,LOW,"ConMeds, Con Meds, Concomitant Meds, Prior Medications, Prior Meds, Medication Review, Prior/Concomitant Medications, concomitant medication assessment, medication history, concurrent medications, background medications, Recording of concomitant medications, concomitant medications and non-study vaccinations, concomitant medications review"
+Concomitant Medications Review,,CPT,Administrative,LOW,"ConMeds, Con Meds, Concomitant Meds, Prior Medications, Prior Meds, Medication Review, Prior/Concomitant Medications, concomitant medication assessment, medication history, concurrent medications, background medications, Recording of concomitant medications, concomitant medications and non-study vaccinations, concomitant medications review, Concomitant medications and procedures, Concomitant medications"
 Consent: genetic sample,,CPT,Administrative,LOW,"Whole blood for gene expression (PaxGene-RNA tubes), Whole blood for gene expression (PAXgene RNA tubes)"
 Demographics Collection,,CPT,Administrative,LOW,"Demographics, Demographic Data, Patient Demographics, Subject Demographics, Baseline Demographics, Demo, Demographic Information, demographic form, demography"
 Eligibility Assessment,,CPT,Administrative,LOW,"I/E Criteria, Inclusion/Exclusion, Eligibility, Eligibility Screening, I/E Assessment, Inclusion Exclusion, Screening Assessment, eligibility check, eligibility review, eligibility determination, qualification assessment, Confirm participant originally received BNT162b2 at Dose 1 and Dose 2, Verification inclusion/ exclusion criteria"
@@ -188,8 +188,8 @@ Esophageal Manometry (High-Resolution),91010,CPT,GI Motility,MEDIUM,"esophageal 
 Gastric Emptying Study (GES),78264,CPT,GI Motility,MEDIUM,"GES, gastric emptying scintigraphy, gastric emptying scan, scintigraphic gastric emptying"
 Hydrogen Breath Test,91065,CPT,GI Motility,LOW,"HBT, hydrogen breath test, SIBO breath test, lactulose breath test, glucose breath test"
 Carrier Screening,81443,CPT,Genetic Testing,HIGH,"expanded carrier screening, ECS, genetic carrier testing, carrier status"
-Genetics research sample,,CPT,Genetic Testing,LOW,
-Pharmacogenetics sample,,CPT,Genetic Testing,LOW,
+Genetics research sample,81479,CPT,Genetic Testing,LOW,"genetic research blood, research genetics sample, DNA research sample"
+Pharmacogenetics sample,81479,CPT,Genetic Testing,LOW,"PGx sample, pharmacogenomics sample, pharmacogenetic blood"
 Targeted Gene Panel (Disease-Specific),81479,CPT,Genetic Testing,HIGH,"gene panel, NGS panel, multigene panel, targeted sequencing, disease gene panel"
 Whole Exome Sequencing (WES),81415,CPT,Genetic Testing,VERY_HIGH,"WES, whole exome, exome sequencing, clinical exome, trio WES"
 Whole Genome Sequencing (WGS),81425,CPT,Genetic Testing,VERY_HIGH,"WGS, whole genome, genome sequencing, short-read WGS, long-read WGS"
@@ -428,7 +428,7 @@ Body Surface Area Calculation,,CPT,Physical Examination,LOW,"BSA, Body Surface A
 Body Weight,,CPT,Physical Examination,LOW,"Weight, Body Wt, Wt, Weight Measurement, Body Mass, Patient Weight, weight check, body weight measurement, weight assessment, scale weight"
 Dermatologic Examination,,CPT,Physical Examination,LOW,"Skin Exam, Derm Exam, Skin Assessment, Dermatology Exam, Skin Check, dermatologic assessment, skin examination, dermatological examination, skin survey"
 Height,,CPT,Physical Examination,LOW,"Ht, Stature, Height Measurement, Standing Height, Patient Height, height check, body height, stature measurement"
-Neurological Examination,,CPT,Physical Examination,LOW,"Neuro Exam, Neurologic Exam, Neuro Assessment, Neurological Assessment, CNS Exam, neurological examination, neuro check, neurologic assessment, nerve exam"
+Neurological Examination,99213,CPT,Physical Examination,LOW,"Neuro Exam, Neurologic Exam, Neuro Assessment, Neurological Assessment, CNS Exam, neurological examination, neuro check, neurologic assessment, nerve exam"
 Ophthalmologic Examination,92004,CPT,Physical Examination,LOW,"Eye Exam, Ophtho Exam, Eye Examination, Ophthalmology Exam, 92004, ophthalmic exam, comprehensive eye exam, ophthalmologic exam, eye check"
 Physical Examination - Full,99214,CPT,Physical Examination,LOW,"Full PE, Complete PE, Complete Physical, Full Physical Exam, Comprehensive PE, Head-to-Toe PE, Full Body Exam, physical exam full, complete physical examination, comprehensive physical examination, full physical, 99213, 99214, Physical Exam, Physical Examination, PE"
 Physical Examination - Targeted,99213,CPT,Physical Examination,LOW,"Targeted PE, Symptom-Directed PE, Focused PE, Limited PE, Directed PE, Abbreviated PE, Symptom-Focused Exam, partial PE, targeted physical, focused physical exam, limited physical examination, abbreviated physical exam, Symptom-Directed Physical Examination, Targeted Physical"
@@ -510,7 +510,7 @@ Skin Fibroblast Culture,88230,CPT,Specialized Rare Disease Procedures,HIGH,"fibr
 Blood Draw/Phlebotomy,36415,CPT,Specimen Collection,LOW,"Phlebotomy, Venipuncture, Blood Collection, Blood Sample, Blood Sampling, Venous Blood Draw, Blood Work, bloods, blood draw, blood specimen collection, venous access, blood letting"
 Nonpharmacogenetic samples for storage,,CPT,Specimen Collection,LOW,
 Specimen Handling,99000,CPT,Specimen Collection,LOW,"Sample Handling, Specimen Processing, Sample Processing, Lab Specimen Handling, Biospecimen Handling, sample management, specimen transport, sample shipping, specimen storage, biospecimen management, sample preparation"
-Stool Sample Collection (Microbiome),,CPT,Specimen Collection,LOW,Stool sample for microbiome
+Stool Sample Collection (Microbiome),89100,CPT,Specimen Collection,LOW,"Stool sample for microbiome, Stool sample, stool collection, fecal sample"
 Central Venous Access Device Repair/Maintenance,36575,CPT,Supportive Care,LOW,"Central line repair, CVC maintenance, port maintenance, catheter repair"
 Central Venous Catheter Placement Tunneled,36560,CPT,Supportive Care,MEDIUM,"Tunneled CVC, Hickman line, Broviac catheter, tunneled central line, central venous access"
 G-CSF Administration (Granulocyte Colony-Stimulating Factor),96372,CPT,Supportive Care,HIGH,"G-CSF, Neupogen, Neulasta, pegfilgrastim, filgrastim, neutropenia prophylaxis, growth factor injection, GCSF administration"
