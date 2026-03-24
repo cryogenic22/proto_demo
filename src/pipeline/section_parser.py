@@ -749,7 +749,8 @@ Return ONLY the JSON array."""
                 continue
             for line in block["lines"]:
                 line_text = "".join(s["text"] for s in line["spans"]).strip()
-                match = section_re.match(line_text)
+                # Also try with trailing space (stripped by .strip() above)
+                match = section_re.match(line_text) or section_re.match(line_text + " ")
                 if not match:
                     continue
                 found_num = match.group(1)
@@ -1694,11 +1695,21 @@ Return ONLY the JSON array."""
                     else:
                         html_parts.append(f"<{desired_type}>")
                     list_stack.append(desired_type)
-                item_text = re.sub(
-                    r"^(?:[\u2022•●○\uf0b7\uf0a7]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)",
-                    "", para["text"]
+                # Strip list marker from text for display (CSS provides the number)
+                marker_re = re.compile(
+                    r"^(?:[\u2022•●○\uf0b7\uf0a7]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)"
                 )
-                html_parts.append(f"  <li>{self._format_inline_html(para)}</li>")
+                stripped_para = dict(para)
+                stripped_para["text"] = marker_re.sub("", para["text"])
+                # Also strip from first span in spans_data
+                if stripped_para.get("spans_data") and stripped_para["spans_data"][0]:
+                    first_spans = list(stripped_para["spans_data"][0])
+                    if first_spans:
+                        first_span = dict(first_spans[0])
+                        first_span["text"] = marker_re.sub("", first_span.get("text", ""))
+                        first_spans[0] = first_span
+                        stripped_para["spans_data"] = [first_spans] + list(stripped_para["spans_data"][1:])
+                html_parts.append(f"  <li>{self._format_inline_html(stripped_para)}</li>")
                 if desired_type == "ol":
                     ol_counter += 1
 
@@ -1734,12 +1745,20 @@ Return ONLY the JSON array."""
 
     def _format_inline_html(self, para: dict) -> str:
         """Format paragraph text with inline bold/italic from span data."""
-        # If we have span data, use it for precise formatting
         if para.get("spans_data"):
+            # Pre-check: if >70% of spans have underline flag, it's a font
+            # artifact (e.g., TimesNewRoman in some PDFs always sets bit 4).
+            # In that case, suppress underline entirely for this paragraph.
+            all_spans = [s for line_spans in para["spans_data"] for s in line_spans]
+            text_spans = [s for s in all_spans if s.get("text", "").strip()]
+            underline_count = sum(1 for s in text_spans if s.get("flags", 0) & 4)
+            underline_is_artifact = (
+                len(text_spans) > 0
+                and underline_count / len(text_spans) > 0.7
+            )
+
             parts = []
             for line_idx, spans in enumerate(para["spans_data"]):
-                # Issue C fix: add space between merged lines to prevent
-                # "orfemale" concatenation across line boundaries
                 if line_idx > 0 and parts:
                     last = parts[-1]
                     if last and not last.endswith((" ", "-", ">")):
@@ -1751,7 +1770,7 @@ Return ONLY the JSON array."""
                     flags = span.get("flags", 0)
                     is_bold = flags & 16 or "Bold" in span.get("font", "")
                     is_italic = flags & 2 or "Italic" in span.get("font", "")
-                    is_underline = bool(flags & 4)  # H3 fix: underline detection
+                    is_underline = bool(flags & 4) and not underline_is_artifact
                     if is_bold:
                         text = f"<strong>{text}</strong>"
                     if is_italic:
