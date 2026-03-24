@@ -31,8 +31,8 @@ web/node_modules/
 web/.next/
 web/out/
 
-# Golden set cached PDFs (large files)
-golden_set/cached_pdfs/
+# Golden set cached PDFs — committed for Railway deployment
+# golden_set/cached_pdfs/
 
 # OS
 .DS_Store
