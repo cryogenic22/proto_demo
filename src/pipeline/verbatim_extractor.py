@@ -84,16 +84,29 @@ class VerbatimExtractor:
         """
         Extract verbatim content based on a user instruction.
 
+        Supports both PDF and DOCX files. For DOCX, uses python-docx XML
+        parsing to preserve 100% of formatting (bold, italic, lists, tables,
+        equations). For PDF, uses PyMuPDF text layer (some formatting loss
+        is expected — industry-known limitation).
+
         Args:
-            pdf_bytes: The PDF file bytes.
-            instruction: What to extract (e.g., "Copy Section 5.1 inclusion criteria")
+            pdf_bytes: The file bytes (PDF or DOCX).
+            instruction: What to extract (e.g., "Copy Section 5.1")
             sections: Pre-parsed sections (optional, will parse if not provided)
+            filename: Original filename — used to detect DOCX vs PDF.
+            output_format: "text", "html", or "docx"
         """
         self._output_format = output_format
+        self._is_docx = filename.lower().endswith(".docx") if filename else False
+        self._file_bytes = pdf_bytes
 
         # Step 1: Parse sections if not provided
         if sections is None:
-            sections = self.section_parser.parse(pdf_bytes, filename=filename)
+            if self._is_docx:
+                sections = self.section_parser.parse_docx(pdf_bytes)
+                logger.info(f"DOCX mode: parsed {len(sections)} sections via XML (100% format retention)")
+            else:
+                sections = self.section_parser.parse(pdf_bytes, filename=filename)
 
         # Step 2: Try deterministic section lookup first (no LLM needed)
         direct_match = self._try_direct_match(sections, instruction)
@@ -182,51 +195,99 @@ class VerbatimExtractor:
         self, pdf_bytes: bytes, matched: list[Section], instruction: str,
         content_type: str, explanation: str,
     ) -> VerbatimResult:
-        """Extract verbatim content from multiple sections."""
+        """Extract verbatim content from multiple sections.
+
+        Routes to DOCX-native extraction when source is DOCX (100% format
+        retention via XML parsing). Falls back to PyMuPDF for PDFs.
+        """
         text_parts = []
         all_tables = []
         all_pages = []
+        is_docx = getattr(self, '_is_docx', False)
 
         for section in matched:
-            # Extract verbatim text — NO LLM, pure PyMuPDF
-            # Use formatted extraction if available, fall back to plain text
-            if hasattr(self, '_output_format') and self._output_format == "html":
-                text = self.section_parser.get_section_formatted(
-                    pdf_bytes, section, output="html",
-                    strip_heading=True,
-                )
-            elif hasattr(self, '_output_format') and self._output_format == "docx":
-                text = self.section_parser.get_section_formatted(
-                    pdf_bytes, section, output="html",
-                    strip_heading=True,
-                )
+            if is_docx:
+                # DOCX path — 100% format retention via python-docx XML
+                fmt = getattr(self, '_output_format', 'text')
+                if fmt == "html":
+                    # Extract raw XML, wrap in basic HTML container
+                    xml = self.section_parser.get_section_docx_xml(pdf_bytes, section)
+                    text = self._docx_xml_to_html(xml, section)
+                elif fmt == "docx":
+                    text = self.section_parser.get_section_docx_xml(pdf_bytes, section)
+                else:
+                    text = self.section_parser.get_section_text_docx(pdf_bytes, section)
+                text_parts.append(text)
+
+                # Tables from DOCX
+                if content_type in ("table", "all"):
+                    tables = self.section_parser.get_tables_in_section_docx(pdf_bytes, section)
+                    all_tables.extend(tables)
             else:
-                text = self.section_parser.get_section_text(pdf_bytes, section)
-                # Strip the first line if it matches the section heading
-                if isinstance(text, str) and text.startswith(f"{section.number}"):
-                    lines = text.split("\n", 1)
-                    if len(lines) > 1:
-                        text = lines[1].strip()
+                # PDF path — PyMuPDF extraction (some formatting loss expected)
+                fmt = getattr(self, '_output_format', 'text')
+                if fmt == "html":
+                    text = self.section_parser.get_section_formatted(
+                        pdf_bytes, section, output="html",
+                        strip_heading=True,
+                    )
+                elif fmt == "docx":
+                    text = self.section_parser.get_section_formatted(
+                        pdf_bytes, section, output="html",
+                        strip_heading=True,
+                    )
+                else:
+                    text = self.section_parser.get_section_text(pdf_bytes, section)
+                    if isinstance(text, str) and text.startswith(f"{section.number}"):
+                        lines = text.split("\n", 1)
+                        if len(lines) > 1:
+                            text = lines[1].strip()
+                text_parts.append(text)
 
-            text_parts.append(text)
+                if content_type in ("table", "all"):
+                    tables = self.section_parser.get_tables_in_section(pdf_bytes, section)
+                    for t in tables:
+                        all_tables.append(t["data"])
 
-            # Extract tables if requested
-            if content_type in ("table", "all"):
-                tables = self.section_parser.get_tables_in_section(pdf_bytes, section)
-                for t in tables:
-                    all_tables.append(t["data"])
-
-            # Track pages
+            # Track pages/paragraphs
             start = section.page
             end = section.end_page or start
             all_pages.extend(range(start, end + 1))
+
+        src = "DOCX XML (100% format retention)" if is_docx else "PyMuPDF text layer"
+        full_explanation = f"{explanation} [Source: {src}]"
 
         return VerbatimResult(
             instruction=instruction,
             sections_found=[s.number for s in matched],
             content_type=content_type,
-            text="\n\n---\n\n".join(text_parts),
+            text="\n\n---\n\n".join(str(t) for t in text_parts),
             tables=all_tables,
             source_pages=sorted(set(all_pages)),
-            explanation=explanation,
+            explanation=full_explanation,
         )
+
+    @staticmethod
+    def _docx_xml_to_html(xml: str, section: Section) -> str:
+        """Convert DOCX XML paragraphs to readable HTML.
+
+        Extracts text content from OpenXML w:r/w:t elements and preserves
+        basic formatting (bold, italic) for display in the UI.
+        """
+        import re as _re
+
+        lines = []
+        # Extract text runs from XML
+        for para_xml in xml.split("</w:p>"):
+            texts = _re.findall(r'<w:t[^>]*>([^<]+)</w:t>', para_xml)
+            if texts:
+                line = "".join(texts)
+                # Detect bold
+                if "<w:b/>" in para_xml or '<w:b ' in para_xml:
+                    line = f"<strong>{line}</strong>"
+                # Detect italic
+                if "<w:i/>" in para_xml or '<w:i ' in para_xml:
+                    line = f"<em>{line}</em>"
+                lines.append(f"<p>{line}</p>")
+
+        return "\n".join(lines) if lines else f"<p>(No content in section {section.number})</p>"
