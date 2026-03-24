@@ -1514,6 +1514,28 @@ async def get_page_image(protocol_id: str, page_number: int):
         if pdf_path:
             break
 
+    # Fallback: look up the document_name from stored protocol data
+    if not pdf_path:
+        store = create_ke_store()
+        protocol = store.load_protocol(protocol_id)
+        if protocol:
+            doc_name = getattr(protocol, "document_name", "") or ""
+            if doc_name:
+                for d in search_dirs:
+                    if not d.exists():
+                        continue
+                    candidate = d / doc_name
+                    if candidate.exists():
+                        pdf_path = candidate
+                        break
+                    # Try without extension variations
+                    for p in d.glob("*.pdf"):
+                        if p.stem.lower().replace(" ", "_") == doc_name.replace(".pdf", "").lower().replace(" ", "_"):
+                            pdf_path = p
+                            break
+                    if pdf_path:
+                        break
+
     if not pdf_path:
         raise HTTPException(
             status_code=404,
@@ -1537,7 +1559,10 @@ async def get_page_image(protocol_id: str, page_number: int):
         return Response(
             content=img_bytes,
             media_type="image/png",
-            headers={"Cache-Control": "public, max-age=3600"},
+            headers={
+                "Cache-Control": "public, max-age=3600",
+                "Access-Control-Allow-Origin": "*",
+            },
         )
     except HTTPException:
         raise
