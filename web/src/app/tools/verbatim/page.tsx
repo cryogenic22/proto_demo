@@ -356,6 +356,13 @@ function VerbatimComparison({
   const [pdfPage, setPdfPage] = useState(sourcePages[0] || 0);
   const [pdfAvailable, setPdfAvailable] = useState(false);
 
+  // Auto-navigate to section's source page when sourcePages changes
+  useEffect(() => {
+    if (sourcePages.length > 0) {
+      setPdfPage(sourcePages[0]);
+    }
+  }, [sourcePages.join(",")]);
+
   // Check PDF availability
   useEffect(() => {
     if (!protocolId) { setPdfAvailable(false); return; }

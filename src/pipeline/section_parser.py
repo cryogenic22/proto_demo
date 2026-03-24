@@ -1375,6 +1375,36 @@ Return ONLY the JSON array."""
                     # "85 years, inclusive (Phase 1)..."
                     pass  # Will merge below
 
+            # Fix: merge heading fragments — when "4." and "Objectives and
+            # Endpoints" are separate lines at same Y or tiny gap, join them
+            # into one heading instead of creating separate paragraphs.
+            if (
+                start_new
+                and is_section_heading
+                and current
+                and current["type"] == "HEADING"
+                and current.get("last_page") == line["page"]
+                and (line["y"] - current.get("last_y", 0)) < continuation_threshold
+            ):
+                # Merge into existing heading
+                start_new = False
+
+            # Fix: continuation lines after list items — if current is a
+            # list item and this non-list-item line is indented, merge it
+            # as continuation text of the list item.
+            if (
+                start_new
+                and not is_list_item
+                and not is_section_heading
+                and not is_subheading
+                and current
+                and current["type"] in ("LIST_ITEM", "LIST_ITEM_L2")
+                and current.get("last_page") == line["page"]
+                and (line["y"] - current.get("last_y", 0)) < continuation_threshold
+                and indent_level >= current.get("indent_level", 0)
+            ):
+                start_new = False
+
             if start_new:
                 if current:
                     paragraphs.append(current)
@@ -1384,7 +1414,6 @@ Return ONLY the JSON array."""
                 elif is_subheading:
                     ptype = "SUBHEADING"
                 elif is_bullet and indent_level >= 3:
-                    # Issue 5: nested bullet at deeper indent
                     ptype = "LIST_ITEM_L2"
                 elif is_list_item:
                     ptype = "LIST_ITEM"
@@ -1407,12 +1436,8 @@ Return ONLY the JSON array."""
                 }
             else:
                 # Merge into current paragraph
-                # Issue C fix: ensure space at page boundaries and between
-                # merged lines. Check if current text already ends with space
-                # or hyphen (word break).
                 prev_text = current["text"]
                 if prev_text.endswith("-"):
-                    # Hyphenated word break — join without space, remove hyphen
                     current["text"] = prev_text[:-1] + text
                 elif prev_text.endswith(" ") or text.startswith(" "):
                     current["text"] += text
@@ -1529,12 +1554,36 @@ Return ONLY the JSON array."""
 
     @staticmethod
     def _table_to_html(table_data: list[list]) -> str:
-        """Convert table data to HTML table."""
+        """Convert table data to HTML table.
+
+        Handles bullet characters inside table cells by converting them
+        to proper HTML lists for clean rendering.
+        """
+        # Bullet chars commonly found in PDF table cells
+        _bullet_chars = "\u25A0\u25AA\u25CF\u2022\u2023\u25E6\u2043\uf0b7\uf0a7•●○"
+        _bullet_re = re.compile(rf"[{re.escape(_bullet_chars)}]\s*")
+
+        def _format_cell(text: str) -> str:
+            text = str(text or "").replace("<", "&lt;").replace(">", "&gt;")
+            # If cell contains bullet chars, convert to HTML list
+            if any(c in text for c in _bullet_chars):
+                lines = _bullet_re.split(text)
+                lines = [l.strip() for l in lines if l.strip()]
+                if len(lines) > 1:
+                    items = "".join(f"<li>{l}</li>" for l in lines)
+                    return f"<ul>{items}</ul>"
+            # If cell has newlines with content, split into paragraphs
+            if "\n" in text:
+                parts = [p.strip() for p in text.split("\n") if p.strip()]
+                if len(parts) > 1:
+                    return "<br>".join(parts)
+            return text
+
         rows = []
         for i, row in enumerate(table_data):
             tag = "th" if i == 0 else "td"
             cells = "".join(
-                f"<{tag}>{str(cell or '').replace('<','&lt;')}</{tag}>"
+                f"<{tag}>{_format_cell(cell)}</{tag}>"
                 for cell in row
             )
             rows.append(f"  <tr>{cells}</tr>")
