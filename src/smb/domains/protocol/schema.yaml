@@ -1,0 +1,102 @@
+# Protocol Domain Schema — defines entity types, relationships, and rules
+# for clinical protocol Schedule of Activities extraction.
+
+domain:
+  name: "protocol"
+  version: "1.0.0"
+  description: "Clinical protocol SoA structured model"
+
+entity_types:
+  - name: Document
+    description: "Top-level protocol document"
+    properties:
+      - {name: protocol_number, type: string}
+      - {name: sponsor, type: string}
+      - {name: phase, type: string}
+      - {name: therapeutic_area, type: string}
+      - {name: indication, type: string}
+      - {name: title, type: string}
+
+  - name: Arm
+    description: "Treatment arm in the study"
+    properties:
+      - {name: arm_type, type: string, allowed: [experimental, comparator, placebo, control]}
+      - {name: arm_label, type: string}
+      - {name: treatment_description, type: string}
+
+  - name: Phase
+    description: "Study phase (Screening, Treatment, Follow-up)"
+    properties:
+      - {name: phase_type, type: string, allowed: [screening, run_in, treatment, follow_up, extension]}
+      - {name: order, type: integer}
+      - {name: duration_days, type: integer, required: false}
+      - {name: cycle_based, type: boolean}
+
+  - name: Visit
+    description: "A scheduled or unscheduled visit"
+    properties:
+      - {name: visit_label, type: string}
+      - {name: col_index, type: integer}
+      - {name: day_number, type: integer, required: false}
+      - {name: window_minus, type: integer}
+      - {name: window_plus, type: integer}
+      - {name: is_unscheduled, type: boolean}
+      - {name: cycle, type: integer, required: false}
+
+  - name: Procedure
+    description: "A clinical procedure mapped to CPT"
+    properties:
+      - {name: raw_name, type: string}
+      - {name: canonical_name, type: string, required: true}
+      - {name: cpt_code, type: string, required: false}
+      - {name: category, type: string}
+      - {name: cost_tier, type: string}
+
+  - name: Footnote
+    description: "A resolved footnote that modifies schedule entries"
+    properties:
+      - {name: footnote_marker, type: string, required: true}
+      - {name: footnote_text, type: string}
+      - {name: classification, type: string, allowed: [CONDITIONAL, FREQUENCY_MODIFIER, EXCEPTION, REFERENCE, CLARIFICATION, SUBSET, TIMING, INFORMATIONAL]}
+
+  - name: ScheduleEntry
+    description: "Visit × Procedure intersection — the atomic scheduling unit"
+    properties:
+      - {name: visit_entity_id, type: string, required: true}
+      - {name: procedure_entity_id, type: string, required: true}
+      - {name: mark_type, type: string, allowed: [firm, conditional, span, excluded, optional]}
+      - {name: raw_mark, type: string}
+      - {name: occurrence_count, type: integer}
+      - {name: total_occurrences, type: integer}
+      - {name: footnote_markers, type: list}
+      - {name: is_span, type: boolean}
+      - {name: span_frequency, type: string, required: false}
+      - {name: span_start_day, type: integer, required: false}
+      - {name: span_end_day, type: integer, required: false}
+      - {name: probability, type: float, required: false}
+      - {name: cycle_multiplier, type: float, required: false}
+      - {name: applied_cycle_count, type: integer, required: false}
+      - {name: cost_multiplier, type: float}
+      - {name: subset_fraction, type: float}
+      - {name: conditions, type: list}
+      - {name: inference_trail, type: list}
+
+  - name: TemporalRule
+    description: "Temporal logic governing visit scheduling"
+    properties:
+      - {name: rule_type, type: string, allowed: [cycle_model, frequency_rule, span_definition]}
+      - {name: cycle_length_days, type: integer, required: false}
+      - {name: expected_cycle_count, type: integer, required: false}
+      - {name: frequency_expression, type: string, required: false}
+
+relationship_types:
+  - {name: HAS_ARM, source: Document, target: Arm, cardinality: "1:N"}
+  - {name: HAS_PHASE, source: Document, target: Phase, cardinality: "1:N"}
+  - {name: BELONGS_TO_PHASE, source: Visit, target: Phase, cardinality: "N:1"}
+  - {name: HAS_SCHEDULE_ENTRY, source: Visit, target: ScheduleEntry, cardinality: "1:N"}
+  - {name: FOR_PROCEDURE, source: ScheduleEntry, target: Procedure, cardinality: "N:1"}
+  - {name: MODIFIED_BY, source: ScheduleEntry, target: Footnote, cardinality: "N:N"}
+  - {name: GOVERNED_BY, source: Phase, target: TemporalRule, cardinality: "N:1"}
+  - {name: FOLLOWS, source: Visit, target: Visit, cardinality: "1:1"}
+  - {name: HAS_ENDPOINT, source: Document, target: Endpoint, cardinality: "1:N"}
+  - {name: MEASURED_BY, source: Endpoint, target: Procedure, cardinality: "N:N"}
