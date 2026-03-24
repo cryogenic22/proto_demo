@@ -5332,97 +5332,89 @@
       "procedures": [
         {
           "raw_name": "AE/SAE assessment",
-          "canonical_name": "AE/SAE assessment",
+          "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "AE/SAE assessmento",
-          "canonical_name": "AE/SAE assessmento",
+          "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Clinical chemistry",
-          "canonical_name": "Clinical chemistry",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Comprehensive Metabolic Panel",
+          "code": "80053",
+          "code_system": "CPT",
+          "category": "Oncology-Specific Labs",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Clinical chemistryg",
-          "canonical_name": "Clinical chemistryg",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Comprehensive Metabolic Panel",
+          "code": "80053",
+          "code_system": "CPT",
+          "category": "Oncology-Specific Labs",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Concomitant medications",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Consent: genetic sample and analysis (optional)",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Day",
-          "canonical_name": "Day",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Demography, including baseline characteristics and tobacco use",
-          "canonical_name": "Demography, including baseline characteristics and tobacco use",
+          "canonical_name": "Demographics Collection",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Durvalumab/placebo",
-          "canonical_name": "Durvalumab/placebo",
+          "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Durvalumab/placebop,q",
-          "canonical_name": "Durvalumab/placebop,q",
+          "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "ECGe",
-          "canonical_name": "ECGe",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "12-Lead Electrocardiogram",
+          "code": "93000",
+          "code_system": "CPT",
+          "category": "Cardiology",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "EORTC QLQ-C30 and CX24, PGIS, EQ-5Dt",
-          "canonical_name": "EORTC QLQ-C30",
+          "canonical_name": "Patient Global Impression of Severity",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
@@ -5430,221 +5422,205 @@
           "raw_name": "Eligibility criteria",
           "canonical_name": "Eligibility Assessment",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "FFPE tumor sample",
-          "canonical_name": "FFPE tumor sample",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Tumor Biopsy (FFPE Sample Collection)",
+          "code": "88305",
+          "code_system": "CPT",
+          "category": "Biopsy",
+          "estimated_cost_tier": "HIGH"
         },
         {
           "raw_name": "FFPE tumor sample (mandatory; a newly acquired sample is preferred if available per site's routine clinical practice; otherwise, archival sample \u22643 months old can be provided)v",
-          "canonical_name": "FFPE tumor sample (mandatory; a newly acquired sample is preferred if available per site's routine clinical practice; otherwise, archival sample \u22643 months old can be provided)v",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Tumor Biopsy (FFPE Sample Collection)",
+          "code": "88305",
+          "code_system": "CPT",
+          "category": "Biopsy",
+          "estimated_cost_tier": "HIGH"
         },
         {
           "raw_name": "Genetics research sample (optional DNA element for long-term storage/future use)",
-          "canonical_name": "Genetics research sample (optional DNA element for long-term storage/future use)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Genetics research sample",
+          "code": "81479",
+          "code_system": "CPT",
+          "category": "Genetic Testing",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Genetics research sample (optional DNA element for long-term storage/future use) w",
-          "canonical_name": "Genetics research sample (optional DNA element for long-term storage/future use) w",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Genetics research sample",
+          "code": "81479",
+          "code_system": "CPT",
+          "category": "Genetic Testing",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "HPV genotype, if available",
-          "canonical_name": "HPV genotype, if available",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "HPV Genotyping",
+          "code": "87624",
+          "code_system": "CPT",
+          "category": "Virology",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Healthcare resource use (HOSPAD)",
-          "canonical_name": "Healthcare resource use (HOSPAD)",
+          "canonical_name": "Healthcare Resource Use Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Healthcare resource use (HOSPAD)u",
-          "canonical_name": "Healthcare resource use (HOSPAD)u",
+          "canonical_name": "Healthcare Resource Use Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Hematology",
-          "canonical_name": "Hematology",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Hematologyh",
-          "canonical_name": "Hematologyh",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Hepatitis B and C and HIV",
-          "canonical_name": "Hepatitis Panel",
-          "code": "86709",
+          "canonical_name": "Complete Blood Count",
+          "code": "85025",
           "code_system": "CPT",
           "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
+          "raw_name": "Hematologyh",
+          "canonical_name": "Complete Blood Count",
+          "code": "85025",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Hepatitis B and C and HIV",
+          "canonical_name": "Viral Hepatitis and HIV Panel",
+          "code": "87340",
+          "code_system": "CPT",
+          "category": "Virology",
+          "estimated_cost_tier": "MEDIUM"
+        },
+        {
           "raw_name": "IP administration",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Immunogenicity assessment (ADA sampling to identify ADA responses in patient circulation)",
-          "canonical_name": "Immunogenicity sampling",
-          "code": null,
-          "code_system": null,
-          "category": "Immunology",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Informed consent",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Informed consent: study procedures",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Informed consent: study proceduresb",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Laboratory assessments",
-          "canonical_name": "Laboratory assessments",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Monitoring",
-          "canonical_name": "Monitoring",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Optional newly acquired tumor biopsy collected upon progression",
-          "canonical_name": "Tumor Biopsy",
-          "code": "20206",
+          "canonical_name": "RANO Criteria Assessment (Brain Tumors)",
+          "code": null,
           "code_system": "CPT",
-          "category": "Procedure",
-          "estimated_cost_tier": "VERY_HIGH"
+          "category": "Clinical Assessments",
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Optional newly acquired tumor biopsy collected upon progressionv",
-          "canonical_name": "Tumor Biopsy",
-          "code": "20206",
+          "canonical_name": "RANO Criteria Assessment (Brain Tumors)",
+          "code": null,
           "code_system": "CPT",
-          "category": "Procedure",
-          "estimated_cost_tier": "VERY_HIGH"
+          "category": "Clinical Assessments",
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "PGIC",
-          "canonical_name": "PGIC",
+          "canonical_name": "Patient Global Impression of Change",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "PGICt",
-          "canonical_name": "PGICt",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "PK sample (serum)",
-          "canonical_name": "PK Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "PRO-CTCAE",
-          "canonical_name": "PRO-CTCAE",
-          "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
         {
-          "raw_name": "Patient follow-up contact/Patient review for safety",
-          "canonical_name": "Patient follow-up contact/Patient review for safety",
+          "raw_name": "PGICt",
+          "canonical_name": "Patient Global Impression of Change",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "PRO",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "PK sample (serum)",
+          "canonical_name": "Pharmacokinetic Blood Sampling",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "PRO-CTCAE",
+          "canonical_name": "PRO-CTCAE (Patient-Reported Outcomes CTCAE)",
+          "code": null,
+          "code_system": "CPT",
+          "category": "Patient-Reported Outcome",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Patient follow-up contact/Patient review for safety",
+          "canonical_name": "Telephone Contact",
+          "code": null,
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Pharmacokinetics",
-          "canonical_name": "Pharmacokinetics",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Pharmacokinetic Blood Sampling",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Physical exam (full)",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "Physical Examination - Full",
+          "code": "99214",
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Pregnancy test",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
@@ -5652,7 +5628,7 @@
         },
         {
           "raw_name": "Pregnancy testk",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
@@ -5660,31 +5636,31 @@
         },
         {
           "raw_name": "Radiation plan collection",
-          "canonical_name": "Radiation plan collection",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "IMRT Delivery",
+          "code": "77385",
+          "code_system": "CPT",
+          "category": "Radiation Therapy",
+          "estimated_cost_tier": "HIGH"
         },
         {
           "raw_name": "SoC cisplatin chemotherapy",
-          "canonical_name": "SoC cisplatin chemotherapy",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Chemotherapy Administration Hormonal SC/IM",
+          "code": "96402",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "SoC radiation therapy",
-          "canonical_name": "SoC radiation therapy",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "IMRT Delivery",
+          "code": "77385",
+          "code_system": "CPT",
+          "category": "Radiation Therapy",
+          "estimated_cost_tier": "HIGH"
         },
         {
           "raw_name": "TSH (reflex free T3 or free T4)",
-          "canonical_name": "Thyroid Function Tests",
+          "canonical_name": "Thyroid Stimulating Hormone",
           "code": "84443",
           "code_system": "CPT",
           "category": "Laboratory",
@@ -5692,34 +5668,34 @@
         },
         {
           "raw_name": "TSHi (reflex free T3 or free T4)j",
-          "canonical_name": "Thyroid Function Tests",
-          "code": "84443",
+          "canonical_name": "Free T3 (Free Triiodothyronine)",
+          "code": "84481",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "Thyroid Function",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Targeted physical exam c",
-          "canonical_name": "Physical Examination",
+          "canonical_name": "Physical Examination - Targeted",
           "code": "99213",
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Tumor radiological assessments (RECIST 1.1) -AND- Physical exam including a pelvic examination",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "RECIST 1.1 Tumor Assessment",
+          "code": null,
           "code_system": "CPT",
-          "category": "General",
+          "category": "Clinical Assessments",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Tumor radiological assessments (RECIST 1.1)y -AND- Physical exam including a pelvic examination",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "RECIST 1.1 Tumor Assessment",
+          "code": null,
           "code_system": "CPT",
-          "category": "General",
+          "category": "Clinical Assessments",
           "estimated_cost_tier": "LOW"
         },
         {
@@ -5733,50 +5709,42 @@
         {
           "raw_name": "Vital signsd",
           "canonical_name": "Vital Signs",
-          "code": "99000",
+          "code": null,
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "WHO/ECOG performance status",
-          "canonical_name": "ECOG Performance Status",
+          "canonical_name": "ECOG Performance Status Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Efficacy",
+          "code_system": "CPT",
+          "category": "Clinical Assessments",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "WHO/ECOG performance statusn",
-          "canonical_name": "ECOG Performance Status",
+          "canonical_name": "ECOG Performance Status Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Efficacy",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Week",
-          "canonical_name": "Week",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Clinical Assessments",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Whole blood for gene expression (PAXgene RNA tubes)",
-          "canonical_name": "Whole blood for gene expression (PAXgene RNA tubes)",
+          "canonical_name": "Consent: genetic sample",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "ctDNA (plasma)",
-          "canonical_name": "ctDNA",
-          "code": null,
-          "code_system": null,
-          "category": "Laboratory",
-          "estimated_cost_tier": "HIGH"
+          "canonical_name": "Liquid Biopsy / Circulating Tumor DNA (ctDNA)",
+          "code": "81479",
+          "code_system": "CPT",
+          "category": "Molecular and Genomic Testing",
+          "estimated_cost_tier": "VERY_HIGH"
         }
       ],
       "visit_windows": [
@@ -10583,175 +10551,167 @@
       "procedures": [
         {
           "raw_name": "AE/SAE assessment",
-          "canonical_name": "AE/SAE assessment",
+          "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Clinical chemistry",
-          "canonical_name": "Clinical chemistry",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Comprehensive Metabolic Panel",
+          "code": "80053",
+          "code_system": "CPT",
+          "category": "Oncology-Specific Labs",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Concomitant medications",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "EORTC QLQ-C30 and CX24, PGIS, EQ-5D",
-          "canonical_name": "Quality of Life Questionnaire",
+          "canonical_name": "Patient Global Impression of Severity",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "EORTC QLQ-C30 and CX24, PGIS, EQ-5Di",
-          "canonical_name": "EORTC QLQ-C30",
+          "canonical_name": "Patient Global Impression of Severity",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Evaluation",
-          "canonical_name": "Evaluation",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Healthcare resource use (HOSPAD)",
-          "canonical_name": "Healthcare resource use (HOSPAD)",
+          "canonical_name": "Healthcare Resource Use Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Healthcare resource use (HOSPAD)j",
-          "canonical_name": "Healthcare resource use (HOSPAD)j",
+          "canonical_name": "Healthcare Resource Use Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Hematology",
-          "canonical_name": "Hematology",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Complete Blood Count",
+          "code": "85025",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Immunogenicity assessment (ADA sampling to identify ADA responses)",
-          "canonical_name": "Immunogenicity sampling",
-          "code": null,
-          "code_system": null,
-          "category": "Immunology",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Immunogenicity assessment (ADA sampling to identify ADA responses^g",
-          "canonical_name": "Immunogenicity sampling",
-          "code": null,
-          "code_system": null,
-          "category": "Immunology",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "PGIC",
-          "canonical_name": "PGIC",
+          "canonical_name": "Patient Global Impression of Change",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "PGICj",
-          "canonical_name": "PGICj",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "PK assessment",
-          "canonical_name": "PK assessment",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "PK assessment^g",
-          "canonical_name": "PK assessment^g",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "PRO-CTCAE",
-          "canonical_name": "PRO-CTCAE",
-          "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
         {
-          "raw_name": "Physical examination (full)",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "raw_name": "PGICj",
+          "canonical_name": "Patient Global Impression of Change",
+          "code": null,
           "code_system": "CPT",
-          "category": "General",
+          "category": "PRO",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "PK assessment",
+          "canonical_name": "Pharmacokinetic Blood Sampling",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "PK assessment^g",
+          "canonical_name": "Pharmacokinetic Blood Sampling",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "PRO-CTCAE",
+          "canonical_name": "PRO-CTCAE (Patient-Reported Outcomes CTCAE)",
+          "code": null,
+          "code_system": "CPT",
+          "category": "Patient-Reported Outcome",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Physical examination (full)",
+          "canonical_name": "Physical Examination - Full",
+          "code": "99214",
+          "code_system": "CPT",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Subsequent anticancer therapy",
-          "canonical_name": "Subsequent anticancer therapy",
+          "canonical_name": "Subsequent Anticancer Therapy Documentation",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Disease-Specific",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Subsequent anticancer therapyc,d",
-          "canonical_name": "Subsequent anticancer therapyc,d",
+          "canonical_name": "Subsequent Anticancer Therapy Documentation",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Disease-Specific",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Survival status",
           "canonical_name": "Survival Follow-up",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Survival statuse",
           "canonical_name": "Survival Follow-up",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "TSH (reflex free T3 or free T4f)",
-          "canonical_name": "Thyroid Function Tests",
+          "canonical_name": "Thyroid Stimulating Hormone",
           "code": "84443",
           "code_system": "CPT",
           "category": "Laboratory",
@@ -10759,18 +10719,18 @@
         },
         {
           "raw_name": "Tumor radiological assessment (RECIST 1.1) / Physical exam including a pelvic examination",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "RECIST 1.1 Tumor Assessment",
+          "code": null,
           "code_system": "CPT",
-          "category": "General",
+          "category": "Clinical Assessments",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Tumor radiological assessment (RECIST 1.1)k\n-AND-\nPhysical exam including a pelvic examination",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "RECIST 1.1 Tumor Assessment",
+          "code": null,
           "code_system": "CPT",
-          "category": "General",
+          "category": "Clinical Assessments",
           "estimated_cost_tier": "LOW"
         },
         {
@@ -10784,42 +10744,42 @@
         {
           "raw_name": "Vital signs (temperature, respiratory rate, blood pressure, and pulse)",
           "canonical_name": "Vital Signs",
-          "code": "99000",
+          "code": null,
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "WHO/ECOG performance status",
-          "canonical_name": "ECOG Performance Status",
+          "canonical_name": "ECOG Performance Status Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Efficacy",
+          "code_system": "CPT",
+          "category": "Clinical Assessments",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Weight",
-          "canonical_name": "Body Weight",
+          "canonical_name": "Body Mass Index (BMI)",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Body Composition",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Whole blood for gene expression (PaxGene-RNA tubes)",
-          "canonical_name": "Whole blood for gene expression (PaxGene-RNA tubes)",
+          "canonical_name": "Consent: genetic sample",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "ctDNA (plasma)",
-          "canonical_name": "ctDNA",
-          "code": null,
-          "code_system": null,
-          "category": "Laboratory",
-          "estimated_cost_tier": "HIGH"
+          "canonical_name": "Liquid Biopsy / Circulating Tumor DNA (ctDNA)",
+          "code": "81479",
+          "code_system": "CPT",
+          "category": "Molecular and Genomic Testing",
+          "estimated_cost_tier": "VERY_HIGH"
         }
       ],
       "visit_windows": [],

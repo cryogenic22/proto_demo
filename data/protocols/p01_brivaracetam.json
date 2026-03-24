@@ -5713,259 +5713,195 @@
       ],
       "procedures": [
         {
-          "raw_name": "ASSESSMENTS",
-          "canonical_name": "ASSESSMENTS",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Blood sampling for the DNA analysis",
-          "canonical_name": "Blood sampling for the DNA analysis",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Blood Draw/Phlebotomy",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Specimen Collection",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Blood sampling for the DNA analysis^i",
-          "canonical_name": "Blood sampling for the DNA analysis^i",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Blood Draw/Phlebotomy",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Specimen Collection",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "C-SSRS",
-          "canonical_name": "Columbia Suicide Severity Rating",
+          "canonical_name": "Columbia Suicide Severity Rating Scale",
           "code": null,
-          "code_system": null,
-          "category": "Efficacy",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Childbearing potential",
-          "canonical_name": "Childbearing potential",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Concomitant AED",
-          "canonical_name": "Concomitant AED",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Concomitant non-AED",
-          "canonical_name": "Concomitant non-AED",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Daily record card dispensed",
-          "canonical_name": "Daily record card dispensed",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Daily record card retrieved",
-          "canonical_name": "Daily record card retrieved",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Demographic data",
-          "canonical_name": "Demographics",
+          "canonical_name": "Demographics Collection",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Drug dispensing",
-          "canonical_name": "Drug dispensing",
+          "canonical_name": "Drug Dispensing/Accountability",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Drug return/accountability",
-          "canonical_name": "Drug return/accountability",
+          "canonical_name": "Drug Dispensing/Accountability",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "ECG",
-          "canonical_name": "Electrocardiogram, 12-lead",
+          "canonical_name": "12-Lead Electrocardiogram",
           "code": "93000",
           "code_system": "CPT",
-          "category": "Cardiac",
-          "estimated_cost_tier": "MEDIUM"
+          "category": "Cardiology",
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "ECG^e",
-          "canonical_name": "Electrocardiogram, 12-lead",
+          "canonical_name": "12-Lead Electrocardiogram",
           "code": "93000",
           "code_system": "CPT",
-          "category": "Cardiac",
-          "estimated_cost_tier": "MEDIUM"
+          "category": "Cardiology",
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "ECGe",
-          "canonical_name": "ECGe",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "12-Lead Electrocardiogram",
+          "code": "93000",
+          "code_system": "CPT",
+          "category": "Cardiology",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Epilepsy history",
           "canonical_name": "Medical History",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "General medical and procedures history",
           "canonical_name": "Medical History",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "IVRS call",
-          "canonical_name": "IVRS call",
+          "canonical_name": "Randomization",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Medical procedures",
-          "canonical_name": "Medical procedures",
+          "canonical_name": "Medical History",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Month",
-          "canonical_name": "Month",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Neurological examination",
-          "canonical_name": "Neurological examination",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Neurological Examination",
+          "code": "99213",
+          "code_system": "CPT",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Physical examination",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "Physical Examination - Full",
+          "code": "99214",
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of AEs",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of seizures",
-          "canonical_name": "Recording of seizures",
+          "canonical_name": "Seizure Diary/Recording",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Disease-Specific",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Subject identification card dispensing",
-          "canonical_name": "Subject identification card dispensing",
+          "canonical_name": "Drug Dispensing/Accountability",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Verification inclusion/ exclusion criteria",
-          "canonical_name": "Verification inclusion/ exclusion criteria",
+          "canonical_name": "Eligibility Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit",
-          "canonical_name": "Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Weight and height",
-          "canonical_name": "Body Weight",
+          "canonical_name": "Body Mass Index (BMI)",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Body Composition",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Weight and height^d",
-          "canonical_name": "Body Weight",
+          "canonical_name": "Body Mass Index (BMI)",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Body Composition",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Weight and heightd",
-          "canonical_name": "Body Weight",
+          "canonical_name": "Body Mass Index (BMI)",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Body Composition",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Written Informed Consent",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Written Informed Consent for DNA analysis (for subjects from N01358)",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         }
       ],
@@ -7911,18 +7847,18 @@
       "procedures": [
         {
           "raw_name": "Blood sampling for the DNA analysis\u2071",
-          "canonical_name": "Blood sampling for the DNA analysis\u2071",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Blood Draw/Phlebotomy",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Specimen Collection",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Written Informed Consent for DNA analysis (for subjects from N01358)",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         }
       ],

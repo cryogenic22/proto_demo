@@ -2311,159 +2311,159 @@
           "raw_name": "Adverse event assessment",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Chest X-ray",
-          "canonical_name": "X-Ray",
+          "canonical_name": "Chest X-Ray (2 Views)",
           "code": "71046",
           "code_system": "CPT",
           "category": "Imaging",
-          "estimated_cost_tier": "MEDIUM"
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Chest X-rayd",
-          "canonical_name": "X-Ray",
+          "canonical_name": "Chest X-Ray (2 Views)",
           "code": "71046",
           "code_system": "CPT",
           "category": "Imaging",
-          "estimated_cost_tier": "MEDIUM"
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Demographics",
-          "canonical_name": "Demographics",
+          "canonical_name": "Demographics Collection",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "IBDQ, UC-PRO/SS, SF-36, WPAI-UC, and abdominal pain and urgency NRS",
-          "canonical_name": "Quality of Life Questionnaire",
+          "canonical_name": "Numeric Rating Scale for Pain (NRS)",
           "code": null,
-          "code_system": null,
-          "category": "PRO",
+          "code_system": "CPT",
+          "category": "Neurology",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Inclusion/exclusion criteria",
           "canonical_name": "Eligibility Assessment",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Informed consent",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "MMS",
-          "canonical_name": "MMS",
+          "canonical_name": "Modified Mayo Score (MMS)",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Clinical Assessment",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "MMS^h",
-          "canonical_name": "MMS^h",
+          "canonical_name": "Modified Rankin Scale (mRS)",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Neurology",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "PGA for total Mayo Clinic Score",
-          "canonical_name": "PGA for total Mayo Clinic Score",
+          "canonical_name": "Physician Global Assessment (PhGA)",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Clinical Assessment",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Randomization",
           "canonical_name": "Randomization",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Stool frequency and rectal bleeding subscore",
-          "canonical_name": "Stool frequency and rectal bleeding subscore",
+          "canonical_name": "Modified Rankin Scale (mRS)",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Neurology",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Stool frequency and rectal bleeding subscore^i",
-          "canonical_name": "Stool frequency and rectal bleeding subscore^i",
+          "canonical_name": "Modified Rankin Scale (mRS)",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Neurology",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Tuberculosis questionnaire",
-          "canonical_name": "Tuberculosis questionnaire",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Tuberculosis Screening",
+          "code": "86580",
+          "code_system": "CPT",
+          "category": "Infectious Disease",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Tuberculosis questionnairee",
-          "canonical_name": "Tuberculosis questionnairee",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Tuberculosis Screening",
+          "code": "86580",
+          "code_system": "CPT",
+          "category": "Infectious Disease",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Tuberculosis test",
-          "canonical_name": "Tuberculosis test",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Tuberculosis Screening",
+          "code": "86580",
+          "code_system": "CPT",
+          "category": "Infectious Disease",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Tuberculosis teste",
-          "canonical_name": "Tuberculosis teste",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Tuberculosis Screening",
+          "code": "86580",
+          "code_system": "CPT",
+          "category": "Infectious Disease",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Virology screen (HIV, HBV, HCV)",
-          "canonical_name": "Hepatitis Panel",
-          "code": "86709",
+          "canonical_name": "Viral Hepatitis and HIV Panel",
+          "code": "87340",
           "code_system": "CPT",
-          "category": "Laboratory",
-          "estimated_cost_tier": "LOW"
+          "category": "Virology",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Virology screen (HIV, HBV, HCV)f",
-          "canonical_name": "Hepatitis Panel",
-          "code": "86709",
+          "canonical_name": "Viral Hepatitis and HIV Panel",
+          "code": "87340",
           "code_system": "CPT",
-          "category": "Laboratory",
-          "estimated_cost_tier": "LOW"
+          "category": "Virology",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "eDiary instructiong",
           "canonical_name": "e-Diary",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         }
@@ -5737,35 +5737,35 @@
       "procedures": [
         {
           "raw_name": "12-lead ECG",
-          "canonical_name": "Electrocardiogram, 12-lead",
+          "canonical_name": "12-Lead Electrocardiogram",
           "code": "93000",
           "code_system": "CPT",
-          "category": "Cardiac",
-          "estimated_cost_tier": "MEDIUM"
+          "category": "Cardiology",
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "12-lead ECGl,m",
-          "canonical_name": "Electrocardiogram, 12-lead",
+          "canonical_name": "12-Lead Electrocardiogram",
           "code": "93000",
           "code_system": "CPT",
-          "category": "Cardiac",
-          "estimated_cost_tier": "MEDIUM"
+          "category": "Cardiology",
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Biomarkers blood sample",
-          "canonical_name": "Biomarker Sample",
-          "code": null,
-          "code_system": null,
+          "canonical_name": "Biomarker Blood Sample",
+          "code": "36415",
+          "code_system": "CPT",
           "category": "Laboratory",
-          "estimated_cost_tier": "MEDIUM"
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Biomarkers blood sampley",
-          "canonical_name": "Biomarker Sample",
+          "canonical_name": "Biomarker Assessment",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "Laboratory",
-          "estimated_cost_tier": "MEDIUM"
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "CBC with differential and platelets",
@@ -5779,65 +5779,65 @@
           "raw_name": "Concomitant medications and procedures",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Concomitant medications and proceduresz",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Drug dispensation/accountability",
-          "canonical_name": "Drug dispensation/accountability",
+          "canonical_name": "Drug Dispensing/Accountability",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Drug dispensation/accountabilityaa",
-          "canonical_name": "Drug dispensation/accountabilityaa",
+          "canonical_name": "Drug Dispensing/Accountability",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Extraintestinal manifestations",
-          "canonical_name": "Extraintestinal manifestations",
+          "canonical_name": "Extraintestinal Manifestation Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Disease-Specific",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Extraintestinal manifestationso",
-          "canonical_name": "Extraintestinal manifestationso",
+          "canonical_name": "Extraintestinal Manifestation Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Disease-Specific",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Flexible proctosigmoidoscopy/ colonoscopy and biopsy",
-          "canonical_name": "Tumor Biopsy",
-          "code": "20206",
+          "canonical_name": "Colonoscopy",
+          "code": "45380",
           "code_system": "CPT",
-          "category": "Procedure",
-          "estimated_cost_tier": "VERY_HIGH"
+          "category": "Endoscopy",
+          "estimated_cost_tier": "HIGH"
         },
         {
           "raw_name": "Flexible proctosigmoidoscopy/ colonoscopy and biopsyw",
-          "canonical_name": "Endoscopy",
-          "code": "43239",
+          "canonical_name": "Colonoscopy",
+          "code": "45380",
           "code_system": "CPT",
-          "category": "Procedure",
-          "estimated_cost_tier": "VERY_HIGH"
+          "category": "Endoscopy",
+          "estimated_cost_tier": "HIGH"
         },
         {
           "raw_name": "Laboratory tests including hs-CRP",
@@ -5849,63 +5849,63 @@
         },
         {
           "raw_name": "Laboratory tests including hs-CRPu",
-          "canonical_name": "Laboratory tests including hs-CRPu",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "High-Sensitivity C-Reactive Protein (hs-CRP)",
+          "code": "86141",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Ophthalmoscopy with OCT",
-          "canonical_name": "Fundoscopy",
-          "code": "92250",
+          "canonical_name": "Optical Coherence Tomography (OCT) - Macular/Retinal",
+          "code": "92134",
           "code_system": "CPT",
-          "category": "Ophthalmology",
+          "category": "Posterior Segment Examination",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Ophthalmoscopy with OCTr",
-          "canonical_name": "Fundoscopy",
-          "code": "92250",
+          "canonical_name": "Dilated Fundus Examination",
+          "code": "92004",
           "code_system": "CPT",
-          "category": "Ophthalmology",
-          "estimated_cost_tier": "MEDIUM"
+          "category": "Posterior Segment Examination",
+          "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "PK assessments",
-          "canonical_name": "PK assessments",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Pharmacokinetic Blood Sampling",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "PK assessmentsx",
-          "canonical_name": "PK assessmentsx",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Pharmacokinetic Blood Sampling",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Physical examination",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "Physical Examination - Full",
+          "code": "99214",
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Physical examinationn",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "Physical Examination - Full",
+          "code": "99214",
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Pregnancy test",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
@@ -5913,7 +5913,7 @@
         },
         {
           "raw_name": "Pregnancy testt",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
@@ -5921,98 +5921,98 @@
         },
         {
           "raw_name": "Pulmonary function test",
-          "canonical_name": "Spirometry",
-          "code": "94010",
+          "canonical_name": "Cardiopulmonary Exercise Testing (CPET)",
+          "code": "94621",
           "code_system": "CPT",
-          "category": "Respiratory",
+          "category": "Cardiology",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Pulmonary function testp",
-          "canonical_name": "Spirometry",
-          "code": "94010",
+          "canonical_name": "Cardiopulmonary Exercise Testing (CPET)",
+          "code": "94621",
           "code_system": "CPT",
-          "category": "Respiratory",
+          "category": "Cardiology",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Stool sample for microbiome",
-          "canonical_name": "Stool sample for microbiome",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Stool Sample Collection (Microbiome)",
+          "code": "89100",
+          "code_system": "CPT",
+          "category": "Specimen Collection",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Stool sample/fecal calprotectin",
-          "canonical_name": "Calprotectin",
-          "code": "83993",
+          "canonical_name": "Stool sample",
+          "code": null,
           "code_system": "CPT",
           "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Stool sample/fecal calprotectinv",
-          "canonical_name": "Stool sample/fecal calprotectinv",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Fecal Calprotectin",
+          "code": "83993",
+          "code_system": "CPT",
+          "category": "GI Labs",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Study treatment administration",
-          "canonical_name": "Study Drug Administration",
+          "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "Study treatment administrationbb",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "TBNK",
-          "canonical_name": "TBNK",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
-          "raw_name": "Urine drug screen",
-          "canonical_name": "Drug Screen",
+          "raw_name": "Study treatment administrationbb",
+          "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
+          "category": "Administrative",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "TBNK",
+          "canonical_name": "T/B/NK Cell Subset Analysis (Flow Cytometry)",
+          "code": "86355",
+          "code_system": "CPT",
+          "category": "Immunology",
+          "estimated_cost_tier": "MEDIUM"
+        },
+        {
+          "raw_name": "Urine drug screen",
+          "canonical_name": "24-Hour Urine Collection",
+          "code": "81050",
+          "code_system": "CPT",
           "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Urine drug screens",
-          "canonical_name": "Drug Screen",
-          "code": null,
-          "code_system": null,
+          "canonical_name": "24-Hour Urine Collection",
+          "code": "81050",
+          "code_system": "CPT",
           "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Vital signs",
           "canonical_name": "Vital Signs",
-          "code": "99000",
+          "code": null,
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Vital signsj,k",
           "canonical_name": "Vital Signs",
-          "code": "99000",
+          "code": null,
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         }
       ],

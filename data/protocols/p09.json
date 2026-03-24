@@ -4408,130 +4408,82 @@
       "procedures": [
         {
           "raw_name": "DTSQc",
-          "canonical_name": "DTSQc",
+          "canonical_name": "DTSQ (Diabetes Treatment Satisfaction Questionnaire)",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Patient-Reported Outcome",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "DTSQs",
-          "canonical_name": "DTSQs",
+          "canonical_name": "DTSQ (Diabetes Treatment Satisfaction Questionnaire)",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Patient-Reported Outcome",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "EQ-5D-5L",
-          "canonical_name": "EQ-5D",
+          "canonical_name": "Quality of Life Questionnaire (Generic)",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
         {
-          "raw_name": "Fasting Visit",
-          "canonical_name": "Fasting Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Fasting Visit d",
-          "canonical_name": "Fasting Visit d",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Immunogenicity (ADAs)",
-          "canonical_name": "Immunogenicity Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Immunogenicity (ADAs)l",
-          "canonical_name": "Immunogenicity Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Laboratory Tests",
-          "canonical_name": "Laboratory Tests",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Nonpharmacogenetic samples for storage",
-          "canonical_name": "Nonpharmacogenetic samples for storage",
+          "canonical_name": "Biomarker Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "PK sample for immunogenicity",
-          "canonical_name": "PK Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
+          "canonical_name": "Pharmacokinetic Blood Sampling",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "PK sample for immunogenicitym",
-          "canonical_name": "PK Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
+          "canonical_name": "Pharmacokinetic Blood Sampling",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Pharmacogenetics sample",
           "canonical_name": "Pharmacogenetics sample",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code": "81479",
+          "code_system": "CPT",
+          "category": "Genetic Testing",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Pharmacogenetics samplek",
-          "canonical_name": "Pharmacogenetics samplek",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Study Visit",
-          "canonical_name": "Study Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit Window (days)",
-          "canonical_name": "Visit Window (days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Week of Treatment",
-          "canonical_name": "Week of Treatment",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Pharmacogenetics sample",
+          "code": "81479",
+          "code_system": "CPT",
+          "category": "Genetic Testing",
           "estimated_cost_tier": "LOW"
         }
       ],

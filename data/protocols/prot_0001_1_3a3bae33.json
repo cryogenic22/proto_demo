@@ -2499,15 +2499,15 @@
           "raw_name": "Collect AEs and SAEs as appropriate",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect e-diary or assist the participant to delete application",
           "canonical_name": "e-Diary",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
@@ -2515,15 +2515,15 @@
           "raw_name": "Collection of COVID-19\u2013related clinical and laboratory information (including local diagnosis)",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Review ongoing reactogenicity e-diary symptoms and obtain stop dates",
           "canonical_name": "Reactogenicity Assessment",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "Safety",
           "estimated_cost_tier": "LOW"
         }
@@ -6696,87 +6696,71 @@
           "raw_name": "Collect AEs and SAEs as appropriate",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect blood sample for immunogenicity assessment",
-          "canonical_name": "Immunogenicity Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Collect blood sample for immunogenicity assessment^e",
-          "canonical_name": "Immunogenicity Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Collect prohibited medication use",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collection of COVID-19\u2013related clinical and laboratory information (including local diagnosis)",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Confirm participant meets local/national recommending criteria or is at least 175 days after Vaccination 2 (Visit 4/Visit 2)",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "Confirm participant originally received placebo",
-          "canonical_name": "Eligibility Assessment",
-          "code": null,
-          "code_system": "General",
-          "category": "General",
+          "canonical_name": "Vaccination Administration",
+          "code": "90471",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Contact the participant by telephone",
           "canonical_name": "Telephone Contact",
           "code": null,
-          "code_system": null,
-          "category": "General",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "For participants who are HIV-positive, record latest CD4 count and HIV viral load",
-          "canonical_name": "CD4 Count",
-          "code": "86359",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Obtain informed consent",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Request the participant return the e-diary or assist the participant to delete the application",
           "canonical_name": "e-Diary",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
@@ -6784,17 +6768,9 @@
           "raw_name": "Review and consider eligibility",
           "canonical_name": "Eligibility Assessment",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Review temporary delay criteria",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
         }
       ],
       "visit_windows": [
@@ -11196,17 +11172,17 @@
       "procedures": [
         {
           "raw_name": "Administer study intervention",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Assess acute reactions for at least 30 minutes after study intervention administration",
           "canonical_name": "Post-Dose Observation",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
@@ -11214,39 +11190,39 @@
           "raw_name": "Collect AEs and SAEs as appropriate",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect blood sample for HLA typingc",
           "canonical_name": "Blood Draw/Phlebotomy",
-          "code": null,
-          "code_system": null,
-          "category": "Laboratory",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Specimen Collection",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect blood sample for PBMC isolationc",
           "canonical_name": "Blood Draw/Phlebotomy",
-          "code": null,
-          "code_system": null,
-          "category": "Laboratory",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Specimen Collection",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect blood sample for immunogenicity assessment",
-          "canonical_name": "Immunogenicity Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Collect e-diary or assist the participant to delete application",
           "canonical_name": "e-Diary",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
@@ -11254,61 +11230,45 @@
           "raw_name": "Collect prohibited medication use",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collection of COVID-19\u2013related clinical and laboratory information (including local diagnosis)",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Confirm participant originally received BNT162b2 at Dose 1 and Dose 2",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "Confirm use of contraceptives (if appropriate)",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Obtain informed consent",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Obtain nasal (midturbinate) swab(s)",
-          "canonical_name": "Nasal Swab",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
           "code": "87635",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Obtain randomization number and study intervention allocation using the IRT system",
           "canonical_name": "Randomization",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Perform urine pregnancy test (if appropriate)",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
@@ -11318,7 +11278,7 @@
           "raw_name": "Review ongoing reactogenicity e-diary symptoms and obtain stop dates",
           "canonical_name": "Reactogenicity Assessment",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
@@ -11326,7 +11286,7 @@
           "raw_name": "Review reactogenicity e-diary data (daily review is optimal during the active diary period)",
           "canonical_name": "Reactogenicity Assessment",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "Safety",
           "estimated_cost_tier": "LOW"
         }
@@ -15468,25 +15428,25 @@
       "procedures": [
         {
           "raw_name": "Administer BNT162b2",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Administer BNT162b2SA",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Assess acute reactions for at least 30 minutes after study intervention administration",
           "canonical_name": "Post-Dose Observation",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
@@ -15494,47 +15454,47 @@
           "raw_name": "Collect AEs and SAEs as appropriate",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect AEs and SAEs as appropriateb",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect AEs and SAEs as appropriated",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect blood sample for immunogenicity assessment",
-          "canonical_name": "Immunogenicity Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Collect blood sample for immunogenicity assessmenta",
-          "canonical_name": "Immunogenicity Sample",
-          "code": null,
-          "code_system": null,
-          "category": "PK",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Collect e-diary or assist the participant to delete application",
           "canonical_name": "e-Diary",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
@@ -15542,125 +15502,109 @@
           "raw_name": "Collect nonstudy vaccine informationd",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect prohibited medication use",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collect prohibited medication used",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Collection of COVID-19\u2013related clinical and laboratory information (including local diagnosis)",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Confirm participant has only received 2 doses of BNT162 as part of the study and not outside the study",
           "canonical_name": "Eligibility Assessment",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Confirm use of contraceptives (if appropriate)",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Contact the participant by telephone",
           "canonical_name": "Telephone Contact",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Explain participant communication methods (including for e-diary completion), assist the participant with downloading the app, or issue provisioned device, if required",
           "canonical_name": "e-Diary",
           "code": null,
-          "code_system": null,
-          "category": "PRO",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "For participants who are HIV-positive, record latest CD4 count and HIV viral load",
-          "canonical_name": "CD4 Count",
-          "code": "86359",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Obtain informed consent",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Obtain informed consent for asymptomatic SARS-CoV-2 infection surveillance",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Obtain nasal (midturbinate) swab",
-          "canonical_name": "Nasal Swab",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
           "code": "87635",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Obtain nasal (midturbinate) swab (self-swab at home or by site staff at an in-person visit)",
-          "canonical_name": "Nasal Swab",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
           "code": "87635",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Obtain the participant's vaccine vial allocation using the IRT system",
           "canonical_name": "Randomization",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Obtain vaccine vial allocation via IRT",
           "canonical_name": "Randomization",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Perform urine pregnancy test (if appropriate)",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
@@ -15670,7 +15614,7 @@
           "raw_name": "Provide/ensure the participant has a thermometer (all participants) and measuring device (reactogenicity subset participants only)",
           "canonical_name": "Reactogenicity Assessment",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
@@ -15678,7 +15622,7 @@
           "raw_name": "Request the participant return the e-diary device or assist the participant to delete the application",
           "canonical_name": "e-Diary",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
@@ -15686,15 +15630,15 @@
           "raw_name": "Review and consider eligibility",
           "canonical_name": "Eligibility Assessment",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Review ongoing reactogenicity e-diary symptoms and obtain stop dates",
           "canonical_name": "Reactogenicity Assessment",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
@@ -15702,40 +15646,8 @@
           "raw_name": "Review reactogenicity e-diary data (daily review is optimal during the active diary period)",
           "canonical_name": "Reactogenicity Assessment",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "Safety",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Review temporary delay criteria",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "Visit Description",
-          "canonical_name": "Visit Description",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit Number",
-          "canonical_name": "Visit Number",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit Window (Days)",
-          "canonical_name": "Visit Window (Days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
           "estimated_cost_tier": "LOW"
         }
       ],

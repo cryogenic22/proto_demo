@@ -3310,71 +3310,55 @@
       "procedures": [
         {
           "raw_name": "Blood for immunologic analysis5",
-          "canonical_name": "Blood for immunologic analysis5",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Confirm participant meets inclusion and exclusion criteria",
-          "canonical_name": "Confirm participant meets inclusion and exclusion criteria",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Dosing",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunologic Blood Sample",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "MEDIUM"
         },
         {
-          "raw_name": "Efficacy Assessment",
-          "canonical_name": "Efficacy Assessment",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "raw_name": "Dosing",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "ICF, demographics, concomitant medications, medical history",
-          "canonical_name": "Informed Consent",
+          "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Immunogenicity Assessment",
-          "canonical_name": "Immunogenicity sampling",
-          "code": null,
-          "code_system": null,
-          "category": "Immunology",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Nasopharyngeal swab5",
-          "canonical_name": "Nasal Swab",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
           "code": "87635",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Physical examination\u00b2",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "Physical Examination - Full",
+          "code": "99214",
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Pregnancy testing\u00b3",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
@@ -3384,24 +3368,24 @@
           "raw_name": "Randomization",
           "canonical_name": "Randomization",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Study injection (including 30-minute post-dosing observation period)",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Surveillance for COVID-19/Unscheduled Visit4",
-          "canonical_name": "Surveillance for COVID-19/Unscheduled Visit4",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
+          "code": "87635",
+          "code_system": "CPT",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         }
       ],
@@ -6137,58 +6121,42 @@
       ],
       "procedures": [
         {
-          "raw_name": "Days Since Most Recent Vaccination",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "Follow-up safety\u2077",
-          "canonical_name": "Follow-up safety\u2077",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE\u2078",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE\u2078",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Serious Adverse Event Reporting",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of concomitant medications and non-study vaccinations\u2078",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of unsolicited AEs",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Review of eDiary",
           "canonical_name": "e-Diary",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         },
@@ -6196,31 +6164,15 @@
           "raw_name": "Safety Assessments",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Study Visit Day / Assessment",
-          "canonical_name": "Study Visit Day / Assessment",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Window Allowance (Days)",
-          "canonical_name": "Window Allowance (Days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "eDiary activation for recording solicited adverse reactions (7 days)\u2076",
           "canonical_name": "e-Diary",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
           "category": "PRO",
           "estimated_cost_tier": "LOW"
         }
@@ -9511,106 +9463,74 @@
       "procedures": [
         {
           "raw_name": "Blood sample for immunologic assessment of SARS-CoV-2 infection6",
-          "canonical_name": "Blood Draw/Phlebotomy",
-          "code": null,
-          "code_system": null,
+          "canonical_name": "Immunologic Blood Sample",
+          "code": "36415",
+          "code_system": "CPT",
           "category": "Laboratory",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Daily Timepoint",
-          "canonical_name": "Daily Timepoint",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Daily telemedicine visit4",
-          "canonical_name": "Daily telemedicine visit4",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Follow-up safety\u00b2",
-          "canonical_name": "Follow-up safety\u00b2",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Telemedicine Visit",
+          "code": "99441",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of MAAEs, AESIs (Part C), AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE\u00b3",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE\u00b3",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Serious Adverse Event Reporting",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of concomitant medications and non-study vaccinations\u00b3",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Respiratory illness sample5",
-          "canonical_name": "Respiratory illness sample5",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
+          "code": "87635",
+          "code_system": "CPT",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Saliva sample",
-          "canonical_name": "Saliva sample",
+          "canonical_name": "Saliva Sample Collection",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Symptom-directed physical examination\u00b9",
-          "canonical_name": "Symptom-directed physical examination\u00b9",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Type of Visit",
-          "canonical_name": "Type of Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "Physical Examination - Targeted",
+          "code": "99213",
+          "code_system": "CPT",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Unscheduled Visit",
           "canonical_name": "Unscheduled Visit",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Window Allowance (Days)",
-          "canonical_name": "Window Allowance (Days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         }
       ],
@@ -10848,122 +10768,42 @@
       "procedures": [
         {
           "raw_name": "Blood for immunologic analysis",
-          "canonical_name": "Blood for immunologic analysis",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Confirm participant's request to be unblinded or not to be unblinded",
-          "canonical_name": "Confirm participant's request to be unblinded or not to be unblinded",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Confirm participant's request to be unblinded or not to be unblinded\u00b9",
-          "canonical_name": "Confirm participant's request to be unblinded or not to be unblinded\u00b9",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Continue with original schedules of events, as applicable",
-          "canonical_name": "Continue with original schedules of events, as applicable",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Continue with original schedules of events, as applicable (Table 16, Table 17, Table 18, and Table 19)",
-          "canonical_name": "Continue with original schedules of events, as applicable (Table 16, Table 17, Table 18, and Table 19)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Immunologic Blood Sample",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Counselling the importance of public health measures",
-          "canonical_name": "Counselling the importance of public health measures",
+          "canonical_name": "Public Health Counselling",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Counselling the importance of public health measures\u00b2",
-          "canonical_name": "Counselling the importance of public health measures\u00b2",
+          "canonical_name": "Public Health Counselling",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Modified Supplemental Schedule of Events: Open-Label Days 1-57",
-          "canonical_name": "Modified Supplemental Schedule of Events: Open-Label Days 1-57",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)3",
-          "canonical_name": "Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)3",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)\u00b3",
-          "canonical_name": "Modified Supplemental Schedule of Events: Open-Label Days 1-57 (Table 22)\u00b3",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Nasopharyngeal swab",
-          "canonical_name": "Nasal Swab",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
           "code": "87635",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Sign revised informed consent form",
           "canonical_name": "Informed Consent",
           "code": null,
-          "code_system": "General",
-          "category": "General",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Supplemental Schedule of Events: Open-Label Days 1-57",
-          "canonical_name": "Supplemental Schedule of Events: Open-Label Days 1-57",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)c",
-          "canonical_name": "Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)c",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)\u1d9c",
-          "canonical_name": "Supplemental Schedule of Events: Open-Label Days 1-57 (Table 21)\u1d9c",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         }
       ],
@@ -12511,114 +12351,66 @@
       "procedures": [
         {
           "raw_name": "Blood for immunologic analysis5",
-          "canonical_name": "Blood for immunologic analysis5",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Confirm participant meets inclusion and exclusion criteria",
-          "canonical_name": "Confirm participant meets inclusion and exclusion criteria",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Immunologic Blood Sample",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Confirm signing of ICF, concomitant medications, medical history",
-          "canonical_name": "Informed Consent",
+          "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": "General",
-          "category": "General",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Efficacy Assessment",
-          "canonical_name": "Efficacy Assessment",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Immunogenicity Assessment",
-          "canonical_name": "Immunogenicity sampling",
-          "code": null,
-          "code_system": null,
-          "category": "Immunology",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Nasopharyngeal swab5",
-          "canonical_name": "Nasal Swab",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
           "code": "87635",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Physical examination2",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "Physical Examination - Full",
+          "code": "99214",
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Pregnancy testing3",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
-          "raw_name": "Study Visit Day",
-          "canonical_name": "Study Visit Day",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Study injection (including 30-minute post-dosing observation period6)",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Surveillance for COVID-19/Unscheduled Visit4",
-          "canonical_name": "Surveillance for COVID-19/Unscheduled Visit4",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Type of Visit",
-          "canonical_name": "Type of Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit Number",
-          "canonical_name": "Visit Number",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Window Allowance (Days)",
-          "canonical_name": "Window Allowance (Days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
+          "code": "87635",
+          "code_system": "CPT",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         }
       ],
@@ -14197,75 +13989,27 @@
       ],
       "procedures": [
         {
-          "raw_name": "Days Since Most Recent Vaccination",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "Follow-up safety7",
-          "canonical_name": "Follow-up safety7",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE8",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE8",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Serious Adverse Event Reporting",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of concomitant medications and non-study vaccinations8",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Study Visit Day",
-          "canonical_name": "Study Visit Day",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Type of Visit",
-          "canonical_name": "Type of Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit Number",
-          "canonical_name": "Visit Number",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Window Allowance (Days)",
-          "canonical_name": "Window Allowance (Days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         }
       ],
@@ -15643,99 +15387,59 @@
       "procedures": [
         {
           "raw_name": "Blood for immunologic analysis4",
-          "canonical_name": "Blood for immunologic analysis4",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Confirm participant meets inclusion and exclusion criteria",
-          "canonical_name": "Confirm participant meets inclusion and exclusion criteria",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Immunologic Blood Sample",
+          "code": "36415",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Confirm signing of ICF, concomitant medications, medical history",
-          "canonical_name": "Informed Consent",
+          "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Dosing",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Immunogenicity Assessment",
-          "canonical_name": "Immunogenicity sampling",
-          "code": null,
-          "code_system": null,
-          "category": "Immunology",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Physical examination2",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "Physical Examination - Full",
+          "code": "99214",
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Pregnancy testing3",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
-          "raw_name": "Study Visit Day",
-          "canonical_name": "Study Visit Day",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Study injection (including 30-minute post-dosing observation period5)",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "Type of Visit",
-          "canonical_name": "Type of Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit Number",
-          "canonical_name": "Visit Number",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Window Allowance (Days)",
-          "canonical_name": "Window Allowance (Days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
         }
       ],
       "visit_windows": [
@@ -16983,99 +16687,51 @@
       ],
       "procedures": [
         {
-          "raw_name": "Days Since Most Recent Vaccination",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "Follow-up safety7",
-          "canonical_name": "Follow-up safety7",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Nasopharyngeal swab5",
-          "canonical_name": "Nasal Swab",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
           "code": "87635",
           "code_system": "CPT",
-          "category": "Laboratory",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of MAAEs, AE leading to withdrawal, and concomitant medications relevant to or for the treatment of the MAAE8",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE8",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Serious Adverse Event Reporting",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of concomitant medications and non-study vaccinations8",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Safety Assessments",
           "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Study Visit Day",
-          "canonical_name": "Study Visit Day",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Surveillance for COVID-19/Unscheduled Visit6",
-          "canonical_name": "Surveillance for COVID-19/Unscheduled Visit6",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Type of Visit",
-          "canonical_name": "Type of Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit Number",
-          "canonical_name": "Visit Number",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Window Allowance (Days)",
-          "canonical_name": "Window Allowance (Days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
+          "code": "87635",
+          "code_system": "CPT",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         }
       ],
@@ -18785,130 +18441,74 @@
       "procedures": [
         {
           "raw_name": "Biomarker Assessment",
-          "canonical_name": "Biomarker Sample",
+          "canonical_name": "Biomarker Assessment",
           "code": null,
-          "code_system": null,
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "LOW"
+        },
+        {
+          "raw_name": "Blood for immunologic analysis",
+          "canonical_name": "Immunologic Blood Sample",
+          "code": "36415",
+          "code_system": "CPT",
           "category": "Laboratory",
           "estimated_cost_tier": "MEDIUM"
         },
         {
-          "raw_name": "Blood for immunologic analysis",
-          "canonical_name": "Blood for immunologic analysis",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Blood sample for potential biomarker analysis5",
-          "canonical_name": "Blood Draw/Phlebotomy",
-          "code": null,
-          "code_system": null,
-          "category": "Laboratory",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Confirm participant meets inclusion and exclusion criteria",
-          "canonical_name": "Confirm participant meets inclusion and exclusion criteria",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Confirm signing of ICF, concomitant medications, medical history",
-          "canonical_name": "Informed Consent",
+          "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": "General",
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Dosing",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
         },
         {
-          "raw_name": "Efficacy Assessment",
-          "canonical_name": "Efficacy Assessment",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Immunogenicity Assessment",
-          "canonical_name": "Immunogenicity sampling",
-          "code": null,
-          "code_system": null,
-          "category": "Immunology",
-          "estimated_cost_tier": "LOW"
+          "canonical_name": "Anti-Drug Antibody Assessment",
+          "code": "86235",
+          "code_system": "CPT",
+          "category": "Laboratory",
+          "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Physical examination\u00b2",
-          "canonical_name": "Physical Examination",
-          "code": "99213",
+          "canonical_name": "Physical Examination - Full",
+          "code": "99214",
           "code_system": "CPT",
-          "category": "General",
+          "category": "Physical Examination",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Pregnancy testing\u00b3",
-          "canonical_name": "Pregnancy Test",
+          "canonical_name": "Pregnancy Test (Urine)",
           "code": "81025",
           "code_system": "CPT",
           "category": "Laboratory",
           "estimated_cost_tier": "LOW"
         },
         {
-          "raw_name": "Study Visit Day",
-          "canonical_name": "Study Visit Day",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Study injection (including 30-minute post-dosing observation period6)",
-          "canonical_name": "Study Drug Administration",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
+          "canonical_name": "Immunotherapy Infusion (Non-Chemotherapy IV Infusion Initial)",
+          "code": "96365",
+          "code_system": "CPT",
+          "category": "Drug Administration",
           "estimated_cost_tier": "MEDIUM"
         },
         {
           "raw_name": "Surveillance for COVID-19/Unscheduled Visit7",
-          "canonical_name": "Surveillance for COVID-19/Unscheduled Visit7",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Type of Visit",
-          "canonical_name": "Type of Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit Number",
-          "canonical_name": "Visit Number",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Window Allowance (Days)",
-          "canonical_name": "Window Allowance (Days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "canonical_name": "SARS-CoV-2 PCR (Nasopharyngeal)",
+          "code": "87635",
+          "code_system": "CPT",
+          "category": "Molecular Diagnostics",
           "estimated_cost_tier": "LOW"
         }
       ],
@@ -20136,83 +19736,35 @@
       ],
       "procedures": [
         {
-          "raw_name": "Days Since Most Recent Vaccination (in Part C, if applicable)",
-          "canonical_name": "Vaccination",
-          "code": null,
-          "code_system": null,
-          "category": "Treatment",
-          "estimated_cost_tier": "MEDIUM"
-        },
-        {
-          "raw_name": "Follow-up safety9,10",
-          "canonical_name": "Follow-up safety9,10",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
           "raw_name": "Recording of MAAEs, AESIs, AE leading to withdrawal and concomitant medications relevant to or for the treatment of the MAAE11",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of SAEs and concomitant medications relevant to or for the treatment of the SAE11",
-          "canonical_name": "Concomitant Medications Review",
+          "canonical_name": "Serious Adverse Event Reporting",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of concomitant medications and non-study vaccinations11",
           "canonical_name": "Concomitant Medications Review",
           "code": null,
-          "code_system": null,
-          "category": "General",
+          "code_system": "CPT",
+          "category": "Administrative",
           "estimated_cost_tier": "LOW"
         },
         {
           "raw_name": "Recording of unsolicited AEs10",
-          "canonical_name": "Recording of unsolicited AEs10",
+          "canonical_name": "Adverse Event Assessment",
           "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Study Visit Day",
-          "canonical_name": "Study Visit Day",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Type of Visit",
-          "canonical_name": "Type of Visit",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Visit Number",
-          "canonical_name": "Visit Number",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
-          "estimated_cost_tier": "LOW"
-        },
-        {
-          "raw_name": "Window Allowance (Days)",
-          "canonical_name": "Window Allowance (Days)",
-          "code": null,
-          "code_system": null,
-          "category": "Unknown",
+          "code_system": "CPT",
+          "category": "Safety",
           "estimated_cost_tier": "LOW"
         }
       ],
