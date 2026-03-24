@@ -592,6 +592,72 @@ async def delete_job(job_id: str):
     return {"deleted": job_id}
 
 
+# ── Admin Endpoints ──────────────────────────────────────────────────────
+
+@app.delete("/api/admin/protocols/{protocol_id}")
+async def admin_delete_protocol(protocol_id: str):
+    """Delete a stored protocol and its data."""
+    store = create_ke_store()
+    protocol = store.load_protocol(protocol_id)
+    if not protocol:
+        raise HTTPException(status_code=404, detail=f"Protocol {protocol_id} not found")
+    proto_path = Path(f"data/protocols/{protocol_id}.json")
+    if proto_path.exists():
+        proto_path.unlink()
+    _smb_cache.pop(protocol_id, None)
+    _trust_cache.pop(protocol_id, None)
+    return {"deleted": protocol_id}
+
+
+@app.delete("/api/admin/jobs")
+async def admin_clear_all_jobs():
+    """Clear all extraction jobs."""
+    count = len(jobs)
+    jobs.clear()
+    _save_jobs()
+    return {"cleared": count}
+
+
+@app.get("/api/admin/stats")
+async def admin_stats():
+    """Get system statistics for admin dashboard."""
+    store = create_ke_store()
+    protocols = store.list_protocols()
+    proto_list = []
+    for pid in protocols:
+        p = store.load_protocol(pid)
+        if p:
+            pdata = p.model_dump(mode="json") if hasattr(p, "model_dump") else p
+            meta = pdata.get("metadata", {})
+            tables = pdata.get("tables", [])
+            proto_list.append({
+                "protocol_id": pid,
+                "document_name": pdata.get("document_name", ""),
+                "title": meta.get("title", "") if isinstance(meta, dict) else "",
+                "tables_count": len(tables),
+                "total_cells": sum(len(t.get("cells", [])) for t in tables),
+                "total_procedures": sum(len(t.get("procedures", [])) for t in tables),
+            })
+
+    job_list = []
+    for jid, jdata in sorted(jobs.items(), key=lambda x: x[1].get("created_at", 0), reverse=True):
+        job_list.append({
+            "job_id": jid,
+            "status": jdata.get("status", "unknown"),
+            "document_name": jdata.get("document_name", ""),
+            "progress": jdata.get("progress", 0),
+            "message": jdata.get("message", ""),
+            "created_at": jdata.get("created_at"),
+        })
+
+    return {
+        "protocols": proto_list,
+        "jobs": job_list,
+        "total_protocols": len(proto_list),
+        "total_jobs": len(job_list),
+    }
+
+
 @app.get("/api/jobs/{job_id}/result")
 async def get_job_result(job_id: str):
     """Get the full result of a completed extraction job."""

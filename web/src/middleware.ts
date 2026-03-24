@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const SITE_PASSWORD = process.env.SITE_PASSWORD || "ProtoExtract1!";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ProtoAdmin2026!";
 const AUTH_COOKIE = "proto_auth";
+const ADMIN_COOKIE = "proto_admin";
 
 export function middleware(request: NextRequest) {
   // Skip auth for API routes and static files
@@ -10,6 +12,26 @@ export function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/_next") ||
     request.nextUrl.pathname.startsWith("/favicon")
   ) {
+    return NextResponse.next();
+  }
+
+  // Admin route — separate auth
+  if (request.nextUrl.pathname.startsWith("/admin")) {
+    const adminCookie = request.cookies.get(ADMIN_COOKIE);
+    if (adminCookie?.value === "admin_authenticated") {
+      return NextResponse.next();
+    }
+    const pw = request.nextUrl.searchParams.get("password");
+    if (pw === ADMIN_PASSWORD) {
+      const response = NextResponse.redirect(new URL("/admin", request.url));
+      response.cookies.set(ADMIN_COOKIE, "admin_authenticated", {
+        httpOnly: true, secure: true, sameSite: "lax", maxAge: 60 * 60 * 4,
+      });
+      return response;
+    }
+    if (request.nextUrl.pathname !== "/admin/login") {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
     return NextResponse.next();
   }
 
