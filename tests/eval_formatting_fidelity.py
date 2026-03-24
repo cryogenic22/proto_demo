@@ -72,15 +72,26 @@ def check_formatting_issues(html: str, text: str) -> list[dict]:
         })
 
     # C3: Missing spaces between words
-    missing_spaces = re.findall(r"[a-z][A-Z](?=[a-z])", text)  # "maleOrfemale" pattern
-    # Also check lowercase-lowercase with no space where words are stuck
-    stuck_words = re.findall(r"[a-z]{2,}(?:of|or|and|the|in|to|for|with|from|by)[a-z]{2,}", text.lower())
-    if missing_spaces or stuck_words:
+    # Only detect actual stuck words — not legitimate words containing "or", "in" etc.
+    # Pattern: lowercase letter immediately followed by uppercase (camelCase boundary)
+    # e.g., "maleOrfemale", "testThe" but NOT "information", "protocol"
+    missing_spaces = re.findall(r"[a-z][A-Z][a-z]", text)
+    # Filter out known legitimate camelCase patterns
+    legit_camel = {"mRNA", "cDNA", "COVID", "BNT", "pH", "eGFR", "HbA", "eDiary",
+                   "mAb", "cDo", "cCo", "cKe", "mcg", "dL", "mL", "kDa"}
+    real_missing = []
+    for m in missing_spaces:
+        # Check if this is part of a known term
+        idx = text.find(m)
+        context = text[max(0, idx-5):idx+10] if idx >= 0 else ""
+        if not any(lc in context for lc in legit_camel):
+            real_missing.append(m)
+    if real_missing:
         issues.append({
             "id": "C3",
             "severity": "critical",
-            "description": f"Potential missing spaces: {len(missing_spaces)} camelCase + {len(stuck_words)} stuck words",
-            "examples": (missing_spaces + stuck_words)[:5],
+            "description": f"Missing spaces: {len(real_missing)} camelCase boundaries detected",
+            "examples": real_missing[:5],
         })
 
     # H1: Sub-items (a., b., c.) not nested
@@ -188,18 +199,21 @@ def evaluate_protocol(pdf_path: Path) -> dict:
             for k in total_elements:
                 total_elements[k] += result["elements"].get(k, 0)
 
-    # Compute fidelity score
-    # Start at 100, deduct for issues
-    score = 100
-    for r in results:
-        for issue in r["issues"]:
-            if issue["severity"] == "critical":
-                score -= 10
-            elif issue["severity"] == "high":
-                score -= 5
-            elif issue["severity"] == "medium":
-                score -= 2
-    score = max(0, score)
+    # Parser failure: <10 sections = score 0 (not 100 from "no issues")
+    if total_sections < 10:
+        score = 0
+    else:
+        # Start at 100, deduct for issues
+        score = 100
+        for r in results:
+            for issue in r["issues"]:
+                if issue["severity"] == "critical":
+                    score -= 10
+                elif issue["severity"] == "high":
+                    score -= 5
+                elif issue["severity"] == "medium":
+                    score -= 2
+        score = max(0, score)
 
     return {
         "protocol": pdf_path.stem,

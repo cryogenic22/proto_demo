@@ -804,6 +804,12 @@ Return ONLY the JSON array."""
             re.compile(r"^Page \d+", re.IGNORECASE),
             re.compile(r"^Confidential$", re.IGNORECASE),
             re.compile(r"^\d{1,4}$"),  # Standalone page numbers
+            re.compile(r"^PF-\d+", re.IGNORECASE),
+            re.compile(r"^Protocol [A-Z]", re.IGNORECASE),
+            re.compile(r"CONFIDENTIAL$", re.IGNORECASE),
+            re.compile(r"^\(continued\)$", re.IGNORECASE),
+            re.compile(r"^Table \w+ \(continued\)", re.IGNORECASE),
+            re.compile(r"^continued from", re.IGNORECASE),
         ]
 
         for page_num in range(actual_start, end + 1):
@@ -1163,6 +1169,57 @@ Return ONLY the JSON array."""
             return self._paragraphs_to_docx(paragraphs)
         return self._paragraphs_to_html(paragraphs)
 
+    @staticmethod
+    def _fix_span_spacing(spans: list[dict]) -> list[dict]:
+        """Inject missing spaces between spans where PyMuPDF dropped them.
+
+        C3 fix: PyMuPDF splits words across spans at font changes, losing
+        the inter-word space. We detect gaps by checking the X-coordinate
+        distance between the end of one span and the start of the next.
+        """
+        if len(spans) < 2:
+            return spans
+
+        fixed = [spans[0]]
+        for i in range(1, len(spans)):
+            prev = fixed[-1]
+            curr = spans[i]
+
+            prev_text = prev.get("text", "")
+            curr_text = curr.get("text", "")
+
+            if not prev_text or not curr_text:
+                fixed.append(curr)
+                continue
+
+            # If previous span doesn't end with space and current doesn't
+            # start with space, and both end/start with letters → inject space
+            needs_space = (
+                prev_text[-1].isalpha()
+                and curr_text[0].isalpha()
+                and not prev_text.endswith((" ", "-", "\n"))
+                and not curr_text.startswith((" ", "\n"))
+            )
+
+            if needs_space:
+                # Check X-coordinate gap: if there's a visible gap, add space
+                prev_bbox = prev.get("bbox")
+                curr_origin = curr.get("origin")
+                if prev_bbox and curr_origin:
+                    # prev_bbox = (x0, y0, x1, y1), curr_origin = (x, y)
+                    prev_end_x = prev_bbox[2] if isinstance(prev_bbox, (list, tuple)) else 0
+                    curr_start_x = curr_origin[0] if isinstance(curr_origin, (list, tuple)) else 0
+                    char_width = curr.get("size", 10) * 0.25
+                    if curr_start_x - prev_end_x > char_width:
+                        prev["text"] = prev_text + " "
+                else:
+                    # No position data — safer to add space between letter boundaries
+                    prev["text"] = prev_text + " "
+
+            fixed.append(curr)
+
+        return fixed
+
     def _reconstruct_paragraphs(self, raw_lines: list[dict], section_number: str = "") -> list[dict]:
         """Group consecutive lines into semantic paragraphs using Y-gaps.
 
@@ -1236,6 +1293,12 @@ Return ONLY the JSON array."""
         # base_x+72 (~144) = sub-bullet body text
 
         for line in raw_lines:
+            # C3 fix: inject missing spaces between spans before processing
+            if line.get("spans"):
+                line["spans"] = self._fix_span_spacing(line["spans"])
+                # Rebuild text from fixed spans
+                line["text"] = "".join(s.get("text", "") for s in line["spans"])
+
             # Table — always its own block
             if line.get("table_data") is not None:
                 if current:
@@ -1305,10 +1368,14 @@ Return ONLY the JSON array."""
                 numbered_list_re.match(text) and not is_section_heading
             )
 
+            # H1 fix: Letter sub-items (a., b., c.) — detect as L2 list items
+            letter_list_re = re.compile(r"^[a-z][.)]\s")
+            is_letter_list = bool(letter_list_re.match(text))
+
             # Bullet list items (• – ○ etc.)
             is_bullet = bool(bullet_re.match(text))
 
-            is_list_item = is_numbered_list or is_bullet
+            is_list_item = is_numbered_list or is_bullet or is_letter_list
 
             # === DECIDE: CONTINUE OR START NEW ===
 
@@ -1413,7 +1480,11 @@ Return ONLY the JSON array."""
                     ptype = "HEADING"
                 elif is_subheading:
                     ptype = "SUBHEADING"
-                elif is_bullet and indent_level >= 3:
+                elif is_letter_list:
+                    # H1 fix: letter sub-items (a., b., c.) always L2
+                    ptype = "LIST_ITEM_L2"
+                elif is_bullet and indent_level >= 2:
+                    # H1 fix: reduced threshold from 3 to 2
                     ptype = "LIST_ITEM_L2"
                 elif is_list_item:
                     ptype = "LIST_ITEM"
@@ -1456,6 +1527,8 @@ Return ONLY the JSON array."""
         """Convert reconstructed paragraphs to semantic HTML."""
         html_parts = []
         list_stack: list[str] = []  # Stack of open list tags for nesting
+        ol_counter = 0  # C2 fix: track numbered list counter across interruptions
+        last_list_type = ""  # Track what list type was open before interruption
 
         def _close_lists_to(depth: int):
             while len(list_stack) > depth:
@@ -1464,8 +1537,14 @@ Return ONLY the JSON array."""
         for para in paragraphs:
             ptype = para["type"]
 
-            # Close lists when leaving list context
+            # C2 fix: when a non-list element interrupts a numbered list,
+            # remember the counter so we can resume with <ol start="N">
             if ptype not in ("LIST_ITEM", "LIST_ITEM_L2"):
+                if list_stack and list_stack[0] == "ol":
+                    last_list_type = "ol"
+                elif list_stack:
+                    last_list_type = list_stack[0]
+                    ol_counter = 0  # Reset for non-numbered lists
                 _close_lists_to(0)
 
             if ptype == "TABLE":
@@ -1479,26 +1558,32 @@ Return ONLY the JSON array."""
                 level = len(match.group(1).split(".")) + 1 if match else 2
                 level = min(level, 6)
                 html_parts.append(f"<h{level}>{text}</h{level}>")
+                ol_counter = 0  # Reset on section heading
 
             elif ptype == "SUBHEADING":
                 text = self._escape_html(para["text"])
                 html_parts.append(f"<h4><strong>{text}</strong></h4>")
+                # Don't reset ol_counter — subheading interrupts but doesn't end the list
 
             elif ptype == "LIST_ITEM":
-                # Close nested lists but keep L1 open if same type
                 _close_lists_to(1)  # Close L2 nesting if any
                 desired_type = "ol" if para.get("is_numbered") else "ul"
                 if list_stack and list_stack[0] != desired_type:
-                    # List type changed (ol→ul or ul→ol) — close and reopen
                     _close_lists_to(0)
                 if not list_stack:
-                    html_parts.append(f"<{desired_type}>")
+                    # C2 fix: resume numbering with start="N" if continuing after interruption
+                    if desired_type == "ol" and ol_counter > 0 and last_list_type == "ol":
+                        html_parts.append(f'<ol start="{ol_counter + 1}">')
+                    else:
+                        html_parts.append(f"<{desired_type}>")
                     list_stack.append(desired_type)
                 item_text = re.sub(
                     r"^(?:[\u2022•●○\uf0b7\uf0a7]\s*|\d+[.)]\s*|[a-z][.)]\s*|[–—-]\s*)",
                     "", para["text"]
                 )
-                html_parts.append(f"  <li>{self._escape_html(item_text)}</li>")
+                html_parts.append(f"  <li>{self._format_inline_html(para)}</li>")
+                if desired_type == "ol":
+                    ol_counter += 1
 
             elif ptype == "LIST_ITEM_L2":
                 # Ensure L1 list is open, then open L2
@@ -1519,7 +1604,15 @@ Return ONLY the JSON array."""
                 html_parts.append(f"<p>{text}</p>")
 
         _close_lists_to(0)
-        return "\n".join(html_parts)
+        html = "\n".join(html_parts)
+
+        # M3 fix: merge adjacent identical formatting tags
+        # Replace with a single space to prevent stuck words
+        html = re.sub(r"</strong>\s*<strong>", " ", html)
+        html = re.sub(r"</em>\s*<em>", " ", html)
+        html = re.sub(r"</u>\s*<u>", " ", html)
+
+        return html
 
     def _format_inline_html(self, para: dict) -> str:
         """Format paragraph text with inline bold/italic from span data."""
@@ -1540,10 +1633,13 @@ Return ONLY the JSON array."""
                     flags = span.get("flags", 0)
                     is_bold = flags & 16 or "Bold" in span.get("font", "")
                     is_italic = flags & 2 or "Italic" in span.get("font", "")
+                    is_underline = bool(flags & 4)  # H3 fix: underline detection
                     if is_bold:
                         text = f"<strong>{text}</strong>"
                     if is_italic:
                         text = f"<em>{text}</em>"
+                    if is_underline:
+                        text = f"<u>{text}</u>"
                     parts.append(text)
             return "".join(parts)
         return self._escape_html(para["text"])
