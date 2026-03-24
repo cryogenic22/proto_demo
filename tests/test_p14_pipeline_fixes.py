@@ -68,11 +68,13 @@ class TestExclusionFixes:
     def test_study_visit_day_still_excluded(self):
         assert self.normalizer.is_not_procedure("Study Visit Day")
 
-    def test_safety_assessments_still_excluded(self):
-        assert self.normalizer.is_not_procedure("Safety Assessments")
+    def test_safety_assessments_maps_correctly(self):
+        """Safety Assessments is now a real procedure (maps to AE Assessment)."""
+        assert not self.normalizer.is_not_procedure("Safety Assessments")
 
-    def test_ediary_activation_excluded(self):
-        assert self.normalizer.is_not_procedure(
+    def test_ediary_activation_maps_correctly(self):
+        """eDiary activation is now a real procedure (maps to e-Diary)."""
+        assert not self.normalizer.is_not_procedure(
             "eDiary activation for recording solicited adverse reactions"
         )
 
