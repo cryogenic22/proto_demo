@@ -158,7 +158,10 @@ class ProtocolBuilder:
                 ),
             )
             entity.id = entity.deterministic_id(extraction.document_id)
+            # Index by both raw_name and canonical_name for flexible lookup
             proc_entities[proc.raw_name.lower()] = entity
+            if proc.canonical_name.lower() != proc.raw_name.lower():
+                proc_entities[proc.canonical_name.lower()] = entity
             model.entities.append(entity)
 
         # 3. Create Footnote entities
@@ -191,12 +194,22 @@ class ProtocolBuilder:
                 footnote_cell_map.setdefault(key, []).append(fn.marker)
 
         # 5. Build row_header → procedure entity map
+        # Try multiple keys: row_header, raw_value, and prefix matches
         row_proc_map: dict[int, Entity] = {}
         for cell in table.cells:
-            if cell.col == 0 and cell.row_header:
-                proc_key = cell.row_header.lower()
-                if proc_key in proc_entities:
-                    row_proc_map[cell.row] = proc_entities[proc_key]
+            if cell.col == 0:
+                row_key = (cell.row_header or cell.raw_value or "").strip().lower()
+                if not row_key:
+                    continue
+                # Exact match
+                if row_key in proc_entities:
+                    row_proc_map[cell.row] = proc_entities[row_key]
+                else:
+                    # Prefix match (handles long SoA descriptions)
+                    for proc_key, proc_entity in proc_entities.items():
+                        if len(proc_key) >= 5 and row_key.startswith(proc_key):
+                            row_proc_map[cell.row] = proc_entity
+                            break
 
         # 6. Create ScheduleEntry for each non-empty data cell
         for cell in table.cells:

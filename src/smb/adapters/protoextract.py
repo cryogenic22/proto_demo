@@ -107,6 +107,25 @@ class ProtoExtractAdapter:
             for vw in td.get("visit_windows", [])
         ]
 
+        # P0 fix: synthesize visits from cell col_headers when visit_windows is empty
+        if not visits:
+            col_headers_seen: dict[str, int] = {}
+            for c in td.get("cells", []):
+                col = c.get("col", 0)
+                header = c.get("col_header", "")
+                if col > 0 and header and header not in col_headers_seen:
+                    col_headers_seen[header] = col
+            for header, col_idx in sorted(col_headers_seen.items(), key=lambda x: x[1]):
+                visits.append(VisitInput(
+                    visit_name=header,
+                    col_index=col_idx,
+                ))
+            if visits:
+                logger.info(
+                    f"Synthesized {len(visits)} visits from col_headers "
+                    f"(visit_windows was empty)"
+                )
+
         return TableInput(
             table_id=td.get("table_id", ""),
             table_type=td.get("table_type", "SOA"),
@@ -120,11 +139,28 @@ class ProtoExtractAdapter:
         )
 
     def _load_domain_config(self, metadata: dict[str, Any]) -> dict[str, Any]:
-        """Load domain YAML config based on protocol metadata."""
+        """Load domain YAML config based on protocol metadata.
+
+        Always returns at least default config — never empty dict.
+        """
         try:
             from src.domain.config import load_domain_config
             ta = metadata.get("therapeutic_area", "")
             sponsor = metadata.get("sponsor", "")
-            return load_domain_config(therapeutic_area=ta, sponsor=sponsor)
-        except Exception:
-            return {}
+            config = load_domain_config(therapeutic_area=ta, sponsor=sponsor)
+            if config:
+                return config
+        except Exception as e:
+            logger.warning(f"Domain config load failed: {e}")
+
+        # Always return defaults — never empty
+        return {
+            "domain": {"name": "General", "visit_structure": "fixed_duration"},
+            "visit_counting": {"marker_patterns": ["X", "x", "Y", "YES", "\u2713", "\u2714"]},
+            "cost_tiers": {"LOW": 75, "MEDIUM": 350, "HIGH": 1200, "VERY_HIGH": 3500},
+            "footnote_rules": {
+                "conditional_handling": "include",
+                "conditional_probability": 0.6,
+                "phone_call_keywords": ["call", "telephone", "phone"],
+            },
+        }
