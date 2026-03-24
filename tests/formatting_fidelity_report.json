@@ -1,0 +1,2111 @@
+{
+  "timestamp": "2026-03-24T03:10:23",
+  "aggregate_score": 52.6,
+  "total_issues": 56,
+  "critical_issues": 46,
+  "protocols": [
+    {
+      "protocol": "P-01",
+      "total_sections": 63,
+      "sections_with_numbers": 63,
+      "parse_time_seconds": 1.08,
+      "sections_evaluated": 4,
+      "total_issues": 4,
+      "critical_issues": 4,
+      "fidelity_score": 60,
+      "elements": {
+        "paragraphs": 73,
+        "headings": 32,
+        "ol_lists": 7,
+        "ul_lists": 0,
+        "list_items": 12,
+        "bold_spans": 32,
+        "italic_spans": 0,
+        "underline_spans": 0,
+        "tables": 88,
+        "images": 0
+      },
+      "section_results": [
+        {
+          "section": "5.1",
+          "title": "Study description",
+          "page": 16,
+          "html_length": 10231,
+          "text_length": 5800,
+          "elements": {
+            "paragraphs": 13,
+            "headings": 11,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 11,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 20,
+            "table_rows": 51,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 34 stuck words",
+              "examples": [
+                "uuurrriiinnn",
+                "iiinnnttto",
+                "iiinnn",
+                "regulatory",
+                "administered"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5.2",
+          "title": "Schedule of study assessments",
+          "page": 18,
+          "html_length": 12121,
+          "text_length": 6807,
+          "elements": {
+            "paragraphs": 12,
+            "headings": 6,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 6,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 14,
+            "table_rows": 79,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 21 stuck words",
+              "examples": [
+                "discontinuation",
+                "examination",
+                "examination",
+                "recording",
+                "professional"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.1",
+          "title": "Inclusion criteria",
+          "page": 25,
+          "html_length": 8832,
+          "text_length": 6566,
+          "elements": {
+            "paragraphs": 19,
+            "headings": 3,
+            "ol_lists": 5,
+            "ul_lists": 0,
+            "list_items": 8,
+            "bold_spans": 3,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 27,
+            "table_rows": 42,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 41 stuck words",
+              "examples": [
+                "informed",
+                "tttooo",
+                "oophorectomy",
+                "hysterectomy",
+                "ethinylestradiol"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.2",
+          "title": "Exclusion criteria",
+          "page": 26,
+          "html_length": 8892,
+          "text_length": 6403,
+          "elements": {
+            "paragraphs": 29,
+            "headings": 12,
+            "ol_lists": 2,
+            "ul_lists": 0,
+            "list_items": 4,
+            "bold_spans": 12,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 27,
+            "table_rows": 42,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 44 stuck words",
+              "examples": [
+                "medicinal",
+                "protocol",
+                "disorders",
+                "laboratory",
+                "clinical"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        }
+      ]
+    },
+    {
+      "protocol": "P-03",
+      "total_sections": 8,
+      "sections_with_numbers": 2,
+      "parse_time_seconds": 2.71,
+      "sections_evaluated": 0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "fidelity_score": 100,
+      "elements": {
+        "paragraphs": 0,
+        "headings": 0,
+        "ol_lists": 0,
+        "ul_lists": 0,
+        "list_items": 0,
+        "bold_spans": 0,
+        "italic_spans": 0,
+        "underline_spans": 0,
+        "tables": 0,
+        "images": 0
+      },
+      "section_results": []
+    },
+    {
+      "protocol": "P-05",
+      "total_sections": 78,
+      "sections_with_numbers": 78,
+      "parse_time_seconds": 2.95,
+      "sections_evaluated": 7,
+      "total_issues": 7,
+      "critical_issues": 7,
+      "fidelity_score": 30,
+      "elements": {
+        "paragraphs": 117,
+        "headings": 2,
+        "ol_lists": 16,
+        "ul_lists": 0,
+        "list_items": 108,
+        "bold_spans": 4,
+        "italic_spans": 0,
+        "underline_spans": 0,
+        "tables": 3,
+        "images": 0
+      },
+      "section_results": [
+        {
+          "section": "1",
+          "title": "INTRODUCTION",
+          "page": 31,
+          "html_length": 6891,
+          "text_length": 6670,
+          "elements": {
+            "paragraphs": 18,
+            "headings": 1,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 2,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 43 stuck words",
+              "examples": [
+                "demyelinating",
+                "autoimmune",
+                "according",
+                "clinical",
+                "clinical"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "2",
+          "title": "Endpoints",
+          "page": 35,
+          "html_length": 8653,
+          "text_length": 7968,
+          "elements": {
+            "paragraphs": 12,
+            "headings": 0,
+            "ol_lists": 5,
+            "ul_lists": 0,
+            "list_items": 48,
+            "bold_spans": 0,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 1 camelCase + 51 stuck words",
+              "examples": [
+                "cD",
+                "endpoints",
+                "defined",
+                "endpoints",
+                "performed"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "3",
+          "title": "STUDY POPULATION",
+          "page": 36,
+          "html_length": 9857,
+          "text_length": 9337,
+          "elements": {
+            "paragraphs": 10,
+            "headings": 0,
+            "ol_lists": 3,
+            "ul_lists": 0,
+            "list_items": 36,
+            "bold_spans": 0,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 1 camelCase + 75 stuck words",
+              "examples": [
+                "cD",
+                "abnormalities",
+                "clinically",
+                "elimination",
+                "termination"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "4",
+          "title": "TREATMENT PLAN",
+          "page": 40,
+          "html_length": 8194,
+          "text_length": 7981,
+          "elements": {
+            "paragraphs": 23,
+            "headings": 0,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 1,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 104 stuck words",
+              "examples": [
+                "definition",
+                "examining",
+                "clinical",
+                "coordinator",
+                "authorized"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.1",
+          "title": "Overview",
+          "page": 57,
+          "html_length": 5428,
+          "text_length": 5010,
+          "elements": {
+            "paragraphs": 8,
+            "headings": 0,
+            "ol_lists": 4,
+            "ul_lists": 0,
+            "list_items": 12,
+            "bold_spans": 0,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 1,
+            "table_rows": 4,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 24 stuck words",
+              "examples": [
+                "obtained",
+                "performed",
+                "performed",
+                "performed",
+                "performed"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.2",
+          "title": "Laboratory Evaluation",
+          "page": 57,
+          "html_length": 6800,
+          "text_length": 6322,
+          "elements": {
+            "paragraphs": 12,
+            "headings": 1,
+            "ol_lists": 4,
+            "ul_lists": 0,
+            "list_items": 12,
+            "bold_spans": 1,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 1,
+            "table_rows": 4,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 38 stuck words",
+              "examples": [
+                "obtained",
+                "performed",
+                "performed",
+                "performed",
+                "performed"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "8",
+          "title": "STATISTICAL CONSIDERATIONS",
+          "page": 82,
+          "html_length": 7400,
+          "text_length": 6634,
+          "elements": {
+            "paragraphs": 34,
+            "headings": 0,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 0,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 1,
+            "table_rows": 15,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 40 stuck words",
+              "examples": [
+                "endpoints",
+                "clinical",
+                "performed",
+                "hypothesis",
+                "hypotheses"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        }
+      ]
+    },
+    {
+      "protocol": "P-09",
+      "total_sections": 121,
+      "sections_with_numbers": 107,
+      "parse_time_seconds": 0.32,
+      "sections_evaluated": 10,
+      "total_issues": 10,
+      "critical_issues": 10,
+      "fidelity_score": 0,
+      "elements": {
+        "paragraphs": 116,
+        "headings": 39,
+        "ol_lists": 0,
+        "ul_lists": 8,
+        "list_items": 51,
+        "bold_spans": 39,
+        "italic_spans": 0,
+        "underline_spans": 0,
+        "tables": 7,
+        "images": 0
+      },
+      "section_results": [
+        {
+          "section": "1",
+          "title": "Synopsis",
+          "page": 9,
+          "html_length": 10253,
+          "text_length": 9469,
+          "elements": {
+            "paragraphs": 12,
+            "headings": 9,
+            "ol_lists": 0,
+            "ul_lists": 5,
+            "list_items": 26,
+            "bold_spans": 9,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 2,
+            "table_rows": 5,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 49 stuck words",
+              "examples": [
+                "monotherapy",
+                "insulinotropic",
+                "synthetic",
+                "receptors",
+                "administered"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "2",
+          "title": "Schedule of Activities",
+          "page": 13,
+          "html_length": 29072,
+          "text_length": 2439,
+          "elements": {
+            "paragraphs": 0,
+            "headings": 0,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 0,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 2,
+            "table_rows": 61,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 17 stuck words",
+              "examples": [
+                "clinical",
+                "informed",
+                "history",
+                "examination",
+                "examinatione"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "3",
+          "title": "Introduction",
+          "page": 17,
+          "html_length": 6954,
+          "text_length": 6714,
+          "elements": {
+            "paragraphs": 10,
+            "headings": 6,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 6,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 38 stuck words",
+              "examples": [
+                "insulinotropic",
+                "synthetic",
+                "receptors",
+                "administered",
+                "administration"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "4",
+          "title": "Objectives and Endpoints",
+          "page": 20,
+          "html_length": 2252,
+          "text_length": 1824,
+          "elements": {
+            "paragraphs": 2,
+            "headings": 3,
+            "ol_lists": 0,
+            "ul_lists": 3,
+            "list_items": 25,
+            "bold_spans": 3,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 1,
+            "table_rows": 3,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 14 stuck words",
+              "examples": [
+                "endpoints",
+                "endpoints",
+                "endpoints",
+                "endpoints",
+                "discontinued"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5",
+          "title": "Study Design",
+          "page": 22,
+          "html_length": 7031,
+          "text_length": 5803,
+          "elements": {
+            "paragraphs": 16,
+            "headings": 2,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 2,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 1,
+            "table_rows": 11,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 29 stuck words",
+              "examples": [
+                "discontinued",
+                "monotherapy",
+                "training",
+                "monitoring",
+                "performed"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5.1",
+          "title": "Overall Design",
+          "page": 22,
+          "html_length": 7000,
+          "text_length": 5798,
+          "elements": {
+            "paragraphs": 16,
+            "headings": 1,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 1,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 1,
+            "table_rows": 11,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 29 stuck words",
+              "examples": [
+                "discontinued",
+                "monotherapy",
+                "training",
+                "monitoring",
+                "performed"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5.2",
+          "title": "Number of Participants",
+          "page": 24,
+          "html_length": 1737,
+          "text_length": 1657,
+          "elements": {
+            "paragraphs": 3,
+            "headings": 2,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 2,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 11 stuck words",
+              "examples": [
+                "superiority",
+                "discontinuation",
+                "discontinuation",
+                "standard",
+                "superiority"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.1",
+          "title": "Inclusion Criteria",
+          "page": 27,
+          "html_length": 3960,
+          "text_length": 3712,
+          "elements": {
+            "paragraphs": 20,
+            "headings": 4,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 4,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 26 stuck words",
+              "examples": [
+                "laboratory",
+                "opportunity",
+                "laboratory",
+                "monotherapy",
+                "thiazolidinedione"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.2",
+          "title": "Exclusion Criteria",
+          "page": 28,
+          "html_length": 6950,
+          "text_length": 6446,
+          "elements": {
+            "paragraphs": 37,
+            "headings": 9,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 9,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 56 stuck words",
+              "examples": [
+                "history",
+                "retinopathy",
+                "retinopathy",
+                "examination",
+                "performed"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "8",
+          "title": "Discontinuation Criteria",
+          "page": 37,
+          "html_length": 144,
+          "text_length": 66,
+          "elements": {
+            "paragraphs": 0,
+            "headings": 3,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 3,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 2 stuck words",
+              "examples": [
+                "discontinuation",
+                "discontinuation"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        }
+      ]
+    },
+    {
+      "protocol": "P-14",
+      "total_sections": 147,
+      "sections_with_numbers": 114,
+      "parse_time_seconds": 0.67,
+      "sections_evaluated": 4,
+      "total_issues": 3,
+      "critical_issues": 3,
+      "fidelity_score": 70,
+      "elements": {
+        "paragraphs": 9,
+        "headings": 21,
+        "ol_lists": 3,
+        "ul_lists": 3,
+        "list_items": 42,
+        "bold_spans": 21,
+        "italic_spans": 0,
+        "underline_spans": 0,
+        "tables": 1,
+        "images": 0
+      },
+      "section_results": [
+        {
+          "section": "5.1",
+          "title": "Inclusion and Exclusion Criteria (Part A, Part B, and Part C)",
+          "page": 67,
+          "html_length": 5551,
+          "text_length": 5031,
+          "elements": {
+            "paragraphs": 2,
+            "headings": 5,
+            "ol_lists": 3,
+            "ul_lists": 1,
+            "list_items": 30,
+            "bold_spans": 5,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 28 stuck words",
+              "examples": [
+                "defined",
+                "informed",
+                "defined",
+                "history",
+                "oophorectomy"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5.2",
+          "title": "Participant Restrictions",
+          "page": 70,
+          "html_length": 166,
+          "text_length": 132,
+          "elements": {
+            "paragraphs": 1,
+            "headings": 1,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 1,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [],
+          "issue_count": 0,
+          "critical_count": 0,
+          "high_count": 0
+        },
+        {
+          "section": "6.1",
+          "title": "Investigational Product",
+          "page": 71,
+          "html_length": 960,
+          "text_length": 926,
+          "elements": {
+            "paragraphs": 1,
+            "headings": 1,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 1,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 4 stuck words",
+              "examples": [
+                "blinded",
+                "administered",
+                "containing",
+                "chloride"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.2",
+          "title": "Dosing and Management of Investigational Product",
+          "page": 71,
+          "html_length": 6880,
+          "text_length": 6124,
+          "elements": {
+            "paragraphs": 5,
+            "headings": 14,
+            "ol_lists": 0,
+            "ul_lists": 2,
+            "list_items": 12,
+            "bold_spans": 14,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 1,
+            "table_rows": 4,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 52 stuck words",
+              "examples": [
+                "blinded",
+                "blinded",
+                "accordance",
+                "unblinded",
+                "blinded"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        }
+      ]
+    },
+    {
+      "protocol": "P-24",
+      "total_sections": 15,
+      "sections_with_numbers": 15,
+      "parse_time_seconds": 0.5,
+      "sections_evaluated": 0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "fidelity_score": 100,
+      "elements": {
+        "paragraphs": 0,
+        "headings": 0,
+        "ol_lists": 0,
+        "ul_lists": 0,
+        "list_items": 0,
+        "bold_spans": 0,
+        "italic_spans": 0,
+        "underline_spans": 0,
+        "tables": 0,
+        "images": 0
+      },
+      "section_results": []
+    },
+    {
+      "protocol": "P-27",
+      "total_sections": 147,
+      "sections_with_numbers": 135,
+      "parse_time_seconds": 0.48,
+      "sections_evaluated": 9,
+      "total_issues": 9,
+      "critical_issues": 9,
+      "fidelity_score": 10,
+      "elements": {
+        "paragraphs": 79,
+        "headings": 76,
+        "ol_lists": 17,
+        "ul_lists": 1,
+        "list_items": 116,
+        "bold_spans": 89,
+        "italic_spans": 10,
+        "underline_spans": 0,
+        "tables": 10,
+        "images": 0
+      },
+      "section_results": [
+        {
+          "section": "1",
+          "title": "TITLE PAGE",
+          "page": 1,
+          "html_length": 2461,
+          "text_length": 1932,
+          "elements": {
+            "paragraphs": 8,
+            "headings": 5,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 5,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 4,
+            "table_rows": 8,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 21 stuck words",
+              "examples": [
+                "protocol",
+                "protocol",
+                "information",
+                "investigators",
+                "information"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "2",
+          "title": "Synopsis",
+          "page": 6,
+          "html_length": 37716,
+          "text_length": 35248,
+          "elements": {
+            "paragraphs": 37,
+            "headings": 1,
+            "ol_lists": 6,
+            "ul_lists": 0,
+            "list_items": 58,
+            "bold_spans": 14,
+            "italic_spans": 8,
+            "underline_spans": 0,
+            "tables": 4,
+            "table_rows": 24,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 221 stuck words",
+              "examples": [
+                "protocol",
+                "thrombocytopenia",
+                "hematologic",
+                "obtained",
+                "discontinue"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "3",
+          "title": "Table of Contents, List of Tables, and List of Figures",
+          "page": 16,
+          "html_length": 20372,
+          "text_length": 20218,
+          "elements": {
+            "paragraphs": 3,
+            "headings": 5,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 5,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 61 stuck words",
+              "examples": [
+                "information",
+                "definitions",
+                "meningococcal",
+                "endpoints",
+                "endpoints"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "4",
+          "title": "List of Abbreviations and Definitions of Terms",
+          "page": 22,
+          "html_length": 4465,
+          "text_length": 2361,
+          "elements": {
+            "paragraphs": 0,
+            "headings": 1,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 1,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 2,
+            "table_rows": 73,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 20 stuck words",
+              "examples": [
+                "definitions",
+                "definition",
+                "disintegrin",
+                "metalloproteinase",
+                "calcineurin"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5",
+          "title": "Introduction",
+          "page": 24,
+          "html_length": 7197,
+          "text_length": 6807,
+          "elements": {
+            "paragraphs": 5,
+            "headings": 13,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 13,
+            "italic_spans": 1,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 1 camelCase + 49 stuck words",
+              "examples": [
+                "mA",
+                "autoantibodies",
+                "against",
+                "regulatory",
+                "endothelial"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5.1",
+          "title": "Benefits and Risks Assessment",
+          "page": 25,
+          "html_length": 4717,
+          "text_length": 4081,
+          "elements": {
+            "paragraphs": 7,
+            "headings": 19,
+            "ol_lists": 2,
+            "ul_lists": 0,
+            "list_items": 5,
+            "bold_spans": 19,
+            "italic_spans": 1,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 1 camelCase + 20 stuck words",
+              "examples": [
+                "mA",
+                "recombinant",
+                "epitope",
+                "sustained",
+                "terminal"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.1",
+          "title": "Study Objectives",
+          "page": 27,
+          "html_length": 3232,
+          "text_length": 2968,
+          "elements": {
+            "paragraphs": 3,
+            "headings": 5,
+            "ol_lists": 2,
+            "ul_lists": 0,
+            "list_items": 8,
+            "bold_spans": 5,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 8 stuck words",
+              "examples": [
+                "thrombocytopenia",
+                "hematologic",
+                "obtained",
+                "discontinue",
+                "discontinue"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.2",
+          "title": "Endpoints",
+          "page": 28,
+          "html_length": 4879,
+          "text_length": 4153,
+          "elements": {
+            "paragraphs": 8,
+            "headings": 17,
+            "ol_lists": 2,
+            "ul_lists": 0,
+            "list_items": 18,
+            "bold_spans": 17,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 35 stuck words",
+              "examples": [
+                "endpoints",
+                "hematological",
+                "creatinine",
+                "obtained",
+                "endpoints"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "8",
+          "title": "Study Population",
+          "page": 46,
+          "html_length": 8537,
+          "text_length": 7847,
+          "elements": {
+            "paragraphs": 8,
+            "headings": 10,
+            "ol_lists": 5,
+            "ul_lists": 1,
+            "list_items": 27,
+            "bold_spans": 10,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 56 stuck words",
+              "examples": [
+                "protocol",
+                "cohorts",
+                "inhibitors",
+                "according",
+                "thrombocytopenia"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        }
+      ]
+    },
+    {
+      "protocol": "P-32",
+      "total_sections": 156,
+      "sections_with_numbers": 120,
+      "parse_time_seconds": 0.67,
+      "sections_evaluated": 9,
+      "total_issues": 17,
+      "critical_issues": 9,
+      "fidelity_score": 0,
+      "elements": {
+        "paragraphs": 85,
+        "headings": 12,
+        "ol_lists": 7,
+        "ul_lists": 8,
+        "list_items": 51,
+        "bold_spans": 89,
+        "italic_spans": 0,
+        "underline_spans": 0,
+        "tables": 0,
+        "images": 0
+      },
+      "section_results": [
+        {
+          "section": "1",
+          "title": "The Investigator or designee must confirm appropriate temperature conditions have been",
+          "page": 40,
+          "html_length": 4793,
+          "text_length": 4326,
+          "elements": {
+            "paragraphs": 15,
+            "headings": 3,
+            "ol_lists": 1,
+            "ul_lists": 1,
+            "list_items": 5,
+            "bold_spans": 14,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 43 stuck words",
+              "examples": [
+                "clinical",
+                "protocol",
+                "storage",
+                "storage",
+                "investigators"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "8 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "2",
+          "title": "Only participants enrolled in the study may receive study intervention and only authorized",
+          "page": 40,
+          "html_length": 4793,
+          "text_length": 4326,
+          "elements": {
+            "paragraphs": 15,
+            "headings": 3,
+            "ol_lists": 1,
+            "ul_lists": 1,
+            "list_items": 5,
+            "bold_spans": 14,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 43 stuck words",
+              "examples": [
+                "clinical",
+                "protocol",
+                "storage",
+                "storage",
+                "investigators"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "8 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "3",
+          "title": "The Investigator, institution, or the head of the medical institution (where applicable) is",
+          "page": 40,
+          "html_length": 4793,
+          "text_length": 4326,
+          "elements": {
+            "paragraphs": 15,
+            "headings": 3,
+            "ol_lists": 1,
+            "ul_lists": 1,
+            "list_items": 5,
+            "bold_spans": 14,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 43 stuck words",
+              "examples": [
+                "clinical",
+                "protocol",
+                "storage",
+                "storage",
+                "investigators"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "8 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "4",
+          "title": "Further guidance and information for the final disposition of used and unused study",
+          "page": 40,
+          "html_length": 4793,
+          "text_length": 4326,
+          "elements": {
+            "paragraphs": 15,
+            "headings": 3,
+            "ol_lists": 1,
+            "ul_lists": 1,
+            "list_items": 5,
+            "bold_spans": 14,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 43 stuck words",
+              "examples": [
+                "clinical",
+                "protocol",
+                "storage",
+                "storage",
+                "investigators"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "8 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5",
+          "title": "Ghebre MA, Pang PH, Diver S, Desai D, Bafadhel M, Haldar K, et al",
+          "page": 112,
+          "html_length": 5995,
+          "text_length": 5638,
+          "elements": {
+            "paragraphs": 3,
+            "headings": 0,
+            "ol_lists": 3,
+            "ul_lists": 0,
+            "list_items": 27,
+            "bold_spans": 0,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 2 camelCase + 42 stuck words",
+              "examples": [
+                "cC",
+                "cK",
+                "altose",
+                "anticholinergic",
+                "thorac"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5.1",
+          "title": "Inclusion Criteria",
+          "page": 107,
+          "html_length": 8394,
+          "text_length": 8168,
+          "elements": {
+            "paragraphs": 6,
+            "headings": 0,
+            "ol_lists": 0,
+            "ul_lists": 1,
+            "list_items": 1,
+            "bold_spans": 9,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 64 stuck words",
+              "examples": [
+                "training",
+                "administration",
+                "training",
+                "medicinal",
+                "administration"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "6 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5.2",
+          "title": "Exclusion Criteria",
+          "page": 107,
+          "html_length": 8394,
+          "text_length": 8168,
+          "elements": {
+            "paragraphs": 6,
+            "headings": 0,
+            "ol_lists": 0,
+            "ul_lists": 1,
+            "list_items": 1,
+            "bold_spans": 9,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 64 stuck words",
+              "examples": [
+                "training",
+                "administration",
+                "training",
+                "medicinal",
+                "administration"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "6 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.2",
+          "title": "Preparation/ Handling/",
+          "page": 108,
+          "html_length": 5350,
+          "text_length": 5194,
+          "elements": {
+            "paragraphs": 4,
+            "headings": 0,
+            "ol_lists": 0,
+            "ul_lists": 1,
+            "list_items": 1,
+            "bold_spans": 6,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 41 stuck words",
+              "examples": [
+                "medicinal",
+                "storage",
+                "information",
+                "storage",
+                "maintenance"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "4 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "8",
+          "title": "Study Assessments",
+          "page": 107,
+          "html_length": 8394,
+          "text_length": 8168,
+          "elements": {
+            "paragraphs": 6,
+            "headings": 0,
+            "ol_lists": 0,
+            "ul_lists": 1,
+            "list_items": 1,
+            "bold_spans": 9,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 64 stuck words",
+              "examples": [
+                "training",
+                "administration",
+                "training",
+                "medicinal",
+                "administration"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "6 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        }
+      ]
+    },
+    {
+      "protocol": "P-33",
+      "total_sections": 194,
+      "sections_with_numbers": 103,
+      "parse_time_seconds": 0.64,
+      "sections_evaluated": 4,
+      "total_issues": 6,
+      "critical_issues": 4,
+      "fidelity_score": 56,
+      "elements": {
+        "paragraphs": 135,
+        "headings": 3,
+        "ol_lists": 3,
+        "ul_lists": 4,
+        "list_items": 7,
+        "bold_spans": 81,
+        "italic_spans": 28,
+        "underline_spans": 0,
+        "tables": 0,
+        "images": 0
+      },
+      "section_results": [
+        {
+          "section": "1",
+          "title": "MADRS total score",
+          "page": 16,
+          "html_length": 10104,
+          "text_length": 9616,
+          "elements": {
+            "paragraphs": 30,
+            "headings": 0,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 11,
+            "italic_spans": 11,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 39 stuck words",
+              "examples": [
+                "records",
+                "records",
+                "clinically",
+                "meaningful",
+                "defined"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "5.1",
+          "title": "The subject",
+          "page": 82,
+          "html_length": 8294,
+          "text_length": 7771,
+          "elements": {
+            "paragraphs": 22,
+            "headings": 3,
+            "ol_lists": 2,
+            "ul_lists": 4,
+            "list_items": 6,
+            "bold_spans": 3,
+            "italic_spans": 17,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 57 stuck words",
+              "examples": [
+                "examination",
+                "history",
+                "performed",
+                "abnormalities",
+                "determination"
+              ]
+            }
+          ],
+          "issue_count": 1,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "6.2",
+          "title": "Double-blind",
+          "page": 13,
+          "html_length": 9699,
+          "text_length": 8889,
+          "elements": {
+            "paragraphs": 45,
+            "headings": 0,
+            "ol_lists": 0,
+            "ul_lists": 0,
+            "list_items": 0,
+            "bold_spans": 30,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 44 stuck words",
+              "examples": [
+                "protocol",
+                "administration",
+                "determination",
+                "points",
+                "standard"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "5 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        },
+        {
+          "section": "8",
+          "title": "Prestudy and",
+          "page": 9,
+          "html_length": 10080,
+          "text_length": 9162,
+          "elements": {
+            "paragraphs": 38,
+            "headings": 0,
+            "ol_lists": 1,
+            "ul_lists": 0,
+            "list_items": 1,
+            "bold_spans": 37,
+            "italic_spans": 0,
+            "underline_spans": 0,
+            "tables": 0,
+            "table_rows": 0,
+            "images": 0,
+            "figures": 0,
+            "links": 0
+          },
+          "issues": [
+            {
+              "id": "C3",
+              "severity": "critical",
+              "description": "Potential missing spaces: 0 camelCase + 45 stuck words",
+              "examples": [
+                "continue",
+                "accordance",
+                "amphetamines",
+                "continue",
+                "discontinued"
+              ]
+            },
+            {
+              "id": "M3",
+              "severity": "medium",
+              "description": "11 adjacent <strong> tags not merged"
+            }
+          ],
+          "issue_count": 2,
+          "critical_count": 1,
+          "high_count": 0
+        }
+      ]
+    },
+    {
+      "protocol": "P-34",
+      "total_sections": 118,
+      "sections_with_numbers": 6,
+      "parse_time_seconds": 0.84,
+      "sections_evaluated": 0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "fidelity_score": 100,
+      "elements": {
+        "paragraphs": 0,
+        "headings": 0,
+        "ol_lists": 0,
+        "ul_lists": 0,
+        "list_items": 0,
+        "bold_spans": 0,
+        "italic_spans": 0,
+        "underline_spans": 0,
+        "tables": 0,
+        "images": 0
+      },
+      "section_results": []
+    }
+  ]
+}
