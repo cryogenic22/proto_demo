@@ -262,8 +262,37 @@ class ProcedureLibraryEntry(BaseModel):
     aliases: str = ""
 
 
+# Extraction speed presets
+EXTRACTION_PRESETS = {
+    "fast": {
+        "max_extraction_passes": 1,      # Single pass (no dual-pass reconciliation)
+        "enable_challenger": False,       # Skip adversarial validation
+        "render_dpi": 120,               # Lower DPI for faster rendering
+        "max_concurrent_llm_calls": 15,  # More parallel calls
+    },
+    "balanced": {
+        "max_extraction_passes": 2,
+        "enable_challenger": False,
+        "render_dpi": 150,
+        "max_concurrent_llm_calls": 10,
+    },
+    "thorough": {
+        "max_extraction_passes": 2,
+        "enable_challenger": True,
+        "render_dpi": 150,
+        "max_concurrent_llm_calls": 10,
+    },
+}
+
+# Current preset — configurable via env or admin
+_current_preset = os.environ.get("EXTRACTION_PRESET", "balanced")
+
+
 def _build_config(**overrides) -> PipelineConfig:
-    """Build PipelineConfig from environment variables. Single source of truth."""
+    """Build PipelineConfig from environment variables + preset. Single source of truth."""
+    preset = EXTRACTION_PRESETS.get(_current_preset, EXTRACTION_PRESETS["balanced"])
+    merged = {**preset, **overrides}
+
     return PipelineConfig(
         llm_provider=os.environ.get("LLM_PROVIDER", "anthropic"),
         llm_model=os.environ.get("LLM_MODEL", ""),
@@ -274,11 +303,13 @@ def _build_config(**overrides) -> PipelineConfig:
         azure_openai_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", ""),
         azure_openai_api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview"),
         azure_openai_deployment=os.environ.get("AZURE_OPENAI_DEPLOYMENT", ""),
-        render_dpi=150,
-        max_concurrent_llm_calls=int(os.environ.get("MAX_CONCURRENT_LLM_CALLS", "10")),
+        render_dpi=merged.get("render_dpi", 150),
+        max_extraction_passes=merged.get("max_extraction_passes", 2),
+        enable_challenger=merged.get("enable_challenger", True),
+        max_concurrent_llm_calls=int(os.environ.get("MAX_CONCURRENT_LLM_CALLS", str(merged.get("max_concurrent_llm_calls", 10)))),
         openai_batch_mode=os.environ.get("OPENAI_BATCH_MODE", "").lower() in ("true", "1", "yes"),
         soa_only=True,
-        **overrides,
+        **{k: v for k, v in overrides.items() if k not in merged},
     )
 
 
@@ -616,6 +647,29 @@ async def admin_clear_all_jobs():
     jobs.clear()
     _save_jobs()
     return {"cleared": count}
+
+
+@app.get("/api/admin/config")
+async def admin_get_config():
+    """Get current extraction configuration."""
+    return {
+        "current_preset": _current_preset,
+        "presets": EXTRACTION_PRESETS,
+        "config": _build_config().model_dump(),
+    }
+
+
+@app.put("/api/admin/config/preset/{preset_name}")
+async def admin_set_preset(preset_name: str):
+    """Switch extraction speed preset: fast, balanced, thorough."""
+    global _current_preset
+    if preset_name not in EXTRACTION_PRESETS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unknown preset '{preset_name}'. Available: {list(EXTRACTION_PRESETS.keys())}",
+        )
+    _current_preset = preset_name
+    return {"preset": preset_name, "config": EXTRACTION_PRESETS[preset_name]}
 
 
 @app.get("/api/admin/stats")
