@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import {
   buildSMBModel,
   getSMBModel,
@@ -11,6 +11,7 @@ import {
   type SMBGraphNode,
   type SMBModelInfo,
   type SMBScheduleEntry,
+  type SMBVisitTimeline,
 } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
@@ -39,8 +40,46 @@ const TYPE_COLORS: Record<string, { bg: string; text: string; border: string }> 
 };
 
 const TYPE_ICONS: Record<string, string> = {
-  Visit: "📅", Procedure: "🔬", Footnote: "📝",
-  ScheduleEntry: "✓", Phase: "📋", Document: "📄",
+  Visit: "\u{1F4C5}", Procedure: "\u{1F52C}", Footnote: "\u{1F4DD}",
+  ScheduleEntry: "\u2713", Phase: "\u{1F4CB}", Document: "\u{1F4C4}",
+};
+
+// ── localStorage helper ────────────────────────────────────────────────────
+
+const KG_ENABLED_KEY = "protoextract_kg_enabled";
+
+function getKGEnabled(): boolean {
+  if (typeof window === "undefined") return true;
+  const stored = localStorage.getItem(KG_ENABLED_KEY);
+  return stored === null ? true : stored === "true";
+}
+
+function setKGEnabled(val: boolean): void {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(KG_ENABLED_KEY, String(val));
+  }
+}
+
+// ── Visit phase classification ─────────────────────────────────────────────
+
+type VisitPhase = "screening" | "treatment" | "followup";
+
+function classifyVisitPhase(visitName: string, dayNumber: number | null): VisitPhase {
+  const lower = visitName.toLowerCase();
+  if (lower.includes("screen") || lower.includes("baseline") || lower.includes("eligib")) {
+    return "screening";
+  }
+  if (lower.includes("follow") || lower.includes("end of study") || lower.includes("eos")
+      || lower.includes("safety") || lower.includes("termination") || lower.includes("post")) {
+    return "followup";
+  }
+  return "treatment";
+}
+
+const PHASE_COLORS: Record<VisitPhase, { node: string; text: string; bg: string; label: string }> = {
+  screening: { node: "#9ca3af", text: "text-neutral-600", bg: "bg-neutral-100", label: "Screening" },
+  treatment: { node: "#3b82f6", text: "text-blue-700", bg: "bg-blue-100", label: "Treatment" },
+  followup:  { node: "#10b981", text: "text-emerald-700", bg: "bg-emerald-100", label: "Follow-up" },
 };
 
 // ── Main Component ─────────────────────────────────────────────────────────
@@ -51,7 +90,11 @@ export function KnowledgeGraphView({ protocolId }: Props) {
   const [graph, setGraph] = useState<SMBGraph | null>(null);
   const [schedule, setSchedule] = useState<SMBScheduleEntry[]>([]);
   const [error, setError] = useState("");
-  const [activeSection, setActiveSection] = useState<"overview" | "visits" | "procedures" | "schedule" | "agent">("overview");
+  const [activeSection, setActiveSection] = useState<"overview" | "visits" | "procedures" | "schedule" | "settings" | "agent">("overview");
+
+  // Settings state
+  const [kgEnabled, setKGEnabledState] = useState(true);
+  const [rebuilding, setRebuilding] = useState(false);
 
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -59,34 +102,62 @@ export function KnowledgeGraphView({ protocolId }: Props) {
   const [chatLoading, setChatLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Init kgEnabled from localStorage
+  useEffect(() => {
+    setKGEnabledState(getKGEnabled());
+  }, []);
+
   // Load data
+  const loadData = useCallback(async () => {
+    setStatus("building");
+    try {
+      try { await getSMBModel(protocolId); } catch {
+        await buildSMBModel(protocolId);
+      }
+      const [info, g, sched] = await Promise.all([
+        getSMBModel(protocolId),
+        getSMBGraph(protocolId),
+        getSMBSchedule(protocolId).then(r => r.schedule).catch(() => [] as SMBScheduleEntry[]),
+      ]);
+      setModelInfo(info);
+      setGraph(g);
+      setSchedule(sched);
+      setStatus("ready");
+    } catch (e) {
+      setError(String(e));
+      setStatus("error");
+    }
+  }, [protocolId]);
+
   useEffect(() => {
     let cancelled = false;
-    async function load() {
-      setStatus("building");
-      try {
-        // Build if needed, then fetch
-        try { await getSMBModel(protocolId); } catch {
-          await buildSMBModel(protocolId);
-        }
-        if (cancelled) return;
-        const [info, g, sched] = await Promise.all([
-          getSMBModel(protocolId),
-          getSMBGraph(protocolId),
-          getSMBSchedule(protocolId).then(r => r.schedule).catch(() => []),
-        ]);
-        if (!cancelled) {
-          setModelInfo(info);
-          setGraph(g);
-          setSchedule(sched);
-          setStatus("ready");
-        }
-      } catch (e) {
-        if (!cancelled) { setError(String(e)); setStatus("error"); }
+    loadData().then(() => {
+      if (cancelled) {
+        // Reset to loading if cancelled (component unmounted during load)
       }
-    }
-    load();
+    });
     return () => { cancelled = true; };
+  }, [loadData]);
+
+  // Rebuild handler
+  const handleRebuild = useCallback(async () => {
+    setRebuilding(true);
+    try {
+      await buildSMBModel(protocolId);
+      const [info, g, sched] = await Promise.all([
+        getSMBModel(protocolId),
+        getSMBGraph(protocolId),
+        getSMBSchedule(protocolId).then(r => r.schedule).catch(() => [] as SMBScheduleEntry[]),
+      ]);
+      setModelInfo(info);
+      setGraph(g);
+      setSchedule(sched);
+      setStatus("ready");
+    } catch (e) {
+      setError(String(e));
+    } finally {
+      setRebuilding(false);
+    }
   }, [protocolId]);
 
   // Chat scroll
@@ -148,12 +219,13 @@ export function KnowledgeGraphView({ protocolId }: Props) {
   const spanCount = entries.filter(e => e.properties.is_span).length;
 
   const SECTIONS = [
-    { key: "overview", label: "Overview", icon: "📊" },
-    { key: "visits", label: `Visits (${visits.length})`, icon: "📅" },
-    { key: "procedures", label: `Procedures (${procedures.length})`, icon: "🔬" },
-    { key: "schedule", label: `Schedule (${entries.length})`, icon: "📋" },
-    { key: "agent", label: "Ask Agent", icon: "💬" },
-  ] as const;
+    { key: "overview" as const, label: "Overview", icon: "\u{1F4CA}" },
+    { key: "visits" as const, label: `Visits (${visits.length})`, icon: "\u{1F4C5}" },
+    { key: "procedures" as const, label: `Procedures (${procedures.length})`, icon: "\u{1F52C}" },
+    { key: "schedule" as const, label: `Schedule (${entries.length})`, icon: "\u{1F4CB}" },
+    { key: "agent" as const, label: "Ask Agent", icon: "\u{1F4AC}" },
+    { key: "settings" as const, label: "Settings", icon: "\u2699\uFE0F" },
+  ];
 
   return (
     <div className="h-full flex flex-col">
@@ -205,11 +277,22 @@ export function KnowledgeGraphView({ protocolId }: Props) {
             procedures={procedures}
             footnotes={footnotes}
             entries={entries}
+            schedule={schedule}
           />
         )}
         {activeSection === "visits" && <VisitSection visits={visits} graph={graph} />}
         {activeSection === "procedures" && <ProcedureSection procedures={procedures} schedule={schedule} />}
         {activeSection === "schedule" && <ScheduleSection schedule={schedule} />}
+        {activeSection === "settings" && (
+          <SettingsSection
+            modelInfo={modelInfo}
+            graph={graph}
+            kgEnabled={kgEnabled}
+            onToggleKG={(val) => { setKGEnabledState(val); setKGEnabled(val); }}
+            rebuilding={rebuilding}
+            onRebuild={handleRebuild}
+          />
+        )}
         {activeSection === "agent" && (
           <AgentSection
             messages={messages}
@@ -246,13 +329,14 @@ function StatPill({ label, value, color }: { label: string; value: number; color
 
 // ── Overview Section ───────────────────────────────────────────────────────
 
-function OverviewSection({ modelInfo, graph, visits, procedures, footnotes, entries }: {
+function OverviewSection({ modelInfo, graph, visits, procedures, footnotes, entries, schedule }: {
   modelInfo: SMBModelInfo;
   graph: SMBGraph;
   visits: SMBGraphNode[];
   procedures: SMBGraphNode[];
   footnotes: SMBGraphNode[];
   entries: SMBGraphNode[];
+  schedule: SMBScheduleEntry[];
 }) {
   const firmEntries = entries.filter(e => e.properties.mark_type === "firm");
   const condEntries = entries.filter(e => e.properties.mark_type === "conditional");
@@ -269,7 +353,7 @@ function OverviewSection({ modelInfo, graph, visits, procedures, footnotes, entr
           const ta = meta["therapeutic_area"] ? String(meta["therapeutic_area"]) : "";
           return (
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-brand-primary/10 flex items-center justify-center text-xl">📄</div>
+              <div className="w-12 h-12 rounded-xl bg-brand-primary/10 flex items-center justify-center text-xl">{"\u{1F4C4}"}</div>
               <div className="flex-1 min-w-0">
                 <h2 className="text-base font-semibold text-neutral-800">{title}</h2>
                 <div className="flex items-center gap-3 mt-1 text-xs text-neutral-500">
@@ -312,37 +396,24 @@ function OverviewSection({ modelInfo, graph, visits, procedures, footnotes, entr
           <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wider mb-3">Validation</h3>
           {modelInfo.validation_errors.map((e, i) => (
             <div key={i} className="flex items-start gap-2 text-xs text-red-600 mb-1">
-              <span className="shrink-0 mt-0.5">●</span> {e}
+              <span className="shrink-0 mt-0.5">{"\u25CF"}</span> {e}
             </div>
           ))}
           {modelInfo.validation_warnings.map((w, i) => (
             <div key={i} className="flex items-start gap-2 text-xs text-amber-600 mb-1">
-              <span className="shrink-0 mt-0.5">▲</span> {w}
+              <span className="shrink-0 mt-0.5">{"\u25B2"}</span> {w}
             </div>
           ))}
         </div>
       )}
 
-      {/* Visit timeline */}
+      {/* Visit Journey Timeline */}
       {modelInfo.timeline && modelInfo.timeline.length > 0 && (
-        <div className="bg-white rounded-xl border border-neutral-200 p-4">
-          <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wider mb-3">Visit Timeline</h3>
-          <div className="flex items-end gap-1 overflow-x-auto pb-2">
-            {modelInfo.timeline.slice(0, 20).map((v, i) => (
-              <div key={i} className="flex flex-col items-center min-w-[48px]">
-                <div
-                  className="w-8 bg-blue-500 rounded-t"
-                  style={{ height: `${Math.max(8, (v.procedure_count || 0) * 3)}px` }}
-                  title={`${v.procedure_count || 0} procedures`}
-                />
-                <div className="text-[9px] text-neutral-500 mt-1 text-center leading-tight">{v.visit_name?.slice(0, 8)}</div>
-                {v.day_number != null && (
-                  <div className="text-[8px] text-neutral-400">D{v.day_number}</div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        <VisitJourneyTimeline
+          timeline={modelInfo.timeline}
+          graph={graph}
+          schedule={schedule}
+        />
       )}
     </div>
   );
@@ -352,7 +423,7 @@ function StructureCard({ type, count, description, items }: {
   type: string; count: number; description: string; items: string[];
 }) {
   const colors = TYPE_COLORS[type] || TYPE_COLORS.ScheduleEntry;
-  const icon = TYPE_ICONS[type] || "●";
+  const icon = TYPE_ICONS[type] || "\u25CF";
   return (
     <div className={cn("rounded-xl border p-4", colors.bg, colors.border)}>
       <div className="flex items-center gap-2 mb-1">
@@ -375,6 +446,289 @@ function StructureCard({ type, count, description, items }: {
   );
 }
 
+// ── Visit Journey Timeline ────────────────────────────────────────────────
+
+function VisitJourneyTimeline({ timeline, graph, schedule }: {
+  timeline: SMBVisitTimeline[];
+  graph: SMBGraph;
+  schedule: SMBScheduleEntry[];
+}) {
+  const [expandedVisit, setExpandedVisit] = useState<string | null>(null);
+
+  // Classify each visit and compute positions
+  const visitData = useMemo(() => {
+    const sorted = [...timeline].sort((a, b) => {
+      const da = a.day_number ?? 999999;
+      const db = b.day_number ?? 999999;
+      return da - db;
+    });
+
+    const dayNumbers = sorted.map(v => v.day_number).filter((d): d is number => d !== null);
+    const minDay = dayNumbers.length > 0 ? Math.min(...dayNumbers) : 0;
+    const maxDay = dayNumbers.length > 0 ? Math.max(...dayNumbers) : 1;
+    const dayRange = Math.max(maxDay - minDay, 1);
+
+    return sorted.map((v, idx) => {
+      const phase = classifyVisitPhase(v.visit_name, v.day_number);
+      // Position: evenly spread if day numbers are missing, else proportional
+      const hasDay = v.day_number !== null;
+      const position = hasDay
+        ? ((v.day_number! - minDay) / dayRange) * 100
+        : (idx / Math.max(sorted.length - 1, 1)) * 100;
+
+      return { ...v, phase, position, index: idx };
+    });
+  }, [timeline]);
+
+  // Get top procedures for a visit from graph edges
+  const getVisitProcedures = useCallback((visitName: string) => {
+    const visitNode = graph.nodes.find(n => n.type === "Visit" && n.label === visitName);
+    if (!visitNode) return [];
+
+    const entryEdges = graph.edges.filter(e => e.type === "HAS_SCHEDULE_ENTRY" && e.source === visitNode.id);
+    const procs: { name: string; markType: string; footnotes: string[] }[] = [];
+
+    for (const edge of entryEdges) {
+      const entryNode = graph.nodes.find(n => n.id === edge.target);
+      if (!entryNode) continue;
+
+      const procEdge = graph.edges.find(e => e.type === "FOR_PROCEDURE" && e.source === entryNode.id);
+      if (!procEdge) continue;
+
+      const procNode = graph.nodes.find(n => n.id === procEdge.target);
+      if (!procNode) continue;
+
+      const footnoteMarkers = entryNode.properties.footnote_markers as string[] | undefined;
+      procs.push({
+        name: procNode.label,
+        markType: String(entryNode.properties.mark_type || "unknown"),
+        footnotes: footnoteMarkers || [],
+      });
+    }
+
+    return procs.sort((a, b) => a.name.localeCompare(b.name));
+  }, [graph]);
+
+  // Detect eDiary / span procedures (procedures that span multiple visits)
+  const spanProcedures = useMemo(() => {
+    const spans: { name: string; startIdx: number; endIdx: number }[] = [];
+    const spanEntries = graph.nodes.filter(n => n.type === "ScheduleEntry" && n.properties.is_span);
+
+    // Group by procedure
+    const procSpans: Record<string, number[]> = {};
+    for (const entry of spanEntries) {
+      const procEdge = graph.edges.find(e => e.type === "FOR_PROCEDURE" && e.source === entry.id);
+      if (!procEdge) continue;
+      const procNode = graph.nodes.find(n => n.id === procEdge.target);
+      if (!procNode) continue;
+
+      const visitEdge = graph.edges.find(e => e.type === "HAS_SCHEDULE_ENTRY" && e.target === entry.id);
+      if (!visitEdge) continue;
+      const visitNode = graph.nodes.find(n => n.id === visitEdge.source);
+      if (!visitNode) continue;
+
+      const visitIdx = visitData.findIndex(v => v.visit_name === visitNode.label);
+      if (visitIdx >= 0) {
+        if (!procSpans[procNode.label]) procSpans[procNode.label] = [];
+        procSpans[procNode.label].push(visitIdx);
+      }
+    }
+
+    for (const [name, indices] of Object.entries(procSpans)) {
+      if (indices.length >= 2) {
+        spans.push({
+          name,
+          startIdx: Math.min(...indices),
+          endIdx: Math.max(...indices),
+        });
+      }
+    }
+
+    return spans;
+  }, [graph, visitData]);
+
+  const isExpanded = expandedVisit !== null;
+
+  return (
+    <div className="bg-white rounded-xl border border-neutral-200 p-4">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wider">Visit Journey</h3>
+        <div className="flex items-center gap-3">
+          {(["screening", "treatment", "followup"] as VisitPhase[]).map(phase => (
+            <div key={phase} className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: PHASE_COLORS[phase].node }} />
+              <span className="text-[10px] text-neutral-500">{PHASE_COLORS[phase].label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Timeline SVG */}
+      <div className="relative overflow-x-auto pb-2">
+        <div className="min-w-[600px]">
+          {/* Span bars (eDiary / continuous procedures) */}
+          {spanProcedures.length > 0 && (
+            <div className="mb-3 space-y-1">
+              {spanProcedures.slice(0, 3).map((span, i) => {
+                const leftPct = (span.startIdx / Math.max(visitData.length - 1, 1)) * 100;
+                const widthPct = ((span.endIdx - span.startIdx) / Math.max(visitData.length - 1, 1)) * 100;
+                return (
+                  <div key={i} className="relative h-5 mx-8">
+                    <div
+                      className="absolute top-0 h-full rounded-full bg-purple-100 border border-purple-300 flex items-center"
+                      style={{
+                        left: `${leftPct}%`,
+                        width: `${Math.max(widthPct, 2)}%`,
+                        minWidth: "60px",
+                      }}
+                    >
+                      <span className="text-[9px] text-purple-700 font-medium px-2 truncate">
+                        {span.name}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Main timeline line */}
+          <div className="relative mx-8">
+            {/* Horizontal line */}
+            <div className="absolute top-4 left-0 right-0 h-0.5 bg-neutral-200" />
+
+            {/* Visit nodes */}
+            <div className="relative flex justify-between" style={{ minHeight: "100px" }}>
+              {visitData.map((v, i) => {
+                const phase = PHASE_COLORS[v.phase];
+                const isSelected = expandedVisit === v.visit_name;
+                const topProcs = getVisitProcedures(v.visit_name).slice(0, 3);
+
+                return (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center relative cursor-pointer group"
+                    style={{ flex: "1 1 0", maxWidth: `${100 / visitData.length}%` }}
+                    onClick={() => setExpandedVisit(isSelected ? null : v.visit_name)}
+                  >
+                    {/* Node circle */}
+                    <div
+                      className={cn(
+                        "w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-bold z-10 transition-all",
+                        "shadow-sm hover:shadow-md hover:scale-110",
+                        isSelected && "ring-2 ring-offset-2 ring-blue-400 scale-110"
+                      )}
+                      style={{ backgroundColor: phase.node }}
+                      title={`${v.visit_name} - ${v.procedure_count} procedures`}
+                    >
+                      {v.procedure_count}
+                    </div>
+
+                    {/* Visit label */}
+                    <div className="mt-1.5 text-center">
+                      <div className="text-[9px] font-medium text-neutral-700 leading-tight truncate max-w-[56px]">
+                        {v.visit_name.length > 10 ? v.visit_name.slice(0, 9) + "\u2026" : v.visit_name}
+                      </div>
+                      {v.day_number !== null && (
+                        <div className="text-[8px] text-neutral-400 tabular-nums">D{v.day_number}</div>
+                      )}
+                    </div>
+
+                    {/* Top procedures preview (shown on hover via group) */}
+                    {topProcs.length > 0 && (
+                      <div className="hidden group-hover:block absolute top-full mt-1 z-20">
+                        <div className="bg-white border border-neutral-200 rounded-lg shadow-lg p-2 min-w-[140px]">
+                          {topProcs.map((p, j) => (
+                            <div key={j} className="flex items-center gap-1.5 text-[9px] py-0.5">
+                              <span className={cn(
+                                "w-1.5 h-1.5 rounded-full shrink-0",
+                                p.markType === "firm" ? "bg-emerald-500" : "bg-amber-400"
+                              )} />
+                              <span className="text-neutral-700 truncate">{p.name}</span>
+                              {p.footnotes.length > 0 && (
+                                <span className="text-neutral-400 text-[8px]">{p.footnotes.join(",")}</span>
+                              )}
+                            </div>
+                          ))}
+                          {v.procedure_count > 3 && (
+                            <div className="text-[9px] text-neutral-400 mt-0.5">+{v.procedure_count - 3} more</div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Expanded visit detail */}
+      {expandedVisit && (() => {
+        const v = visitData.find(vd => vd.visit_name === expandedVisit);
+        if (!v) return null;
+        const procs = getVisitProcedures(expandedVisit);
+        const phase = PHASE_COLORS[v.phase];
+
+        return (
+          <div className="mt-3 bg-neutral-50 rounded-lg border border-neutral-200 p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className={cn("px-2.5 py-1 rounded-full text-[10px] font-semibold", phase.bg, phase.text)}>
+                {phase.label}
+              </div>
+              <h4 className="text-sm font-semibold text-neutral-800">{v.visit_name}</h4>
+              {v.day_number !== null && (
+                <span className="text-xs text-neutral-500">Day {v.day_number}</span>
+              )}
+              {(v.window_minus > 0 || v.window_plus > 0) && (
+                <span className="text-[10px] text-neutral-400">
+                  Window: -{v.window_minus}/+{v.window_plus} {v.window_unit?.toLowerCase() || "days"}
+                </span>
+              )}
+              <button
+                onClick={() => setExpandedVisit(null)}
+                className="ml-auto text-xs text-neutral-400 hover:text-neutral-600"
+              >
+                Close
+              </button>
+            </div>
+
+            {procs.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+                {procs.map((p, i) => (
+                  <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md border border-neutral-100">
+                    <span className={cn(
+                      "w-2 h-2 rounded-full shrink-0",
+                      p.markType === "firm" ? "bg-emerald-500" : p.markType === "conditional" ? "bg-amber-400" : "bg-neutral-300"
+                    )} />
+                    <span className="text-[11px] text-neutral-700 flex-1 truncate">{p.name}</span>
+                    <span className={cn(
+                      "text-[9px] px-1.5 py-0.5 rounded",
+                      p.markType === "firm"
+                        ? "bg-emerald-50 text-emerald-600"
+                        : p.markType === "conditional"
+                          ? "bg-amber-50 text-amber-600"
+                          : "bg-neutral-50 text-neutral-500"
+                    )}>
+                      {p.markType}
+                    </span>
+                    {p.footnotes.length > 0 && (
+                      <span className="text-[9px] text-amber-500 font-mono">{p.footnotes.join(",")}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-neutral-400">No procedures linked to this visit.</p>
+            )}
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
+
 // ── Visit Section ──────────────────────────────────────────────────────────
 
 function VisitSection({ visits, graph }: { visits: SMBGraphNode[]; graph: SMBGraph }) {
@@ -387,7 +741,7 @@ function VisitSection({ visits, graph }: { visits: SMBGraphNode[]; graph: SMBGra
         return (
           <div key={v.id} className="bg-white rounded-lg border border-neutral-200 px-4 py-3 flex items-center gap-4">
             <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xs">
-              {v.properties.day_number != null ? `D${v.properties.day_number}` : "—"}
+              {v.properties.day_number != null ? `D${v.properties.day_number}` : "\u2014"}
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-medium text-neutral-800">{v.label}</div>
@@ -421,7 +775,7 @@ function ProcedureSection({ procedures, schedule }: { procedures: SMBGraphNode[]
         return (
           <div key={p.id} className="bg-white rounded-lg border border-neutral-200 px-4 py-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-lg">🔬</div>
+              <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-lg">{"\u{1F52C}"}</div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-neutral-800">{p.label}</div>
                 <div className="flex items-center gap-2 mt-0.5 text-[11px] text-neutral-500">
@@ -475,7 +829,7 @@ function ScheduleSection({ schedule }: { schedule: SMBScheduleEntry[] }) {
                 <td className="text-center px-2 py-2 text-emerald-700 font-semibold">{s.firm_occurrences}</td>
                 <td className="text-center px-2 py-2 text-amber-600">{s.conditional_occurrences || 0}</td>
                 <td className="text-center px-2 py-2 font-bold text-neutral-800">{s.total_occurrences}</td>
-                <td className="px-2 py-2 font-mono text-neutral-500">{s.cpt_code || "—"}</td>
+                <td className="px-2 py-2 font-mono text-neutral-500">{s.cpt_code || "\u2014"}</td>
                 <td className="px-2 py-2">
                   <div className="flex flex-wrap gap-1">
                     {((s as unknown as Record<string, unknown>)["inference_rules"] as string[] ?? []).map((r: string, j: number) => (
@@ -490,6 +844,142 @@ function ScheduleSection({ schedule }: { schedule: SMBScheduleEntry[] }) {
           </tbody>
         </table>
       </div>
+    </div>
+  );
+}
+
+// ── Settings Section ──────────────────────────────────────────────────────
+
+function SettingsSection({ modelInfo, graph, kgEnabled, onToggleKG, rebuilding, onRebuild }: {
+  modelInfo: SMBModelInfo;
+  graph: SMBGraph;
+  kgEnabled: boolean;
+  onToggleKG: (val: boolean) => void;
+  rebuilding: boolean;
+  onRebuild: () => void;
+}) {
+  const meta = graph.metadata || {};
+  const ta = meta["therapeutic_area"] ? String(meta["therapeutic_area"]) : "Auto-detect";
+  const domainConfig = meta["domain_config"] ? String(meta["domain_config"]) : graph.domain || "protocol";
+
+  return (
+    <div className="p-4 space-y-4">
+      {/* Enable/disable toggle */}
+      <div className="bg-white rounded-xl border border-neutral-200 p-5">
+        <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wider mb-4">Knowledge Graph Settings</h3>
+
+        <div className="space-y-4">
+          {/* Toggle */}
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-neutral-700">Enable Knowledge Graph</div>
+              <div className="text-[11px] text-neutral-400 mt-0.5">
+                When enabled, the KG model is built automatically on protocol load.
+              </div>
+            </div>
+            <button
+              onClick={() => onToggleKG(!kgEnabled)}
+              className={cn(
+                "relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors cursor-pointer",
+                kgEnabled ? "bg-brand-primary" : "bg-neutral-200"
+              )}
+            >
+              <span
+                className={cn(
+                  "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform",
+                  kgEnabled ? "translate-x-5" : "translate-x-0"
+                )}
+              />
+            </button>
+          </div>
+
+          {/* Rebuild button */}
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-neutral-700">Rebuild Model</div>
+              <div className="text-[11px] text-neutral-400 mt-0.5">
+                Force rebuild the structured model from the current protocol data.
+              </div>
+            </div>
+            <button
+              onClick={onRebuild}
+              disabled={rebuilding}
+              className={cn(
+                "px-4 py-2 rounded-lg text-xs font-medium transition-colors",
+                rebuilding
+                  ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                  : "bg-brand-primary text-white hover:bg-brand-french"
+              )}
+            >
+              {rebuilding ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-3 h-3 border border-neutral-300 border-t-transparent rounded-full animate-spin" />
+                  Rebuilding...
+                </span>
+              ) : (
+                "Rebuild Model"
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Model information */}
+      <div className="bg-white rounded-xl border border-neutral-200 p-5">
+        <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wider mb-4">Model Information</h3>
+
+        <div className="grid grid-cols-2 gap-4">
+          <InfoRow label="Therapeutic Area" value={ta} />
+          <InfoRow label="Domain Config" value={domainConfig} />
+          <InfoRow label="Build Time" value={`${modelInfo.build_time_seconds.toFixed(2)}s`} />
+          <InfoRow label="Inference Rules" value={`${modelInfo.inference_rules_fired.length} rules applied`} />
+          <InfoRow
+            label="Validation"
+            value={modelInfo.validation_passed ? "Passed" : `${modelInfo.validation_errors.length} errors`}
+            valueClass={modelInfo.validation_passed ? "text-emerald-600" : "text-red-600"}
+          />
+          <InfoRow label="Entities" value={String(modelInfo.summary.total_entities)} />
+          <InfoRow label="Relationships" value={String(modelInfo.summary.total_relationships)} />
+          <InfoRow label="Model Version" value={`v${modelInfo.summary.version}`} />
+        </div>
+
+        {/* Entity type breakdown */}
+        {modelInfo.summary.entity_types && (
+          <div className="mt-4 pt-4 border-t border-neutral-100">
+            <div className="text-[10px] font-semibold text-neutral-500 uppercase tracking-wider mb-2">Entity Breakdown</div>
+            <div className="flex flex-wrap gap-2">
+              {Object.entries(modelInfo.summary.entity_types).map(([type, count]) => (
+                <span key={type} className="px-2 py-1 bg-neutral-50 border border-neutral-200 rounded text-[10px] text-neutral-600">
+                  {type}: <strong>{count}</strong>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Inference rules list */}
+        {modelInfo.inference_rules_fired.length > 0 && (
+          <div className="mt-4 pt-4 border-t border-neutral-100">
+            <div className="text-[10px] font-semibold text-neutral-500 uppercase tracking-wider mb-2">Inference Rules</div>
+            <div className="flex flex-wrap gap-1.5">
+              {modelInfo.inference_rules_fired.map(rule => (
+                <span key={rule} className="px-2 py-1 bg-indigo-50 border border-indigo-200 rounded text-[10px] text-indigo-700">
+                  {rule}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function InfoRow({ label, value, valueClass }: { label: string; value: string; valueClass?: string }) {
+  return (
+    <div>
+      <div className="text-[10px] text-neutral-400 uppercase tracking-wider">{label}</div>
+      <div className={cn("text-sm font-medium text-neutral-700 mt-0.5", valueClass)}>{value}</div>
     </div>
   );
 }
@@ -520,11 +1010,11 @@ function AgentSection({ messages, chatInput, chatLoading, onInputChange, onSend,
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.length === 0 && (
           <div className="text-center py-8">
-            <div className="text-3xl mb-3">💬</div>
+            <div className="text-3xl mb-3">{"\u{1F4AC}"}</div>
             <h3 className="text-sm font-semibold text-neutral-700">Protocol Agent</h3>
             <p className="text-xs text-neutral-400 mt-1 max-w-sm mx-auto">
-              Ask questions about this protocol. The agent uses the structured model
-              to give grounded answers from the actual document.
+              Ask questions about this protocol. The agent uses the knowledge graph
+              and document sections to give grounded answers with source citations.
             </p>
             <div className="flex flex-wrap gap-2 justify-center mt-4">
               {suggestions.map(s => (
@@ -542,7 +1032,7 @@ function AgentSection({ messages, chatInput, chatLoading, onInputChange, onSend,
         {messages.map((m, i) => (
           <div key={i} className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}>
             <div className={cn(
-              "max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed",
+              "max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap",
               m.role === "user"
                 ? "bg-brand-primary text-white rounded-br-md"
                 : "bg-white border border-neutral-200 text-neutral-700 rounded-bl-md"

@@ -879,24 +879,213 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
 # ---------------------------------------------------------------------------
 
 
+def _format_kg_context_for_agent(protocol_id: str) -> str:
+    """Format cached SMB model data as text context for the LLM agent."""
+    if protocol_id not in _smb_cache:
+        return "(Knowledge graph not built for this protocol.)"
+
+    cached = _smb_cache[protocol_id]
+    graph = cached.get("graph", {})
+    timeline = cached.get("timeline", [])
+    schedule = cached.get("schedule", [])
+    rules = cached.get("inference_rules_fired", [])
+
+    lines: list[str] = []
+
+    # ── Visits ──
+    if timeline:
+        lines.append("VISITS:")
+        for v in timeline:
+            day = f"Day {v['day_number']}" if v.get("day_number") is not None else "No day"
+            window = ""
+            if v.get("window_minus") or v.get("window_plus"):
+                window = f" (window: -{v.get('window_minus', 0)}/+{v.get('window_plus', 0)} days)"
+            lines.append(f"  - {v['visit_name']}: {day}, {v.get('procedure_count', 0)} procedures{window}")
+
+    # ── Procedures & schedule ──
+    if schedule:
+        lines.append("\nPROCEDURES (schedule summary):")
+        for s in schedule:
+            name = s.get("canonical_name") or s.get("procedure", "Unknown")
+            firm = s.get("firm_occurrences", 0)
+            cond = s.get("conditional_occurrences", 0)
+            cpt = s.get("cpt_code", "")
+            visits = s.get("visits_required", [])
+            visit_str = f" at visits: {', '.join(visits[:8])}" if visits else ""
+            cpt_str = f" [CPT {cpt}]" if cpt else ""
+            lines.append(f"  - {name}: {firm} firm, {cond} conditional{cpt_str}{visit_str}")
+
+    # ── Footnotes ──
+    footnotes = [n for n in graph.get("nodes", []) if n.get("type") == "Footnote"]
+    if footnotes:
+        lines.append("\nFOOTNOTES:")
+        for fn in footnotes:
+            marker = fn.get("properties", {}).get("footnote_marker", "?")
+            text = fn.get("properties", {}).get("footnote_text", fn.get("label", ""))
+            classification = fn.get("properties", {}).get("classification", "")
+            cls_str = f" [{classification}]" if classification else ""
+            lines.append(f"  {marker}: {text}{cls_str}")
+
+    # ── Inference rules ──
+    if rules:
+        lines.append(f"\nINFERENCE RULES APPLIED: {', '.join(rules)}")
+
+    return "\n".join(lines) if lines else "(No KG data available.)"
+
+
+def _get_relevant_sections(protocol: Any, question: str) -> str:
+    """Extract relevant section text from the protocol based on question keywords."""
+    from src.models.protocol import SectionNode
+
+    all_sections: list[SectionNode] = protocol._flatten_sections(protocol.sections)
+    if not all_sections:
+        return "(No parsed sections available.)"
+
+    # Tokenize question into keywords (lowercase, skip short words)
+    stop_words = {"the", "a", "an", "is", "are", "was", "were", "what", "how",
+                  "many", "much", "does", "this", "that", "for", "and", "or",
+                  "in", "of", "to", "with", "on", "at", "by", "from", "do"}
+    keywords = [
+        w.lower().strip("?.,!;:")
+        for w in question.split()
+        if len(w) > 2 and w.lower().strip("?.,!;:") not in stop_words
+    ]
+
+    # Score each section by keyword overlap in title + content
+    scored: list[tuple[float, SectionNode]] = []
+    for sec in all_sections:
+        title_lower = (sec.title or "").lower()
+        content_lower = (sec.content_html or "").lower()
+        combined = f"{title_lower} {content_lower}"
+        score = sum(1 for kw in keywords if kw in combined)
+        # Boost sections with direct title match
+        if any(kw in title_lower for kw in keywords):
+            score += 2
+        if score > 0:
+            scored.append((score, sec))
+
+    scored.sort(key=lambda x: -x[0])
+
+    # Take top 5 relevant sections, limit total text
+    result_parts: list[str] = []
+    total_chars = 0
+    max_chars = 8000  # Keep context manageable for the LLM
+    for _score, sec in scored[:5]:
+        header = f"[Section {sec.number}: {sec.title} (p.{sec.page})]"
+        content = sec.content_html or "(no content)"
+        # Strip HTML tags for cleaner LLM input
+        import re
+        content = re.sub(r"<[^>]+>", " ", content)
+        content = re.sub(r"\s+", " ", content).strip()
+        if total_chars + len(content) > max_chars:
+            content = content[:max_chars - total_chars] + "..."
+        result_parts.append(f"{header}\n{content}")
+        total_chars += len(content)
+        if total_chars >= max_chars:
+            break
+
+    if not result_parts:
+        # Fallback: return first few sections
+        for sec in all_sections[:3]:
+            header = f"[Section {sec.number}: {sec.title} (p.{sec.page})]"
+            content = sec.content_html or "(no content)"
+            import re
+            content = re.sub(r"<[^>]+>", " ", content)
+            content = re.sub(r"\s+", " ", content).strip()[:2000]
+            result_parts.append(f"{header}\n{content}")
+
+    return "\n\n".join(result_parts) if result_parts else "(No section text available.)"
+
+
 @app.post("/api/protocols/{protocol_id}/ask", response_model=AskResponse)
 async def ask_protocol_endpoint(protocol_id: str, body: AskRequest):
-    """Ask a question about a stored protocol."""
+    """Ask a question about a stored protocol — grounded in KG + section text."""
     store = create_ke_store()
     protocol = store.load_protocol(protocol_id)
     if protocol is None:
         raise HTTPException(status_code=404, detail="Protocol not found")
 
-    return AskResponse(
-        role="assistant",
-        content=(
-            "LLM-based Q&A is not yet configured. "
-            f"Protocol '{protocol.document_name}' has "
-            f"{len(protocol.tables)} table(s) and "
-            f"{protocol.total_pages} page(s)."
-        ),
-        sources=[AskSource(section="metadata", page=0)],
-    )
+    # Build SMB model if not already cached
+    if protocol_id not in _smb_cache:
+        try:
+            from src.smb.core.engine import SMBEngine
+            from src.smb.core.query import get_budget_schedule, get_visit_timeline
+
+            protocol_data = (
+                protocol.model_dump(mode="json")
+                if hasattr(protocol, "model_dump")
+                else protocol
+            )
+            engine = SMBEngine(domain="protocol")
+            result = engine.build_from_protocol_json(protocol_data)
+
+            _smb_cache[protocol_id] = {
+                "model": result.model.model_dump(mode="json"),
+                "graph": result.model.to_graph_dict(),
+                "summary": result.model.summary(),
+                "schedule": get_budget_schedule(result.model),
+                "timeline": get_visit_timeline(result.model),
+                "build_time_seconds": result.build_time_seconds,
+                "inference_rules_fired": result.inference_rules_fired,
+                "validation_passed": result.validation_passed,
+                "validation_errors": result.validation_errors,
+                "validation_warnings": result.validation_warnings,
+            }
+        except Exception as e:
+            logger.warning(f"Could not build SMB for ask endpoint: {e}")
+
+    # Format KG context
+    kg_context = _format_kg_context_for_agent(protocol_id)
+
+    # Get relevant section text
+    sections_text = _get_relevant_sections(protocol, body.question)
+
+    # Collect source pages from relevant sections
+    source_sections: list[AskSource] = []
+    for sec in protocol._flatten_sections(protocol.sections):
+        title_lower = (sec.title or "").lower()
+        q_lower = body.question.lower()
+        if any(w in title_lower for w in q_lower.split() if len(w) > 3):
+            source_sections.append(AskSource(section=f"{sec.number} {sec.title}", page=sec.page))
+    source_sections = source_sections[:5]  # Limit sources
+
+    # Send to LLM
+    try:
+        from src.llm.client import LLMClient
+
+        config = _build_config()
+        llm = LLMClient(config)
+        system_prompt = (
+            "You are a clinical protocol analyst. Answer the question based ONLY on the "
+            "provided context below. Be specific — cite visit names, procedure names, "
+            "day numbers, and footnote markers when relevant. If the answer is not in "
+            "the context, say so clearly.\n\n"
+            f"KNOWLEDGE GRAPH:\n{kg_context}\n\n"
+            f"PROTOCOL SECTIONS:\n{sections_text}"
+        )
+        response_text = await llm.text_query(
+            prompt=body.question,
+            system=system_prompt,
+            max_tokens=2048,
+            temperature=0.1,
+        )
+        return AskResponse(
+            role="assistant",
+            content=response_text,
+            sources=source_sections if source_sections else [AskSource(section="knowledge_graph", page=0)],
+        )
+    except Exception as e:
+        logger.exception(f"LLM query failed for protocol {protocol_id}: {e}")
+        # Graceful fallback — return KG summary instead of an error
+        fallback = (
+            f"I couldn't reach the LLM service, but here is what the knowledge graph contains "
+            f"for protocol '{protocol.document_name}':\n\n{kg_context}"
+        )
+        return AskResponse(
+            role="assistant",
+            content=fallback,
+            sources=[AskSource(section="knowledge_graph", page=0)],
+        )
 
 
 @app.post("/api/protocols/{protocol_id}/review", response_model=ReviewResponse)
