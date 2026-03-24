@@ -62,11 +62,56 @@ def _cors_origin_allowed(origin: str) -> bool:
     return False
 
 
+def _find_protocol_pdf(protocol_id: str) -> Path | None:
+    """Find the PDF file for a protocol. Shared by page-image and verbatim endpoints."""
+    import re as _re
+
+    num_match = _re.match(r"^[pP][-_]?(\d+)", protocol_id)
+    pid_dash = f"P-{num_match.group(1).zfill(2)}" if num_match else protocol_id
+    pid_norm = protocol_id.upper().replace("_", "-")
+
+    search_dirs = [Path("data/pdfs"), Path("golden_set/cached_pdfs")]
+
+    for d in search_dirs:
+        if not d.exists():
+            continue
+        for pattern in [f"{protocol_id}.pdf", f"{pid_dash}.pdf", f"{pid_norm}.pdf"]:
+            candidate = d / pattern
+            if candidate.exists():
+                return candidate
+        for p in d.glob("*.pdf"):
+            stem_clean = _re.sub(r"[^a-zA-Z0-9]", "", p.stem).lower()
+            pid_clean = _re.sub(r"[^a-zA-Z0-9]", "", protocol_id).lower()
+            if stem_clean == pid_clean or stem_clean.startswith(pid_clean):
+                return p
+
+    # Fallback: look up document_name from stored protocol
+    try:
+        store = create_ke_store()
+        protocol = store.load_protocol(protocol_id)
+        if protocol:
+            doc_name = getattr(protocol, "document_name", "") or ""
+            if doc_name:
+                for d in search_dirs:
+                    if not d.exists():
+                        continue
+                    candidate = d / doc_name
+                    if candidate.exists():
+                        return candidate
+                    for p in d.glob("*.pdf"):
+                        if p.stem.lower().replace(" ", "_") == doc_name.replace(".pdf", "").lower().replace(" ", "_"):
+                            return p
+    except Exception:
+        pass
+
+    return None
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origin_regex=r"https://.*\.up\.railway\.app",
-    allow_origins=_allowed_origins,
-    allow_credentials=True,
+    allow_origins=["*"],  # Allow all origins — Railway CORS issues with subdomains
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -373,31 +418,7 @@ async def extract_verbatim_from_protocol(
     if not instruction:
         raise HTTPException(status_code=400, detail="Provide an 'instruction'")
 
-    # Find the PDF for this protocol
-    import re as _re
-
-    num_match = _re.match(r"^[pP][-_]?(\d+)", protocol_id)
-    pid_dash = f"P-{num_match.group(1).zfill(2)}" if num_match else protocol_id
-
-    pdf_path = None
-    for d in [Path("data/pdfs"), Path("golden_set/cached_pdfs")]:
-        if not d.exists():
-            continue
-        for pattern in [f"{protocol_id}.pdf", f"{pid_dash}.pdf"]:
-            candidate = d / pattern
-            if candidate.exists():
-                pdf_path = candidate
-                break
-        if not pdf_path:
-            for p in d.glob("*.pdf"):
-                stem_clean = _re.sub(r"[^a-zA-Z0-9]", "", p.stem).lower()
-                pid_clean = _re.sub(r"[^a-zA-Z0-9]", "", protocol_id).lower()
-                if stem_clean == pid_clean or stem_clean.startswith(pid_clean):
-                    pdf_path = p
-                    break
-        if pdf_path:
-            break
-
+    pdf_path = _find_protocol_pdf(protocol_id)
     if not pdf_path:
         raise HTTPException(
             status_code=404,
@@ -1482,60 +1503,7 @@ async def get_page_image(protocol_id: str, page_number: int):
     """Render a PDF page as a PNG image for the document viewer."""
     from fastapi.responses import Response
 
-    # Find the PDF file — check multiple locations and naming patterns
-    pdf_path = None
-    pid = protocol_id
-    # Normalize: p09 → P-09, p14 → P-14, p01_brivaracetam → P-01
-    pid_norm = pid.upper().replace("_", "-")
-    # Extract numeric prefix: p09 → P-09, p14 → P-14
-    import re as _re
-    num_match = _re.match(r"^[pP][-_]?(\d+)", pid)
-    pid_dash = f"P-{num_match.group(1).zfill(2)}" if num_match else pid_norm
-
-    search_dirs = [Path("data/pdfs"), Path("golden_set/cached_pdfs")]
-    for d in search_dirs:
-        if not d.exists():
-            continue
-        # Try exact match, normalized match, and prefix match
-        for pattern in [f"{pid}.pdf", f"{pid_norm}.pdf", f"{pid_dash}.pdf"]:
-            candidate = d / pattern
-            if candidate.exists():
-                pdf_path = candidate
-                break
-        if pdf_path:
-            break
-        # Fuzzy match: strip non-alphanumeric and compare
-        for p in d.glob("*.pdf"):
-            stem_clean = _re.sub(r"[^a-zA-Z0-9]", "", p.stem).lower()
-            pid_clean = _re.sub(r"[^a-zA-Z0-9]", "", pid).lower()
-            if stem_clean == pid_clean or stem_clean.startswith(pid_clean):
-                pdf_path = p
-                break
-        if pdf_path:
-            break
-
-    # Fallback: look up the document_name from stored protocol data
-    if not pdf_path:
-        store = create_ke_store()
-        protocol = store.load_protocol(protocol_id)
-        if protocol:
-            doc_name = getattr(protocol, "document_name", "") or ""
-            if doc_name:
-                for d in search_dirs:
-                    if not d.exists():
-                        continue
-                    candidate = d / doc_name
-                    if candidate.exists():
-                        pdf_path = candidate
-                        break
-                    # Try without extension variations
-                    for p in d.glob("*.pdf"):
-                        if p.stem.lower().replace(" ", "_") == doc_name.replace(".pdf", "").lower().replace(" ", "_"):
-                            pdf_path = p
-                            break
-                    if pdf_path:
-                        break
-
+    pdf_path = _find_protocol_pdf(protocol_id)
     if not pdf_path:
         raise HTTPException(
             status_code=404,
