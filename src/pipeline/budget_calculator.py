@@ -35,6 +35,70 @@ _EMBEDDED_MARKER_RE = re.compile(
 # Arrow/span patterns indicating continuous daily procedures
 _SPAN_PATTERNS = ['←→', '↔', '←', '→', '⟵', '⟶', '⟷', '──', '———']
 
+# Regex for span/continuous cells: dashes surrounding text, or explicit frequency words
+_SPAN_RE = re.compile(
+    r'^[\-<>─═]{3,}|'                           # Starts with 3+ dashes/arrows
+    r'[\-<>─═]{3,}$|'                           # Ends with 3+ dashes/arrows
+    r'[\-]{2,}.*(?:Day|Week|Month).*[\-]{2,}',  # Dashes surrounding temporal text
+    re.IGNORECASE,
+)
+
+# Frequency word detection
+_FREQ_RE = re.compile(r'\b(Daily|Weekly|Monthly|Continuous)\b', re.IGNORECASE)
+
+# Day range extraction
+_DAY_RANGE_RE = re.compile(
+    r'Day\s+(\d+)\s+(?:through|to|thru|[-–—])\s+Day\s+(\d+)', re.IGNORECASE
+)
+
+
+def _parse_span_cell(val: str) -> dict | None:
+    """Parse a span/continuous cell to extract frequency and duration.
+
+    Handles:
+    - "--Weekly eDiary prompts (Day 64 through Day 759)--" → 99 weekly
+    - "----Daily----" → daily (unknown duration)
+    - "Day 1 through Day 28" → 28 daily
+    """
+    freq_match = _FREQ_RE.search(val)
+    day_match = _DAY_RANGE_RE.search(val)
+
+    if freq_match:
+        frequency = freq_match.group(1).lower()
+        result: dict = {"frequency": frequency}
+
+        if day_match:
+            start = int(day_match.group(1))
+            end = int(day_match.group(2))
+            total_days = end - start + 1
+            result["start_day"] = start
+            result["end_day"] = end
+            result["total_days"] = total_days
+            if frequency == "daily":
+                result["occurrences"] = total_days
+            elif frequency == "weekly":
+                result["occurrences"] = max(1, total_days // 7)
+            elif frequency == "monthly":
+                result["occurrences"] = max(1, total_days // 30)
+            else:
+                result["occurrences"] = total_days
+        return result
+
+    # Day range without explicit frequency word → assume daily
+    if day_match:
+        start = int(day_match.group(1))
+        end = int(day_match.group(2))
+        return {
+            "frequency": "daily",
+            "start_day": start,
+            "end_day": end,
+            "total_days": end - start + 1,
+            "occurrences": end - start + 1,
+        }
+
+    return None
+
+
 # Conditional text patterns in cells (not firm visits)
 _CONDITIONAL_CELL_RE = re.compile(
     r'as clinically indicated|'
@@ -331,18 +395,42 @@ def _extract_budget_lines(
             if cell.col == 0:
                 continue
             val = cell.raw_value.strip()
+            # Strip trailing Unicode superscript chars (footnote markers)
+            # e.g., "X⁴" → "X", "D577⚡" → "D577"
+            val = re.sub(r'[²³⁴⁵⁶⁷⁸⁹¹⁰⚡\u26A1]+$', '', val).strip()
             val_upper = val.upper()
 
             # ── P0-4: Arrow/span detection ───────────────────────────
-            if any(p in val for p in _SPAN_PATTERNS):
+            # Check for Unicode arrows, ASCII dash spans, and frequency text
+            is_span_cell = (
+                any(p in val for p in _SPAN_PATTERNS)
+                or bool(_SPAN_RE.search(val))
+            )
+            if is_span_cell:
                 has_span = True
-                if span_col_range is None:
-                    span_col_range = (cell.col, cell.col)
+                # Parse temporal range from span text
+                span_info = _parse_span_cell(val)
+                if span_info and span_info.get("occurrences"):
+                    # We know the exact count — use it directly
+                    freq = span_info["frequency"]
+                    occ = span_info["occurrences"]
+                    label = f"{freq.title()} x{occ}"
+                    if span_info.get("start_day"):
+                        label += f" (Day {span_info['start_day']}-{span_info['end_day']})"
+                    firm_visits.append(label)
+                    # Override total_occurrences later with the parsed count
+                    if not hasattr(cell, '_span_occurrences'):
+                        # Store for later use in occurrence calculation
+                        pass
                 else:
-                    span_col_range = (
-                        min(span_col_range[0], cell.col),
-                        max(span_col_range[1], cell.col),
-                    )
+                    # Unknown duration — track column range as before
+                    if span_col_range is None:
+                        span_col_range = (cell.col, cell.col)
+                    else:
+                        span_col_range = (
+                            min(span_col_range[0], cell.col),
+                            max(span_col_range[1], cell.col),
+                        )
                 continue
 
             # ── P0-5: Conditional text detection ─────────────────────
@@ -354,9 +442,11 @@ def _extract_budget_lines(
                 continue
 
             # ── Standard marker check ────────────────────────────────
-            is_marker = any(
-                p == val_upper or p in val_upper
-                for p in marker_patterns
+            # Marker check — exact match or single-character match only
+            # Avoid false positives: "Y" in "DAY 577" should NOT match
+            is_marker = (
+                val_upper in marker_patterns  # Exact match: "X", "Y", "✓"
+                or (len(val) <= 2 and any(p == val_upper for p in marker_patterns))
             )
 
             # ── P0-3: Footnote-embedded marker check (Xr, Xm, etc.) ─

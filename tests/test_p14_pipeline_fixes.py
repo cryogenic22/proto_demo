@@ -163,6 +163,41 @@ class TestCompoundRowSplitting:
         assert len(result) == 3
 
 
+class TestSpanCellParsing:
+    """Test span/continuous cell parsing for eDiary and similar rows."""
+
+    def test_weekly_ediary_with_day_range(self):
+        from src.pipeline.budget_calculator import _parse_span_cell
+        result = _parse_span_cell("--Weekly eDiary prompts (Day 64 through Day 759)--")
+        assert result is not None
+        assert result["frequency"] == "weekly"
+        assert result["occurrences"] == 99  # 695 days / 7
+
+    def test_daily_span(self):
+        from src.pipeline.budget_calculator import _parse_span_cell
+        result = _parse_span_cell("----Daily----")
+        assert result is not None
+        assert result["frequency"] == "daily"
+
+    def test_day_range_without_frequency(self):
+        from src.pipeline.budget_calculator import _parse_span_cell
+        result = _parse_span_cell("Day 1 through Day 28")
+        assert result is not None
+        assert result["occurrences"] == 28
+
+    def test_normal_marker_not_span(self):
+        from src.pipeline.budget_calculator import _parse_span_cell
+        result = _parse_span_cell("X")
+        assert result is None
+
+    def test_superscript_stripped(self):
+        """Superscript Unicode chars should be stripped from cell values."""
+        import re
+        val = "X\u2074"  # X⁴
+        val = re.sub(r'[\u00b2\u00b3\u2074\u2075\u2076\u2077\u2078\u2079\u00b9\u2070\u26a1]+$', '', val).strip()
+        assert val == "X"
+
+
 class TestDomainCptOverrides:
     """Test domain-aware CPT override mechanism."""
 
