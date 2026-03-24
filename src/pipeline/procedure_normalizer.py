@@ -210,6 +210,8 @@ class ProcedureNormalizer:
         "visit", "month", "week", "day", "year",
         "notes", "comments", "remarks",
         "assessments", "monitoring", "laboratory tests",
+        "arm", "cohort", "group", "period", "epoch", "cycle",
+        "withdrawal",
     }
 
     def is_not_procedure(self, raw_name: str) -> bool:
