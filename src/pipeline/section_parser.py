@@ -468,6 +468,60 @@ class SectionParser:
         """True if the last parse produced low-confidence results."""
         return getattr(self, "_low_confidence", False)
 
+    async def parse_auto(
+        self,
+        pdf_bytes: bytes,
+        filename: str = "",
+        llm_client: Any = None,
+    ) -> list[Section]:
+        """Parse with deterministic strategies, auto-fallback to LLM if low confidence.
+
+        This is the recommended entry point for all callers that have an LLM
+        client available. It runs the fast deterministic parse first, then
+        automatically invokes parse_with_llm() if the result is low quality.
+
+        Args:
+            pdf_bytes: PDF file bytes.
+            filename: Original filename (used for DOCX detection).
+            llm_client: LLM client for fallback. If None, skips fallback.
+
+        Returns:
+            Best available section list.
+        """
+        # DOCX path — always deterministic, no LLM needed
+        if filename.lower().endswith(".docx"):
+            return self.parse_docx(pdf_bytes)
+
+        # Deterministic parse
+        sections = self.parse(pdf_bytes, filename=filename)
+
+        # Check quality
+        flat = self._flatten(sections)
+        seen = set()
+        deduped = [s for s in flat if (s.number, s.page) not in seen and not seen.add((s.number, s.page))]
+
+        if len(deduped) >= 15 and not self.needs_llm_fallback:
+            return sections  # Good enough
+
+        # Low confidence — try LLM fallback
+        if llm_client is not None:
+            logger.info(
+                f"Low-confidence parse ({len(deduped)} sections) — invoking LLM fallback"
+            )
+            try:
+                llm_sections = await self.parse_with_llm(pdf_bytes, llm_client=llm_client)
+                llm_flat = self._flatten(llm_sections)
+                if len(llm_flat) > len(deduped) * 1.5:
+                    logger.info(
+                        f"LLM fallback produced {len(llm_flat)} sections "
+                        f"(vs {len(deduped)} deterministic) — using LLM result"
+                    )
+                    return llm_sections
+            except Exception as e:
+                logger.warning(f"LLM fallback failed: {e} — using deterministic result")
+
+        return sections
+
     async def parse_with_llm(
         self,
         pdf_bytes: bytes,
@@ -1148,6 +1202,44 @@ Return ONLY the JSON array."""
             except (AttributeError, Exception):
                 pass
 
+        # Wave 3: collect embedded images and interleave by Y-position
+        import base64 as _b64
+        for page_num in range(start, min(end + 1, doc.page_count)):
+            page = doc[page_num]
+            page_start_y = start_y if page_num == start else 0.0
+            page_end_y = end_y if page_num == end else 99999.0
+            for img in page.get_images(full=True):
+                xref = img[0]
+                try:
+                    rects = page.get_image_rects(xref)
+                    if not rects:
+                        continue
+                    rect = rects[0]
+                    if rect.y0 < page_start_y - 10 or rect.y0 > page_end_y + 10:
+                        continue
+                    # Skip tiny images (logos, bullets) — only real figures
+                    if rect.width < 50 or rect.height < 50:
+                        continue
+                    base_img = doc.extract_image(xref)
+                    b64 = _b64.b64encode(base_img["image"]).decode()
+                    raw_lines.append({
+                        "text": None,
+                        "y": rect.y0,
+                        "x": rect.x0,
+                        "page": page_num,
+                        "size": 0, "bold": False, "italic": False,
+                        "spans": [],
+                        "image_data": {
+                            "b64": b64,
+                            "ext": base_img.get("ext", "png"),
+                            "width": rect.width,
+                            "height": rect.height,
+                            "alt": f"Figure on page {page_num + 1}",
+                        },
+                    })
+                except Exception:
+                    continue
+
         doc.close()
 
         if not raw_lines:
@@ -1307,6 +1399,18 @@ Return ONLY the JSON array."""
                 paragraphs.append({
                     "type": "TABLE",
                     "table_data": line["table_data"],
+                    "y": line["y"],
+                })
+                continue
+
+            # Image — always its own block
+            if line.get("image_data") is not None:
+                if current:
+                    paragraphs.append(current)
+                    current = None
+                paragraphs.append({
+                    "type": "IMAGE",
+                    "image_data": line["image_data"],
                     "y": line["y"],
                 })
                 continue
@@ -1552,6 +1656,19 @@ Return ONLY the JSON array."""
                 if table_data:
                     html_parts.append(self._table_to_html(table_data))
 
+            elif ptype == "IMAGE":
+                img = para.get("image_data", {})
+                if img.get("b64"):
+                    ext = img.get("ext", "png")
+                    alt = self._escape_html(img.get("alt", "Figure"))
+                    w = int(img.get("width", 400))
+                    html_parts.append(
+                        f'<figure style="margin:1rem 0;text-align:center;">'
+                        f'<img src="data:image/{ext};base64,{img["b64"]}" '
+                        f'alt="{alt}" style="max-width:100%;width:{w}px;" />'
+                        f'</figure>'
+                    )
+
             elif ptype == "HEADING":
                 text = self._escape_html(para["text"])
                 match = re.match(r"^(\d{1,2}(?:\.\d{1,2}){0,5})", para["text"])
@@ -1607,10 +1724,11 @@ Return ONLY the JSON array."""
         html = "\n".join(html_parts)
 
         # M3 fix: merge adjacent identical formatting tags
-        # Handle whitespace, newlines, and zero-width chars between tags
-        html = re.sub(r"</strong>[\s\n\r\t\u200b]*<strong>", " ", html)
-        html = re.sub(r"</em>[\s\n\r\t\u200b]*<em>", " ", html)
-        html = re.sub(r"</u>[\s\n\r\t\u200b]*<u>", " ", html)
+        # Handle all whitespace variants: spaces, newlines, tabs, non-breaking spaces, zero-width
+        _ws = r'[\s\u00a0\u200b\u200c\u200d\ufeff]*'
+        html = re.sub(rf"</strong>{_ws}<strong>", " ", html)
+        html = re.sub(rf"</em>{_ws}<em>", " ", html)
+        html = re.sub(rf"</u>{_ws}<u>", " ", html)
 
         return html
 
@@ -1780,6 +1898,55 @@ Return ONLY the JSON array."""
 
         doc.close()
         return tables
+
+    def extract_images_in_section(
+        self, pdf_bytes: bytes, section: Section
+    ) -> list[dict]:
+        """Extract all embedded images within a section's page range.
+
+        Returns list of dicts with: page, bbox, width, height, image_bytes,
+        extension, y_position (for ordering in text flow).
+        """
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        start = section.page
+        end = section.end_page if section.end_page is not None else start
+        start_y = section.start_y or 0
+
+        images = []
+        for page_num in range(start, min(end + 1, doc.page_count)):
+            page = doc[page_num]
+            for img in page.get_images(full=True):
+                xref = img[0]
+                try:
+                    rects = page.get_image_rects(xref)
+                except Exception:
+                    continue
+                if not rects:
+                    continue
+                rect = rects[0]
+
+                # Y-coordinate gate on start page
+                if page_num == start and rect.y0 < start_y - 10:
+                    continue
+
+                try:
+                    base_image = doc.extract_image(xref)
+                except Exception:
+                    continue
+
+                images.append({
+                    "page": page_num,
+                    "bbox": (rect.x0, rect.y0, rect.x1, rect.y1),
+                    "width": rect.width,
+                    "height": rect.height,
+                    "image_bytes": base_image["image"],
+                    "extension": base_image.get("ext", "png"),
+                    "y_position": rect.y0,
+                    "xref": xref,
+                })
+
+        doc.close()
+        return sorted(images, key=lambda i: (i["page"], i["y_position"]))
 
     def to_outline(self, sections: list[Section]) -> str:
         """Generate a readable outline of all sections."""

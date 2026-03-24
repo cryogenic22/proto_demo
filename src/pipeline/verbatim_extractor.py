@@ -101,12 +101,20 @@ class VerbatimExtractor:
         self._file_bytes = pdf_bytes
 
         # Step 1: Parse sections if not provided
+        # Use parse_auto() for automatic LLM fallback on low-confidence parses
         if sections is None:
             if self._is_docx:
                 sections = self.section_parser.parse_docx(pdf_bytes)
                 logger.info(f"DOCX mode: parsed {len(sections)} sections via XML (100% format retention)")
             else:
-                sections = self.section_parser.parse(pdf_bytes, filename=filename)
+                try:
+                    sections = await self.section_parser.parse_auto(
+                        pdf_bytes, filename=filename,
+                        llm_client=self.llm if hasattr(self, 'llm') else None,
+                    )
+                except Exception:
+                    # Fallback to synchronous parse if async fails
+                    sections = self.section_parser.parse(pdf_bytes, filename=filename)
 
         # Step 2: Try deterministic section lookup first (no LLM needed)
         direct_match = self._try_direct_match(sections, instruction)

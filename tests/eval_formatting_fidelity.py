@@ -72,26 +72,39 @@ def check_formatting_issues(html: str, text: str) -> list[dict]:
         })
 
     # C3: Missing spaces between words
-    # Only detect actual stuck words — not legitimate words containing "or", "in" etc.
-    # Pattern: lowercase letter immediately followed by uppercase (camelCase boundary)
-    # e.g., "maleOrfemale", "testThe" but NOT "information", "protocol"
-    missing_spaces = re.findall(r"[a-z][A-Z][a-z]", text)
-    # Filter out known legitimate camelCase patterns
-    legit_camel = {"mRNA", "cDNA", "COVID", "BNT", "pH", "eGFR", "HbA", "eDiary",
-                   "mAb", "cDo", "cCo", "cKe", "mcg", "dL", "mL", "kDa"}
-    real_missing = []
-    for m in missing_spaces:
-        # Check if this is part of a known term
-        idx = text.find(m)
-        context = text[max(0, idx-5):idx+10] if idx >= 0 else ""
-        if not any(lc in context for lc in legit_camel):
-            real_missing.append(m)
-    if real_missing:
+    # Detect genuine stuck words: lowercase immediately followed by uppercase
+    # that forms a word boundary (not part of a single scientific term).
+    # Strategy: find camelCase patterns, then check if they're inside a single
+    # word (legitimate) or at a word boundary (stuck).
+    missing_spaces = []
+    for m in re.finditer(r"([a-z])([A-Z])([a-z])", text):
+        idx = m.start()
+        # Get the full word containing this pattern
+        # Walk left to find word start
+        start = idx
+        while start > 0 and text[start - 1].isalpha():
+            start -= 1
+        # Walk right to find word end
+        end = idx + 3
+        while end < len(text) and text[end].isalpha():
+            end += 1
+        word = text[start:end]
+
+        # If the word is short (<12 chars), it's likely a legitimate
+        # abbreviation (mRNA, nAbs, CoVs, eGFR, etc.)
+        if len(word) <= 12:
+            continue
+
+        # If the word is long and has camelCase mid-word, it's likely stuck
+        # e.g., "maleOrfemale" (14 chars) vs "neutralizingAntibody" (20 chars)
+        missing_spaces.append(m.group())
+
+    if len(missing_spaces) >= 3:  # Only flag if 3+ instances (avoids noise)
         issues.append({
             "id": "C3",
             "severity": "critical",
-            "description": f"Missing spaces: {len(real_missing)} camelCase boundaries detected",
-            "examples": real_missing[:5],
+            "description": f"Missing spaces: {len(missing_spaces)} camelCase boundaries in long words",
+            "examples": missing_spaces[:5],
         })
 
     # H1: Sub-items (a., b., c.) not nested
@@ -103,6 +116,10 @@ def check_formatting_issues(html: str, text: str) -> list[dict]:
             "severity": "high",
             "description": f"{sub_items_flat} sub-items (a., b.) at L1 instead of nested L2",
         })
+
+    # Wave 3: Image presence detection
+    img_count = len(re.findall(r"<figure[\s>]", html)) + len(re.findall(r"<img[\s>]", html))
+    # This is informational, not a deduction — images are a bonus
 
     # H3: Missing underline
     # Can't detect this from HTML alone — need to check if PDF has underlined text
@@ -172,28 +189,42 @@ def evaluate_protocol(pdf_path: Path) -> dict:
     total_sections = len(deduped)
     section_with_numbers = [s for s in deduped if s.number]
 
-    # Evaluate a sample of sections (up to 10 diverse sections)
-    # Try fixed numbers first, then search by title keyword for protocols
-    # with non-standard numbering (e.g., inclusion criteria in Section 4.1)
+    # Evaluate a sample of key clinical sections (up to 10)
+    # Uses structured targets: try by number first, then by title keyword
+    TARGET_SECTIONS = [
+        {"numbers": ["1"], "keywords": ["synopsis", "summary", "introduction"]},
+        {"numbers": ["2"], "keywords": ["background", "rationale"]},
+        {"numbers": ["3"], "keywords": ["objective", "endpoint"]},
+        {"numbers": ["4"], "keywords": ["design", "overview"]},
+        {"numbers": ["5", "5.1"], "keywords": ["inclusion", "eligibility"]},
+        {"numbers": ["5.2"], "keywords": ["exclusion"]},
+        {"numbers": ["6", "6.1"], "keywords": ["intervention", "treatment", "study drug"]},
+        {"numbers": ["6.2"], "keywords": ["dosing", "administration"]},
+        {"numbers": ["8"], "keywords": ["assessment", "procedure", "schedule"]},
+        {"numbers": ["9"], "keywords": ["statistical", "sample size", "analysis"]},
+    ]
+
     sample_sections = []
-    for target in ["1", "2", "3", "4", "5", "5.1", "5.2", "6.1", "6.2", "8"]:
-        s = parser.find(sections, target)
-        if s:
-            sample_sections.append(target)
-
-    # If too few found by number, search by title keywords
-    if len(sample_sections) < 3:
-        title_keywords = ["inclusion", "exclusion", "objective", "endpoint",
-                          "assessment", "design", "background", "rationale"]
-        for kw in title_keywords:
-            for s in deduped:
-                if kw in s.title.lower() and s.number and s.number not in sample_sections:
-                    sample_sections.append(s.number)
-                    break
-            if len(sample_sections) >= 8:
+    for target in TARGET_SECTIONS:
+        found = None
+        # Try number first
+        for num in target["numbers"]:
+            found = parser.find(sections, num)
+            if found:
+                sample_sections.append(num)
                 break
-
-    sample_sections = sample_sections[:10]
+        # Fall back to keyword search
+        if not found:
+            for kw in target["keywords"]:
+                matches = parser.find_by_title(sections, kw)
+                if matches:
+                    sec = matches[0]
+                    if sec.number and sec.number not in sample_sections:
+                        sample_sections.append(sec.number)
+                        found = sec
+                        break
+        if len(sample_sections) >= 10:
+            break
 
     results = []
     total_issues = 0
