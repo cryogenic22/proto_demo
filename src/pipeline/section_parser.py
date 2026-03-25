@@ -1752,6 +1752,8 @@ Return ONLY the JSON array."""
         html = re.sub(rf"</strong>{_ws}<strong>", " ", html)
         html = re.sub(rf"</em>{_ws}<em>", " ", html)
         html = re.sub(rf"</u>{_ws}<u>", " ", html)
+        html = re.sub(rf"</sup>{_ws}<sup>", "", html)
+        html = re.sub(rf"</sub>{_ws}<sub>", "", html)
 
         return html
 
@@ -1782,13 +1784,29 @@ Return ONLY the JSON array."""
                     flags = span.get("flags", 0)
                     is_bold = flags & 16 or "Bold" in span.get("font", "")
                     is_italic = flags & 2 or "Italic" in span.get("font", "")
+                    is_superscript = bool(flags & 1)
                     is_underline = bool(flags & 4) and not underline_is_artifact
+
+                    # Subscript: smaller font + lower Y position than surrounding text
+                    span_size = span.get("size", 0)
+                    is_subscript = False
+                    if span_size > 0 and span_size < 8 and not is_superscript:
+                        # Small font that isn't flagged as superscript → likely subscript
+                        # Check if it's significantly smaller than the paragraph's main font
+                        main_size = para.get("size", 10)
+                        if main_size > 0 and span_size < main_size * 0.75:
+                            is_subscript = True
+
                     if is_bold:
                         text = f"<strong>{text}</strong>"
                     if is_italic:
                         text = f"<em>{text}</em>"
                     if is_underline:
                         text = f"<u>{text}</u>"
+                    if is_superscript:
+                        text = f"<sup>{text}</sup>"
+                    if is_subscript:
+                        text = f"<sub>{text}</sub>"
                     parts.append(text)
             return "".join(parts)
         return self._escape_html(para["text"])
