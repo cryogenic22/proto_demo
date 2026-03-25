@@ -124,7 +124,7 @@ export default function VerbatimExtractPage() {
 
   return (
     <div>
-      <TopBar title="Verbatim Extract" subtitle="Extract exact content from protocol documents — zero hallucination" />
+      <TopBar title="Verbatim Extract" subtitle="Extract exact content from protocol documents — text copied directly from source" />
 
       <div className="p-6 space-y-4">
         {/* Source mode toggle */}
@@ -355,6 +355,7 @@ function VerbatimComparison({
   const [viewMode, setViewMode] = useState<"side-by-side" | "extracted" | "source">("side-by-side");
   const [pdfPage, setPdfPage] = useState(sourcePages[0] || 0);
   const [pdfAvailable, setPdfAvailable] = useState(false);
+  const [highlightMode, setHighlightMode] = useState(false);
 
   // Auto-navigate to section's source page when sourcePages changes
   useEffect(() => {
@@ -438,8 +439,20 @@ function VerbatimComparison({
             <FidelityBadge label="Tables" count={fidelity.tables} icon="T" />
             <FidelityBadge label="Headings" count={fidelity.headings} icon="H" />
           </div>
-          <div className="ml-auto flex items-center gap-1.5">
-            <span className="text-[10px] text-neutral-400">Method:</span>
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={() => setHighlightMode(!highlightMode)}
+              className={cn(
+                "px-2 py-1 text-[10px] font-medium rounded-md transition-colors flex items-center gap-1",
+                highlightMode
+                  ? "bg-yellow-200 text-yellow-800 border border-yellow-300"
+                  : "bg-neutral-100 text-neutral-500 hover:bg-yellow-50"
+              )}
+              title="Highlight extracted text"
+            >
+              <span className="text-xs">&#9654;</span>
+              {highlightMode ? "Highlighted" : "Highlight"}
+            </button>
             <Badge variant={isVerbatim ? "success" : "warning"}>
               {isVerbatim ? "Direct Copy (no LLM)" : "LLM-assisted"}
             </Badge>
@@ -517,17 +530,20 @@ function VerbatimComparison({
                   Extracted Content
                 </span>
                 <Badge variant="success" className="text-[9px]">
-                  {isVerbatim ? "Zero Hallucination" : "LLM-assisted"}
+                  {isVerbatim ? "Direct Copy" : "LLM-assisted"}
                 </Badge>
               </div>
               <div className="overflow-auto p-4" style={{ maxHeight: "600px" }}>
                 {extractedHtml ? (
                   <div
-                    className="section-content max-w-none text-sm"
+                    className={cn("section-content max-w-none text-sm", highlightMode && "verbatim-highlight")}
                     dangerouslySetInnerHTML={{ __html: sanitizeHtml(extractedHtml) }}
                   />
                 ) : extractedText ? (
-                  <pre className="text-xs text-neutral-700 bg-neutral-50 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap font-mono border border-neutral-200">
+                  <pre className={cn(
+                    "text-xs text-neutral-700 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap font-mono border border-neutral-200",
+                    highlightMode ? "bg-yellow-100 border-yellow-300" : "bg-neutral-50"
+                  )}>
                     {extractedText}
                   </pre>
                 ) : null}

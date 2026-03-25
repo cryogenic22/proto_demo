@@ -177,6 +177,23 @@ body {
   text-indent: 0;
 }
 
+/* Verbatim highlight mode — yellow background on all extracted content */
+.verbatim-highlight p,
+.verbatim-highlight li,
+.verbatim-highlight td,
+.verbatim-highlight th,
+.verbatim-highlight h2,
+.verbatim-highlight h3,
+.verbatim-highlight h4 {
+  background: linear-gradient(to bottom, #fef9c3 0%, #fef08a 100%);
+  padding: 1px 3px;
+  border-radius: 2px;
+  box-decoration-break: clone;
+}
+.verbatim-highlight table {
+  border: 2px solid #eab308;
+}
+
 /* Drag-drop zone animation */
 @keyframes pulse-border {
   0%, 100% { border-color: var(--color-brand-primary); }
