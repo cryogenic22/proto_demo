@@ -151,6 +151,20 @@ body {
   color: var(--color-brand-primary);
   text-decoration: underline;
 }
+.section-content a.cross-ref {
+  color: #0000fe;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.section-content a.cross-ref:hover {
+  color: #0000cc;
+  text-decoration-thickness: 2px;
+}
+.section-content a.external-link {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all;
+}
 .section-content blockquote {
   border-left: 3px solid var(--color-brand-primary);
   padding-left: 1rem;
@@ -161,7 +175,7 @@ body {
 /* em/strong inside content */
 .section-content strong {
   font-weight: 600;
-  color: var(--color-neutral-800);
+  /* color inherited — allows inline color styles to pass through */
 }
 .section-content em {
   font-style: italic;

@@ -1766,6 +1766,57 @@ Return ONLY the JSON array."""
         html = re.sub(rf"</sup>{_ws}<sup>", "", html)
         html = re.sub(rf"</sub>{_ws}<sub>", "", html)
 
+        # Auto-link cross-references (deterministic, regex-based)
+        html = self._auto_link_references(html)
+
+        return html
+
+    @staticmethod
+    def _auto_link_references(html: str) -> str:
+        """Convert cross-reference text patterns into clickable links.
+
+        Handles:
+        - "Section 5.1" → link to section in explorer
+        - "Table 15" → link to table extraction
+        - "Figure 3" → anchor link
+        - "Appendix A" → link to section
+        - External URLs (http/https)
+        """
+        # Section references: "Section 5.1", "Section 5.1.2", "see Section 8"
+        html = re.sub(
+            r'(?<!["\w])([Ss]ection\s+)(\d{1,2}(?:\.\d{1,3}){0,4})',
+            r'<a href="#section-\2" class="cross-ref" data-ref-type="section" data-ref="\2">\1\2</a>',
+            html,
+        )
+
+        # Table references: "Table 15", "Table 3.1"
+        html = re.sub(
+            r'(?<!["\w])([Tt]able\s+)(\d{1,3}(?:\.\d{1,2})?)',
+            r'<a href="#table-\2" class="cross-ref" data-ref-type="table" data-ref="\2">\1\2</a>',
+            html,
+        )
+
+        # Figure references: "Figure 1", "Figure 2.3"
+        html = re.sub(
+            r'(?<!["\w])([Ff]igure\s+)(\d{1,3}(?:\.\d{1,2})?)',
+            r'<a href="#figure-\2" class="cross-ref" data-ref-type="figure" data-ref="\2">\1\2</a>',
+            html,
+        )
+
+        # Appendix references: "Appendix A", "Appendix 3"
+        html = re.sub(
+            r'(?<!["\w])([Aa]ppendix\s+)([A-Z0-9]{1,3})',
+            r'<a href="#appendix-\2" class="cross-ref" data-ref-type="appendix" data-ref="\2">\1\2</a>',
+            html,
+        )
+
+        # External URLs
+        html = re.sub(
+            r'(?<!["\w=])(https?://[^\s<>"\')\]]+)',
+            r'<a href="\1" target="_blank" rel="noopener" class="external-link">\1</a>',
+            html,
+        )
+
         return html
 
     def _format_inline_html(self, para: dict) -> str:
