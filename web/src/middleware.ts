@@ -6,6 +6,11 @@ const AUTH_COOKIE = "proto_auth";
 const ADMIN_COOKIE = "proto_admin";
 
 export function middleware(request: NextRequest) {
+  // Auth bypass — set DISABLE_AUTH=true to skip login
+  if (process.env.DISABLE_AUTH === "true") {
+    return NextResponse.next();
+  }
+
   // Skip auth for API routes and static files
   if (
     request.nextUrl.pathname.startsWith("/api") ||
