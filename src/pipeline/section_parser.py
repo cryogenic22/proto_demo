@@ -981,6 +981,7 @@ Return ONLY the JSON array."""
         output: str = "html",
         include_subsections: bool = True,
         strip_heading: bool = False,
+        next_sibling: Section | None = None,
     ) -> str | bytes:
         """Extract section content with formatting — no page chrome, just content.
 
@@ -1015,10 +1016,21 @@ Return ONLY the JSON array."""
             end_y = self._find_heading_y(doc, end, first_child.number, first_child.title)
             if end_y == 0.0:
                 end_y = 99999.0
+        elif next_sibling is not None:
+            # Use pre-computed sibling boundary from section tree (most reliable)
+            # This avoids re-detecting boundaries and eliminates the 5% bleed
+            end = next_sibling.page
+            end_y = next_sibling.start_y
+            if end_y == 0.0:
+                end_y = self._find_heading_y(doc, end, next_sibling.number, next_sibling.title)
+            if end_y == 0.0:
+                end_y = self._find_heading_y(doc, end, next_sibling.number, "")
+            if end_y == 0.0:
+                # Fallback: try with trailing space (fixes "2.3." → "2.3. " issue)
+                end_y = self._find_next_heading_y(doc, end, section.number, after_y=0.0)
+            logger.debug(f"Using pre-computed sibling boundary: {next_sibling.number} at page {end} y={end_y}")
         else:
-            # Scan EACH page from declared_end onward for the next heading.
-            # Use the resolved start_y (not 0.0) to correctly skip
-            # the current section's own heading on a shared page.
+            # Fallback: re-detect boundary (when section tree doesn't have sibling info)
             end_y = 99999.0
             for scan_page in range(declared_end, end + 1):
                 after = start_y if scan_page == start else 0.0

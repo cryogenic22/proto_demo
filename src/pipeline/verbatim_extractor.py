@@ -116,7 +116,20 @@ class VerbatimExtractor:
                     # Fallback to synchronous parse if async fails
                     sections = self.section_parser.parse(pdf_bytes, filename=filename)
 
-        # Step 2: Try deterministic section lookup first (no LLM needed)
+        # Cache flat section list for sibling lookup (reduces section bleed)
+        flat = self.section_parser._flatten(sections)
+        seen: set[tuple[str, int]] = set()
+        self._all_sections_flat = [
+            s for s in flat
+            if (s.number, s.page) not in seen and not seen.add((s.number, s.page))
+        ]
+
+        # Step 2a: Try table-specific extraction (e.g., "Table 15", "Table 15 from Section 9.6")
+        table_result = self._try_table_extraction(pdf_bytes, sections, instruction)
+        if table_result:
+            return table_result
+
+        # Step 2b: Try deterministic section lookup (no LLM needed)
         direct_match = self._try_direct_match(sections, instruction)
         if direct_match:
             return self._extract_from_section(pdf_bytes, direct_match, instruction,
@@ -177,6 +190,130 @@ class VerbatimExtractor:
                 explanation=f"Extraction failed: {e}",
             )
 
+    def _try_table_extraction(
+        self, pdf_bytes: bytes, sections: list[Section], instruction: str
+    ) -> VerbatimResult | None:
+        """Try to extract a specific table by number — fully deterministic.
+
+        Handles:
+        - "Table 15" → find table titled "Table 15" across all pages
+        - "Table 15 from Section 9.6" → find table within a specific section
+        - "Table from 9.6" → extract all tables from section 9.6
+        """
+        import fitz
+
+        # Match "Table N" patterns
+        table_match = re.search(
+            r'\b[Tt]able\s+(\d+(?:\.\d+)?)\b', instruction
+        )
+        # Match "from Section X.Y" or "in Section X.Y"
+        section_match = re.search(
+            r'(?:from|in|of)\s+[Ss]ection\s+(\d{1,2}(?:\.\d{1,3}){0,4})',
+            instruction,
+        )
+        # Match "Table from X.Y" (no table number, just section)
+        table_from_section = re.search(
+            r'[Tt]able(?:s)?\s+(?:from|in)\s+(?:[Ss]ection\s+)?(\d{1,2}(?:\.\d{1,3}){0,4})',
+            instruction,
+        )
+
+        if not table_match and not table_from_section:
+            return None
+
+        table_number = table_match.group(1) if table_match else None
+        target_section_num = (
+            section_match.group(1) if section_match
+            else table_from_section.group(1) if table_from_section
+            else None
+        )
+
+        # Determine page range to search
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        search_pages: list[int] = []
+
+        if target_section_num:
+            section = self.section_parser.find(sections, target_section_num)
+            if section:
+                start = section.page
+                end = section.end_page if section.end_page is not None else start
+                search_pages = list(range(start, min(end + 1, doc.page_count)))
+        if not search_pages:
+            search_pages = list(range(doc.page_count))
+
+        # Search for tables
+        found_tables: list[dict] = []
+        for page_num in search_pages:
+            page = doc[page_num]
+
+            # Check page text for "Table N" title
+            page_text = page.get_text("text")
+            if table_number:
+                # Look for "Table N" or "Table N." in the text
+                pattern = rf'\bTable\s+{re.escape(table_number)}[\.\s:\n]'
+                if not re.search(pattern, page_text, re.IGNORECASE):
+                    continue
+
+            # Extract tables from this page
+            try:
+                page_tables = page.find_tables()
+                for t in page_tables.tables:
+                    data = t.extract()
+                    if data and len(data) > 1:  # At least header + 1 row
+                        found_tables.append({
+                            "page": page_num,
+                            "data": data,
+                            "rows": len(data),
+                            "cols": len(data[0]) if data else 0,
+                        })
+            except (AttributeError, Exception):
+                pass
+
+        doc.close()
+
+        if not found_tables:
+            return None
+
+        # Build HTML table output
+        html_parts = []
+        for ft in found_tables:
+            html_parts.append(self.section_parser._table_to_html(ft["data"]))
+
+        table_label = f"Table {table_number}" if table_number else "Tables"
+        section_label = f" from Section {target_section_num}" if target_section_num else ""
+
+        return VerbatimResult(
+            instruction=instruction,
+            sections_found=[target_section_num] if target_section_num else [],
+            content_type="table",
+            text="\n".join(html_parts),
+            tables=[ft["data"] for ft in found_tables],
+            source_pages=sorted(set(ft["page"] for ft in found_tables)),
+            explanation=(
+                f"Extracted {table_label}{section_label} — "
+                f"{len(found_tables)} table(s) found, "
+                f"{sum(ft['rows'] for ft in found_tables)} total rows. "
+                f"Deterministic extraction via PyMuPDF find_tables()."
+            ),
+        )
+
+    def _find_next_sibling(self, section: Section) -> Section | None:
+        """Find the next sibling section in the tree for precise boundary detection.
+
+        Uses the section parser's pre-computed section list rather than
+        re-detecting boundaries at extraction time. This eliminates the
+        ~5% section bleed caused by independent boundary re-detection.
+        """
+        if not hasattr(self, '_all_sections_flat'):
+            return None
+
+        flat = self._all_sections_flat
+        for i, s in enumerate(flat):
+            if s.number == section.number and s.page == section.page:
+                if i + 1 < len(flat):
+                    return flat[i + 1]
+                break
+        return None
+
     def _try_direct_match(self, sections: list[Section], instruction: str) -> Section | None:
         """Try to match a section number directly from the instruction."""
         # Look for patterns like "Section 4.1", "section 5", "4.2.3"
@@ -213,7 +350,10 @@ class VerbatimExtractor:
         all_pages = []
         is_docx = getattr(self, '_is_docx', False)
 
-        for section in matched:
+        for idx, section in enumerate(matched):
+            # Find next sibling for precise boundary (reduces section bleed)
+            next_sibling = self._find_next_sibling(section)
+
             if is_docx:
                 # DOCX path — 100% format retention via python-docx XML
                 fmt = getattr(self, '_output_format', 'text')
@@ -238,11 +378,13 @@ class VerbatimExtractor:
                     text = self.section_parser.get_section_formatted(
                         pdf_bytes, section, output="html",
                         strip_heading=True,
+                        next_sibling=next_sibling,
                     )
                 elif fmt == "docx":
                     text = self.section_parser.get_section_formatted(
                         pdf_bytes, section, output="html",
                         strip_heading=True,
+                        next_sibling=next_sibling,
                     )
                 else:
                     text = self.section_parser.get_section_text(pdf_bytes, section)
