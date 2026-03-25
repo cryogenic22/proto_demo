@@ -89,10 +89,28 @@ export default function DocumentExplorerPage() {
     setLoading(true); setError(null);
     try {
       const p = await getProtocol(selectedId);
-      setSections(toSectionLike(p.sections));
+      let secs = toSectionLike(p.sections);
+      let method = "stored";
+
+      // If stored protocol has no sections, try parsing from PDF
+      if (secs.length === 0) {
+        try {
+          const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+          const parseRes = await fetch(`${API_URL}/api/protocols/${selectedId}/sections`);
+          if (parseRes.ok) {
+            const parseData = await parseRes.json();
+            if (parseData.sections?.length > 0) {
+              secs = toSectionLike(parseData.sections);
+              method = parseData.method || "parsed";
+            }
+          }
+        } catch { /* fall through */ }
+      }
+
+      setSections(secs);
       setDocName(p.metadata.short_title || p.metadata.title || p.document_name);
       setTotalPages(p.total_pages);
-      setParseMethod("stored");
+      setParseMethod(method);
       setPdfAvailable(true);
       setIsLibraryProtocol(true);
       setSelectedSection(null); setVerbatimResult(null);

@@ -627,17 +627,53 @@ async def delete_job(job_id: str):
 
 @app.delete("/api/admin/protocols/{protocol_id}")
 async def admin_delete_protocol(protocol_id: str):
-    """Delete a stored protocol and its data."""
+    """Delete a stored protocol and ALL related data."""
     store = create_ke_store()
     protocol = store.load_protocol(protocol_id)
     if not protocol:
         raise HTTPException(status_code=404, detail=f"Protocol {protocol_id} not found")
+
+    deleted_files = []
+
+    # Delete protocol JSON
     proto_path = Path(f"data/protocols/{protocol_id}.json")
     if proto_path.exists():
         proto_path.unlink()
+        deleted_files.append(str(proto_path))
+
+    # Delete KE sidecar
+    ke_path = Path(f"data/protocols/{protocol_id}_kes.json")
+    if ke_path.exists():
+        ke_path.unlink()
+        deleted_files.append(str(ke_path))
+
+    # Delete annotations
+    for ann_dir in [Path("data/annotations"), Path("golden_set/annotations")]:
+        if ann_dir.exists():
+            for f in ann_dir.glob(f"*{protocol_id}*"):
+                f.unlink()
+                deleted_files.append(str(f))
+
+    # Delete related jobs
+    related_jobs = [
+        jid for jid, j in jobs.items()
+        if j.get("protocol_id") == protocol_id
+        or protocol_id in j.get("document_name", "")
+    ]
+    for jid in related_jobs:
+        del jobs[jid]
+    if related_jobs:
+        _save_jobs()
+
+    # Clear caches
     _smb_cache.pop(protocol_id, None)
     _trust_cache.pop(protocol_id, None)
-    return {"deleted": protocol_id}
+
+    return {
+        "deleted": protocol_id,
+        "files_removed": deleted_files,
+        "jobs_removed": len(related_jobs),
+    }
 
 
 @app.delete("/api/admin/jobs")
@@ -1835,6 +1871,38 @@ async def get_cell_evidence(protocol_id: str, row: int, col: int):
                     }
 
     raise HTTPException(status_code=404, detail=f"Cell ({row},{col}) not found")
+
+
+@app.get("/api/protocols/{protocol_id}/sections")
+async def get_protocol_sections(protocol_id: str):
+    """Parse sections from a protocol's PDF. Used when stored sections are empty."""
+    pdf_path = _find_protocol_pdf(protocol_id)
+    if not pdf_path:
+        raise HTTPException(status_code=404, detail="PDF not available for this protocol")
+
+    from src.pipeline.section_parser import SectionParser
+    parser = SectionParser()
+    pdf_bytes = pdf_path.read_bytes()
+    sections = parser.parse(pdf_bytes, filename=pdf_path.name)
+
+    def serialize(secs):
+        result = []
+        for s in secs:
+            result.append({
+                "number": s.number,
+                "title": s.title,
+                "page": s.page,
+                "end_page": s.end_page,
+                "level": s.level,
+                "children": serialize(s.children) if s.children else [],
+            })
+        return result
+
+    return {
+        "sections": serialize(sections),
+        "method": "parsed_from_pdf",
+        "total_sections": len(parser._flatten(sections)),
+    }
 
 
 @app.get("/api/protocols/{protocol_id}/page-image/{page_number}")
