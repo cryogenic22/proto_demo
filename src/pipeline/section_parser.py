@@ -1125,6 +1125,17 @@ Return ONLY the JSON array."""
             except (AttributeError, Exception):
                 pass
 
+            # Collect hyperlinks on this page for link detection
+            page_links = []
+            try:
+                for link in page.get_links():
+                    uri = link.get("uri", "")
+                    rect = link.get("from")
+                    if rect and uri:
+                        page_links.append({"uri": uri, "rect": rect})
+            except Exception:
+                pass
+
             blocks = page.get_text("dict")["blocks"]
             for block in blocks:
                 if "lines" not in block:
@@ -1807,6 +1818,16 @@ Return ONLY the JSON array."""
                         text = f"<sup>{text}</sup>"
                     if is_subscript:
                         text = f"<sub>{text}</sub>"
+
+                    # Text color preservation (blue links, red tracked changes, etc.)
+                    span_color = span.get("color", 0)
+                    if span_color and span_color != 0 and span_color != 0x000000:
+                        r = (span_color >> 16) & 0xFF
+                        g = (span_color >> 8) & 0xFF
+                        b = span_color & 0xFF
+                        # Only apply color for non-black, visually distinct colors
+                        if not (r < 30 and g < 30 and b < 30):  # Skip near-black
+                            text = f'<span style="color:rgb({r},{g},{b})">{text}</span>'
                     parts.append(text)
             return "".join(parts)
         return self._escape_html(para["text"])
