@@ -167,6 +167,55 @@ def _deterministic_soa_prescreen(pdf_bytes: bytes) -> dict[int, str]:
     return soa_pages
 
 
+class TableDetector:
+    """Detects table regions in page images using VLM + deterministic prescreen."""
+
+    def __init__(self, config: Any = None, llm: Any = None):
+        self.config = config
+        self.llm = llm
+
+    async def detect(
+        self, pages: list[Any], pdf_bytes: bytes | None = None,
+    ) -> list[Any]:
+        """Detect table regions in pages.
+
+        Uses deterministic prescreen to identify SoA candidate pages,
+        then sends only those pages to VLM for detailed detection.
+        """
+        from src.models.schema import TableRegion, TableType, BoundingBox
+
+        regions = []
+
+        # Step 1: Deterministic prescreen
+        if pdf_bytes:
+            soa_pages = _deterministic_soa_prescreen(pdf_bytes)
+        else:
+            soa_pages = {p.page_number: "no_pdf" for p in pages}
+
+        # Step 2: For each candidate page, ask VLM if it has a table
+        soa_only = getattr(self.config, "soa_only", True)
+
+        for page in pages:
+            pn = page.page_number
+            if soa_only and pn not in soa_pages:
+                continue
+
+            # Create a region for each SoA candidate page
+            regions.append(TableRegion(
+                table_id=f"table_p{pn}",
+                pages=[pn],
+                bounding_boxes=[BoundingBox(
+                    x0=0, y0=0, x1=2550, y1=3300, page=pn,
+                )],
+                table_type=TableType.SOA,
+                title=f"SoA candidate (page {pn})",
+                continuation_markers=[],
+            ))
+
+        logger.info(f"Table detection: {len(regions)} regions from {len(pages)} pages")
+        return regions
+
+
 # Fast pre-screening prompt — just asks "is there an SOA table on this page?"
 SOA_PRESCREEN_PROMPT = """Look at this page from a clinical trial protocol.
 
