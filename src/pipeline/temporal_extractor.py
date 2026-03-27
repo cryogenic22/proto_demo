@@ -14,7 +14,7 @@ from __future__ import annotations
 import re
 import logging
 
-from src.models.schema import VisitWindow, WindowUnit
+from src.models.schema import ColumnAddress, VisitWindow, WindowUnit
 
 logger = logging.getLogger(__name__)
 
@@ -229,6 +229,23 @@ class TemporalExtractor:
             self.parse_visit(h, col_index=i)
             for i, h in enumerate(headers)
         ]
+
+    def parse_from_addresses(self, addresses: list[ColumnAddress]) -> list[VisitWindow]:
+        """Parse VisitWindow objects from hierarchical ColumnAddress objects.
+
+        Uses the leaf text for day/window parsing (the innermost header),
+        and stores the full display path in visit_name for traceability.
+        """
+        windows: list[VisitWindow] = []
+        for addr in addresses:
+            # Parse temporal info from the leaf text
+            window = self.parse_visit(addr.leaf, col_index=addr.col_index)
+            # Override visit_name with the full hierarchical path for context
+            window = window.model_copy(update={
+                "visit_name": addr.display if len(addr.path) > 1 else addr.leaf,
+            })
+            windows.append(window)
+        return windows
 
     @staticmethod
     def _to_days(value: int, unit: WindowUnit) -> int:

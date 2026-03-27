@@ -211,11 +211,9 @@ class CellExtractor:
         else:
             prompt_template = EXTRACTION_PROMPT_V1 if pass_number == 1 else EXTRACTION_PROMPT_V2
 
-        # Build column description from schema
-        col_desc = ", ".join(
-            f"{h.text} (col {h.col_index})"
-            for h in schema.column_headers
-        ) or f"{schema.num_cols} columns"
+        # Build column description from schema — use hierarchical paths
+        # when available (P1c TreeThinker), fall back to flat headers
+        col_desc = self._build_col_description(schema)
 
         # If we have row groups, extract per group in parallel
         if schema.row_groups:
@@ -276,10 +274,7 @@ class CellExtractor:
             f"(region {region.table_id})"
         )
 
-        col_desc = ", ".join(
-            f"{h.text} (col {h.col_index})"
-            for h in schema.column_headers
-        ) or f"{schema.num_cols} columns"
+        col_desc = self._build_col_description(schema)
 
         # Build per-page row ranges from grid_skeleton when available
         page_row_ranges = self._get_per_page_row_ranges(region, grid_skeleton)
@@ -520,6 +515,29 @@ class CellExtractor:
             for pn in region.pages
             if pn in page_map
         ]
+
+    @staticmethod
+    def _build_col_description(schema: TableSchema) -> str:
+        """Build column description string for VLM prompts.
+
+        Uses hierarchical paths (P1c TreeThinker) when column_addresses
+        are available, otherwise falls back to flat header text.
+        """
+        if schema.column_addresses:
+            # Use full hierarchical paths: "Treatment Period > Cycle 1 > Day 1 (col 2)"
+            return ", ".join(
+                f"{addr.display} (col {addr.col_index})"
+                for addr in schema.column_addresses
+            )
+
+        # Fallback: flat column headers
+        if schema.column_headers:
+            return ", ".join(
+                f"{h.text} (col {h.col_index})"
+                for h in schema.column_headers
+            )
+
+        return f"{schema.num_cols} columns"
 
     @staticmethod
     def detect_text_layout(pdf_bytes: bytes, table_pages: list[int]) -> bool:

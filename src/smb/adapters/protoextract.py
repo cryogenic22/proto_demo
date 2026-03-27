@@ -92,6 +92,15 @@ class ProtoExtractAdapter:
             for p in td.get("procedures", [])
         ]
 
+        # P1c: Build column address lookup for visit_path enrichment
+        col_address_map: dict[int, list[str]] = {}
+        schema_info = td.get("schema_info", {})
+        for addr_data in schema_info.get("column_addresses", []):
+            col_idx = addr_data.get("col_index", -1)
+            path = addr_data.get("path", [])
+            if col_idx >= 0 and path:
+                col_address_map[col_idx] = path
+
         visits = [
             VisitInput(
                 visit_name=vw.get("visit_name", ""),
@@ -103,6 +112,7 @@ class ProtoExtractAdapter:
                 relative_to=vw.get("relative_to", "randomization"),
                 is_unscheduled=vw.get("is_unscheduled", False),
                 cycle=vw.get("cycle"),
+                visit_path=col_address_map.get(vw.get("col_index", 0), []),
             )
             for vw in td.get("visit_windows", [])
         ]

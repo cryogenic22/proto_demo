@@ -136,6 +136,28 @@ class ColumnHeader(BaseModel):
     parent_col: int | None = Field(default=None, description="Parent header column index if nested")
 
 
+class ColumnAddress(BaseModel):
+    """Full hierarchical path for a column header.
+
+    Represents the complete tree path from root to leaf, e.g.,
+    ["Treatment Period", "Cycle 1", "Day 1"] for a 3-level header.
+    """
+    path: list[str] = Field(default_factory=list, description="Full path from root to leaf")
+    col_index: int = Field(..., ge=0)
+    span: int = Field(default=1, ge=1)
+    level: int = Field(default=0, ge=0)
+
+    @property
+    def display(self) -> str:
+        """Human-readable path: 'Treatment Period > Cycle 1 > Day 1'."""
+        return " > ".join(self.path)
+
+    @property
+    def leaf(self) -> str:
+        """The leaf (innermost) header text."""
+        return self.path[-1] if self.path else ""
+
+
 class RowGroup(BaseModel):
     name: str
     start_row: int = Field(..., ge=0)
@@ -179,6 +201,10 @@ class TableRegion(BaseModel):
 class TableSchema(BaseModel):
     table_id: str
     column_headers: list[ColumnHeader] = Field(default_factory=list)
+    column_addresses: list[ColumnAddress] = Field(
+        default_factory=list,
+        description="Hierarchical column paths (TreeThinker). Empty = flat headers only.",
+    )
     row_groups: list[RowGroup] = Field(default_factory=list)
     merged_regions: list[MergedRegion] = Field(default_factory=list)
     footnote_markers: list[str] = Field(default_factory=list)

@@ -414,9 +414,19 @@ class PipelineOrchestrator:
         procedures = self.procedure_normalizer.normalize_batch(procedure_names)
 
         # Stage 8: Temporal Extraction
+        # P1c: Use hierarchical column addresses when available
         logger.info(f"  Table {region.table_id}: Temporal Extraction")
-        col_headers = [h.text for h in schema.column_headers]
-        visit_windows = self.temporal_extractor.parse_batch(col_headers)
+        if schema.column_addresses:
+            visit_windows = self.temporal_extractor.parse_from_addresses(
+                schema.column_addresses
+            )
+            logger.info(
+                f"  Parsed {len(visit_windows)} visits from hierarchical "
+                f"column addresses"
+            )
+        else:
+            col_headers = [h.text for h in schema.column_headers]
+            visit_windows = self.temporal_extractor.parse_batch(col_headers)
 
         # Stage 9: Challenger Agent (adversarial validation)
         challenges = []

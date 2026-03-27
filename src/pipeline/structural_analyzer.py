@@ -14,6 +14,7 @@ from typing import Any
 
 from src.llm.client import LLMClient
 from src.models.schema import (
+    ColumnAddress,
     ColumnHeader,
     MergedRegion,
     PageImage,
@@ -21,6 +22,11 @@ from src.models.schema import (
     RowGroup,
     TableRegion,
     TableSchema,
+)
+from src.pipeline.header_tree import (
+    HeaderTreeBuilder,
+    parse_column_header_tree,
+    validate_tree,
 )
 
 logger = logging.getLogger(__name__)
@@ -51,6 +57,19 @@ Return a JSON object with:
       "parent_col": null
     }}
   ],
+  "column_header_tree": [
+    {{
+      "text": "top-level header", "col_start": 2, "col_end": 5, "level": 0,
+      "children": [
+        {{
+          "text": "sub-header", "col_start": 2, "col_end": 3, "level": 1,
+          "children": [
+            {{"text": "leaf header", "col_start": 2, "col_end": 2, "level": 2}}
+          ]
+        }}
+      ]
+    }}
+  ],
   "row_groups": [
     {{
       "name": "group name",
@@ -64,6 +83,14 @@ Return a JSON object with:
   "num_rows": 10,
   "num_cols": 8
 }}
+
+CRITICAL — Header hierarchy:
+- "column_headers" is the FLAT list (every header at every level, with level/parent_col).
+- "column_header_tree" is the NESTED tree — only include this if the table has MULTI-LEVEL
+  headers (e.g., "Treatment Period" spanning "Cycle 1 > Day 1", "Cycle 1 > Day 8", etc.).
+  If headers are single-level, omit column_header_tree.
+- For multi-level headers, set "level" (0=top, 1=sub, 2=leaf) and "parent_col" (col_index
+  of the parent header) in the flat column_headers list.
 
 Focus on:
 - Multi-tier headers (e.g., "Treatment Period" spanning sub-columns)
@@ -187,15 +214,79 @@ class StructuralAnalyzer:
             str(m) for m in raw.get("footnote_markers", [])
         ]
 
+        # P1c: Build hierarchical column addresses (TreeThinker)
+        column_addresses = self._build_column_addresses(raw, column_headers, table_id)
+
         return TableSchema(
             table_id=table_id,
             column_headers=column_headers,
+            column_addresses=column_addresses,
             row_groups=row_groups,
             merged_regions=merged_regions,
             footnote_markers=footnote_markers,
             num_rows=_safe_int(raw.get("num_rows", 0)),
             num_cols=_safe_int(raw.get("num_cols", 0)),
         )
+
+    @staticmethod
+    def _build_column_addresses(
+        raw: dict[str, Any],
+        column_headers: list[ColumnHeader],
+        table_id: str,
+    ) -> list[ColumnAddress]:
+        """Build hierarchical ColumnAddress list from VLM output.
+
+        Tries these strategies in order:
+        1. Parse column_header_tree (nested VLM format) if present.
+        2. Build from flat column_headers using level/parent_col fields.
+        3. Return empty list (flat headers only, backward compatible).
+        """
+        # Strategy 1: Nested tree from VLM
+        tree_data = raw.get("column_header_tree")
+        if tree_data and isinstance(tree_data, list):
+            try:
+                addresses = parse_column_header_tree(tree_data)
+                if addresses:
+                    errors = validate_tree(addresses)
+                    if errors:
+                        logger.warning(
+                            f"Header tree validation for {table_id}: {errors}"
+                        )
+                    logger.info(
+                        f"P1c: Parsed column_header_tree for {table_id}: "
+                        f"{len(addresses)} leaf columns"
+                    )
+                    return addresses
+            except Exception as e:
+                logger.warning(
+                    f"Failed to parse column_header_tree for {table_id}: {e}"
+                )
+
+        # Strategy 2: Build from flat headers with level/parent_col
+        if column_headers:
+            max_level = max(h.level for h in column_headers)
+            if max_level > 0:
+                try:
+                    builder = HeaderTreeBuilder()
+                    addresses = builder.build_tree(column_headers)
+                    if addresses:
+                        errors = validate_tree(addresses)
+                        if errors:
+                            logger.warning(
+                                f"Header tree validation for {table_id}: {errors}"
+                            )
+                        logger.info(
+                            f"P1c: Built header tree from flat headers for "
+                            f"{table_id}: {len(addresses)} leaf columns"
+                        )
+                        return addresses
+                except Exception as e:
+                    logger.warning(
+                        f"Failed to build header tree for {table_id}: {e}"
+                    )
+
+        # Strategy 3: No hierarchy detected — return empty (backward compatible)
+        return []
 
     def _cross_check_with_pymupdf(
         self,

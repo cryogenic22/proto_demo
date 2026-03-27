@@ -58,6 +58,11 @@ class VisitInput(BaseModel):
     relative_to: str = "randomization"
     is_unscheduled: bool = False
     cycle: int | None = None
+    visit_path: list[str] = Field(
+        default_factory=list,
+        description="Hierarchical path from TreeThinker header tree, "
+        "e.g., ['Treatment Period', 'Cycle 1', 'Day 1']",
+    )
 
 
 class TableInput(BaseModel):
