@@ -129,11 +129,17 @@ class TableStitcher:
             score += 0.15 * 0.3
         # Beyond 5 pages: 0 proximity score (but can still merge via other signals)
 
-        # Both SOA type bonus
+        # Both SOA type bonus (only when titles are absent or match)
         if prev.table_type == TableType.SOA and curr.table_type == TableType.SOA:
-            score += 0.05
+            if not prev.title or not curr.title or self._base_title(prev.title) == self._base_title(curr.title):
+                score += 0.05
 
-        return min(1.0, score)
+        # Penalty: different non-empty titles that don't match = likely different tables
+        if prev.title and curr.title:
+            if self._base_title(prev.title) != self._base_title(curr.title):
+                score -= 0.15
+
+        return max(0.0, min(1.0, score))
 
     def _column_fingerprint_similarity(self, prev: TableRegion, curr: TableRegion) -> float:
         """Compare column structure between two table fragments."""

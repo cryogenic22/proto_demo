@@ -381,13 +381,14 @@ class TestTableStitchingRegression:
         result = self.stitcher.stitch(regions)
         assert len(result) == 1
 
-    def test_same_title_non_consecutive_no_merge(self):
+    def test_same_title_non_consecutive_merges(self):
+        """Same title on distant pages merges via content-continuity scoring."""
         regions = [
             self._region("t1", 3, "Table 14.1"),
             self._region("t2", 10, "Table 14.1"),
         ]
         result = self.stitcher.stitch(regions)
-        assert len(result) == 2
+        assert len(result) == 1
 
     def test_different_tables_not_merged(self):
         regions = [
