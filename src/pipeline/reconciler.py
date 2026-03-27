@@ -35,6 +35,28 @@ class ReconciliationResult:
     conflicts: int = 0
 
 
+def _normalize_for_vote(value: str) -> str:
+    """Normalize cell value for consensus comparison.
+
+    Strips superscript Unicode, footnote markers (trailing letters/digits),
+    and lowercases so that 'X\u2074', 'Xa', and 'X' are all treated as the
+    same base marker.
+    """
+    import re
+    v = value.strip()
+    # Strip trailing superscript Unicode characters
+    v = re.sub(r'[\u00b2\u00b3\u2074\u2075\u2076\u2077\u2078\u2079\u00b9\u2070]+$', '', v)
+    # Strip trailing footnote letter markers (a-f) when preceded by a
+    # non-letter marker character like X, checkmark, etc.
+    # "Xa" -> "X", "Xb" -> "X", but "CBC" stays "CBC"
+    # Only strip single trailing lowercase letters after an uppercase letter
+    v = re.sub(r'(?<=[A-Z\u2713\u2714\u2715\u2716])([a-f])$', '', v)
+    # Strip trailing regular digit footnote markers (e.g., "X4" -> "X")
+    v = re.sub(r'(?<=[a-zA-Z\u2713\u2714])(\d)$', '', v)
+    # Lowercase for comparison
+    return v.lower()
+
+
 class Reconciler:
     """Reconciles multi-pass extractions and produces confidence scores."""
 
@@ -177,7 +199,10 @@ class Reconciler:
                 # Both passes have this cell — check agreement
                 if self._values_agree(cell1, cell2):
                     confidence = 0.95
-                    merged = cell1.model_copy(update={"confidence": confidence})
+                    # Prefer the more informative raw value (longer string
+                    # keeps footnote annotations like "Xa" over "X")
+                    best = max([cell1, cell2], key=lambda c: len(c.raw_value))
+                    merged = best.model_copy(update={"confidence": confidence})
                 else:
                     conflicts += 1
                     confidence = 0.50
@@ -261,9 +286,13 @@ class Reconciler:
 
     @staticmethod
     def _values_agree(cell1: ExtractedCell, cell2: ExtractedCell) -> bool:
-        """Check if two cells agree on their value."""
-        v1 = cell1.raw_value.strip().lower()
-        v2 = cell2.raw_value.strip().lower()
+        """Check if two cells agree on their value.
+
+        Uses normalized comparison so superscript variants
+        and footnote markers don't cause false disagreements.
+        """
+        v1 = _normalize_for_vote(cell1.raw_value)
+        v2 = _normalize_for_vote(cell2.raw_value)
         return v1 == v2
 
     def _apply_consensus(
@@ -303,25 +332,37 @@ class Reconciler:
                 updated_cells.append(cell)
                 continue
 
-            # Majority vote: take the value that 2+ passes agree on
-            values = []
+            # Majority vote: normalize values before comparing so that
+            # superscript variants ("X\u2074" vs "X") and footnote-annotated
+            # values ("Xa" vs "X") are counted as the same base marker.
+            raw_values: list[str] = []
+            norm_values: list[str] = []
+            candidates_list: list[ExtractedCell | None] = []
             if cell1:
-                values.append(cell1.raw_value.strip().lower())
+                raw_values.append(cell1.raw_value.strip())
+                norm_values.append(_normalize_for_vote(cell1.raw_value))
+                candidates_list.append(cell1)
             if cell2:
-                values.append(cell2.raw_value.strip().lower())
-            values.append(cell3.raw_value.strip().lower())
+                raw_values.append(cell2.raw_value.strip())
+                norm_values.append(_normalize_for_vote(cell2.raw_value))
+                candidates_list.append(cell2)
+            raw_values.append(cell3.raw_value.strip())
+            norm_values.append(_normalize_for_vote(cell3.raw_value))
+            candidates_list.append(cell3)
 
             from collections import Counter
-            vote = Counter(values).most_common(1)
+            vote = Counter(norm_values).most_common(1)
             if vote and vote[0][1] >= 2:
-                # 2-of-3 agreement
-                winning_value = vote[0][0]
-                # Find the cell with the winning value
-                winner = cell  # default
-                for candidate in [cell1, cell2, cell3]:
-                    if candidate and candidate.raw_value.strip().lower() == winning_value:
-                        winner = candidate
-                        break
+                # 2-of-3 agreement on normalized value
+                winning_norm = vote[0][0]
+
+                # Among the candidates that match, prefer the LONGEST raw value
+                # (more informative: "Xa" over "X", keeps footnote annotation)
+                matching_candidates = [
+                    c for c in candidates_list
+                    if c and _normalize_for_vote(c.raw_value) == winning_norm
+                ]
+                winner = max(matching_candidates, key=lambda c: len(c.raw_value)) if matching_candidates else cell
 
                 evidence = build_cell_evidence(
                     pass1_value=cell1.raw_value if cell1 else "",
@@ -334,7 +375,7 @@ class Reconciler:
                 consensus_step = {
                     "method": "CONSENSUS_3WAY",
                     "status": "PASS",
-                    "detail": f"2-of-3 agreement: '{winning_value}' (pass3='{cell3.raw_value}')",
+                    "detail": f"2-of-3 agreement: '{winning_norm}' (pass3='{cell3.raw_value}')",
                     "confidence": 0.90,
                 }
                 evidence.verification_steps.append(

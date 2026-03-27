@@ -114,3 +114,80 @@ class TestSoADetectionExpanded:
                       "Objectives and Endpoints"]:
             # These specific words should NOT appear in accept_keywords
             assert title.lower() not in accept_keywords
+
+
+class TestExtractionDeterminism:
+    """Same input must produce same output across runs."""
+
+    def test_extraction_determinism(self):
+        """Load a stored protocol and run normalizer + reconciler twice.
+
+        Verify that the cell list is identical between both runs — the pipeline
+        must be fully deterministic.
+        """
+        import json
+        from pathlib import Path
+        from src.pipeline.procedure_normalizer import ProcedureNormalizer
+        from src.pipeline.reconciler import Reconciler
+        from src.models.schema import ExtractedCell, PipelineConfig
+
+        proto_path = Path(__file__).parent.parent / "data" / "protocols" / "pfizer_bnt162.json"
+        if not proto_path.exists():
+            import pytest
+            pytest.skip("pfizer_bnt162.json not found in data/protocols")
+
+        with open(proto_path, encoding="utf-8") as f:
+            data = json.load(f)
+
+        table = data["tables"][0]
+        raw_cells = table.get("cells", [])
+        if not raw_cells:
+            import pytest
+            pytest.skip("No cells in stored protocol table")
+
+        # Build ExtractedCell list from stored data
+        cells = [
+            ExtractedCell(
+                row=c["row"],
+                col=c["col"],
+                raw_value=c.get("raw_value", ""),
+                confidence=c.get("confidence", 0.9),
+            )
+            for c in raw_cells
+        ]
+
+        normalizer = ProcedureNormalizer()
+        config = PipelineConfig()
+        reconciler = Reconciler(config)
+
+        # --- Run 1 ---
+        normalized_1 = [
+            normalizer.normalize(c.raw_value) for c in cells if c.col == 0
+        ]
+        reconciled_1 = reconciler.reconcile(cells, cells)
+
+        # --- Run 2 ---
+        normalized_2 = [
+            normalizer.normalize(c.raw_value) for c in cells if c.col == 0
+        ]
+        reconciled_2 = reconciler.reconcile(cells, cells)
+
+        # Compare normalizer output
+        assert len(normalized_1) == len(normalized_2)
+        for n1, n2 in zip(normalized_1, normalized_2):
+            assert n1.canonical_name == n2.canonical_name, (
+                f"Normalizer non-deterministic: {n1.canonical_name} != {n2.canonical_name}"
+            )
+            assert n1.code == n2.code
+
+        # Compare reconciler output cell-by-cell
+        assert len(reconciled_1.cells) == len(reconciled_2.cells)
+        for c1, c2 in zip(reconciled_1.cells, reconciled_2.cells):
+            assert c1.row == c2.row
+            assert c1.col == c2.col
+            assert c1.raw_value == c2.raw_value, (
+                f"Cell ({c1.row},{c1.col}): '{c1.raw_value}' != '{c2.raw_value}'"
+            )
+            assert c1.confidence == c2.confidence, (
+                f"Cell ({c1.row},{c1.col}): conf {c1.confidence} != {c2.confidence}"
+            )
