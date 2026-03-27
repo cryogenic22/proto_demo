@@ -45,6 +45,7 @@ class Reconciler:
         self,
         pass1: list[ExtractedCell],
         pass2: list[ExtractedCell] | None = None,
+        pass3: list[ExtractedCell] | None = None,
         *,
         challenges: list[ChallengeIssue] | None = None,
         cost_map: dict[CellRef, CostTier] | None = None,
@@ -72,7 +73,13 @@ class Reconciler:
             return self._single_pass_result(pass1, challenges, cost_map)
 
         # Multi-pass reconciliation
-        return self._multi_pass_result(pass1, pass2, challenges, cost_map)
+        result = self._multi_pass_result(pass1, pass2, challenges, cost_map)
+
+        # P2a: If pass3 provided, use majority vote for disagreement cells
+        if pass3 is not None and result.conflicts > 0:
+            result = self._apply_consensus(result, pass1, pass2, pass3, challenges, cost_map)
+
+        return result
 
     def _single_pass_result(
         self,
@@ -258,6 +265,106 @@ class Reconciler:
         v1 = cell1.raw_value.strip().lower()
         v2 = cell2.raw_value.strip().lower()
         return v1 == v2
+
+    def _apply_consensus(
+        self,
+        result: ReconciliationResult,
+        pass1: list[ExtractedCell],
+        pass2: list[ExtractedCell],
+        pass3: list[ExtractedCell],
+        challenges: list[ChallengeIssue],
+        cost_map: dict[CellRef, CostTier],
+    ) -> ReconciliationResult:
+        """Apply 3-way majority vote for cells where pass1 and pass2 disagreed.
+
+        Only re-evaluates flagged cells — cells with agreement are untouched.
+        This is the "shadow voting" approach: run pass3 only when needed.
+        """
+        map3 = {(c.row, c.col): c for c in pass3}
+        map1 = {(c.row, c.col): c for c in pass1}
+        map2 = {(c.row, c.col): c for c in pass2}
+
+        updated_cells = []
+        resolved_conflicts = 0
+
+        for cell in result.cells:
+            key = (cell.row, cell.col)
+
+            # Only re-evaluate cells with low confidence (disagreements)
+            if cell.confidence >= 0.8:
+                updated_cells.append(cell)
+                continue
+
+            cell1 = map1.get(key)
+            cell2 = map2.get(key)
+            cell3 = map3.get(key)
+
+            if not cell3:
+                updated_cells.append(cell)
+                continue
+
+            # Majority vote: take the value that 2+ passes agree on
+            values = []
+            if cell1:
+                values.append(cell1.raw_value.strip().lower())
+            if cell2:
+                values.append(cell2.raw_value.strip().lower())
+            values.append(cell3.raw_value.strip().lower())
+
+            from collections import Counter
+            vote = Counter(values).most_common(1)
+            if vote and vote[0][1] >= 2:
+                # 2-of-3 agreement
+                winning_value = vote[0][0]
+                # Find the cell with the winning value
+                winner = cell  # default
+                for candidate in [cell1, cell2, cell3]:
+                    if candidate and candidate.raw_value.strip().lower() == winning_value:
+                        winner = candidate
+                        break
+
+                evidence = build_cell_evidence(
+                    pass1_value=cell1.raw_value if cell1 else "",
+                    pass1_conf=cell1.confidence if cell1 else 0.5,
+                    pass2_value=cell2.raw_value if cell2 else None,
+                    pass2_conf=cell2.confidence if cell2 else None,
+                    challenger_issues=[],
+                )
+                # Add consensus step to evidence
+                consensus_step = {
+                    "method": "CONSENSUS_3WAY",
+                    "status": "PASS",
+                    "detail": f"2-of-3 agreement: '{winning_value}' (pass3='{cell3.raw_value}')",
+                    "confidence": 0.90,
+                }
+                evidence.verification_steps.append(
+                    type(evidence.verification_steps[0])(**consensus_step)
+                    if evidence.verification_steps else consensus_step
+                )
+
+                updated_cells.append(winner.model_copy(update={
+                    "confidence": 0.90,
+                    "evidence": evidence.model_dump(),
+                }))
+                resolved_conflicts += 1
+            else:
+                # No 2-of-3 agreement — keep flagged for human review
+                updated_cells.append(cell)
+
+        if resolved_conflicts > 0:
+            logger.info(
+                f"Consensus resolved {resolved_conflicts} of {result.conflicts} "
+                f"conflicts via 3-way majority vote"
+            )
+
+        return ReconciliationResult(
+            cells=updated_cells,
+            flagged=[ref for ref in result.flagged
+                     if any(c.row == ref.row and c.col == ref.col and c.confidence < 0.8
+                            for c in updated_cells)],
+            review_items=result.review_items,
+            conflicts=result.conflicts - resolved_conflicts,
+        )
 
     @staticmethod
     def _build_challenge_map(
