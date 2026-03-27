@@ -226,6 +226,8 @@ class SectionParser:
         for j, s in enumerate(sections):
             if j + 1 < len(sections):
                 s.end_page = sections[j + 1].page - 1
+                if s.end_page < s.page:
+                    s.end_page = s.page
             else:
                 s.end_page = len(doc.paragraphs) - 1
 
