@@ -68,14 +68,18 @@ class TestTableStitcher:
         result = self.stitcher.stitch(regions)
         assert len(result) == 1
 
-    def test_no_stitch_non_consecutive(self):
-        """Same title on non-consecutive pages does NOT merge."""
+    def test_same_title_distant_pages_now_merges(self):
+        """Same title on distant pages DOES merge with content-continuity scoring.
+
+        The old max_gap=2 behavior rejected this. The new continuity scorer
+        merges based on title similarity regardless of page distance.
+        """
         regions = [
             _region("t1", [2], title="Table 14.1"),
             _region("t2", [8], title="Table 14.1"),
         ]
         result = self.stitcher.stitch(regions)
-        assert len(result) == 2
+        assert len(result) == 1  # Now merges (title match overrides distance)
 
     def test_mixed_stitching(self):
         """Mix of continuations and standalone tables."""
