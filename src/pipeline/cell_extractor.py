@@ -242,6 +242,9 @@ class CellExtractor:
                     logger.error(f"Row group extraction failed: {res}")
                 else:
                     all_cells.extend(res)
+            # P0 fix: deterministic ordering — sort by (row, col) regardless
+            # of asyncio.gather completion order
+            all_cells.sort(key=lambda c: (c.row, c.col))
             return all_cells
         else:
             # Single extraction for entire table
@@ -385,6 +388,8 @@ class CellExtractor:
                 max_row_this_page = max(c.row for c in page_cells)
                 cumulative_row_offset = max_row_this_page + 1
 
+        # P0 fix: deterministic ordering after concurrent page extraction
+        all_cells.sort(key=lambda c: (c.row, c.col))
         return all_cells
 
     @staticmethod

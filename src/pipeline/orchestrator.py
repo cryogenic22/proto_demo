@@ -591,6 +591,19 @@ class PipelineOrchestrator:
                 "supplemental schedule",
                 "soa", "s.o.a.", "soe",
                 "schedule", "activities",
+                # Extended patterns from testing team feedback:
+                "time and events", "time & events",
+                "study procedures schedule", "study procedures matrix",
+                "study procedures table", "study procedures overview",
+                "assessment schedule", "assessment matrix",
+                "assessment overview", "assessment plan",
+                "visit schedule", "encounter schedule",
+                "protocol flowchart", "study flowchart",
+                "clinical trial flowchart",
+                "table of activities", "table of assessments",
+                "table of procedures", "table of study procedures",
+                "treatment schedule", "dosing schedule",
+                "evaluation schedule",
             ]
             if any(kw in title_lower for kw in accept_keywords):
                 return True
@@ -623,6 +636,12 @@ class PipelineOrchestrator:
                     title_re = re.compile(
                         r"schedule\s+of\s+(?:activities|assessments|"
                         r"evaluations|procedures|events)"
+                        r"|time\s+and\s+events?\s+(?:table|schedule)"
+                        r"|study\s+procedures?\s+(?:schedule|table|matrix)"
+                        r"|assessment\s+(?:schedule|matrix|overview)"
+                        r"|(?:visit|encounter)\s+schedule"
+                        r"|table\s+of\s+(?:study\s+)?(?:activities|assessments|procedures)"
+                        r"|(?:treatment|dosing|evaluation)\s+schedule"
                         r"|(?:^|\s)soa(?:\s|$)"
                         r"|(?:^|\s)s\.o\.a\.(?:\s|$)",
                         re.IGNORECASE,
