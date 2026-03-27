@@ -38,14 +38,11 @@ python -m pytest tests/ --cov=src -q
 python -m pytest tests/test_consensus.py -v
 ```
 
-### Validation Scripts
+### Validation
 
+Header tree and stitcher validation are covered by the test suite:
 ```bash
-# Header tree validation on stored protocols
-python tests/validate_header_tree_stored.py
-
-# Stitcher dry-run on multi-page tables
-python tests/validate_stitcher_multipage.py
+python -m pytest tests/test_header_tree.py tests/test_stitcher_continuity.py -v
 ```
 
 ### Frontend (vitest)

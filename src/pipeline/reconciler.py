@@ -51,8 +51,10 @@ def _normalize_for_vote(value: str) -> str:
     # "Xa" -> "X", "Xb" -> "X", but "CBC" stays "CBC"
     # Only strip single trailing lowercase letters after an uppercase letter
     v = re.sub(r'(?<=[A-Z\u2713\u2714\u2715\u2716])([a-f])$', '', v)
-    # Strip trailing regular digit footnote markers (e.g., "X4" -> "X")
-    v = re.sub(r'(?<=[a-zA-Z\u2713\u2714])(\d)$', '', v)
+    # Strip trailing digit footnote markers only for short marker-like values
+    # (X4→X, Y2→Y) — NOT for drug names (BNT162b2 should stay BNT162b2)
+    if len(v) <= 3:
+        v = re.sub(r'(?<=[a-zA-Z\u2713\u2714])(\d)$', '', v)
     # Lowercase for comparison
     return v.lower()
 

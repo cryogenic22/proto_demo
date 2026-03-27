@@ -31,10 +31,16 @@ logger = logging.getLogger(__name__)
 
 # Deterministic SoA page detection patterns — catches pages without LLM cost
 _SOA_TEXT_PATTERNS = [
-    re.compile(r"schedule of (?:activities|assessments|events|study)", re.IGNORECASE),
+    re.compile(r"schedule of (?:activities|assessments|events|study|evaluations|procedures)", re.IGNORECASE),
     re.compile(r"schedule of study (?:activities|procedures|assessments)", re.IGNORECASE),
-    re.compile(r"study\s+(?:activities|procedures)\s+(?:schedule|table)", re.IGNORECASE),
+    re.compile(r"study\s+(?:activities|procedures)\s+(?:schedule|table|matrix|overview)", re.IGNORECASE),
     re.compile(r"table\s+\w*\.?\d*\.?\s*(?:schedule of|study activities)", re.IGNORECASE),
+    # Expanded patterns aligned with orchestrator.py accept_keywords
+    re.compile(r"time\s+and\s+events?\s+(?:table|schedule)", re.IGNORECASE),
+    re.compile(r"assessment\s+(?:schedule|matrix|overview)", re.IGNORECASE),
+    re.compile(r"(?:visit|encounter)\s+schedule", re.IGNORECASE),
+    re.compile(r"(?:treatment|dosing|evaluation)\s+schedule", re.IGNORECASE),
+    re.compile(r"table\s+of\s+(?:study\s+)?(?:activities|assessments|procedures)", re.IGNORECASE),
 ]
 
 # Patterns for table continuation pages (no title but table-like content)
