@@ -70,6 +70,11 @@ class ProtocolBuilder:
         doc_entity = self._create_document_entity(extraction)
         model.entities.append(doc_entity)
 
+        # Track global procedure and visit entities across all tables
+        # to prevent duplicates. Key = canonical_name or visit_name.
+        self._global_proc_entities: dict[str, Entity] = {}
+        self._global_visit_entities: dict[str, Entity] = {}
+
         # Process each table
         for table in extraction.tables:
             self._process_table(model, table, doc_entity.id, extraction)
@@ -108,64 +113,81 @@ class ProtocolBuilder:
     ) -> None:
         """Process one SoA table into entities and relationships."""
 
-        # 1. Create Visit entities from column headers
+        # 1. Create Visit entities from column headers (deduplicated across tables)
         visit_entities: dict[int, Entity] = {}
         for visit in table.visits:
-            entity = Entity(
-                entity_type="Visit",
-                name=visit.visit_name,
-                properties={
-                    "visit_label": visit.visit_name,
-                    "col_index": visit.col_index,
-                    "day_number": visit.target_day,
-                    "window_minus": visit.window_minus,
-                    "window_plus": visit.window_plus,
-                    "window_unit": visit.window_unit,
-                    "is_unscheduled": visit.is_unscheduled,
-                    "cycle": visit.cycle,
-                },
-                provenance=ProvenanceInfo(
-                    source_type="table_cell",
-                    table_name=table.title,
-                    col_index=visit.col_index,
-                    raw_text=visit.visit_name,
-                    extraction_method="vlm",
-                ),
-            )
-            entity.id = entity.deterministic_id(extraction.document_id)
-            visit_entities[visit.col_index] = entity
-            model.entities.append(entity)
+            visit_key = visit.visit_name.lower().strip()
 
-        # 2. Create Procedure entities
+            # Check if this visit already exists from another table
+            if visit_key in self._global_visit_entities:
+                entity = self._global_visit_entities[visit_key]
+            else:
+                entity = Entity(
+                    entity_type="Visit",
+                    name=visit.visit_name,
+                    properties={
+                        "visit_label": visit.visit_name,
+                        "col_index": visit.col_index,
+                        "day_number": visit.target_day,
+                        "window_minus": visit.window_minus,
+                        "window_plus": visit.window_plus,
+                        "window_unit": visit.window_unit,
+                        "is_unscheduled": visit.is_unscheduled,
+                        "cycle": visit.cycle,
+                    },
+                    provenance=ProvenanceInfo(
+                        source_type="table_cell",
+                        table_name=table.title,
+                        col_index=visit.col_index,
+                        raw_text=visit.visit_name,
+                        extraction_method="vlm",
+                    ),
+                )
+                entity.id = entity.deterministic_id(extraction.document_id)
+                self._global_visit_entities[visit_key] = entity
+                model.entities.append(entity)
+
+            visit_entities[visit.col_index] = entity
+
+        # 2. Create Procedure entities (deduplicated across tables)
         proc_entities: dict[str, Entity] = {}
         for proc in table.procedures:
-            entity = Entity(
-                entity_type="Procedure",
-                name=proc.canonical_name,
-                properties={
-                    "raw_name": proc.raw_name,
-                    "canonical_name": proc.canonical_name,
-                    "cpt_code": proc.code,
-                    "code_system": proc.code_system,
-                    "category": proc.category,
-                    "cost_tier": proc.cost_tier,
-                },
-                provenance=ProvenanceInfo(
-                    source_type="table_cell",
-                    table_name=table.title,
-                    raw_text=proc.raw_name,
-                    extraction_method="vlm",
-                ),
-            )
-            entity.id = entity.deterministic_id(extraction.document_id)
+            canon_key = proc.canonical_name.lower()
+
+            # Check if this procedure already exists from another table
+            if canon_key in self._global_proc_entities:
+                entity = self._global_proc_entities[canon_key]
+            else:
+                entity = Entity(
+                    entity_type="Procedure",
+                    name=proc.canonical_name,
+                    properties={
+                        "raw_name": proc.raw_name,
+                        "canonical_name": proc.canonical_name,
+                        "cpt_code": proc.code,
+                        "code_system": proc.code_system,
+                        "category": proc.category,
+                        "cost_tier": proc.cost_tier,
+                    },
+                    provenance=ProvenanceInfo(
+                        source_type="table_cell",
+                        table_name=table.title,
+                        raw_text=proc.raw_name,
+                        extraction_method="vlm",
+                    ),
+                )
+                entity.id = entity.deterministic_id(extraction.document_id)
+                self._global_proc_entities[canon_key] = entity
+                model.entities.append(entity)
+
             # Index by both raw_name and canonical_name for flexible lookup
             proc_entities[proc.raw_name.lower()] = entity
             if proc.canonical_name.lower() != proc.raw_name.lower():
                 proc_entities[proc.canonical_name.lower()] = entity
-            model.entities.append(entity)
 
-        # 3. Create Footnote entities
+        # 3. Create Footnote entities (deduplicated by marker + text)
         footnote_entities: dict[str, Entity] = {}
+        existing_fn_ids = {e.id for e in model.entities if e.entity_type == "Footnote"}
         for fn in table.footnotes:
             entity = Entity(
                 entity_type="Footnote",
@@ -184,7 +206,9 @@ class ProtocolBuilder:
             )
             entity.id = entity.deterministic_id(extraction.document_id)
             footnote_entities[fn.marker] = entity
-            model.entities.append(entity)
+            if entity.id not in existing_fn_ids:
+                model.entities.append(entity)
+                existing_fn_ids.add(entity.id)
 
         # 4. Build footnote lookup: (row, col) → list of footnote markers
         footnote_cell_map: dict[tuple[int, int], list[str]] = {}
