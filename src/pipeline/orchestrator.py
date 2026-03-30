@@ -135,11 +135,26 @@ class PipelineOrchestrator:
             self.protocol_synopsis = None
 
         # Stage 2: Table Detection
+        # Strategy A (preferred): Find SoA SECTION first, extract all tables
+        # within that section's page range. This avoids per-page classification
+        # errors (missing SoA pages or flagging non-SoA pages).
+        # Strategy B (fallback): Per-page prescreen if section parser fails.
         mode = "SOA tables" if self.config.soa_only else "all tables"
         _progress(20, f"Detecting {mode} across {total_pages} pages...")
         logger.info(f"Stage 2: Table Detection ({mode})")
+
+        regions = []
         try:
-            regions = await self.detector.detect(pages, pdf_bytes=pdf_bytes)
+            if self.config.soa_only and pdf_bytes:
+                regions = self._detect_soa_from_sections(pdf_bytes, pages)
+                if regions:
+                    logger.info(
+                        f"Section-based SoA detection: {len(regions)} table regions "
+                        f"from SoA section page ranges"
+                    )
+
+            if not regions:
+                regions = await self.detector.detect(pages, pdf_bytes=pdf_bytes)
         except Exception as e:
             logger.error(f"Table detection failed: {e}")
             regions = []
@@ -554,6 +569,75 @@ class PipelineOrchestrator:
             })
 
         return table
+
+    def _detect_soa_from_sections(
+        self, pdf_bytes: bytes, pages: list
+    ) -> list:
+        """Detect SoA tables by finding the SoA SECTION first.
+
+        Instead of classifying each page independently, find the section titled
+        'Schedule of Activities' (or similar) and extract ALL tables within that
+        section's page range. This is more reliable than per-page classification.
+        """
+        from src.models.schema import TableRegion, TableType, BoundingBox
+
+        try:
+            sections = self.section_parser.parse(pdf_bytes)
+            flat = self.section_parser._flatten(sections)
+
+            soa_keywords = [
+                "schedule of activit", "schedule of assess", "schedule of event",
+                "schedule of evaluat", "schedule of procedure",
+                "time and events", "study procedures schedule",
+                "study procedures matrix", "assessment schedule",
+            ]
+
+            soa_page_ranges: list[tuple[int, int, str]] = []
+            for s in flat:
+                title_lower = s.title.lower()
+                if any(kw in title_lower for kw in soa_keywords):
+                    start = s.page
+                    end = s.end_page if s.end_page is not None else start
+                    soa_page_ranges.append((start, end, s.title))
+
+            if not soa_page_ranges:
+                return []
+
+            # Merge overlapping ranges
+            soa_page_ranges.sort()
+            merged_ranges: list[tuple[int, int, str]] = []
+            for start, end, title in soa_page_ranges:
+                if merged_ranges and start <= merged_ranges[-1][1] + 1:
+                    prev_start, prev_end, prev_title = merged_ranges[-1]
+                    merged_ranges[-1] = (prev_start, max(prev_end, end), prev_title)
+                else:
+                    merged_ranges.append((start, end, title))
+
+            # Create one TableRegion per merged SoA range
+            regions = []
+            for start, end, title in merged_ranges:
+                region_pages = list(range(start, end + 1))
+                regions.append(TableRegion(
+                    table_id=f"soa_s{start}",
+                    pages=region_pages,
+                    bounding_boxes=[
+                        BoundingBox(x0=0, y0=0, x1=2550, y1=3300, page=p)
+                        for p in region_pages
+                    ],
+                    table_type=TableType.SOA,
+                    title=title,
+                    continuation_markers=[],
+                ))
+
+            logger.info(
+                f"Section-based SoA: found {len(merged_ranges)} SoA regions "
+                f"covering pages {[f'{s}-{e}' for s, e, _ in merged_ranges]}"
+            )
+            return regions
+
+        except Exception as e:
+            logger.warning(f"Section-based SoA detection failed: {e}")
+            return []
 
     def _is_likely_soa(self, region, pdf_bytes: bytes) -> bool:
         """Validate that a detected region is actually an SoA table.

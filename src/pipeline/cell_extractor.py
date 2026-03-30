@@ -82,6 +82,8 @@ Rules:
 - EMPTY = cells with no content
 - CONDITIONAL = cells with markers that have footnotes modifying their meaning
 - Capture ALL superscript symbols as footnote_markers
+- For superscript text, wrap in ^{}: e.g., "X^{a}" for X with superscript a, "10^{6}" for 10 to the 6th
+- For subscript text, wrap in _{}: e.g., "CO_{2}" for CO2, "HbA_{1c}" for HbA1c
 - Be precise — do not invent values not visible in the image
 
 Return ONLY the JSON array."""
@@ -106,6 +108,8 @@ Important:
 - Include superscript letters/symbols in footnote_markers
 - MARKER means X or check marks
 - CONDITIONAL means the cell's meaning depends on a footnote
+- For superscript text, wrap in ^{}: e.g., "X^{a}", "10^{6}"
+- For subscript text, wrap in _{}: e.g., "CO_{2}", "HbA_{1c}"
 - Do NOT guess or hallucinate values — only report what you can see
 
 Return ONLY valid JSON array."""

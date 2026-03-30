@@ -1,7 +1,7 @@
 """Tests for superscript/subscript resolver."""
 
 import pytest
-from src.pipeline.superscript_resolver import SuperscriptResolver
+from src.pipeline.superscript_resolver import SuperscriptResolver, parse_vlm_markers
 
 
 class TestChemicalPatterns:
@@ -57,3 +57,31 @@ class TestCellValueAnnotation:
 
     def test_cell_empty(self):
         assert self.resolver.annotate_cell_value("") == ""
+
+
+class TestVLMMarkerParsing:
+    """Test parsing of ^{} and _{} markers from VLM output."""
+
+    def test_superscript_footnote(self):
+        assert parse_vlm_markers("X^{a}") == "X<sup>a</sup>"
+
+    def test_subscript_chemical(self):
+        assert parse_vlm_markers("CO_{2}") == "CO<sub>2</sub>"
+
+    def test_exponent(self):
+        assert parse_vlm_markers("10^{6} cells/mL") == "10<sup>6</sup> cells/mL"
+
+    def test_subscript_hba1c(self):
+        assert parse_vlm_markers("HbA_{1c}") == "HbA<sub>1c</sub>"
+
+    def test_no_markers_unchanged(self):
+        assert parse_vlm_markers("X") == "X"
+        assert parse_vlm_markers("CBC") == "CBC"
+
+    def test_mixed_super_and_sub(self):
+        result = parse_vlm_markers("Fe^{2+} in H_{2}O")
+        assert "<sup>2+</sup>" in result
+        assert "<sub>2</sub>" in result
+
+    def test_multiple_superscripts(self):
+        assert parse_vlm_markers("X^{a,b}") == "X<sup>a,b</sup>"

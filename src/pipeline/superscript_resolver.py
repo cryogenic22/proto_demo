@@ -46,6 +46,29 @@ _EXPONENT_PATTERNS = [
 ]
 
 
+def parse_vlm_markers(text: str) -> str:
+    """Parse ^{} and _{} markers from VLM output into HTML sup/sub tags.
+
+    The VLM is prompted to output superscript as ^{text} and subscript as _{text}.
+    This function converts those markers to proper HTML.
+
+    Examples:
+        "X^{a}" → "X<sup>a</sup>"
+        "CO_{2}" → "CO<sub>2</sub>"
+        "10^{6} cells/mL" → "10<sup>6</sup> cells/mL"
+        "HbA_{1c}" → "HbA<sub>1c</sub>"
+    """
+    if "^{" not in text and "_{" not in text:
+        return text
+
+    # Superscript: ^{content}
+    result = re.sub(r'\^\{([^}]+)\}', r'<sup>\1</sup>', text)
+    # Subscript: _{content}
+    result = re.sub(r'_\{([^}]+)\}', r'<sub>\1</sub>', result)
+
+    return result
+
+
 class SuperscriptResolver:
     """Cross-checks VLM text output with PyMuPDF font data for sub/superscript."""
 
