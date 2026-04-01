@@ -15,10 +15,12 @@ from src.llm.client import LLMClient
 from src.models.schema import (
     CellRef,
     CostTier,
+    ExtractedCell,
     ExtractedTable,
     ExtractionMetadata,
     PipelineConfig,
     PipelineOutput,
+    TableSchema,
     TableType,
 )
 from src.pipeline.cell_extractor import CellExtractor
@@ -520,6 +522,13 @@ class PipelineOrchestrator:
             except Exception as e:
                 logger.warning(f"Grid anchor post-validation failed: {e}")
 
+        # Stage 10b: Propagate marks from spanning parent headers
+        reconciliation_cells = self._propagate_spanning_header_marks(
+            reconciliation.cells, schema
+        )
+        # Update reconciliation with propagated cells
+        reconciliation = reconciliation.model_copy(update={"cells": reconciliation_cells})
+
         # Compute overall confidence
         if reconciliation.cells:
             overall_confidence = sum(
@@ -572,6 +581,87 @@ class PipelineOrchestrator:
             })
 
         return table
+
+    @staticmethod
+    def _propagate_spanning_header_marks(
+        cells: list[ExtractedCell],
+        schema: TableSchema,
+    ) -> list[ExtractedCell]:
+        """Propagate marks from parent spanning headers to child columns.
+
+        When a table has hierarchical headers like "All Participants" spanning
+        columns 1-5, and the VLM puts X only in the parent column, this
+        propagates the X to all child columns for that row.
+
+        Only propagates single-character marks (X, checkmarks) — not text content.
+        """
+        from src.models.schema import ColumnAddress
+
+        if not schema.column_headers or not cells:
+            return cells
+
+        # Find parent headers that span multiple columns
+        # A parent header has span > 1 (covers multiple leaf columns)
+        spanning_parents: list[tuple[int, int, int]] = []  # (col_index, start, end)
+        for h in schema.column_headers:
+            span = getattr(h, 'span', 1) or 1
+            if span > 1:
+                spanning_parents.append((h.col_index, h.col_index, h.col_index + span - 1))
+
+        if not spanning_parents:
+            return cells
+
+        logger.info(
+            f"  Spanning header propagation: {len(spanning_parents)} parent headers found"
+        )
+
+        # Build cell lookup: (row, col) → cell
+        cell_map: dict[tuple[int, int], ExtractedCell] = {}
+        for c in cells:
+            cell_map[(c.row, c.col)] = c
+
+        # Identify mark values that should propagate
+        mark_chars = {"X", "x", "✓", "✔", "●", "Y", "y"}
+
+        new_cells = list(cells)
+        added = 0
+
+        for parent_col, start, end in spanning_parents:
+            child_cols = [c for c in range(start, end + 1) if c != parent_col]
+            if not child_cols:
+                continue
+
+            # Get all rows that have a mark in the parent column
+            rows_with_marks = {}
+            for (r, c), cell in cell_map.items():
+                if c == parent_col and cell.raw_value.strip() in mark_chars:
+                    rows_with_marks[r] = cell
+
+            for row, parent_cell in rows_with_marks.items():
+                # Check if child columns are empty for this row
+                children_empty = all(
+                    (row, cc) not in cell_map
+                    or cell_map[(row, cc)].raw_value.strip() in ("", "-", "--", "—")
+                    for cc in child_cols
+                )
+
+                if children_empty:
+                    # Propagate the mark to all child columns
+                    for cc in child_cols:
+                        if (row, cc) not in cell_map:
+                            propagated = parent_cell.model_copy(update={
+                                "col": cc,
+                                "confidence": parent_cell.confidence * 0.9,
+                                "col_header": "",  # will be set by downstream
+                            })
+                            new_cells.append(propagated)
+                            cell_map[(row, cc)] = propagated
+                            added += 1
+
+        if added:
+            logger.info(f"  Propagated {added} marks from spanning parent headers")
+
+        return new_cells
 
     def _detect_soa_from_sections(
         self, pdf_bytes: bytes, pages: list
