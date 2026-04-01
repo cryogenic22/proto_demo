@@ -2132,6 +2132,254 @@ async def smb_model_graph(protocol_id: str):
     return _smb_cache[protocol_id]["graph"]
 
 
+# ---------------------------------------------------------------------------
+# Feedback System — submit, triage, track, delivery reports
+# ---------------------------------------------------------------------------
+
+FEEDBACK_DIR = Path("data/feedback")
+FEEDBACK_FILE = FEEDBACK_DIR / "backlog.jsonl"
+
+
+class FeedbackSubmission(BaseModel):
+    """User-submitted feedback from the UI."""
+    category: str = Field(..., pattern="^(bug|issue|enhancement|feature)$")
+    title: str = Field(..., min_length=3, max_length=500)
+    description: str = Field(..., min_length=3)
+    priority: str = Field(default="medium", pattern="^(low|medium|high|critical)$")
+    page_url: str = ""
+    attachments: list[dict[str, str]] = Field(default_factory=list)
+
+
+class FeedbackStatusUpdate(BaseModel):
+    status: str = Field(..., pattern="^(new|triaging|spec_ready|in_progress|testing|deploying|delivered|rejected)$")
+    resolution: str | None = None
+
+
+def _load_feedback() -> list[dict[str, Any]]:
+    """Load all feedback entries from JSONL."""
+    if not FEEDBACK_FILE.exists():
+        return []
+    entries = []
+    for line in FEEDBACK_FILE.read_text(encoding="utf-8").strip().split("\n"):
+        if line.strip():
+            try:
+                entries.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    return entries
+
+
+def _save_feedback_entry(entry: dict[str, Any]) -> None:
+    """Append a single feedback entry to the JSONL file."""
+    FEEDBACK_DIR.mkdir(parents=True, exist_ok=True)
+    with open(FEEDBACK_FILE, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, default=str) + "\n")
+
+
+def _update_feedback_entry(entry_id: str, updates: dict[str, Any]) -> dict[str, Any] | None:
+    """Update a feedback entry in place. Rewrites the JSONL."""
+    entries = _load_feedback()
+    updated = None
+    for e in entries:
+        if e["id"] == entry_id:
+            e.update(updates)
+            e["updated_at"] = time.time()
+            updated = e
+            break
+    if updated:
+        FEEDBACK_DIR.mkdir(parents=True, exist_ok=True)
+        with open(FEEDBACK_FILE, "w", encoding="utf-8") as f:
+            for e in entries:
+                f.write(json.dumps(e, default=str) + "\n")
+    return updated
+
+
+async def _auto_triage(entry: dict[str, Any]) -> dict[str, Any]:
+    """Use Claude to auto-triage feedback into a structured ticket with spec + TDD plan."""
+    try:
+        import anthropic
+        client = anthropic.Anthropic()
+
+        prompt = f"""You are a senior software engineer triaging a user feedback ticket for ProtoExtract,
+a clinical trial protocol extraction platform. The pipeline has 14 stages: PDF ingestion, table detection,
+table stitching, structural analysis, cell extraction (dual-pass VLM), footnote extraction, footnote resolution,
+procedure normalization, temporal extraction, challenger agent, OCR grounding, reconciliation, validation, budget calculation.
+
+The frontend is Next.js + TypeScript. The backend is FastAPI + Python.
+
+USER FEEDBACK:
+- Category: {entry['category']}
+- Priority: {entry['priority']}
+- Title: {entry['title']}
+- Description: {entry['description']}
+- Page URL: {entry['page_url']}
+
+Analyze this feedback and return a JSON object with:
+{{
+  "severity": "critical|high|medium|low",
+  "affected_modules": ["list of likely affected source files or modules"],
+  "root_cause_hypothesis": "brief hypothesis of what's wrong",
+  "spec": {{
+    "summary": "what needs to change",
+    "acceptance_criteria": ["list of acceptance criteria"],
+    "files_to_modify": ["list of files that likely need changes"],
+    "estimated_effort": "small|medium|large"
+  }},
+  "tdd_plan": {{
+    "test_file": "path to test file",
+    "test_cases": [
+      {{"name": "test_name", "description": "what this test verifies"}}
+    ]
+  }},
+  "suggested_fix": "brief description of the fix approach"
+}}
+
+Return ONLY valid JSON."""
+
+        response = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=2000,
+            messages=[{"role": "user", "content": prompt}],
+        )
+
+        triage_text = response.content[0].text
+        # Parse JSON from response
+        import re as _re
+        json_match = _re.search(r'\{[\s\S]+\}', triage_text)
+        if json_match:
+            triage = json.loads(json_match.group())
+        else:
+            triage = {"error": "Failed to parse triage response", "raw": triage_text[:500]}
+
+        return triage
+    except Exception as e:
+        logger.warning(f"Auto-triage failed: {e}")
+        return {
+            "severity": entry.get("priority", "medium"),
+            "affected_modules": [],
+            "root_cause_hypothesis": "Auto-triage unavailable",
+            "error": str(e),
+        }
+
+
+@app.post("/api/feedback")
+async def submit_feedback(submission: FeedbackSubmission):
+    """Submit user feedback. Auto-triages with LLM and generates spec + TDD plan."""
+    entry_id = str(uuid.uuid4())[:8]
+    now = time.time()
+
+    entry = {
+        "id": entry_id,
+        "submitted_at": now,
+        "updated_at": now,
+        "category": submission.category,
+        "title": submission.title,
+        "description": submission.description,
+        "priority": submission.priority,
+        "page_url": submission.page_url,
+        "attachments": submission.attachments[:5],  # max 5
+        "status": "new",
+        "triage": None,
+        "delivery_report": None,
+    }
+
+    _save_feedback_entry(entry)
+    logger.info(f"Feedback submitted: {entry_id} — {submission.title}")
+
+    # Auto-triage in background
+    async def triage_task():
+        try:
+            triage = await _auto_triage(entry)
+            _update_feedback_entry(entry_id, {
+                "triage": triage,
+                "status": "triaging",
+                "priority": triage.get("severity", submission.priority),
+            })
+            # Move to spec_ready once triage is done
+            _update_feedback_entry(entry_id, {"status": "spec_ready"})
+            logger.info(f"Feedback {entry_id} triaged: {triage.get('severity', 'unknown')}")
+        except Exception as e:
+            logger.warning(f"Triage failed for {entry_id}: {e}")
+
+    asyncio.create_task(triage_task())
+
+    return {"id": entry_id, "status": "new", "message": "Feedback submitted. Auto-triage in progress."}
+
+
+@app.get("/api/feedback")
+async def list_feedback(status: str | None = None, limit: int = 50, offset: int = 0):
+    """List feedback entries, newest first. Optionally filter by status."""
+    entries = _load_feedback()
+    if status:
+        entries = [e for e in entries if e.get("status") == status]
+    entries.sort(key=lambda e: e.get("submitted_at", 0), reverse=True)
+    total = len(entries)
+    entries = entries[offset:offset + limit]
+    return {"items": entries, "total": total}
+
+
+@app.get("/api/feedback/{entry_id}")
+async def get_feedback(entry_id: str):
+    """Get a single feedback entry with full triage, spec, and delivery report."""
+    entries = _load_feedback()
+    for e in entries:
+        if e["id"] == entry_id:
+            return e
+    raise HTTPException(status_code=404, detail=f"Feedback {entry_id} not found")
+
+
+@app.patch("/api/feedback/{entry_id}")
+async def update_feedback_status(entry_id: str, update: FeedbackStatusUpdate):
+    """Update feedback status and optional resolution/delivery report."""
+    updates: dict[str, Any] = {"status": update.status}
+    if update.resolution:
+        updates["resolution"] = update.resolution
+    if update.status == "delivered":
+        updates["delivered_at"] = time.time()
+        # Auto-generate delivery report
+        entry = None
+        for e in _load_feedback():
+            if e["id"] == entry_id:
+                entry = e
+                break
+        if entry and entry.get("triage"):
+            updates["delivery_report"] = {
+                "title": entry["title"],
+                "status": "delivered",
+                "triage_summary": entry["triage"].get("root_cause_hypothesis", ""),
+                "fix_applied": update.resolution or entry["triage"].get("suggested_fix", ""),
+                "spec": entry["triage"].get("spec", {}),
+                "tdd_plan": entry["triage"].get("tdd_plan", {}),
+                "delivered_at": time.time(),
+            }
+
+    result = _update_feedback_entry(entry_id, updates)
+    if not result:
+        raise HTTPException(status_code=404, detail=f"Feedback {entry_id} not found")
+    return result
+
+
+@app.post("/api/feedback/{entry_id}/retriage")
+async def retriage_feedback(entry_id: str):
+    """Re-run auto-triage on a feedback entry."""
+    entries = _load_feedback()
+    entry = None
+    for e in entries:
+        if e["id"] == entry_id:
+            entry = e
+            break
+    if not entry:
+        raise HTTPException(status_code=404, detail=f"Feedback {entry_id} not found")
+
+    triage = await _auto_triage(entry)
+    _update_feedback_entry(entry_id, {
+        "triage": triage,
+        "status": "spec_ready",
+        "priority": triage.get("severity", entry.get("priority", "medium")),
+    })
+    return {"id": entry_id, "status": "spec_ready", "triage": triage}
+
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))

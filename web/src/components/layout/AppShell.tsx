@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SideNav } from "./SideNav";
+import { FeedbackWidget } from "../FeedbackWidget";
 import { getJobStatus } from "@/lib/api";
 
 function ActiveJobBanner() {
@@ -74,6 +75,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <ActiveJobBanner />
         {children}
       </div>
+      <FeedbackWidget />
     </div>
   );
 }

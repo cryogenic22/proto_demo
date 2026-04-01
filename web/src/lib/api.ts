@@ -598,3 +598,103 @@ export async function getSMBGraph(protocolId: string): Promise<SMBGraph> {
   if (!res.ok) throw new Error("SMB graph not available");
   return res.json();
 }
+
+// ─── Feedback System API Functions ──────────────────────────────────────────
+
+export interface FeedbackEntry {
+  id: string;
+  submitted_at: number;
+  updated_at: number;
+  category: string;
+  title: string;
+  description: string;
+  priority: string;
+  page_url: string;
+  status: string;
+  triage: FeedbackTriage | null;
+  delivery_report: DeliveryReport | null;
+  resolution: string | null;
+  delivered_at: number | null;
+}
+
+export interface FeedbackTriage {
+  severity: string;
+  affected_modules: string[];
+  root_cause_hypothesis: string;
+  spec: {
+    summary: string;
+    acceptance_criteria: string[];
+    files_to_modify: string[];
+    estimated_effort: string;
+  };
+  tdd_plan: {
+    test_file: string;
+    test_cases: { name: string; description: string }[];
+  };
+  suggested_fix: string;
+  error?: string;
+}
+
+export interface DeliveryReport {
+  title: string;
+  status: string;
+  triage_summary: string;
+  fix_applied: string;
+  spec: Record<string, unknown>;
+  tdd_plan: Record<string, unknown>;
+  delivered_at: number;
+}
+
+export async function submitFeedback(feedback: {
+  category: string;
+  title: string;
+  description: string;
+  priority: string;
+  page_url: string;
+  attachments?: { data: string; filename: string }[];
+}): Promise<{ id: string; status: string; message: string }> {
+  const res = await fetch(`${API_BASE}/api/feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(feedback),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: "Failed to submit" }));
+    throw new Error(err.detail || "Feedback submission failed");
+  }
+  return res.json();
+}
+
+export async function listFeedback(
+  status?: string,
+  limit = 50,
+  offset = 0,
+): Promise<{ items: FeedbackEntry[]; total: number }> {
+  const params = new URLSearchParams();
+  if (status && status !== "all") params.set("status", status);
+  params.set("limit", String(limit));
+  params.set("offset", String(offset));
+  const res = await fetch(`${API_BASE}/api/feedback?${params}`);
+  if (!res.ok) throw new Error("Failed to list feedback");
+  return res.json();
+}
+
+export async function getFeedback(entryId: string): Promise<FeedbackEntry> {
+  const res = await fetch(`${API_BASE}/api/feedback/${entryId}`);
+  if (!res.ok) throw new Error("Feedback not found");
+  return res.json();
+}
+
+export async function updateFeedbackStatus(
+  entryId: string,
+  status: string,
+  resolution?: string,
+): Promise<FeedbackEntry> {
+  const res = await fetch(`${API_BASE}/api/feedback/${entryId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status, resolution }),
+  });
+  if (!res.ok) throw new Error("Failed to update feedback");
+  return res.json();
+}
