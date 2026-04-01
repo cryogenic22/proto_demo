@@ -30,8 +30,51 @@ export function FeedbackWidget() {
   const [submitting, setSubmitting] = useState(false);
   const [ticketId, setTicketId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [attachments, setAttachments] = useState<{ data: string; filename: string }[]>([]);
   const panelRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const MAX_ATTACHMENTS = 5;
+  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
+  const addAttachment = (file: File) => {
+    if (attachments.length >= MAX_ATTACHMENTS) return;
+    if (file.size > MAX_FILE_SIZE) {
+      setError("Screenshot must be under 2MB");
+      return;
+    }
+    if (!file.type.startsWith("image/")) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      setAttachments((prev) => [...prev, { data: dataUrl, filename: file.name }]);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Handle paste (Ctrl+V) for screenshots
+  useEffect(() => {
+    if (step !== "describe") return;
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type.startsWith("image/")) {
+          e.preventDefault();
+          const file = item.getAsFile();
+          if (file) addAttachment(file);
+        }
+      }
+    };
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, [step, attachments.length]);
 
   // Auto-focus textarea when describe step opens
   useEffect(() => {
@@ -71,7 +114,7 @@ export function FeedbackWidget() {
           description: description.trim(),
           priority,
           page_url: window.location.pathname,
-          attachments: [],
+          attachments,
         }),
       });
 
@@ -96,6 +139,7 @@ export function FeedbackWidget() {
     setPriority("medium");
     setTicketId(null);
     setError(null);
+    setAttachments([]);
     setStep("closed");
   };
 
@@ -196,6 +240,71 @@ export function FeedbackWidget() {
                   {description.length > 0 && `Title: "${extractTitle(description)}"`}
                 </div>
               </div>
+
+              {/* Screenshot attachments */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-medium text-neutral-500">
+                    Screenshots (optional)
+                  </label>
+                  <span className="text-[10px] text-neutral-400">{attachments.length}/{MAX_ATTACHMENTS}</span>
+                </div>
+
+                {/* Thumbnails */}
+                {attachments.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {attachments.map((att, i) => (
+                      <div key={i} className="relative group">
+                        <img
+                          src={att.data}
+                          alt={att.filename}
+                          className="w-16 h-16 object-cover rounded-lg border border-neutral-200"
+                        />
+                        <button
+                          onClick={() => removeAttachment(i)}
+                          className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          x
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {attachments.length < MAX_ATTACHMENTS && (
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const files = e.dataTransfer.files;
+                      for (const file of files) addAttachment(file);
+                    }}
+                    className="border-2 border-dashed border-neutral-200 rounded-lg px-4 py-3 text-center cursor-pointer hover:border-brand-primary hover:bg-brand-primary/5 transition-colors"
+                  >
+                    <p className="text-xs text-neutral-500">
+                      Drop image, <span className="text-brand-primary font-medium">browse</span>, or paste (Ctrl+V)
+                    </p>
+                    <p className="text-[10px] text-neutral-400 mt-0.5">Max 2MB per image</p>
+                  </div>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => {
+                    const files = e.target.files;
+                    if (files) {
+                      for (const file of files) addAttachment(file);
+                    }
+                    e.target.value = "";
+                  }}
+                />
+              </div>
+
               <button
                 onClick={() => description.trim().length >= 3 && setStep("priority")}
                 disabled={description.trim().length < 3}
@@ -255,6 +364,16 @@ export function FeedbackWidget() {
                   <span className="text-xs text-neutral-500">Description</span>
                   <p className="text-sm text-neutral-600 mt-0.5 line-clamp-4">{description}</p>
                 </div>
+                {attachments.length > 0 && (
+                  <div className="px-4 py-2.5 flex items-center justify-between">
+                    <span className="text-xs text-neutral-500">Screenshots</span>
+                    <div className="flex gap-1">
+                      {attachments.map((att, i) => (
+                        <img key={i} src={att.data} alt={att.filename} className="w-8 h-8 rounded object-cover border border-neutral-200" />
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="px-4 py-2.5 flex items-center justify-between">
                   <span className="text-xs text-neutral-500">Page</span>
                   <span className="text-xs text-neutral-600 font-mono">{typeof window !== "undefined" ? window.location.pathname : ""}</span>
