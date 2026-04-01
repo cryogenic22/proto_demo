@@ -523,11 +523,9 @@ class PipelineOrchestrator:
                 logger.warning(f"Grid anchor post-validation failed: {e}")
 
         # Stage 10b: Propagate marks from spanning parent headers
-        reconciliation_cells = self._propagate_spanning_header_marks(
+        reconciliation.cells = self._propagate_spanning_header_marks(
             reconciliation.cells, schema
         )
-        # Update reconciliation with propagated cells
-        reconciliation = reconciliation.model_copy(update={"cells": reconciliation_cells})
 
         # Compute overall confidence
         if reconciliation.cells:
