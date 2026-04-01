@@ -106,3 +106,18 @@ class TestConsensusVoting:
         # Should prefer "X\u2074" as most informative (longest)
         assert result.cells[0].raw_value == "X\u2074"
         assert result.cells[0].confidence >= 0.85
+
+    def test_vlm_marker_normalization_in_consensus(self):
+        """Pass1='X^{a}', Pass2='X' -> same base marker after stripping ^{} markers."""
+        pass1 = [_cell(0, 1, "X^{a}")]
+        pass2 = [_cell(0, 1, "X")]
+        result = self.reconciler.reconcile(pass1, pass2)
+        # Both normalize to "x" -> agreement
+        assert result.cells[0].confidence >= 0.85
+
+    def test_vlm_subscript_marker_normalization(self):
+        """Pass1='CO_{2}', Pass2='CO2' -> same base after stripping _{} markers."""
+        pass1 = [_cell(0, 1, "CO_{2}")]
+        pass2 = [_cell(0, 1, "CO2")]
+        result = self.reconciler.reconcile(pass1, pass2)
+        assert result.cells[0].confidence >= 0.85

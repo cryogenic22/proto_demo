@@ -44,6 +44,9 @@ def _normalize_for_vote(value: str) -> str:
     """
     import re
     v = value.strip()
+    # Strip VLM-generated superscript/subscript markers: ^{...} and _{...}
+    v = re.sub(r'\^\{[^}]+\}', '', v)
+    v = re.sub(r'_\{[^}]+\}', '', v)
     # Strip trailing superscript Unicode characters
     v = re.sub(r'[\u00b2\u00b3\u2074\u2075\u2076\u2077\u2078\u2079\u00b9\u2070]+$', '', v)
     # Strip trailing footnote letter markers (a-f) when preceded by a

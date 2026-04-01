@@ -39,6 +39,7 @@ from src.pipeline.procedure_normalizer import ProcedureNormalizer
 from src.pipeline.protocol_synopsis import ProtocolSynopsisExtractor
 from src.pipeline.reconciler import Reconciler
 from src.pipeline.structural_analyzer import StructuralAnalyzer
+from src.pipeline.section_parser import SectionParser
 from src.pipeline.table_detection import TableDetector
 from src.pipeline.table_stitcher import TableStitcher
 from src.pipeline.temporal_extractor import TemporalExtractor
@@ -69,6 +70,7 @@ class PipelineOrchestrator:
         self.ocr_verifier = OCRGroundingVerifier(config)
         self.validator = OutputValidator()
         self.synopsis_extractor = ProtocolSynopsisExtractor(config, self.llm)
+        self.section_parser = SectionParser()
         self.protocol_synopsis = None
         self.domain_classifier = ClinicalDomainClassifier()
         self.detected_domain: TherapeuticDomain = TherapeuticDomain.GENERAL
@@ -164,6 +166,7 @@ class PipelineOrchestrator:
         _progress(35, f"Stitching {len(regions)} table regions...")
         logger.info("Stage 3: Table Stitching")
         try:
+            self.stitcher._pdf_bytes = pdf_bytes
             regions = self.stitcher.stitch(regions)
         except Exception as e:
             logger.error(f"Table stitching failed: {e}")
