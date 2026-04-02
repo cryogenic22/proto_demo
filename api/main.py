@@ -2578,6 +2578,78 @@ async def detect_formulas(file: UploadFile = File(...)):
     }
 
 
+@app.post("/api/fidelity/generate-contract")
+async def generate_site_contract(
+    template: UploadFile = File(...),
+    protocol_id: str | None = None,
+):
+    """Generate a site contract from a CTSA template + stored protocol data.
+
+    Upload a CTSA template PDF. If protocol_id is provided, fills with
+    that protocol's extracted data. Returns HTML preview + DOCX download.
+    """
+    from src.formatter.site_contract_generator import SiteContractGenerator
+
+    template_bytes = await template.read()
+
+    # Load protocol data
+    protocol_data: dict[str, Any] = {}
+    if protocol_id:
+        store = create_ke_store()
+        protocol = store.load_protocol(protocol_id)
+        if protocol:
+            protocol_data = (
+                protocol.model_dump(mode="json")
+                if hasattr(protocol, "model_dump")
+                else protocol
+            )
+
+    generator = SiteContractGenerator()
+    result = generator.generate(template_bytes, protocol_data)
+
+    return {
+        "html": result["html"],
+        "fill_report": result["fill_report"],
+        "template_pages": result["template_pages"],
+        "template_paragraphs": result["template_paragraphs"],
+    }
+
+
+@app.post("/api/fidelity/generate-contract-docx")
+async def generate_site_contract_docx(
+    template: UploadFile = File(...),
+    protocol_id: str | None = None,
+):
+    """Generate a site contract DOCX from a CTSA template + protocol data."""
+    from src.formatter.site_contract_generator import SiteContractGenerator
+    from fastapi.responses import Response
+
+    template_bytes = await template.read()
+
+    protocol_data: dict[str, Any] = {}
+    if protocol_id:
+        store = create_ke_store()
+        protocol = store.load_protocol(protocol_id)
+        if protocol:
+            protocol_data = (
+                protocol.model_dump(mode="json")
+                if hasattr(protocol, "model_dump")
+                else protocol
+            )
+
+    generator = SiteContractGenerator()
+    result = generator.generate(template_bytes, protocol_data)
+
+    return Response(
+        content=result["docx_bytes"],
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={
+            "Content-Disposition": 'attachment; filename="site_contract.docx"',
+            "Access-Control-Allow-Origin": "*",
+        },
+    )
+
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
