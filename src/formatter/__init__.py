@@ -15,6 +15,7 @@ from src.formatter.render.pdf_renderer import PDFRenderer
 from src.formatter.render.pptx_renderer import PPTXRenderer
 from src.formatter.ingest.pptx_ingestor import PPTXIngestor
 from src.formatter.ingest.excel_ingestor import ExcelIngestor
+from src.formatter.ingest.docx_ingestor import DOCXIngestor
 
 
 class DocHandler:
@@ -31,6 +32,7 @@ class DocHandler:
     def __init__(self):
         self._ingestors = {
             "pdf": FormattingExtractor(),
+            "docx": DOCXIngestor(),
             "html": HTMLIngestor(),
             "markdown": MarkdownIngestor(),
             "text": TextIngestor(),
