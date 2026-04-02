@@ -242,13 +242,36 @@ export default function FidelityCheckerPage() {
               <label className="block text-sm font-medium text-neutral-700 mb-1.5">Upload PDF to check</label>
               <input ref={fileRef} type="file" accept=".pdf" className="text-sm" />
             </div>
-            <button
-              onClick={handleCheck}
-              disabled={loading}
-              className="px-6 py-2.5 rounded-lg bg-brand-primary text-white text-sm font-medium hover:bg-brand-french disabled:opacity-50 transition-colors"
-            >
-              {loading ? "Analyzing..." : "Check Fidelity"}
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={handleCheck}
+                disabled={loading}
+                className="px-6 py-2.5 rounded-lg bg-brand-primary text-white text-sm font-medium hover:bg-brand-french disabled:opacity-50 transition-colors"
+              >
+                {loading ? "Analyzing..." : "Check Fidelity"}
+              </button>
+              <button
+                onClick={() => {
+                  const file = fileRef.current?.files?.[0];
+                  if (!file) return;
+                  const formData = new FormData();
+                  formData.append("file", file);
+                  fetch(`${API_BASE}/api/fidelity/export-docx`, { method: "POST", body: formData })
+                    .then(r => r.blob())
+                    .then(blob => {
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = file.name.replace(".pdf", ".docx");
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    });
+                }}
+                className="px-6 py-2.5 rounded-lg border border-neutral-300 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors"
+              >
+                Export as DOCX
+              </button>
+            </div>
           </div>
         ) : mode === "compare" ? (
           <div className="space-y-4">
@@ -292,13 +315,38 @@ export default function FidelityCheckerPage() {
                 </div>
               </div>
             </div>
-            <button
-              onClick={handleGenerate}
-              disabled={loading}
-              className="px-6 py-2.5 rounded-lg bg-brand-primary text-white text-sm font-medium hover:bg-brand-french disabled:opacity-50 transition-colors"
-            >
-              {loading ? "Generating..." : "Generate Document"}
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={handleGenerate}
+                disabled={loading}
+                className="px-6 py-2.5 rounded-lg bg-brand-primary text-white text-sm font-medium hover:bg-brand-french disabled:opacity-50 transition-colors"
+              >
+                {loading ? "Generating..." : "Generate Document"}
+              </button>
+              <button
+                onClick={() => {
+                  const template = genTemplateRef.current?.files?.[0];
+                  const source = genSourceRef.current?.files?.[0];
+                  if (!template || !source) return;
+                  const formData = new FormData();
+                  formData.append("template", template);
+                  formData.append("source", source);
+                  fetch(`${API_BASE}/api/fidelity/export-docx-from-template`, { method: "POST", body: formData })
+                    .then(r => r.blob())
+                    .then(blob => {
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = (source.name || "document").replace(".pdf", "_formatted.docx");
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    });
+                }}
+                className="px-6 py-2.5 rounded-lg border border-neutral-300 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors"
+              >
+                Export as DOCX
+              </button>
+            </div>
           </div>
         )}
       </div>

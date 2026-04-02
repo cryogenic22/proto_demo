@@ -2477,6 +2477,107 @@ async def template_generate(
     }
 
 
+@app.post("/api/fidelity/export-docx")
+async def export_docx(file: UploadFile = File(...)):
+    """Convert a PDF to a formatting-preserved DOCX document.
+
+    Extracts all formatting (fonts, sizes, colors, bold/italic,
+    super/subscript) from the PDF and renders to a Word document.
+    """
+    from src.formatter.docx_renderer import DOCXRenderer
+    from fastapi.responses import Response
+
+    pdf_bytes = await file.read()
+    renderer = DOCXRenderer()
+    docx_bytes = renderer.render_from_pdf(pdf_bytes, filename=file.filename or "")
+
+    output_name = (file.filename or "document").replace(".pdf", ".docx")
+    return Response(
+        content=docx_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={
+            "Content-Disposition": f'attachment; filename="{output_name}"',
+            "Access-Control-Allow-Origin": "*",
+        },
+    )
+
+
+@app.post("/api/fidelity/export-docx-from-template")
+async def export_docx_from_template(
+    template: UploadFile = File(...),
+    source: UploadFile = File(...),
+):
+    """Generate a DOCX by applying template formatting to source content.
+
+    Takes a blueprint template PDF (formatting source) and a source PDF
+    (content source), produces a DOCX with template formatting applied.
+    """
+    from src.formatter.docx_renderer import DOCXRenderer
+    from src.formatter.template_generator import TemplateConformer
+    from fastapi.responses import Response
+
+    template_bytes = await template.read()
+    source_bytes = await source.read()
+
+    conformer = TemplateConformer()
+    profile = conformer.extract_style_profile(template_bytes)
+    source_doc = conformer.extractor.extract(source_bytes)
+
+    renderer = DOCXRenderer()
+    docx_bytes = renderer.render_with_profile(source_doc, profile.to_dict())
+
+    output_name = (source.filename or "document").replace(".pdf", "_formatted.docx")
+    return Response(
+        content=docx_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={
+            "Content-Disposition": f'attachment; filename="{output_name}"',
+            "Access-Control-Allow-Origin": "*",
+        },
+    )
+
+
+@app.post("/api/fidelity/detect-formulas")
+async def detect_formulas(file: UploadFile = File(...)):
+    """Detect chemical, statistical, dosing, and PK formulas in a PDF.
+
+    Returns all formulas found with their type, original text,
+    and HTML-annotated version with proper sub/superscript tags.
+    """
+    from src.formatter.formula_detector import FormulaDetector
+    from src.formatter.extractor import FormattingExtractor
+
+    pdf_bytes = await file.read()
+    extractor = FormattingExtractor()
+    doc = extractor.extract(pdf_bytes, filename=file.filename or "")
+
+    detector = FormulaDetector()
+    all_formulas = []
+    formula_counts: dict[str, int] = {}
+
+    for page in doc.pages:
+        for para_idx, para in enumerate(page.paragraphs):
+            text = para.text
+            formulas = detector.detect(text)
+            for f in formulas:
+                all_formulas.append({
+                    "page": page.page_number + 1,
+                    "paragraph": para_idx + 1,
+                    "type": f.formula_type,
+                    "original": f.original_text,
+                    "html": f.html_text,
+                    "confidence": f.confidence,
+                })
+                formula_counts[f.formula_type] = formula_counts.get(f.formula_type, 0) + 1
+
+    return {
+        "document_name": file.filename,
+        "total_formulas": len(all_formulas),
+        "by_type": formula_counts,
+        "formulas": all_formulas,
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
