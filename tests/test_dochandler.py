@@ -426,12 +426,12 @@ class TestDocHandler:
 
     def test_unsupported_input_format(self):
         with pytest.raises(ValueError, match="Unsupported input"):
-            self.handler.ingest("content", "xlsx")
+            self.handler.ingest("content", "rtf")
 
     def test_unsupported_output_format(self):
         doc = _make_doc()
         with pytest.raises(ValueError, match="Unsupported output"):
-            self.handler.render(doc, "pdf")
+            self.handler.render(doc, "epub")
 
     def test_round_trip_html(self):
         """HTML -> IR -> HTML should preserve content."""

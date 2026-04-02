@@ -11,6 +11,10 @@ from src.formatter.render.html_renderer import HTMLRenderer
 from src.formatter.render.markdown_renderer import MarkdownRenderer
 from src.formatter.render.text_renderer import TextRenderer
 from src.formatter.render.json_renderer import JSONRenderer
+from src.formatter.render.pdf_renderer import PDFRenderer
+from src.formatter.render.pptx_renderer import PPTXRenderer
+from src.formatter.ingest.pptx_ingestor import PPTXIngestor
+from src.formatter.ingest.excel_ingestor import ExcelIngestor
 
 
 class DocHandler:
@@ -30,6 +34,8 @@ class DocHandler:
             "html": HTMLIngestor(),
             "markdown": MarkdownIngestor(),
             "text": TextIngestor(),
+            "pptx": PPTXIngestor(),
+            "xlsx": ExcelIngestor(),
         }
         self._renderers = {
             "docx": DOCXRenderer(),
@@ -37,6 +43,8 @@ class DocHandler:
             "markdown": MarkdownRenderer(),
             "text": TextRenderer(),
             "json": JSONRenderer(),
+            "pdf": PDFRenderer(),
+            "pptx": PPTXRenderer(),
         }
 
     def ingest(self, content, format: str, filename: str = "") -> FormattedDocument:
@@ -58,6 +66,8 @@ class DocHandler:
             raise ValueError(f"Unsupported input format: {format}")
         if format == "pdf":
             return ingestor.extract(content, filename)
+        if format in ("pptx", "xlsx"):
+            return ingestor.ingest(content, filename)
         return ingestor.ingest(content, filename)
 
     def render(self, doc: FormattedDocument, format: str):
