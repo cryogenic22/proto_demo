@@ -86,6 +86,11 @@ class _HTMLWalker(HTMLParser):
         self._current_alignment: str = "left"
         self._current_indent: int = 0
 
+        # CSS style inheritance stack — tracks elements that carry a
+        # ``style`` attribute so children inherit formatting.  Each entry
+        # is the tag name pushed; we pop on the matching end-tag.
+        self._style_stack: list[str] = []
+
         # List context
         self._list_stack: list[str] = []  # "ul" or "ol"
 
@@ -160,10 +165,11 @@ class _HTMLWalker(HTMLParser):
             self._push_fmt(bold=True)
             return
 
-        # Paragraph / div
+        # Paragraph / div — apply both block and inheritable inline styles
         if tag in ("p", "div"):
             style_attr = attr_dict.get("style", "")
             self._apply_block_style(style_attr)
+            self._push_inherited_style(tag, style_attr)
             return
 
         # Lists
@@ -276,6 +282,11 @@ class _HTMLWalker(HTMLParser):
             self._cell_rowspan = rowspan
             return
 
+        # Generic elements with style attributes — inherit CSS to children
+        style_attr = attr_dict.get("style", "")
+        if style_attr:
+            self._push_inherited_style(tag, style_attr)
+
     def handle_endtag(self, tag: str) -> None:
         tag = tag.lower()
 
@@ -292,8 +303,9 @@ class _HTMLWalker(HTMLParser):
             self._flush_paragraph()
             return
 
-        # Paragraph / div
+        # Paragraph / div — pop inherited CSS styles
         if tag in ("p", "div"):
+            self._pop_inherited_style(tag)
             self._flush_paragraph()
             return
 
@@ -353,6 +365,9 @@ class _HTMLWalker(HTMLParser):
             self._table_rows = []
             return
 
+        # Generic elements — pop inherited CSS styles
+        self._pop_inherited_style(tag)
+
     def handle_data(self, data: str) -> None:
         if self._ignore_depth:
             return
@@ -384,6 +399,26 @@ class _HTMLWalker(HTMLParser):
             subscript=fmt.subscript,
         )
         self._current_spans.append(span)
+
+    # -- CSS inheritance helpers --------------------------------------------
+
+    def _push_inherited_style(self, tag: str, style_attr: str) -> None:
+        """If *style_attr* contains inheritable CSS formatting, push to the
+        format stack and record the tag so we can pop on the matching end-tag.
+        """
+        if not style_attr:
+            return
+        overrides = self._parse_inline_style(style_attr)
+        if not overrides:
+            return
+        self._push_fmt(**overrides)
+        self._style_stack.append(tag)
+
+    def _pop_inherited_style(self, tag: str) -> None:
+        """Pop the format state pushed by *_push_inherited_style* for *tag*."""
+        if self._style_stack and self._style_stack[-1] == tag:
+            self._style_stack.pop()
+            self._pop_fmt()
 
     # -- style parsing helpers ---------------------------------------------
 

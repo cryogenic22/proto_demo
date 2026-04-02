@@ -483,8 +483,18 @@ class FormattingExtractor:
                 if abs(center_of_para - center_of_content) < 20 and avg_width < content_width * 0.8:
                     para.alignment = "center"
 
+    # Heuristic for detecting tabular content inside a single cell.
+    # Matches lines that have 2+ columns separated by 2+ spaces or tab chars.
+    _TABULAR_LINE_RE = re.compile(r"\S.*(?:\t|  {2,})\S")
+
     def _extract_tables(self, page: Any) -> list[FormattedTable]:
-        """Extract tables from a PDF page using PyMuPDF's find_tables()."""
+        """Extract tables from a PDF page using PyMuPDF's find_tables().
+
+        Also detects cells that contain nested/sub-table content (multiple
+        aligned columns of data).  PyMuPDF flattens nested tables, so the
+        inner content is preserved as text with a ``[nested table]`` marker
+        prepended to flag downstream consumers.
+        """
         tables: list[FormattedTable] = []
         try:
             found = page.find_tables()
@@ -507,6 +517,19 @@ class FormattingExtractor:
                         is_header = r_idx == 0
                         # Detect bold in header rows
                         is_bold = is_header
+
+                        # --- Nested table detection -----------------------
+                        # If the cell text looks like it contains structured
+                        # tabular data (multiple lines with aligned columns),
+                        # flag it so downstream consumers can handle it.
+                        if text and self._cell_looks_tabular(text):
+                            text = f"[nested table] {text}"
+                            logger.debug(
+                                "Nested table content detected in cell "
+                                "(%d, %d): %s...",
+                                r_idx, c_idx, text[:80],
+                            )
+
                         fmt_row.append(FormattedTableCell(
                             text=text,
                             row=r_idx,
@@ -527,6 +550,22 @@ class FormattingExtractor:
             logger.debug(f"Table extraction failed on page: {e}")
 
         return tables
+
+    def _cell_looks_tabular(self, text: str) -> bool:
+        """Return True if *text* contains content that looks like a nested table.
+
+        Heuristic: the cell has 3+ lines and at least half of them contain
+        two or more whitespace-separated columns (tab or 2+ consecutive
+        spaces between non-whitespace segments).
+        """
+        lines = [ln for ln in text.split("\n") if ln.strip()]
+        if len(lines) < 3:
+            return False
+
+        tabular_lines = sum(
+            1 for ln in lines if self._TABULAR_LINE_RE.search(ln)
+        )
+        return tabular_lines >= len(lines) * 0.5
 
     def _extract_images(self, page: Any, fmt_page: FormattedPage) -> None:
         """Extract images from a PDF page and store metadata."""
