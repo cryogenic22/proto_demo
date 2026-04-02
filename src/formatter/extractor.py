@@ -100,12 +100,38 @@ class FormattedParagraph:
 
 
 @dataclass
+class FormattedTableCell:
+    """A cell in a formatted table."""
+    text: str = ""
+    row: int = 0
+    col: int = 0
+    rowspan: int = 1
+    colspan: int = 1
+    bold: bool = False
+    is_header: bool = False
+
+
+@dataclass
+class FormattedTable:
+    """A table extracted from the document."""
+    rows: list[list[FormattedTableCell]] = field(default_factory=list)
+    num_rows: int = 0
+    num_cols: int = 0
+    y_position: float = 0.0  # Y coordinate on page for ordering with paragraphs
+
+    @property
+    def is_empty(self) -> bool:
+        return self.num_rows == 0
+
+
+@dataclass
 class FormattedPage:
-    """A page with paragraphs and layout info."""
+    """A page with paragraphs, tables, and layout info."""
     page_number: int
     width: float
     height: float
     paragraphs: list[FormattedParagraph] = field(default_factory=list)
+    tables: list[FormattedTable] = field(default_factory=list)
     margin_left: float = 72.0
     margin_right: float = 72.0
     margin_top: float = 72.0
@@ -168,6 +194,12 @@ class FormattingExtractor:
 
             # Group lines into paragraphs
             fmt_page.paragraphs = self._group_paragraphs(lines, fmt_page)
+
+            # Extract tables
+            fmt_page.tables = self._extract_tables(page)
+
+            # Extract images
+            self._extract_images(page, fmt_page)
 
             pages.append(fmt_page)
 
@@ -393,3 +425,83 @@ class FormattingExtractor:
 
                 if abs(center_of_para - center_of_content) < 20 and avg_width < content_width * 0.8:
                     para.alignment = "center"
+
+    def _extract_tables(self, page: Any) -> list[FormattedTable]:
+        """Extract tables from a PDF page using PyMuPDF's find_tables()."""
+        tables: list[FormattedTable] = []
+        try:
+            found = page.find_tables()
+            if not found.tables:
+                return []
+
+            for tab in found.tables:
+                extracted = tab.extract()
+                if not extracted or len(extracted) < 1:
+                    continue
+
+                num_rows = len(extracted)
+                num_cols = len(extracted[0]) if extracted[0] else 0
+
+                fmt_rows: list[list[FormattedTableCell]] = []
+                for r_idx, row in enumerate(extracted):
+                    fmt_row: list[FormattedTableCell] = []
+                    for c_idx, cell_val in enumerate(row):
+                        text = str(cell_val).strip() if cell_val else ""
+                        is_header = r_idx == 0
+                        # Detect bold in header rows
+                        is_bold = is_header
+                        fmt_row.append(FormattedTableCell(
+                            text=text,
+                            row=r_idx,
+                            col=c_idx,
+                            bold=is_bold,
+                            is_header=is_header,
+                        ))
+                    fmt_rows.append(fmt_row)
+
+                tables.append(FormattedTable(
+                    rows=fmt_rows,
+                    num_rows=num_rows,
+                    num_cols=num_cols,
+                    y_position=tab.bbox[1] if hasattr(tab, 'bbox') else 0.0,
+                ))
+
+        except Exception as e:
+            logger.debug(f"Table extraction failed on page: {e}")
+
+        return tables
+
+    def _extract_images(self, page: Any, fmt_page: FormattedPage) -> None:
+        """Extract images from a PDF page and store metadata."""
+        try:
+            image_list = page.get_images(full=True)
+            for img_idx, img_info in enumerate(image_list):
+                xref = img_info[0]
+                try:
+                    base_image = page.parent.extract_image(xref)
+                    if base_image and base_image.get("image"):
+                        # Store as a paragraph with image marker
+                        # (actual image embedding handled by renderer)
+                        img_data = base_image["image"]
+                        img_ext = base_image.get("ext", "png")
+                        width = base_image.get("width", 0)
+                        height = base_image.get("height", 0)
+
+                        import base64
+                        b64 = base64.b64encode(img_data).decode("ascii")
+                        data_uri = f"data:image/{img_ext};base64,{b64}"
+
+                        # Create a paragraph with the image data
+                        img_para = FormattedParagraph(
+                            style="image",
+                            lines=[FormattedLine(spans=[FormattedSpan(
+                                text=data_uri,
+                                x0=0, y0=0, x1=float(width), y1=float(height),
+                                font="", size=0,
+                            )])],
+                        )
+                        fmt_page.paragraphs.append(img_para)
+                except Exception:
+                    continue
+        except Exception as e:
+            logger.debug(f"Image extraction failed: {e}")

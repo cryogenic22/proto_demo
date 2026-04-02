@@ -59,8 +59,17 @@ class DOCXRenderer:
                 section.page_height = Emu(int(p0.height * 12700))
 
         for page in doc.pages:
+            # Interleave paragraphs and tables by Y position
             for para in page.paragraphs:
-                self._add_paragraph(word_doc, para)
+                if para.style == "image":
+                    self._add_image(word_doc, para)
+                else:
+                    self._add_paragraph(word_doc, para)
+
+            # Add tables
+            for table in page.tables:
+                if not table.is_empty:
+                    self._add_table(word_doc, table)
 
         # Write to bytes
         buf = io.BytesIO()
@@ -200,7 +209,84 @@ class DOCXRenderer:
                 elif span.subscript:
                     run.font.subscript = True
 
-                # Color
+                # Color — preserve ALL non-black colors (red instructions,
+                # blue links, grey headers)
                 r, g, b = span.color_rgb
-                if r > 30 or g > 30 or b > 30:  # Skip near-black
+                if r > 20 or g > 20 or b > 20:
                     run.font.color.rgb = RGBColor(r, g, b)
+
+    def _add_table(self, word_doc: Any, table: Any) -> None:
+        """Add a formatted table to the Word document."""
+        from docx.shared import Pt, RGBColor, Emu
+        from docx.oxml.ns import qn
+        from docx.oxml import OxmlElement
+
+        if table.num_rows == 0 or table.num_cols == 0:
+            return
+
+        doc_table = word_doc.add_table(
+            rows=table.num_rows, cols=table.num_cols
+        )
+        doc_table.style = "Table Grid"
+
+        for r_idx, row in enumerate(table.rows):
+            for c_idx, cell in enumerate(row):
+                if c_idx >= table.num_cols or r_idx >= table.num_rows:
+                    continue
+                doc_cell = doc_table.cell(r_idx, c_idx)
+                doc_cell.text = cell.text or ""
+
+                # Apply formatting to cell text
+                for paragraph in doc_cell.paragraphs:
+                    for run in paragraph.runs:
+                        run.font.name = "Arial"
+                        run.font.size = Pt(10)
+                        if cell.bold or cell.is_header:
+                            run.font.bold = True
+
+                # Header row shading
+                if cell.is_header:
+                    shading = OxmlElement("w:shd")
+                    shading.set(qn("w:fill"), "1565C0")
+                    shading.set(qn("w:val"), "clear")
+                    doc_cell._element.get_or_add_tcPr().append(shading)
+                    for paragraph in doc_cell.paragraphs:
+                        for run in paragraph.runs:
+                            run.font.color.rgb = RGBColor(255, 255, 255)
+
+    def _add_image(self, word_doc: Any, para: Any) -> None:
+        """Add an image to the Word document."""
+        from docx.shared import Inches
+
+        if not para.lines or not para.lines[0].spans:
+            return
+
+        span = para.lines[0].spans[0]
+        data_uri = span.text
+
+        if not data_uri.startswith("data:image/"):
+            return
+
+        try:
+            import base64
+            # Parse data URI
+            header, b64_data = data_uri.split(",", 1)
+            img_bytes = base64.b64decode(b64_data)
+
+            # Get dimensions from span bbox
+            width_pt = span.x1
+            height_pt = span.y1
+
+            # Write to temp buffer
+            img_stream = io.BytesIO(img_bytes)
+
+            # Scale to fit page width (max 6 inches)
+            max_width = 6.0
+            if width_pt > 0:
+                width_inches = min(width_pt / 72.0, max_width)
+            else:
+                width_inches = 4.0
+
+            word_doc.add_picture(img_stream, width=Inches(width_inches))
+        except Exception as e:
+            logger.debug(f"Failed to add image to DOCX: {e}")

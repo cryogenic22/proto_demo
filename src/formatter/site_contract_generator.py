@@ -97,8 +97,12 @@ class SiteContractGenerator:
         # Generate filled HTML with template formatting
         html = self._render_filled_html(template_doc, fill_values)
 
-        # Generate filled DOCX
-        docx_bytes = self._render_filled_docx(template_doc, fill_values)
+        # Generate filled DOCX — use DOCXRenderer for full formatting preservation,
+        # then substitute placeholders in the rendered document
+        from src.formatter.docx_renderer import DOCXRenderer
+        renderer = DOCXRenderer()
+        base_docx = renderer.render(template_doc)
+        docx_bytes = self._substitute_placeholders_in_docx(base_docx, fill_values)
 
         # Build fill report
         fill_report = self._build_fill_report(template_doc, fill_values)
@@ -427,7 +431,108 @@ of the Trial Drug (<span class="filled">{fill_values['trial_drug']}</span>).</p>
             result = re.sub(pattern, replacement, result, flags=re.IGNORECASE)
         return result
 
-    def _render_filled_docx(
+    def _substitute_placeholders_in_docx(
+        self,
+        docx_bytes: bytes,
+        fill_values: dict[str, Any],
+    ) -> bytes:
+        """Substitute placeholders in a rendered DOCX while preserving formatting.
+
+        This approach preserves ALL original formatting (bold, italic, colors,
+        tables, indents) because we only modify text content, not structure.
+        """
+        import io as _io
+        from docx import Document
+
+        doc = Document(_io.BytesIO(docx_bytes))
+
+        # Build substitution map
+        subs = [
+            ("ANIMATE", fill_values.get("protocol_number", "ANIMATE")),
+            ("nivolumab", fill_values.get("trial_drug", "nivolumab")),
+        ]
+
+        # Substitute in all paragraphs
+        for para in doc.paragraphs:
+            for old_text, new_text in subs:
+                if old_text in para.text:
+                    for run in para.runs:
+                        if old_text in run.text:
+                            run.text = run.text.replace(old_text, new_text)
+
+        # Substitute in table cells
+        for table in doc.tables:
+            for row in table.rows:
+                for cell in row.cells:
+                    for para in cell.paragraphs:
+                        for old_text, new_text in subs:
+                            if old_text in para.text:
+                                for run in para.runs:
+                                    if old_text in run.text:
+                                        run.text = run.text.replace(old_text, new_text)
+
+        # Append protocol summary as new content at the end
+        self._append_protocol_summary(doc, fill_values)
+
+        buf = _io.BytesIO()
+        doc.save(buf)
+        return buf.getvalue()
+
+    def _append_protocol_summary(self, doc: Any, fill_values: dict[str, Any]) -> None:
+        """Append protocol-specific summary tables to the DOCX."""
+        from docx.shared import Pt, RGBColor
+        from docx.oxml.ns import qn
+        from docx.oxml import OxmlElement
+
+        doc.add_page_break()
+        h = doc.add_heading("Protocol Summary (Auto-Generated from Extraction)", level=1)
+        for run in h.runs:
+            run.font.name = "Arial"
+
+        # Metadata table
+        meta_fields = [
+            ("Protocol Number", fill_values.get("protocol_number", "")),
+            ("Protocol Title", str(fill_values.get("trial_title", ""))[:150]),
+            ("Sponsor", fill_values.get("sponsor_name", "")),
+            ("Phase", fill_values.get("phase", "")),
+            ("Therapeutic Area", fill_values.get("therapeutic_area", "")),
+            ("Indication", fill_values.get("indication", "")),
+            ("Trial Drug", fill_values.get("trial_drug", "")),
+            ("Total Procedures", fill_values.get("num_procedures", "0")),
+            ("Total Visits", fill_values.get("num_visits", "0")),
+        ]
+        table = doc.add_table(rows=len(meta_fields), cols=2)
+        table.style = "Table Grid"
+        for i, (label, value) in enumerate(meta_fields):
+            table.cell(i, 0).text = label
+            table.cell(i, 1).text = str(value)
+            for run in table.cell(i, 0).paragraphs[0].runs:
+                run.font.bold = True
+                run.font.name = "Arial"
+                run.font.size = Pt(10)
+            for run in table.cell(i, 1).paragraphs[0].runs:
+                run.font.name = "Arial"
+                run.font.size = Pt(10)
+
+        # Procedures table
+        procedures = fill_values.get("procedures_list", [])
+        if procedures:
+            doc.add_paragraph()
+            doc.add_heading("Schedule of Procedures", level=2)
+            ptable = doc.add_table(rows=len(procedures) + 1, cols=3)
+            ptable.style = "Table Grid"
+            for j, h in enumerate(["#", "Procedure", "CPT Code"]):
+                ptable.cell(0, j).text = h
+                for run in ptable.cell(0, j).paragraphs[0].runs:
+                    run.font.bold = True
+                    run.font.name = "Arial"
+                    run.font.size = Pt(10)
+            for i, proc in enumerate(procedures, 1):
+                ptable.cell(i, 0).text = str(i)
+                ptable.cell(i, 1).text = proc.get("name", "")
+                ptable.cell(i, 2).text = proc.get("cpt") or ""
+
+    def _render_filled_docx_legacy(
         self,
         template_doc: FormattedDocument,
         fill_values: dict[str, Any],
