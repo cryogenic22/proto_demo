@@ -2279,6 +2279,170 @@ async def update_feedback_status(entry_id: str, update: FeedbackStatusUpdate):
     return result
 
 
+# ---------------------------------------------------------------------------
+# Document Fidelity Checker endpoints
+# ---------------------------------------------------------------------------
+
+@app.post("/api/fidelity/check")
+async def fidelity_check(file: UploadFile = File(...)):
+    """Check a PDF document for formatting fidelity issues.
+
+    Detects run-on words, spacing problems, font inconsistencies,
+    alignment issues, and color anomalies.
+    """
+    from src.formatter.fidelity_checker import DocumentFidelityChecker
+
+    pdf_bytes = await file.read()
+    checker = DocumentFidelityChecker()
+    report = checker.check(pdf_bytes, filename=file.filename or "")
+
+    return {
+        "document_name": report.document_name,
+        "score": round(report.score, 1),
+        "total_issues": report.total_issues,
+        "critical": report.critical_count,
+        "high": report.high_count,
+        "medium": report.medium_count,
+        "low": report.low_count,
+        "issues": [
+            {
+                "category": i.category,
+                "severity": i.severity,
+                "page": i.page,
+                "location": i.location,
+                "description": i.description,
+                "original_text": i.original_text,
+                "suggested_fix": i.suggested_fix,
+                "auto_fixable": i.auto_fixable,
+            }
+            for i in report.issues
+        ],
+        "formatting_summary": report.formatting_summary,
+    }
+
+
+@app.post("/api/fidelity/compare")
+async def fidelity_compare(
+    template: UploadFile = File(...),
+    generated: UploadFile = File(...),
+):
+    """Compare a generated document against a template for formatting conformance.
+
+    Upload two PDFs: the blueprint/template and the generated document.
+    Returns a fidelity report showing where the generated doc deviates.
+    """
+    from src.formatter.fidelity_checker import DocumentFidelityChecker
+
+    template_bytes = await template.read()
+    generated_bytes = await generated.read()
+
+    checker = DocumentFidelityChecker()
+    report = checker.compare(
+        template_bytes, generated_bytes,
+        template_name=template.filename or "template",
+        generated_name=generated.filename or "generated",
+    )
+
+    return {
+        "template_name": template.filename,
+        "generated_name": generated.filename,
+        "score": round(report.score, 1),
+        "total_issues": report.total_issues,
+        "critical": report.critical_count,
+        "high": report.high_count,
+        "medium": report.medium_count,
+        "low": report.low_count,
+        "issues": [
+            {
+                "category": i.category,
+                "severity": i.severity,
+                "page": i.page,
+                "location": i.location,
+                "description": i.description,
+                "original_text": i.original_text,
+                "suggested_fix": i.suggested_fix,
+                "auto_fixable": i.auto_fixable,
+            }
+            for i in report.issues
+        ],
+        "formatting_summary": report.formatting_summary,
+    }
+
+
+@app.post("/api/fidelity/extract-formatted")
+async def extract_formatted(file: UploadFile = File(...)):
+    """Extract a PDF with full formatting preserved.
+
+    Returns the document as styled HTML (suitable for CKEditor or preview)
+    along with formatting metadata (fonts, colors, styles used).
+    """
+    from src.formatter.extractor import FormattingExtractor
+
+    pdf_bytes = await file.read()
+    extractor = FormattingExtractor()
+    doc = extractor.extract(pdf_bytes, filename=file.filename or "")
+
+    # Render to HTML with inline styles
+    html_parts = []
+    for page in doc.pages:
+        html_parts.append(f'<div class="page" data-page="{page.page_number + 1}">')
+        for para in page.paragraphs:
+            tag = "p"
+            if para.style.startswith("heading"):
+                level = para.style[-1] if para.style[-1].isdigit() else "3"
+                tag = f"h{level}"
+            elif para.style == "list_bullet":
+                tag = "li"
+            elif para.style == "list_number":
+                tag = "li"
+
+            # Build inline HTML from spans
+            spans_html = []
+            for line in para.lines:
+                for span in line.spans:
+                    text = span.text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                    styles = []
+                    if span.font:
+                        styles.append(f"font-family:'{span.font_family}'")
+                    if span.size:
+                        styles.append(f"font-size:{span.size:.1f}pt")
+                    r, g, b = span.color_rgb
+                    if r > 30 or g > 30 or b > 30:
+                        styles.append(f"color:rgb({r},{g},{b})")
+                    if span.bold:
+                        text = f"<strong>{text}</strong>"
+                    if span.italic:
+                        text = f"<em>{text}</em>"
+                    if span.underline:
+                        text = f"<u>{text}</u>"
+                    if span.superscript:
+                        text = f"<sup>{text}</sup>"
+                    if span.subscript:
+                        text = f"<sub>{text}</sub>"
+
+                    if styles:
+                        text = f'<span style="{";".join(styles)}">{text}</span>'
+                    spans_html.append(text)
+
+            content = "".join(spans_html)
+            indent_style = f"margin-left:{para.indent_level * 24}px;" if para.indent_level else ""
+            align_style = f"text-align:{para.alignment};" if para.alignment != "left" else ""
+            style_attr = f' style="{indent_style}{align_style}"' if indent_style or align_style else ""
+
+            html_parts.append(f"<{tag}{style_attr}>{content}</{tag}>")
+        html_parts.append("</div>")
+
+    return {
+        "document_name": file.filename,
+        "html": "\n".join(html_parts),
+        "total_pages": len(doc.pages),
+        "total_paragraphs": doc.total_paragraphs,
+        "fonts_used": dict(sorted(doc.font_inventory.items(), key=lambda x: -x[1])[:10]),
+        "colors_used": dict(sorted(doc.color_inventory.items(), key=lambda x: -x[1])[:10]),
+        "styles_used": doc.style_inventory,
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))

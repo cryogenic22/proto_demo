@@ -1,0 +1,395 @@
+"""
+Formatting Extractor — extracts rich formatting metadata from PDF documents.
+
+Produces a FormattedDocument with every span's position, font, size, color,
+bold/italic/underline/superscript flags, and paragraph structure. This is
+the "ground truth" for formatting fidelity checks.
+"""
+
+from __future__ import annotations
+
+import logging
+import re
+from dataclasses import dataclass, field
+from typing import Any
+
+import fitz
+
+logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Data models
+# ---------------------------------------------------------------------------
+
+@dataclass
+class FormattedSpan:
+    """A single text span with full formatting metadata."""
+    text: str
+    x0: float
+    y0: float
+    x1: float
+    y1: float
+    font: str = ""
+    size: float = 10.0
+    color: int = 0          # RGB packed as integer
+    bold: bool = False
+    italic: bool = False
+    underline: bool = False
+    superscript: bool = False
+    subscript: bool = False
+    strikethrough: bool = False
+    flags: int = 0
+
+    @property
+    def color_rgb(self) -> tuple[int, int, int]:
+        r = (self.color >> 16) & 0xFF
+        g = (self.color >> 8) & 0xFF
+        b = self.color & 0xFF
+        return (r, g, b)
+
+    @property
+    def font_family(self) -> str:
+        """Extract base font family from PDF font name."""
+        name = self.font
+        for suffix in ["-Bold", "-Italic", "-BoldItalic", "MT", "PS",
+                       ",Bold", ",Italic", ",BoldItalic", "-Regular"]:
+            name = name.replace(suffix, "")
+        return name.strip()
+
+
+@dataclass
+class FormattedLine:
+    """A line of text with spans preserving formatting."""
+    spans: list[FormattedSpan] = field(default_factory=list)
+    y_center: float = 0.0
+    indent: float = 0.0
+
+    @property
+    def text(self) -> str:
+        return "".join(s.text for s in self.spans)
+
+    @property
+    def is_empty(self) -> bool:
+        return not self.text.strip()
+
+
+@dataclass
+class FormattedParagraph:
+    """A paragraph with lines and formatting metadata."""
+    lines: list[FormattedLine] = field(default_factory=list)
+    style: str = "body"       # body, heading1-6, list_item, table_cell
+    indent_level: int = 0
+    alignment: str = "left"   # left, center, right, justify
+    spacing_before: float = 0.0
+    spacing_after: float = 0.0
+
+    @property
+    def text(self) -> str:
+        return " ".join(line.text for line in self.lines)
+
+    @property
+    def is_bold(self) -> bool:
+        spans = [s for line in self.lines for s in line.spans if s.text.strip()]
+        return bool(spans) and all(s.bold for s in spans)
+
+    @property
+    def font_size(self) -> float:
+        sizes = [s.size for line in self.lines for s in line.spans if s.text.strip()]
+        return max(sizes) if sizes else 10.0
+
+
+@dataclass
+class FormattedPage:
+    """A page with paragraphs and layout info."""
+    page_number: int
+    width: float
+    height: float
+    paragraphs: list[FormattedParagraph] = field(default_factory=list)
+    margin_left: float = 72.0
+    margin_right: float = 72.0
+    margin_top: float = 72.0
+    margin_bottom: float = 72.0
+
+
+@dataclass
+class FormattedDocument:
+    """Complete document with formatting metadata."""
+    filename: str = ""
+    pages: list[FormattedPage] = field(default_factory=list)
+    font_inventory: dict[str, int] = field(default_factory=dict)  # font → count
+    color_inventory: dict[str, int] = field(default_factory=dict)  # hex color → count
+    style_inventory: dict[str, int] = field(default_factory=dict)  # style → count
+
+    @property
+    def total_spans(self) -> int:
+        return sum(
+            len(s.text)
+            for page in self.pages
+            for para in page.paragraphs
+            for line in para.lines
+            for s in line.spans
+        )
+
+    @property
+    def total_paragraphs(self) -> int:
+        return sum(len(p.paragraphs) for p in self.pages)
+
+
+# ---------------------------------------------------------------------------
+# Extractor
+# ---------------------------------------------------------------------------
+
+class FormattingExtractor:
+    """Extracts rich formatting metadata from PDF documents."""
+
+    def extract(self, pdf_bytes: bytes, filename: str = "") -> FormattedDocument:
+        """Extract formatting from a PDF document."""
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        pages: list[FormattedPage] = []
+        font_counts: dict[str, int] = {}
+        color_counts: dict[str, int] = {}
+
+        for page_idx in range(doc.page_count):
+            page = doc[page_idx]
+            rect = page.rect
+            fmt_page = FormattedPage(
+                page_number=page_idx,
+                width=rect.width,
+                height=rect.height,
+            )
+
+            # Detect margins from text block positions
+            blocks = page.get_text("dict")["blocks"]
+            self._detect_margins(fmt_page, blocks)
+
+            # Extract spans with formatting
+            lines = self._extract_lines(blocks, font_counts, color_counts)
+
+            # Group lines into paragraphs
+            fmt_page.paragraphs = self._group_paragraphs(lines, fmt_page)
+
+            pages.append(fmt_page)
+
+        doc.close()
+
+        # Build style inventory
+        style_counts: dict[str, int] = {}
+        for p in pages:
+            for para in p.paragraphs:
+                style_counts[para.style] = style_counts.get(para.style, 0) + 1
+
+        return FormattedDocument(
+            filename=filename,
+            pages=pages,
+            font_inventory=font_counts,
+            color_inventory=color_counts,
+            style_inventory=style_counts,
+        )
+
+    def _detect_margins(self, page: FormattedPage, blocks: list[dict]) -> None:
+        """Detect page margins from text block positions."""
+        x_positions = []
+        x_ends = []
+        y_positions = []
+        y_ends = []
+
+        for b in blocks:
+            if b.get("type") != 0:  # text blocks only
+                continue
+            bbox = b["bbox"]
+            x_positions.append(bbox[0])
+            x_ends.append(bbox[2])
+            y_positions.append(bbox[1])
+            y_ends.append(bbox[3])
+
+        if x_positions:
+            page.margin_left = min(x_positions)
+            page.margin_right = page.width - max(x_ends)
+        if y_positions:
+            page.margin_top = min(y_positions)
+            page.margin_bottom = page.height - max(y_ends)
+
+    def _extract_lines(
+        self, blocks: list[dict],
+        font_counts: dict[str, int],
+        color_counts: dict[str, int],
+    ) -> list[FormattedLine]:
+        """Extract formatted lines from PyMuPDF blocks."""
+        lines: list[FormattedLine] = []
+
+        for block in blocks:
+            if block.get("type") != 0:
+                continue
+
+            for line_data in block.get("lines", []):
+                fmt_line = FormattedLine()
+                spans = line_data.get("spans", [])
+
+                prev_span_end_x = None
+
+                for i, span in enumerate(spans):
+                    text = span.get("text", "")
+                    if not text:
+                        continue
+
+                    flags = span.get("flags", 0)
+                    font_name = span.get("font", "")
+                    font_size = span.get("size", 10.0)
+                    color = span.get("color", 0)
+
+                    is_bold = bool(flags & 16) or "Bold" in font_name
+                    is_italic = bool(flags & 2) or "Italic" in font_name
+                    is_superscript = bool(flags & 1)
+                    is_underline = bool(flags & 4)
+
+                    # Subscript: small font, not flagged as superscript
+                    is_subscript = False
+                    if not is_superscript and font_size < 7.5:
+                        is_subscript = True
+
+                    bbox = span.get("bbox", span.get("origin", [0, 0, 0, 0]))
+                    if len(bbox) == 2:
+                        bbox = [bbox[0], bbox[1], bbox[0] + len(text) * font_size * 0.5, bbox[1] + font_size]
+
+                    # Space injection for run-on words
+                    if prev_span_end_x is not None and fmt_line.spans:
+                        gap = bbox[0] - prev_span_end_x
+                        char_width = font_size * 0.25
+                        prev_text = fmt_line.spans[-1].text
+                        if (gap > char_width
+                                and prev_text and prev_text[-1].isalpha()
+                                and text and text[0].isalpha()):
+                            # Insert space to fix run-on word
+                            fmt_line.spans[-1] = FormattedSpan(
+                                text=prev_text + " ",
+                                x0=fmt_line.spans[-1].x0,
+                                y0=fmt_line.spans[-1].y0,
+                                x1=fmt_line.spans[-1].x1,
+                                y1=fmt_line.spans[-1].y1,
+                                font=fmt_line.spans[-1].font,
+                                size=fmt_line.spans[-1].size,
+                                color=fmt_line.spans[-1].color,
+                                bold=fmt_line.spans[-1].bold,
+                                italic=fmt_line.spans[-1].italic,
+                                underline=fmt_line.spans[-1].underline,
+                                superscript=fmt_line.spans[-1].superscript,
+                                subscript=fmt_line.spans[-1].subscript,
+                                flags=fmt_line.spans[-1].flags,
+                            )
+
+                    prev_span_end_x = bbox[2]
+
+                    fmt_span = FormattedSpan(
+                        text=text,
+                        x0=bbox[0], y0=bbox[1],
+                        x1=bbox[2], y1=bbox[3],
+                        font=font_name,
+                        size=font_size,
+                        color=color,
+                        bold=is_bold,
+                        italic=is_italic,
+                        underline=is_underline,
+                        superscript=is_superscript,
+                        subscript=is_subscript,
+                        flags=flags,
+                    )
+                    fmt_line.spans.append(fmt_span)
+
+                    # Track inventories
+                    base_font = fmt_span.font_family
+                    font_counts[base_font] = font_counts.get(base_font, 0) + 1
+                    hex_color = f"#{color:06X}"
+                    color_counts[hex_color] = color_counts.get(hex_color, 0) + 1
+
+                if fmt_line.spans:
+                    fmt_line.y_center = sum(s.y0 for s in fmt_line.spans) / len(fmt_line.spans)
+                    fmt_line.indent = fmt_line.spans[0].x0
+                    lines.append(fmt_line)
+
+        return lines
+
+    def _group_paragraphs(
+        self, lines: list[FormattedLine], page: FormattedPage,
+    ) -> list[FormattedParagraph]:
+        """Group lines into paragraphs based on Y-gap analysis."""
+        if not lines:
+            return []
+
+        paragraphs: list[FormattedParagraph] = []
+        current = FormattedParagraph(lines=[lines[0]])
+
+        for i in range(1, len(lines)):
+            prev_line = lines[i - 1]
+            curr_line = lines[i]
+
+            # Compute Y gap
+            y_gap = curr_line.y_center - prev_line.y_center
+            line_height = max(s.size for s in prev_line.spans) if prev_line.spans else 12.0
+
+            # New paragraph if gap > 1.5x line height or significant indent change
+            is_new_para = y_gap > line_height * 1.5
+
+            if is_new_para:
+                # Classify the completed paragraph
+                self._classify_paragraph(current, page)
+                paragraphs.append(current)
+                current = FormattedParagraph(
+                    lines=[curr_line],
+                    spacing_before=y_gap,
+                )
+            else:
+                current.lines.append(curr_line)
+
+        # Don't forget the last paragraph
+        if current.lines:
+            self._classify_paragraph(current, page)
+            paragraphs.append(current)
+
+        return paragraphs
+
+    def _classify_paragraph(self, para: FormattedParagraph, page: FormattedPage) -> None:
+        """Classify paragraph style based on formatting."""
+        if not para.lines or not para.lines[0].spans:
+            return
+
+        font_size = para.font_size
+        is_bold = para.is_bold
+        text = para.text.strip()
+
+        # Heading detection by font size
+        if font_size >= 16 and is_bold:
+            para.style = "heading1"
+        elif font_size >= 14 and is_bold:
+            para.style = "heading2"
+        elif font_size >= 12 and is_bold:
+            para.style = "heading3"
+        elif is_bold and len(text) < 100:
+            para.style = "heading4"
+
+        # List detection
+        if re.match(r"^\s*[\u2022\u2023\u25CF\u25CB\u2013\u2014•●○–—\-]\s", text):
+            para.style = "list_bullet"
+        elif re.match(r"^\s*\d{1,3}[.)]\s", text):
+            para.style = "list_number"
+
+        # Indent level
+        if para.lines:
+            indent = para.lines[0].indent - page.margin_left
+            para.indent_level = max(0, int(indent / 18))  # 18pt per indent level
+
+        # Alignment detection
+        if para.lines:
+            line_widths = [
+                (l.spans[-1].x1 - l.spans[0].x0) if l.spans else 0
+                for l in para.lines
+            ]
+            content_width = page.width - page.margin_left - page.margin_right
+            if line_widths:
+                avg_width = sum(line_widths) / len(line_widths)
+                first_indent = para.lines[0].indent
+                center_of_content = page.margin_left + content_width / 2
+                center_of_para = first_indent + avg_width / 2
+
+                if abs(center_of_para - center_of_content) < 20 and avg_width < content_width * 0.8:
+                    para.alignment = "center"

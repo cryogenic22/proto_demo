@@ -18,6 +18,7 @@ const NAV_ITEMS = [
     items: [
       { name: "Document Explorer", href: "/tools/sections", icon: "document" },
       { name: "Verbatim Extract", href: "/tools/verbatim", icon: "clipboard" },
+      { name: "Fidelity Checker", href: "/tools/fidelity", icon: "check" },
     ],
   },
   {
