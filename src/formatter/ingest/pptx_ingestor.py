@@ -148,8 +148,42 @@ class PPTXIngestor:
                 font = run.font
                 font_name = font.name or ""
                 font_size = _pt_value(font.size) if font.size is not None else 11.0
-                is_bold = bool(font.bold)
-                is_italic = bool(font.italic)
+
+                # Resolve bold/italic through PPTX inheritance:
+                # Level 1: run.font.bold (explicit on run)
+                # Level 2: paragraph defRPr (default run properties)
+                # Level 3: font name contains "Bold"/"Italic"
+                # Level 4: font size heuristic (large = likely title = bold)
+                is_bold = font.bold
+                if is_bold is None:
+                    # Try paragraph-level default run properties
+                    try:
+                        ns = "{http://schemas.openxmlformats.org/drawingml/2006/main}"
+                        defRPr = pptx_para._p.find(f"{ns}pPr/{ns}defRPr")
+                        if defRPr is not None and defRPr.get("b") == "1":
+                            is_bold = True
+                    except Exception:
+                        pass
+                if is_bold is None:
+                    is_bold = bool(font_name and ("Bold" in font_name or "Bd" in font_name))
+                if is_bold is None:
+                    # Heuristic: title shapes and large text are typically bold
+                    is_bold = font_size >= 18.0
+                is_bold = bool(is_bold)
+
+                is_italic = font.italic
+                if is_italic is None:
+                    try:
+                        ns = "{http://schemas.openxmlformats.org/drawingml/2006/main}"
+                        defRPr = pptx_para._p.find(f"{ns}pPr/{ns}defRPr")
+                        if defRPr is not None and defRPr.get("i") == "1":
+                            is_italic = True
+                    except Exception:
+                        pass
+                if is_italic is None:
+                    is_italic = bool(font_name and ("Italic" in font_name or "It" in font_name))
+                is_italic = bool(is_italic) if is_italic else False
+
                 is_underline = bool(font.underline)
                 color_int = _rgb_to_int(font.color)
 
