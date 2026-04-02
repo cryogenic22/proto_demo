@@ -132,6 +132,61 @@ _EXPONENT_PATTERNS: list[tuple[re.Pattern, str, str]] = [
     (re.compile(r"\b(mm|cm|m)3\b"), r"\1<sup>3</sup>", "mathematical"),
     # 10^6, 10^9 etc (generic exponents)
     (re.compile(r"\b10\^(\d+)\b"), r"10<sup>\1</sup>", "mathematical"),
+    # sigma^2, s^2 (variance)
+    (re.compile(r"\b([sS]|sigma|\u03c3)\^?2\b"), r"\1<sup>2</sup>", "mathematical"),
+    # x^n generic exponent
+    (re.compile(r"\b([a-zA-Z])\^(\d+)\b"), r"\1<sup>\2</sup>", "mathematical"),
+]
+
+# Advanced mathematical patterns (complex formulas from clinical biostatistics)
+_ADVANCED_MATH_PATTERNS: list[tuple[re.Pattern, str, str]] = [
+    # Partial derivative: ∂ or d/dx
+    (re.compile(r"\u2202"), "\u2202", "mathematical"),  # preserve ∂
+    (re.compile(r"\bd/d([a-zA-Z])\b"), r"d/d\1", "mathematical"),
+
+    # Square root: sqrt(...) or √
+    (re.compile(r"\bsqrt\(([^)]+)\)"), r"sqrt(\1)", "mathematical"),
+    (re.compile(r"\u221a"), "sqrt", "mathematical"),  # preserve √ as sqrt
+
+    # Logarithms: log10, log2, ln, log_10
+    (re.compile(r"\blog10\b"), "log<sub>10</sub>", "mathematical"),
+    (re.compile(r"\blog_10\b"), "log<sub>10</sub>", "mathematical"),
+    (re.compile(r"\blog2\b"), "log<sub>2</sub>", "mathematical"),
+    (re.compile(r"\blog_2\b"), "log<sub>2</sub>", "mathematical"),
+    (re.compile(r"\bln\b"), "ln", "mathematical"),  # natural log — preserve
+
+    # Greek letters commonly in formulas (detect only, preserve as-is)
+    (re.compile(r"\b(?:sigma|Sigma)\b"), "sigma", "mathematical"),
+    (re.compile(r"\b(?:alpha)\b", re.IGNORECASE), "alpha", "mathematical"),
+    (re.compile(r"\b(?:beta)\b", re.IGNORECASE), "beta", "mathematical"),
+    (re.compile(r"\b(?:lambda)\b", re.IGNORECASE), "lambda", "mathematical"),
+    (re.compile(r"\b(?:delta)\b", re.IGNORECASE), "delta", "mathematical"),
+
+    # %RSD, %CV (relative standard deviation / coefficient of variation)
+    (re.compile(r"%\s*RSD\b"), "%RSD", "statistical"),
+    (re.compile(r"%\s*CV\b"), "%CV", "statistical"),
+
+    # Summation: sum(...) or Σ
+    (re.compile(r"\bsum\b", re.IGNORECASE), "\u03a3", "mathematical"),
+    (re.compile(r"\u03a3"), "\u03a3", "mathematical"),  # preserve Σ
+
+    # Fractions: n/N, a/b patterns in formulas
+    (re.compile(r"\b(\d+)/(\d+)\b"), r"\1/\2", "mathematical"),
+
+    # Nested exponents: 10^ln(10), e^x
+    (re.compile(r"\b10\^ln\(10\)"), "10<sup>ln(10)</sup>", "mathematical"),
+    (re.compile(r"\be\^([a-zA-Z0-9()+\-*/]+)"), r"e<sup>\1</sup>", "mathematical"),
+
+    # Titer/dilution: log10 Titer, geometric mean titer (GMT)
+    (re.compile(r"\blog10\s*Titer\b", re.IGNORECASE), "log<sub>10</sub> Titer", "mathematical"),
+    (re.compile(r"\bGMT\b"), "GMT", "statistical"),
+    (re.compile(r"\bGMFR\b"), "GMFR", "statistical"),
+    (re.compile(r"\bGMR\b"), "GMR", "statistical"),
+
+    # Standard deviation notation: SD, s.d., std dev
+    (re.compile(r"\bSD\b"), "SD", "statistical"),
+    (re.compile(r"\bSE\b"), "SE", "statistical"),  # standard error
+    (re.compile(r"\bSEM\b"), "SEM", "statistical"),  # standard error of mean
 ]
 
 
@@ -202,6 +257,21 @@ class FormulaDetector:
         for pattern, replacement, ftype in _EXPONENT_PATTERNS:
             for match in pattern.finditer(text):
                 html = pattern.sub(replacement, match.group())
+                formulas.append(DetectedFormula(
+                    formula_type=ftype,
+                    original_text=match.group(),
+                    html_text=html,
+                    start=match.start(),
+                    end=match.end(),
+                ))
+
+        # Advanced mathematical patterns
+        for pattern, replacement, ftype in _ADVANCED_MATH_PATTERNS:
+            for match in pattern.finditer(text):
+                if callable(replacement):
+                    html = replacement(match)
+                else:
+                    html = pattern.sub(replacement, match.group())
                 formulas.append(DetectedFormula(
                     formula_type=ftype,
                     original_text=match.group(),
