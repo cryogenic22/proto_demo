@@ -4,6 +4,39 @@ import { useState, useRef } from "react";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+interface StyleProfile {
+  body_font: string;
+  body_size: number;
+  heading_fonts: Record<string, string>;
+  heading_sizes: Record<string, number>;
+  heading_colors: Record<string, string>;
+  heading_bold: Record<string, boolean>;
+  margin_left: number;
+  margin_right: number;
+  margin_top: number;
+  margin_bottom: number;
+  line_spacing: number;
+  paragraph_spacing: number;
+  primary_color: string;
+  accent_color: string;
+  list_indent_px: number;
+}
+
+interface GenerateResult {
+  template_name: string;
+  source_name: string;
+  html: string;
+  style_profile: StyleProfile;
+  conformance_report: {
+    rules_applied: number;
+    rules_skipped: number;
+    details: { rule: string; description: string }[];
+    skipped_details: { rule: string; description: string }[];
+    source_stats: Record<string, number>;
+    template_stats: Record<string, number>;
+  };
+}
+
 interface FidelityIssue {
   category: string;
   severity: string;
@@ -66,14 +99,17 @@ function ScoreGauge({ score }: { score: number }) {
 }
 
 export default function FidelityCheckerPage() {
-  const [mode, setMode] = useState<"check" | "compare">("check");
+  const [mode, setMode] = useState<"check" | "compare" | "generate">("check");
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState<FidelityReport | null>(null);
+  const [generateResult, setGenerateResult] = useState<GenerateResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [filterSeverity, setFilterSeverity] = useState<string>("all");
   const fileRef = useRef<HTMLInputElement>(null);
   const templateRef = useRef<HTMLInputElement>(null);
   const generatedRef = useRef<HTMLInputElement>(null);
+  const genTemplateRef = useRef<HTMLInputElement>(null);
+  const genSourceRef = useRef<HTMLInputElement>(null);
 
   const handleCheck = async () => {
     const file = fileRef.current?.files?.[0];
@@ -125,6 +161,32 @@ export default function FidelityCheckerPage() {
     }
   };
 
+  const handleGenerate = async () => {
+    const template = genTemplateRef.current?.files?.[0];
+    const source = genSourceRef.current?.files?.[0];
+    if (!template || !source) return;
+
+    setLoading(true);
+    setError(null);
+    setGenerateResult(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("template", template);
+      formData.append("source", source);
+      const res = await fetch(`${API_BASE}/api/fidelity/generate`, {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error("Document generation failed");
+      setGenerateResult(await res.json());
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Generation failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filteredIssues = report?.issues.filter(
     (i) => filterSeverity === "all" || i.severity === filterSeverity
   ) ?? [];
@@ -141,7 +203,7 @@ export default function FidelityCheckerPage() {
       {/* Mode toggle */}
       <div className="flex gap-2 mb-6">
         <button
-          onClick={() => { setMode("check"); setReport(null); }}
+          onClick={() => { setMode("check"); setReport(null); setGenerateResult(null); }}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             mode === "check"
               ? "bg-brand-primary text-white"
@@ -151,7 +213,7 @@ export default function FidelityCheckerPage() {
           Single Document Check
         </button>
         <button
-          onClick={() => { setMode("compare"); setReport(null); }}
+          onClick={() => { setMode("compare"); setReport(null); setGenerateResult(null); }}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             mode === "compare"
               ? "bg-brand-primary text-white"
@@ -159,6 +221,16 @@ export default function FidelityCheckerPage() {
           }`}
         >
           Template Comparison
+        </button>
+        <button
+          onClick={() => { setMode("generate"); setReport(null); setGenerateResult(null); }}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            mode === "generate"
+              ? "bg-brand-primary text-white"
+              : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+          }`}
+        >
+          Template Generator
         </button>
       </div>
 
@@ -178,7 +250,7 @@ export default function FidelityCheckerPage() {
               {loading ? "Analyzing..." : "Check Fidelity"}
             </button>
           </div>
-        ) : (
+        ) : mode === "compare" ? (
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -198,6 +270,36 @@ export default function FidelityCheckerPage() {
               {loading ? "Comparing..." : "Compare Documents"}
             </button>
           </div>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-sm text-neutral-500">
+              Upload a blueprint template (formatting source) and a source document (content source).
+              The generator will produce a new document with the template&apos;s formatting applied to the source&apos;s content.
+            </p>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">Blueprint Template (PDF)</label>
+                <div className="border-2 border-dashed border-neutral-300 rounded-lg p-4 hover:border-brand-primary transition-colors">
+                  <input ref={genTemplateRef} type="file" accept=".pdf" className="text-sm" />
+                  <p className="text-xs text-neutral-400 mt-1">Formatting will be extracted from this document</p>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">Source Document (PDF)</label>
+                <div className="border-2 border-dashed border-neutral-300 rounded-lg p-4 hover:border-brand-primary transition-colors">
+                  <input ref={genSourceRef} type="file" accept=".pdf" className="text-sm" />
+                  <p className="text-xs text-neutral-400 mt-1">Content will be extracted from this document</p>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={handleGenerate}
+              disabled={loading}
+              className="px-6 py-2.5 rounded-lg bg-brand-primary text-white text-sm font-medium hover:bg-brand-french disabled:opacity-50 transition-colors"
+            >
+              {loading ? "Generating..." : "Generate Document"}
+            </button>
+          </div>
         )}
       </div>
 
@@ -210,6 +312,201 @@ export default function FidelityCheckerPage() {
       {loading && (
         <div className="flex items-center justify-center py-16">
           <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+
+      {/* Generate result */}
+      {generateResult && (
+        <div className="space-y-6">
+          {/* Conformance summary bar */}
+          <div className="rounded-xl border border-neutral-200 bg-white px-5 py-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-semibold text-neutral-700">Conformance Report</h3>
+                <p className="text-xs text-neutral-400 mt-0.5">
+                  Template: {generateResult.template_name} &rarr; Source: {generateResult.source_name}
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <div className="text-center px-4 py-2 rounded-lg bg-green-50 border border-green-200">
+                  <div className="text-lg font-bold text-green-700">{generateResult.conformance_report.rules_applied}</div>
+                  <div className="text-[10px] text-green-600">Rules Applied</div>
+                </div>
+                <div className="text-center px-4 py-2 rounded-lg bg-neutral-50 border border-neutral-200">
+                  <div className="text-lg font-bold text-neutral-500">{generateResult.conformance_report.rules_skipped}</div>
+                  <div className="text-[10px] text-neutral-400">Skipped</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Two-panel layout: HTML preview + Style Profile */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Left: Generated HTML preview */}
+            <div className="rounded-xl border border-neutral-200 bg-white overflow-hidden">
+              <div className="px-5 py-3 border-b border-neutral-100 bg-neutral-50">
+                <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Generated Document Preview</h3>
+              </div>
+              <div
+                className="p-5 prose prose-sm max-w-none overflow-auto"
+                style={{ maxHeight: "600px" }}
+                dangerouslySetInnerHTML={{ __html: generateResult.html }}
+              />
+            </div>
+
+            {/* Right: Style profile */}
+            <div className="rounded-xl border border-neutral-200 bg-white overflow-hidden">
+              <div className="px-5 py-3 border-b border-neutral-100 bg-neutral-50">
+                <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Extracted Style Profile</h3>
+              </div>
+              <div className="p-5 space-y-4 overflow-auto" style={{ maxHeight: "600px" }}>
+                {/* Body typography */}
+                <div>
+                  <h4 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">Body Typography</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="px-3 py-2 rounded-lg bg-neutral-50">
+                      <div className="text-[10px] text-neutral-400">Font</div>
+                      <div className="text-sm font-medium text-neutral-800">{generateResult.style_profile.body_font}</div>
+                    </div>
+                    <div className="px-3 py-2 rounded-lg bg-neutral-50">
+                      <div className="text-[10px] text-neutral-400">Size</div>
+                      <div className="text-sm font-medium text-neutral-800">{generateResult.style_profile.body_size}pt</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Heading styles */}
+                {Object.keys(generateResult.style_profile.heading_fonts).length > 0 && (
+                  <div>
+                    <h4 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">Heading Styles</h4>
+                    <div className="space-y-1.5">
+                      {Object.entries(generateResult.style_profile.heading_fonts).map(([level, font]) => (
+                        <div key={level} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-50">
+                          <span className="text-xs font-mono text-brand-primary w-20">{level}</span>
+                          <span className="text-xs text-neutral-700">{font}</span>
+                          <span className="text-xs text-neutral-400">
+                            {generateResult.style_profile.heading_sizes[level]}pt
+                          </span>
+                          {generateResult.style_profile.heading_colors[level] && (
+                            <span
+                              className="w-3 h-3 rounded-full border border-neutral-300"
+                              style={{ backgroundColor: generateResult.style_profile.heading_colors[level] }}
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Margins */}
+                <div>
+                  <h4 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">Margins (px)</h4>
+                  <div className="grid grid-cols-4 gap-2">
+                    {([
+                      ["Top", generateResult.style_profile.margin_top],
+                      ["Right", generateResult.style_profile.margin_right],
+                      ["Bottom", generateResult.style_profile.margin_bottom],
+                      ["Left", generateResult.style_profile.margin_left],
+                    ] as const).map(([label, value]) => (
+                      <div key={label} className="px-3 py-2 rounded-lg bg-neutral-50 text-center">
+                        <div className="text-[10px] text-neutral-400">{label}</div>
+                        <div className="text-sm font-medium text-neutral-800">{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Spacing */}
+                <div>
+                  <h4 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">Spacing</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="px-3 py-2 rounded-lg bg-neutral-50">
+                      <div className="text-[10px] text-neutral-400">Line Spacing</div>
+                      <div className="text-sm font-medium text-neutral-800">{generateResult.style_profile.line_spacing}</div>
+                    </div>
+                    <div className="px-3 py-2 rounded-lg bg-neutral-50">
+                      <div className="text-[10px] text-neutral-400">Paragraph Spacing</div>
+                      <div className="text-sm font-medium text-neutral-800">{generateResult.style_profile.paragraph_spacing}px</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Colors */}
+                <div>
+                  <h4 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">Colors</h4>
+                  <div className="flex gap-3">
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-50">
+                      <span
+                        className="w-4 h-4 rounded border border-neutral-300"
+                        style={{ backgroundColor: generateResult.style_profile.primary_color }}
+                      />
+                      <div>
+                        <div className="text-[10px] text-neutral-400">Primary</div>
+                        <div className="text-xs font-mono text-neutral-700">{generateResult.style_profile.primary_color}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-50">
+                      <span
+                        className="w-4 h-4 rounded border border-neutral-300"
+                        style={{ backgroundColor: generateResult.style_profile.accent_color }}
+                      />
+                      <div>
+                        <div className="text-[10px] text-neutral-400">Accent</div>
+                        <div className="text-xs font-mono text-neutral-700">{generateResult.style_profile.accent_color}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Applied rules detail */}
+          <div className="rounded-xl border border-neutral-200 bg-white overflow-hidden">
+            <div className="px-5 py-3 border-b border-neutral-100">
+              <h3 className="text-sm font-semibold text-neutral-700">
+                Applied Style Rules ({generateResult.conformance_report.rules_applied})
+              </h3>
+            </div>
+            <div className="divide-y divide-neutral-100">
+              {generateResult.conformance_report.details.map((detail, idx) => (
+                <div key={idx} className="px-5 py-2.5 flex items-center gap-3 hover:bg-neutral-50 transition-colors">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-green-50 text-green-700 border border-green-200 shrink-0">
+                    applied
+                  </span>
+                  <span className="text-xs font-mono text-brand-primary w-36 shrink-0">{detail.rule}</span>
+                  <span className="text-xs text-neutral-600">{detail.description}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Document stats */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="rounded-xl border border-neutral-200 bg-white px-5 py-4">
+              <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-3">Template Stats</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {Object.entries(generateResult.conformance_report.template_stats).map(([key, val]) => (
+                  <div key={key} className="px-3 py-2 rounded-lg bg-neutral-50">
+                    <div className="text-[10px] text-neutral-400">{key.replace(/_/g, " ")}</div>
+                    <div className="text-sm font-medium text-neutral-800">{val}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-xl border border-neutral-200 bg-white px-5 py-4">
+              <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-3">Source Stats</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {Object.entries(generateResult.conformance_report.source_stats).map(([key, val]) => (
+                  <div key={key} className="px-3 py-2 rounded-lg bg-neutral-50">
+                    <div className="text-[10px] text-neutral-400">{key.replace(/_/g, " ")}</div>
+                    <div className="text-sm font-medium text-neutral-800">{val}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

@@ -2443,6 +2443,40 @@ async def extract_formatted(file: UploadFile = File(...)):
     }
 
 
+# ---------------------------------------------------------------------------
+# Template-Guided Document Generator endpoint
+# ---------------------------------------------------------------------------
+
+@app.post("/api/fidelity/generate")
+async def template_generate(
+    template: UploadFile = File(...),
+    source: UploadFile = File(...),
+):
+    """Generate a document by applying template formatting to source content.
+
+    Accepts two PDF files:
+    - template: the blueprint PDF whose formatting will be extracted
+    - source: the input PDF whose content will be re-styled
+
+    Returns generated HTML, a style profile, and a conformance report.
+    """
+    from src.formatter.template_generator import TemplateConformer
+
+    template_bytes = await template.read()
+    source_bytes = await source.read()
+
+    conformer = TemplateConformer()
+    result = conformer.conform(template_bytes, source_bytes)
+
+    return {
+        "template_name": template.filename,
+        "source_name": source.filename,
+        "html": result["html"],
+        "style_profile": result["style_profile"],
+        "conformance_report": result["conformance_report"],
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
