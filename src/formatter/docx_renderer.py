@@ -173,7 +173,14 @@ class DOCXRenderer:
                 if not span.text:
                     continue
 
-                run = wp.add_run(span.text)
+                # Ensure text is a valid string (guard against bytes/None)
+                text = str(span.text) if span.text else ""
+                # Strip null bytes and control characters that Word rejects
+                text = text.replace("\x00", "").replace("\r", "")
+                if not text:
+                    continue
+
+                run = wp.add_run(text)
 
                 # Font name
                 font_name = span.font_family

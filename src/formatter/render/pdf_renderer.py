@@ -149,7 +149,8 @@ class PDFRenderer:
 
         # Sort by vertical position (top to bottom)
         items.sort(key=lambda x: x[0])
-        return [item[1] for item in items]
+        # Filter out None items (failed renders)
+        return [item[1] for item in items if item[1] is not None]
 
     # ------------------------------------------------------------------
     # Internal — paragraphs
@@ -180,10 +181,14 @@ class PDFRenderer:
         try:
             return Paragraph(markup, style)
         except Exception as exc:
-            logger.debug("Failed to render paragraph: %s", exc)
-            # Fall back to plain text
-            plain = para.text
-            return Paragraph(plain, style)
+            logger.debug("Failed to render paragraph with markup: %s", exc)
+            # Fall back to plain text with all XML stripped
+            plain = para.text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            try:
+                return Paragraph(plain, style)
+            except Exception:
+                # Last resort: skip this paragraph
+                return Spacer(1, 6)
 
     def _spans_to_markup(self, para: FormattedParagraph) -> str:
         """Convert all spans in a paragraph to reportlab-compatible XML markup."""
