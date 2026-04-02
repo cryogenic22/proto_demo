@@ -111,12 +111,30 @@ def detect_runon_words(text: str) -> list[tuple[str, int, str]]:
     """
     issues = []
 
-    # Method 1: Words > 15 chars with internal uppercase
+    # Method 1: Words > 20 chars with internal uppercase
+    # Skip words with hyphens, slashes, or dots — these are compound terms, not run-ons
     words = text.split()
     pos = 0
     for word in words:
+        # Skip hyphenated compounds (Placebo-Controlled), slashed terms
+        # (Demographics/Medical), dotted terms (e.g. U.S.A.), and
+        # scientific identifiers (SARS-CoV-2, HbA1c)
+        if re.search(r"[-/.]", word):
+            pos += len(word) + 1
+            continue
+
         clean = re.sub(r"[^\w]", "", word)
-        if len(clean) > 15:
+        # Skip known legitimate compound words
+        if clean.lower() in {"cannot", "nonetheless", "furthermore", "nevertheless",
+                             "notwithstanding", "throughout", "meanwhile", "otherwise",
+                             "whatever", "whenever", "wherever", "however", "moreover",
+                             "therefore", "outstanding", "understand", "understanding",
+                             "undertaken", "underlying", "undergoing", "overarching",
+                             "overwhelming", "overdose", "somewhere", "everywhere"}:
+            pos += len(word) + 1
+            continue
+
+        if len(clean) > 20:  # raised from 15 to reduce false positives
             # Check for camelCase-like boundaries
             boundaries = list(_WORD_BOUNDARY_RE.finditer(clean))
             if boundaries:
@@ -127,15 +145,31 @@ def detect_runon_words(text: str) -> list[tuple[str, int, str]]:
                     parts.append(clean[last:m.start() + 1])
                     last = m.start() + 1
                 parts.append(clean[last:])
-                fix = " ".join(parts)
-                issues.append((word, pos, fix))
+                # Only flag if all parts are >=3 chars (avoids splitting acronyms)
+                if all(len(p) >= 3 for p in parts):
+                    fix = " ".join(parts)
+                    issues.append((word, pos, fix))
 
         pos += len(word) + 1
 
-    # Method 2: Common word concatenations
+    # Method 2: Common word concatenations (skip known legitimate compound words)
+    _LEGITIMATE_COMPOUNDS = {
+        "cannot", "cannot", "nonetheless", "furthermore", "nevertheless",
+        "notwithstanding", "therein", "thereof", "thereafter", "throughout",
+        "meanwhile", "otherwise", "whatever", "whenever", "wherever",
+        "whoever", "whoever", "however", "moreover", "therefore",
+        "whereabouts", "somewhere", "everywhere", "anywhere", "nowhere",
+        "somehow", "somewhat", "someone", "something", "sometime",
+        "sometimes", "outstanding", "understand", "understanding",
+        "undertaken", "underlying", "undergoing", "overarching",
+        "overlooking", "overwhelming", "overdose", "overconsumption",
+    }
+
     for pattern in _RUNON_PATTERNS:
         for match in pattern.finditer(text):
             matched = match.group()
+            if matched.lower() in _LEGITIMATE_COMPOUNDS:
+                continue
             # Try to split into two real words
             for split_point in range(3, len(matched) - 2):
                 left = matched[:split_point].lower()
@@ -295,20 +329,32 @@ class DocumentFidelityChecker:
 
     def _check_spacing(self, doc: FormattedDocument, report: FidelityReport) -> None:
         """Check for spacing inconsistencies."""
+        # First, detect if the document uses double-spacing as a convention
+        # (if >50% of paragraphs have double-spaces, it's intentional)
+        total_paras = sum(len(p.paragraphs) for p in doc.pages)
+        paras_with_doubles = 0
+        for page in doc.pages:
+            for para in page.paragraphs:
+                if re.search(r"  ", para.text):
+                    paras_with_doubles += 1
+        double_space_is_convention = total_paras > 0 and paras_with_doubles / total_paras > 0.3
+
         for page in doc.pages:
             for para_idx, para in enumerate(page.paragraphs):
-                # Check for double spaces
                 text = para.text
-                double_spaces = [m.start() for m in re.finditer(r"  +", text)]
-                if len(double_spaces) > 2:
-                    report.add_issue(FidelityIssue(
-                        category="spacing",
-                        severity="medium",
-                        page=page.page_number + 1,
-                        location=f"Paragraph {para_idx + 1}",
-                        description=f"Multiple double-spaces found ({len(double_spaces)} instances)",
-                        auto_fixable=True,
-                    ))
+
+                # Only flag double-spaces if it's NOT a document-wide convention
+                if not double_space_is_convention:
+                    double_spaces = [m.start() for m in re.finditer(r"  +", text)]
+                    if len(double_spaces) > 5:  # raised threshold — occasional doubles are normal
+                        report.add_issue(FidelityIssue(
+                            category="spacing",
+                            severity="low",  # downgraded from medium — less impactful
+                            page=page.page_number + 1,
+                            location=f"Paragraph {para_idx + 1}",
+                            description=f"Multiple double-spaces found ({len(double_spaces)} instances)",
+                            auto_fixable=True,
+                        ))
 
                 # Check for missing space after period
                 missing_space = re.findall(r"\.[A-Z]", text)
