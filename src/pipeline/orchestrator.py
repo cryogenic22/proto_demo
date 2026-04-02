@@ -279,21 +279,30 @@ class PipelineOrchestrator:
                         continue
 
                     # Layer 4: High-flagged-rate rejection
-                    # >80% flagged = almost certainly not SoA
+                    # Only reject if 100% flagged AND 0 markers — this means
+                    # the VLM produced nothing useful. Previously >80% threshold
+                    # was too aggressive and rejected valid tables where the
+                    # dual-pass extraction had many disagreements.
                     if len(table.cells) > 10:
                         flagged_rate = (
                             len(table.flagged_cells) / len(table.cells)
                         )
-                        if flagged_rate > 0.80:
+                        if flagged_rate >= 0.98 and marker_count == 0:
                             logger.info(
                                 f"REJECTED (flagged rate): '{table.title}' "
-                                f"— {flagged_rate:.0%} of cells flagged"
+                                f"— {flagged_rate:.0%} of cells flagged, 0 markers"
                             )
                             warnings.append(
                                 f"Rejected: {table.title} "
                                 f"({flagged_rate:.0%} flagged)"
                             )
                             continue
+                        elif flagged_rate > 0.80:
+                            logger.warning(
+                                f"HIGH FLAG RATE: '{table.title}' "
+                                f"— {flagged_rate:.0%} of cells flagged "
+                                f"(keeping table, confidence will be low)"
+                            )
 
                     # Layer 5: Column header validation
                     # SoA tables have visit/time column headers

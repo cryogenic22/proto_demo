@@ -381,28 +381,85 @@ class FormattingExtractor:
         return paragraphs
 
     def _classify_paragraph(self, para: FormattedParagraph, page: FormattedPage) -> None:
-        """Classify paragraph style based on formatting."""
+        """Classify paragraph style using multi-signal scoring.
+
+        Heading detection uses a scoring model with signals:
+        - Font size (larger = more likely heading)
+        - Bold (strong signal)
+        - Short text (headings are typically < 15 words)
+        - Starts with section number (1., 1.1, etc.)
+        - Followed by spacing gap (structural signal)
+        - ALL CAPS (common heading convention)
+        """
         if not para.lines or not para.lines[0].spans:
             return
 
         font_size = para.font_size
         is_bold = para.is_bold
         text = para.text.strip()
+        word_count = len(text.split())
 
-        # Heading detection by font size
-        if font_size >= 16 and is_bold:
-            para.style = "heading1"
-        elif font_size >= 14 and is_bold:
-            para.style = "heading2"
-        elif font_size >= 12 and is_bold:
-            para.style = "heading3"
-        elif is_bold and len(text) < 100:
+        # ── Heading scoring model ──────────────────────────────────
+        heading_score = 0.0
+
+        # Signal 1: Font size (larger = more likely heading)
+        if font_size >= 16:
+            heading_score += 3.0
+        elif font_size >= 14:
+            heading_score += 2.0
+        elif font_size >= 12:
+            heading_score += 1.0
+
+        # Signal 2: Bold text
+        if is_bold:
+            heading_score += 2.0
+
+        # Signal 3: Short text (< 15 words)
+        if word_count <= 15:
+            heading_score += 1.5
+        elif word_count <= 8:
+            heading_score += 2.0
+
+        # Signal 4: Section numbering pattern
+        section_match = re.match(r"^(\d+(?:\.\d+)*)[.)]?\s+", text)
+        if section_match:
+            heading_score += 2.5
+            # Determine depth from numbering
+            section_num = section_match.group(1)
+            depth = section_num.count(".")
+        else:
+            depth = -1
+
+        # Signal 5: ALL CAPS (common in legal/clinical docs)
+        alpha_chars = [c for c in text if c.isalpha()]
+        if alpha_chars and len(alpha_chars) > 3:
+            upper_ratio = sum(1 for c in alpha_chars if c.isupper()) / len(alpha_chars)
+            if upper_ratio > 0.8:
+                heading_score += 1.0
+
+        # Signal 6: Large spacing before (structural gap)
+        if para.spacing_before > 15:
+            heading_score += 0.5
+
+        # Classify based on score
+        if heading_score >= 5.0:
+            # Determine level from depth or font size
+            if depth == 0 or font_size >= 16:
+                para.style = "heading1"
+            elif depth == 1 or font_size >= 14:
+                para.style = "heading2"
+            elif depth >= 2 or font_size >= 12:
+                para.style = "heading3"
+            else:
+                para.style = "heading4"
+        elif heading_score >= 3.5 and is_bold and word_count <= 15:
             para.style = "heading4"
 
-        # List detection
-        if re.match(r"^\s*[\u2022\u2023\u25CF\u25CB\u2013\u2014•●○–—\-]\s", text):
+        # ── List detection (overrides heading if matched) ──────────
+        if re.match(r"^\s*[\u2022\u2023\u25CF\u25CB\u2013\u2014\u2015•●○–—\-]\s", text):
             para.style = "list_bullet"
-        elif re.match(r"^\s*\d{1,3}[.)]\s", text):
+        elif re.match(r"^\s*\d{1,3}[.)]\s", text) and not section_match:
+            # Numbered list (but NOT section headings like "1. DEFINITIONS")
             para.style = "list_number"
 
         # Indent level

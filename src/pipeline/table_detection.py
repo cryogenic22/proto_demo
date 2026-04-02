@@ -117,34 +117,56 @@ def _deterministic_soa_prescreen(pdf_bytes: bytes) -> dict[int, str]:
         except Exception:
             pass
 
-    # ── Tier 3: Limited neighbor expansion (±2 pages, NO cascade) ───
-    # Only expand from title_match and table_dense pages, not from
-    # other expansions. This prevents the cascade that flagged 97% of pages.
-    confirmed_pages = set(soa_pages.keys())
-    for page_idx in confirmed_pages:
-        for offset in [-2, -1, 1, 2]:
+    # ── Tier 3: Gap-filling between confirmed SoA pages ──────────────
+    # If pages N and N+2 are both confirmed SoA, page N+1 is almost
+    # certainly a continuation (even if PyMuPDF can't detect its table
+    # because it's a text-layout grid with no visible lines).
+    confirmed_pages = sorted(soa_pages.keys())
+    for i in range(len(confirmed_pages) - 1):
+        p1 = confirmed_pages[i]
+        p2 = confirmed_pages[i + 1]
+        gap = p2 - p1
+        if 1 < gap <= 3:
+            # Fill in the gap pages
+            for fill in range(p1 + 1, p2):
+                if fill not in soa_pages:
+                    soa_pages[fill] = "gap_fill"
+
+    # Also expand ±1 from confirmed pages for text-layout continuations
+    confirmed_after_fill = set(soa_pages.keys())
+    for page_idx in confirmed_after_fill:
+        for offset in [-1, 1]:
             neighbor = page_idx + offset
             if neighbor in soa_pages or neighbor < 0 or neighbor >= doc.page_count:
                 continue
 
             page = doc[neighbor]
             try:
+                # Check for tables WITH X marks (original Tier 3 logic)
                 tables = page.find_tables()
-                if not tables.tables:
-                    continue
-
-                # Neighbor must also have X marks (not just any table)
-                for t in tables.tables:
-                    extracted = t.extract()
-                    if not extracted or len(extracted) < 3:
-                        continue
-                    x_count = sum(
-                        1 for row in extracted for cell in row
-                        if cell and str(cell).strip().upper() in ("X", "Y", "✓", "✔")
-                    )
-                    if x_count >= 2:
-                        soa_pages[neighbor] = "neighbor_soa"
-                        break
+                if tables.tables:
+                    for t in tables.tables:
+                        extracted = t.extract()
+                        if not extracted or len(extracted) < 3:
+                            continue
+                        x_count = sum(
+                            1 for row in extracted for cell in row
+                            if cell and str(cell).strip().upper() in ("X", "Y", "✓", "✔")
+                        )
+                        if x_count >= 2:
+                            soa_pages[neighbor] = "neighbor_soa"
+                            break
+                else:
+                    # No PyMuPDF tables — check if page has substantial text
+                    # (text-layout tables have lots of text but no grid lines)
+                    text = page.get_text("text").strip()
+                    if len(text) > 300:
+                        # Check if text has SoA-like content (column-aligned data)
+                        lines = text.split("\n")
+                        short_lines = sum(1 for l in lines if 1 <= len(l.strip()) <= 5)
+                        if short_lines > 10:
+                            # Many short lines = likely a table with X/Y marks
+                            soa_pages[neighbor] = "text_layout_neighbor"
             except Exception:
                 pass
 
