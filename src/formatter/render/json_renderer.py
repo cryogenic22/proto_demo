@@ -135,6 +135,16 @@ class JSONRenderer:
         if self._include_coords:
             result["bbox"] = [span.x0, span.y0, span.x1, span.y1]
 
+        # Include formula metadata if present
+        if span.formula and hasattr(span.formula, 'latex'):
+            result["formula"] = {
+                "type": span.formula.formula_type.value if hasattr(span.formula.formula_type, 'value') else str(span.formula.formula_type),
+                "latex": span.formula.latex or "",
+                "html": span.formula.html or "",
+                "complexity": span.formula.complexity.value if hasattr(span.formula.complexity, 'value') else str(span.formula.complexity),
+                "source": span.formula.source.value if hasattr(span.formula.source, 'value') else str(span.formula.source),
+            }
+
         return result
 
     def _serialise_table(self, table: FormattedTable) -> dict:

@@ -227,6 +227,16 @@ class HTMLRenderer:
 
     def _render_span(self, span: FormattedSpan) -> str:
         """Render a single span as HTML with inline formatting."""
+        # If span has a formula with HTML rendering, use it
+        if span.formula and hasattr(span.formula, 'html') and span.formula.html:
+            text = span.formula.html
+            # Apply bold/italic wrapping on top of formula HTML
+            if span.bold:
+                text = f"<strong>{text}</strong>"
+            if span.italic:
+                text = f"<em>{text}</em>"
+            return text
+
         text = html_module.escape(span.text)
 
         if not text.strip():
