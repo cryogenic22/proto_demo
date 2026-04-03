@@ -10,6 +10,9 @@ backends by changing config, not code.
 
 from __future__ import annotations
 
+import logging
+import os
+
 from src.formatter.formula.orchestrator import FormulaOrchestrator, OrchestratorConfig
 from src.formatter.formula.registry import FormulaToolRegistry
 from src.formatter.formula.tools.regex_detector import RegexFormulaDetector
@@ -19,6 +22,14 @@ from src.formatter.formula.tools.renderers import (
     MathMLFormulaRenderer,
     OmmlFormulaRenderer,
 )
+from src.formatter.formula.tools.image_classifier import HeuristicImageClassifier
+from src.formatter.formula.tools.ocr_backends import (
+    ClaudeVisionOCR,
+    LocalLaTeXOCR,
+    PlaceholderOCR,
+)
+
+logger = logging.getLogger(__name__)
 
 
 def create_formula_system(
@@ -45,9 +56,24 @@ def create_formula_system(
     registry.register_renderer(MathMLFormulaRenderer())
     registry.register_renderer(OmmlFormulaRenderer())
 
-    # -- Future: register OCR tools, validators, classifiers --
-    # registry.register_ocr(Pix2TextOCR())
-    # registry.register_validator(SympyValidator())
-    # registry.register_classifier(HeuristicImageClassifier())
+    # -- Register image classifier (always available, no dependencies) --
+    registry.register_classifier(HeuristicImageClassifier())
+
+    # -- Register OCR tools (graceful degradation) --
+
+    # Always register placeholder as low-priority fallback
+    registry.register_ocr(PlaceholderOCR())
+
+    # Claude Vision OCR — register if API key is available
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if api_key:
+        registry.register_ocr(ClaudeVisionOCR(api_key=api_key))
+        logger.info("Factory: registered ClaudeVisionOCR")
+
+    # Local LaTeX OCR — register if pix2tex/rapid_latex_ocr is installed
+    local_ocr = LocalLaTeXOCR()
+    if local_ocr._available:
+        registry.register_ocr(local_ocr)
+        logger.info("Factory: registered LocalLaTeXOCR (%s)", local_ocr._backend)
 
     return FormulaOrchestrator(registry, config or OrchestratorConfig())
