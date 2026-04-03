@@ -99,10 +99,12 @@ function ScoreGauge({ score }: { score: number }) {
 }
 
 export default function FidelityCheckerPage() {
-  const [mode, setMode] = useState<"check" | "compare" | "generate">("check");
+  const [mode, setMode] = useState<"check" | "compare" | "generate" | "formulas">("check");
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState<FidelityReport | null>(null);
   const [generateResult, setGenerateResult] = useState<GenerateResult | null>(null);
+  const [formulaResult, setFormulaResult] = useState<any>(null);
+  const [formulaLoading, setFormulaLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filterSeverity, setFilterSeverity] = useState<string>("all");
   const fileRef = useRef<HTMLInputElement>(null);
@@ -232,6 +234,16 @@ export default function FidelityCheckerPage() {
         >
           Template Generator
         </button>
+        <button
+          onClick={() => { setMode("formulas"); setReport(null); setGenerateResult(null); }}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            mode === "formulas"
+              ? "bg-brand-primary text-white"
+              : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+          }`}
+        >
+          Formula Detection
+        </button>
       </div>
 
       {/* Upload area */}
@@ -293,7 +305,7 @@ export default function FidelityCheckerPage() {
               {loading ? "Comparing..." : "Compare Documents"}
             </button>
           </div>
-        ) : (
+        ) : mode === "generate" ? (
           <div className="space-y-4">
             <p className="text-sm text-neutral-500">
               Upload a blueprint template (formatting source) and a source document (content source).
@@ -348,6 +360,37 @@ export default function FidelityCheckerPage() {
               </button>
             </div>
           </div>
+        ) : (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">Upload document to scan for formulas</label>
+              <input ref={fileRef} type="file" accept=".pdf,.docx,.pptx,.xlsx,.html" className="text-sm" />
+            </div>
+            <button
+              onClick={async () => {
+                const f = fileRef.current?.files?.[0];
+                if (!f) return;
+                setFormulaLoading(true);
+                setFormulaResult(null);
+                setError(null);
+                const fd = new FormData();
+                fd.append("file", f);
+                try {
+                  const res = await fetch(`${API_BASE}/api/fidelity/detect-formulas`, { method: "POST", body: fd });
+                  if (!res.ok) throw new Error("Formula detection failed");
+                  const data = await res.json();
+                  setFormulaResult(data);
+                } catch (e) {
+                  setError(e instanceof Error ? e.message : "Formula detection failed");
+                }
+                setFormulaLoading(false);
+              }}
+              disabled={formulaLoading}
+              className="px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-medium hover:bg-brand-primary/90 disabled:opacity-50"
+            >
+              {formulaLoading ? "Scanning..." : "Detect Formulas"}
+            </button>
+          </div>
         )}
       </div>
 
@@ -360,6 +403,78 @@ export default function FidelityCheckerPage() {
       {loading && (
         <div className="flex items-center justify-center py-16">
           <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+
+      {/* Formula results */}
+      {formulaResult && mode === "formulas" && (
+        <div className="mt-6 space-y-4">
+          {/* Summary */}
+          <div className="grid grid-cols-4 gap-3">
+            <div className="bg-blue-50 rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold text-blue-700">{formulaResult.total_formulas}</div>
+              <div className="text-xs text-blue-500">Total Formulas</div>
+            </div>
+            {Object.entries(formulaResult.by_type || {}).map(([type, count]) => (
+              <div key={type} className="bg-neutral-50 rounded-lg p-3 text-center">
+                <div className="text-xl font-bold text-neutral-700">{count as number}</div>
+                <div className="text-xs text-neutral-500 capitalize">{type}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tier breakdown */}
+          <div className="flex gap-2">
+            {Object.entries(formulaResult.by_tier || {}).map(([tier, count]) => (
+              <span key={tier} className="px-3 py-1 bg-neutral-100 rounded-full text-xs font-medium">
+                {tier}: {count as number}
+              </span>
+            ))}
+          </div>
+
+          {/* Formula table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="border-b border-neutral-200 text-left">
+                  <th className="py-2 px-3 font-medium text-neutral-500">Pg</th>
+                  <th className="py-2 px-3 font-medium text-neutral-500">Type</th>
+                  <th className="py-2 px-3 font-medium text-neutral-500">Original</th>
+                  <th className="py-2 px-3 font-medium text-neutral-500">Formatted</th>
+                  <th className="py-2 px-3 font-medium text-neutral-500">LaTeX</th>
+                  <th className="py-2 px-3 font-medium text-neutral-500">Tier</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(formulaResult.formulas || []).map((f: any, i: number) => (
+                  <tr key={i} className="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td className="py-2 px-3 text-neutral-400">{f.page}</td>
+                    <td className="py-2 px-3">
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                        f.type === "chemical" ? "bg-blue-100 text-blue-700" :
+                        f.type === "pk" ? "bg-green-100 text-green-700" :
+                        f.type === "statistical" ? "bg-purple-100 text-purple-700" :
+                        f.type === "mathematical" ? "bg-orange-100 text-orange-700" :
+                        f.type === "dosing" ? "bg-red-100 text-red-700" :
+                        f.type === "efficacy" ? "bg-teal-100 text-teal-700" :
+                        "bg-neutral-100 text-neutral-700"
+                      }`}>{f.type}</span>
+                    </td>
+                    <td className="py-2 px-3 font-mono text-xs">{f.original}</td>
+                    <td className="py-2 px-3" dangerouslySetInnerHTML={{ __html: f.html }} />
+                    <td className="py-2 px-3 font-mono text-xs text-neutral-500">{f.latex || "\u2014"}</td>
+                    <td className="py-2 px-3">
+                      <span className={`px-2 py-0.5 rounded text-xs ${
+                        f.complexity === "inline" ? "bg-green-50 text-green-600" :
+                        f.complexity === "structured" ? "bg-amber-50 text-amber-600" :
+                        "bg-red-50 text-red-600"
+                      }`}>{f.complexity}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

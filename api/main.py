@@ -2539,41 +2539,62 @@ async def export_docx_from_template(
 
 @app.post("/api/fidelity/detect-formulas")
 async def detect_formulas(file: UploadFile = File(...)):
-    """Detect chemical, statistical, dosing, and PK formulas in a PDF.
+    """Detect formulas in a document using the registry-based formula system.
 
-    Returns all formulas found with their type, original text,
-    and HTML-annotated version with proper sub/superscript tags.
+    Supports PDF, DOCX, HTML, PPTX, XLSX input.
+    Returns formulas with type, original text, HTML, LaTeX, complexity tier, and source.
     """
-    from src.formatter.formula_detector import FormulaDetector
-    from src.formatter.extractor import FormattingExtractor
+    from src.formatter.formula.factory import create_formula_system
+    from src.formatter import DocHandler
 
-    pdf_bytes = await file.read()
-    extractor = FormattingExtractor()
-    doc = extractor.extract(pdf_bytes, filename=file.filename or "")
+    content = await file.read()
+    filename = file.filename or ""
 
-    detector = FormulaDetector()
+    # Detect format from extension
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else "pdf"
+    format_map = {"pdf": "pdf", "docx": "docx", "html": "html", "htm": "html",
+                  "pptx": "pptx", "xlsx": "xlsx", "md": "markdown", "txt": "text"}
+    fmt = format_map.get(ext, "pdf")
+
+    # Ingest document
+    handler = DocHandler()
+    doc = handler.ingest(content, fmt, filename)
+
+    # Run formula detection
+    orchestrator = create_formula_system()
     all_formulas = []
     formula_counts: dict[str, int] = {}
+    tier_counts = {"inline": 0, "structured": 0, "rendered": 0}
 
     for page in doc.pages:
         for para_idx, para in enumerate(page.paragraphs):
             text = para.text
-            formulas = detector.detect(text)
-            for f in formulas:
+            if not text.strip():
+                continue
+            spans = orchestrator.process_text(text)
+            for s in spans:
+                f = s.formula
                 all_formulas.append({
                     "page": page.page_number + 1,
                     "paragraph": para_idx + 1,
-                    "type": f.formula_type,
-                    "original": f.original_text,
-                    "html": f.html_text,
+                    "type": f.formula_type.value,
+                    "original": s.original_text,
+                    "html": f.html or s.original_text,
+                    "latex": f.latex or "",
+                    "complexity": f.complexity.value,
+                    "source": f.source.value,
                     "confidence": f.confidence,
                 })
-                formula_counts[f.formula_type] = formula_counts.get(f.formula_type, 0) + 1
+                ftype = f.formula_type.value
+                formula_counts[ftype] = formula_counts.get(ftype, 0) + 1
+                tier_counts[f.complexity.value] = tier_counts.get(f.complexity.value, 0) + 1
 
     return {
-        "document_name": file.filename,
+        "document_name": filename,
         "total_formulas": len(all_formulas),
         "by_type": formula_counts,
+        "by_tier": tier_counts,
+        "registry_tools": orchestrator._registry.list_tools(),
         "formulas": all_formulas,
     }
 
