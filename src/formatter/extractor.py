@@ -40,6 +40,7 @@ class FormattedSpan:
     subscript: bool = False
     strikethrough: bool = False
     flags: int = 0
+    formula: Any = None     # FormattedFormula if this span is a formula
 
     @property
     def color_rgb(self) -> tuple[int, int, int]:
