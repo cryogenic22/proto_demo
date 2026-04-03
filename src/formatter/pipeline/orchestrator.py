@@ -166,20 +166,13 @@ class PipelineOrchestrator:
     def _process_formulas(self, doc: FormattedDocument) -> FormattedDocument:
         """Run formula detection on all text content in the document.
 
-        This is an integration point: the formula orchestrator scans text
-        spans in the IR for formulas and annotates them. The actual formula
-        processing is fully delegated to the FormulaOrchestrator.
+        Uses the FormulaEnricher to detect formulas in paragraph text and
+        map them back to individual FormattedSpan objects. The enricher
+        handles offset mapping, edge cases, and error recovery.
         """
         if self._formula_orchestrator is None:
             return doc
 
-        for page in doc.pages:
-            for para in page.paragraphs:
-                text = "".join(span.text for span in para.spans)
-                if text.strip():
-                    try:
-                        self._formula_orchestrator.process_text(text)
-                    except Exception as e:
-                        logger.debug("Formula processing failed for paragraph: %s", e)
-
-        return doc
+        from src.formatter.formula.enricher import FormulaEnricher
+        enricher = FormulaEnricher(self._formula_orchestrator)
+        return enricher.enrich(doc)

@@ -291,7 +291,12 @@ class TestCreatePipeline:
         assert isinstance(result, str)
         assert "title" in result.lower()
 
-    def test_create_pipeline_no_formula_orchestrator_by_default(self):
-        """By default, formula_orchestrator is None."""
+    def test_create_pipeline_has_formula_orchestrator_by_default(self):
+        """By default, formula_orchestrator is auto-created."""
         pipeline = create_pipeline()
+        assert pipeline.formula_orchestrator is not None
+
+    def test_create_pipeline_no_formula_when_disabled(self):
+        """Pass formula_orchestrator=False to disable formula processing."""
+        pipeline = create_pipeline(formula_orchestrator=False)
         assert pipeline.formula_orchestrator is None

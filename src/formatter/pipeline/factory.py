@@ -33,10 +33,15 @@ def create_pipeline(
 ) -> PipelineOrchestrator:
     """Assemble the full pipeline with all ingestors, renderers, and formula processing.
 
+    If no formula_orchestrator is provided, the factory creates a default one
+    using create_formula_system(). Pass formula_orchestrator=False to explicitly
+    disable formula processing.
+
     Args:
         config: Optional configuration dict (reserved for future use).
         formula_orchestrator: Optional FormulaOrchestrator instance for
-            formula detection/rendering integration.
+            formula detection/rendering integration. Pass False to disable.
+            If None (default), a default formula system is created.
 
     Returns:
         A fully-configured PipelineOrchestrator ready for use.
@@ -64,6 +69,18 @@ def create_pipeline(
                 "Failed to register renderer %s: %s",
                 adapter_cls.__name__, e,
             )
+
+    # Wire up formula system (default: auto-create; False: disable)
+    if formula_orchestrator is False:
+        formula_orchestrator = None
+    elif formula_orchestrator is None:
+        try:
+            from src.formatter.formula.factory import create_formula_system
+            formula_orchestrator = create_formula_system()
+            logger.info("Formula system wired into pipeline")
+        except Exception as e:
+            logger.warning("Failed to create formula system: %s", e)
+            formula_orchestrator = None
 
     logger.info(
         "Pipeline assembled: %d tools (%d ingestors, %d renderers)",
