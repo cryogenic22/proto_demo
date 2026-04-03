@@ -13,6 +13,7 @@ from __future__ import annotations
 from src.formatter.formula.orchestrator import FormulaOrchestrator, OrchestratorConfig
 from src.formatter.formula.registry import FormulaToolRegistry
 from src.formatter.formula.tools.regex_detector import RegexFormulaDetector
+from src.formatter.formula.tools.structured_parser import StructuredParser
 from src.formatter.formula.tools.renderers import (
     HTMLFormulaRenderer,
     MathMLFormulaRenderer,
@@ -37,6 +38,7 @@ def create_formula_system(
 
     # -- Register detectors --
     registry.register_detector(RegexFormulaDetector())
+    registry.register_detector(StructuredParser())
 
     # -- Register renderers --
     registry.register_renderer(HTMLFormulaRenderer())
