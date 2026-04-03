@@ -53,12 +53,14 @@ def _span(
     plain: str,
     ftype: FormulaType,
     confidence: float = 0.95,
+    html: str = "",
 ) -> DetectedFormulaSpan:
     """Convenience builder for a detected structured formula span."""
     return DetectedFormulaSpan(
         formula=FormattedFormula(
             latex=latex,
             plain_text=plain,
+            html=html or plain,  # Use HTML if provided, else plain text
             formula_type=ftype,
             complexity=FormulaComplexity.STRUCTURED,
             source=FormulaSource.PARSER,
@@ -102,6 +104,7 @@ def _handle_partial2(m: re.Match) -> DetectedFormulaSpan:
         latex="\\frac{\\partial^%s %s}{\\partial %s^%s}" % (order, numer_var, denom_var, order),
         plain=m.group(),
         ftype=FormulaType.MATHEMATICAL,
+        html="\u2202<sup>%s</sup>%s/\u2202%s<sup>%s</sup>" % (order, numer_var, denom_var, order),
     )
 
 _register(_RE_PARTIAL2, _handle_partial2)
@@ -119,15 +122,15 @@ _RE_PK_ODE = re.compile(
 def _handle_pk_ode(m: re.Match) -> DetectedFormulaSpan:
     var = m.group(1)
     rhs = m.group(2).strip()
-    # Build LaTeX for the RHS: replace common tokens
-    # Use str.replace to avoid re.sub backreference issues with LaTeX escapes
     rhs_latex = rhs.replace("*", " \\cdot ")
     latex = "\\frac{d%s}{dt} = %s" % (var, rhs_latex)
+    rhs_html = rhs.replace("*", "\u00b7")
     return _span(
         m,
         latex=latex,
         plain=m.group(),
         ftype=FormulaType.PK,
+        html="d%s/dt = %s" % (var, rhs_html),
     )
 
 _register(_RE_PK_ODE, _handle_pk_ode)
@@ -176,11 +179,13 @@ def _handle_integral_bounds(m: re.Match) -> DetectedFormulaSpan:
     upper = m.group(2)
     body = m.group(3).strip()
     var = m.group(4)
-    # Normalize infinity tokens
     upper_latex = _normalize_infinity(upper)
     lower_latex = _normalize_infinity(lower)
     latex = "\\int_{%s}^{%s} %s\\,d%s" % (lower_latex, upper_latex, body, var)
-    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL)
+    upper_html = upper.replace("inf", "\u221e")
+    lower_html = lower.replace("inf", "\u221e") if "inf" in lower.lower() else lower
+    html = "\u222b<sub>%s</sub><sup>%s</sup> %s d%s" % (lower_html, upper_html, body, var)
+    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL, html=html)
 
 _register(_RE_INTEGRAL_BOUNDS, _handle_integral_bounds)
 
@@ -210,7 +215,8 @@ def _handle_sum_bounds(m: re.Match) -> DetectedFormulaSpan:
     lower = m.group(1).strip()
     upper = m.group(2).strip()
     latex = "\\sum_{%s}^{%s}" % (lower, upper)
-    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL)
+    html = "\u03a3<sub>%s</sub><sup>%s</sup>" % (lower, upper)
+    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL, html=html)
 
 _register(_RE_SUM_BOUNDS, _handle_sum_bounds)
 
@@ -228,7 +234,8 @@ def _handle_prod_bounds(m: re.Match) -> DetectedFormulaSpan:
     lower = m.group(1).strip()
     upper = m.group(2).strip()
     latex = "\\prod_{%s}^{%s}" % (lower, upper)
-    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL)
+    html = "\u220f<sub>%s</sub><sup>%s</sup>" % (lower, upper)
+    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL, html=html)
 
 _register(_RE_PROD_BOUNDS, _handle_prod_bounds)
 
@@ -247,7 +254,9 @@ def _handle_limit_brace(m: re.Match) -> DetectedFormulaSpan:
     target = m.group(2).strip()
     target_latex = _normalize_infinity(target)
     latex = "\\lim_{%s \\to %s}" % (var, target_latex)
-    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL)
+    target_html = target.replace("inf", "\u221e")
+    html = "lim<sub>%s\u2192%s</sub>" % (var, target_html)
+    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL, html=html)
 
 _register(_RE_LIMIT_BRACE, _handle_limit_brace)
 
@@ -262,7 +271,9 @@ def _handle_limit_verbal(m: re.Match) -> DetectedFormulaSpan:
     target = m.group(2).strip()
     target_latex = _normalize_infinity(target)
     latex = "\\lim_{%s \\to %s}" % (var, target_latex)
-    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL)
+    target_html = target.replace("inf", "\u221e")
+    html = "lim<sub>%s\u2192%s</sub>" % (var, target_html)
+    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.MATHEMATICAL, html=html)
 
 _register(_RE_LIMIT_VERBAL, _handle_limit_verbal)
 
@@ -340,7 +351,8 @@ _RE_KAPLAN_MEIER = re.compile(
 
 def _handle_kaplan_meier(m: re.Match) -> DetectedFormulaSpan:
     latex = "S(t) = \\prod_{i} \\left(1 - \\frac{d_i}{n_i}\\right)"
-    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.STATISTICAL)
+    html = "S(t) = \u220f<sub>i</sub>(1 - d<sub>i</sub>/n<sub>i</sub>)"
+    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.STATISTICAL, html=html)
 
 _register(_RE_KAPLAN_MEIER, _handle_kaplan_meier)
 
@@ -380,7 +392,8 @@ _RE_COCKCROFT = re.compile(
 
 def _handle_cockcroft(m: re.Match) -> DetectedFormulaSpan:
     latex = "\\text{CrCl} = \\frac{(140 - \\text{age}) \\times \\text{weight}}{72 \\times \\text{SCr}}"
-    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.DOSING)
+    html = "CrCl = (140 - age) \u00d7 weight / (72 \u00d7 SCr)"
+    return _span(m, latex=latex, plain=m.group(), ftype=FormulaType.DOSING, html=html)
 
 _register(_RE_COCKCROFT, _handle_cockcroft)
 
