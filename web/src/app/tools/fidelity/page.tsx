@@ -450,7 +450,8 @@ export default function FidelityCheckerPage() {
             <div className="rounded-xl border border-neutral-200 bg-white p-4">
               <h3 className="text-sm font-medium text-neutral-500 mb-3">Rendered Output (with formula formatting)</h3>
               <div
-                className="prose prose-sm max-w-none border border-neutral-100 rounded-lg p-4 bg-neutral-50 overflow-auto max-h-96"
+                className="max-w-none border border-neutral-100 rounded-lg p-4 bg-white overflow-auto max-h-[600px] text-sm"
+                style={{ fontFamily: "serif", lineHeight: 1.6 }}
                 dangerouslySetInnerHTML={{ __html: formulaResult.rendered_html }}
               />
             </div>

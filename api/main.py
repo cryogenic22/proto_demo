@@ -2589,11 +2589,9 @@ async def detect_formulas(file: UploadFile = File(...)):
                 formula_counts[ftype] = formula_counts.get(ftype, 0) + 1
                 tier_counts[f.complexity.value] = tier_counts.get(f.complexity.value, 0) + 1
 
-    # Render enriched document to HTML (with formula sub/sup/MathML)
-    from src.formatter.pipeline.factory import create_pipeline
-    pipeline = create_pipeline()
-    enriched_doc = pipeline.ingest(content, fmt, filename)
-    rendered_html = pipeline.render(enriched_doc, "html")
+    # Render the document to HTML using the existing formatting tool
+    # (preserves tables, styles, layout from source PDF)
+    rendered_html = handler.render(doc, "html")
 
     return {
         "document_name": filename,
@@ -2608,12 +2606,12 @@ async def detect_formulas(file: UploadFile = File(...)):
 
 @app.post("/api/fidelity/formula-export")
 async def formula_export(file: UploadFile = File(...), format: str = "docx"):
-    """Export a document with formula annotations applied.
+    """Export a document with formatting preserved.
 
-    Returns the document rendered to the specified format (docx, pdf, html).
-    Formulas are enriched with proper sub/superscript and MathML rendering.
+    Uses the existing DocHandler formatting tool to maintain full fidelity
+    with the source document (tables, styles, fonts, colors).
     """
-    from src.formatter.pipeline.factory import create_pipeline
+    from src.formatter import DocHandler
     from fastapi.responses import Response
 
     content = await file.read()
@@ -2623,9 +2621,9 @@ async def formula_export(file: UploadFile = File(...), format: str = "docx"):
                   "pptx": "pptx", "xlsx": "xlsx", "md": "markdown", "txt": "text"}
     fmt = format_map.get(ext, "pdf")
 
-    pipeline = create_pipeline()
-    doc = pipeline.ingest(content, fmt, filename)
-    output = pipeline.render(doc, format)
+    handler = DocHandler()
+    doc = handler.ingest(content, fmt, filename)
+    output = handler.render(doc, format)
 
     mime_map = {
         "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
