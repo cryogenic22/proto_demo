@@ -26,6 +26,7 @@ from src.formatter.formula.tools.image_classifier import HeuristicImageClassifie
 from src.formatter.formula.tools.ocr_backends import (
     ClaudeVisionOCR,
     LocalLaTeXOCR,
+    OpenAIVisionOCR,
     PlaceholderOCR,
 )
 
@@ -69,6 +70,12 @@ def create_formula_system(
     if api_key:
         registry.register_ocr(ClaudeVisionOCR(api_key=api_key))
         logger.info("Factory: registered ClaudeVisionOCR")
+
+    # OpenAI Vision OCR — register if API key is available
+    openai_ocr = OpenAIVisionOCR()
+    if openai_ocr._available:
+        registry.register_ocr(openai_ocr)
+        logger.info("Factory: registered OpenAIVisionOCR")
 
     # Local LaTeX OCR — register if pix2tex/rapid_latex_ocr is installed
     local_ocr = LocalLaTeXOCR()

@@ -7,6 +7,7 @@ dependencies are not installed (return None, never crash).
 Backends:
 - PlaceholderOCR: stub that always returns None (fallback)
 - ClaudeVisionOCR: uses Anthropic API to read equation images (VLM)
+- OpenAIVisionOCR: uses OpenAI GPT-4o vision for equation OCR
 - LocalLaTeXOCR: wraps pix2tex / RapidLaTeXOCR if installed
 """
 
@@ -170,6 +171,109 @@ class ClaudeVisionOCR(FormulaOCRTool):
         elif image_bytes[:4] == b"RIFF" and image_bytes[8:12] == b"WEBP":
             return "image/webp"
         return "image/png"  # Default fallback
+
+
+# ---------------------------------------------------------------------------
+# LocalLaTeXOCR — pix2tex / RapidLaTeXOCR wrapper
+# ---------------------------------------------------------------------------
+
+class OpenAIVisionOCR(FormulaOCRTool):
+    """Uses OpenAI GPT-4o vision to extract equations from images.
+
+    Requires an API key (passed directly or via OPENAI_API_KEY env var).
+    Gracefully returns None if the key is missing, the openai package is
+    not installed, or the API call fails.
+    """
+
+    def __init__(self, api_key: str = "", model: str = "gpt-4o"):
+        self._api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
+        self._model = model
+        self._available = bool(self._api_key)
+        # Try importing openai
+        try:
+            import openai  # noqa: F401
+            self._openai = openai
+        except ImportError:
+            self._available = False
+            self._openai = None
+
+    def metadata(self) -> ToolMetadata:
+        return ToolMetadata(
+            name="openai_vision_ocr",
+            version="1.0.0",
+            description=(
+                "Extract equations from images using OpenAI GPT-4o vision. "
+                "Use as alternative to Claude Vision for equation OCR."
+            ),
+            side_effects=ToolSideEffect.EXTERNAL,
+            supported_complexities=[FormulaComplexity.RENDERED],
+            priority=75,  # Between Claude (80) and local OCR (60)
+            requires_gpu=False,
+            requires_network=True,
+            timeout_ms=30000,
+        )
+
+    def recognize(self, image_bytes: bytes, width: int = 0, height: int = 0) -> FormattedFormula | None:
+        """Send image to OpenAI GPT-4o Vision and extract LaTeX.
+
+        Returns None if:
+        - No API key is configured
+        - The openai package is not installed
+        - The API call fails for any reason
+        """
+        if not self._available or self._openai is None:
+            return None
+
+        try:
+            # Detect MIME type from magic bytes
+            mime = "image/png"
+            if image_bytes[:3] == b'\xff\xd8\xff':
+                mime = "image/jpeg"
+            elif image_bytes[:4] == b'\x89PNG':
+                mime = "image/png"
+
+            b64 = base64.b64encode(image_bytes).decode()
+
+            client = self._openai.OpenAI(api_key=self._api_key)
+            response = client.chat.completions.create(
+                model=self._model,
+                messages=[{
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": f"data:{mime};base64,{b64}"},
+                        },
+                        {
+                            "type": "text",
+                            "text": (
+                                "Convert all mathematical equations in this image to LaTeX. "
+                                "Return ONLY the LaTeX equations, one per line. No explanations."
+                            ),
+                        },
+                    ],
+                }],
+                max_tokens=2000,
+            )
+
+            latex = response.choices[0].message.content.strip()
+            # Strip $ delimiters
+            latex = latex.replace("$$", "").replace("$", "").strip()
+
+            if not latex:
+                return None
+
+            return FormattedFormula(
+                latex=latex,
+                plain_text=latex,
+                formula_type=FormulaType.MATHEMATICAL,
+                complexity=FormulaComplexity.RENDERED,
+                source=FormulaSource.VLM,
+                confidence=0.85,
+            )
+        except Exception as e:
+            logger.debug("OpenAI Vision OCR failed: %s", e)
+            return None
 
 
 # ---------------------------------------------------------------------------
