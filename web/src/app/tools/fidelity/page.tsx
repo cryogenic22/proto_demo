@@ -409,6 +409,53 @@ export default function FidelityCheckerPage() {
       {/* Formula results */}
       {formulaResult && mode === "formulas" && (
         <div className="mt-6 space-y-4">
+          {/* Export buttons */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                const blob = new Blob([formulaResult.rendered_html || ""], { type: "text/html" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a"); a.href = url; a.download = "formula_output.html"; a.click();
+              }}
+              className="px-3 py-1.5 bg-neutral-100 text-neutral-700 rounded-lg text-xs font-medium hover:bg-neutral-200"
+            >Download HTML</button>
+            <button
+              onClick={async () => {
+                const f = fileRef.current?.files?.[0];
+                if (!f) return;
+                const fd = new FormData(); fd.append("file", f);
+                const res = await fetch(`${API_BASE}/api/fidelity/formula-export?format=docx`, { method: "POST", body: fd });
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a"); a.href = url; a.download = "formula_output.docx"; a.click();
+              }}
+              className="px-3 py-1.5 bg-neutral-100 text-neutral-700 rounded-lg text-xs font-medium hover:bg-neutral-200"
+            >Download DOCX</button>
+            <button
+              onClick={async () => {
+                const f = fileRef.current?.files?.[0];
+                if (!f) return;
+                const fd = new FormData(); fd.append("file", f);
+                const res = await fetch(`${API_BASE}/api/fidelity/formula-export?format=pdf`, { method: "POST", body: fd });
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a"); a.href = url; a.download = "formula_output.pdf"; a.click();
+              }}
+              className="px-3 py-1.5 bg-neutral-100 text-neutral-700 rounded-lg text-xs font-medium hover:bg-neutral-200"
+            >Download PDF</button>
+          </div>
+
+          {/* Rendered output preview */}
+          {formulaResult.rendered_html && (
+            <div className="rounded-xl border border-neutral-200 bg-white p-4">
+              <h3 className="text-sm font-medium text-neutral-500 mb-3">Rendered Output (with formula formatting)</h3>
+              <div
+                className="prose prose-sm max-w-none border border-neutral-100 rounded-lg p-4 bg-neutral-50 overflow-auto max-h-96"
+                dangerouslySetInnerHTML={{ __html: formulaResult.rendered_html }}
+              />
+            </div>
+          )}
+
           {/* Summary */}
           <div className="grid grid-cols-4 gap-3">
             <div className="bg-blue-50 rounded-lg p-3 text-center">

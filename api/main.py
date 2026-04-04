@@ -2589,6 +2589,12 @@ async def detect_formulas(file: UploadFile = File(...)):
                 formula_counts[ftype] = formula_counts.get(ftype, 0) + 1
                 tier_counts[f.complexity.value] = tier_counts.get(f.complexity.value, 0) + 1
 
+    # Render enriched document to HTML (with formula sub/sup/MathML)
+    from src.formatter.pipeline.factory import create_pipeline
+    pipeline = create_pipeline()
+    enriched_doc = pipeline.ingest(content, fmt, filename)
+    rendered_html = pipeline.render(enriched_doc, "html")
+
     return {
         "document_name": filename,
         "total_formulas": len(all_formulas),
@@ -2596,7 +2602,48 @@ async def detect_formulas(file: UploadFile = File(...)):
         "by_tier": tier_counts,
         "registry_tools": orchestrator._registry.list_tools(),
         "formulas": all_formulas,
+        "rendered_html": rendered_html,
     }
+
+
+@app.post("/api/fidelity/formula-export")
+async def formula_export(file: UploadFile = File(...), format: str = "docx"):
+    """Export a document with formula annotations applied.
+
+    Returns the document rendered to the specified format (docx, pdf, html).
+    Formulas are enriched with proper sub/superscript and MathML rendering.
+    """
+    from src.formatter.pipeline.factory import create_pipeline
+    from fastapi.responses import Response
+
+    content = await file.read()
+    filename = file.filename or ""
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else "pdf"
+    format_map = {"pdf": "pdf", "docx": "docx", "html": "html", "htm": "html",
+                  "pptx": "pptx", "xlsx": "xlsx", "md": "markdown", "txt": "text"}
+    fmt = format_map.get(ext, "pdf")
+
+    pipeline = create_pipeline()
+    doc = pipeline.ingest(content, fmt, filename)
+    output = pipeline.render(doc, format)
+
+    mime_map = {
+        "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "pdf": "application/pdf",
+        "html": "text/html",
+        "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    }
+
+    out_filename = filename.rsplit(".", 1)[0] + f"_formulas.{format}" if filename else f"output.{format}"
+
+    if isinstance(output, str):
+        output = output.encode("utf-8")
+
+    return Response(
+        content=output,
+        media_type=mime_map.get(format, "application/octet-stream"),
+        headers={"Content-Disposition": f'attachment; filename="{out_filename}"'},
+    )
 
 
 @app.post("/api/fidelity/generate-contract")
