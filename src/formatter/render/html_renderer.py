@@ -137,6 +137,10 @@ class HTMLRenderer:
 
         for page in doc.pages:
             for para in page.paragraphs:
+                # Skip header/footer paragraphs (marked by extractor)
+                if para.style in ("header", "footer"):
+                    continue
+
                 if para.style == "image":
                     parts.append(self._render_image_para(para))
                     continue

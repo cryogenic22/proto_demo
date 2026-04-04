@@ -336,7 +336,7 @@ class FormattingExtractor:
                     # being falsely marked as subscript.
                     is_subscript = False
                     if (not is_superscript
-                            and font_size < dominant_size * 0.80
+                            and font_size <= dominant_size * 0.82
                             and dominant_size > 0):
                         # Check vertical position: subscript sits lower
                         span_y1 = bbox[3] if len(bbox) >= 4 else 0
