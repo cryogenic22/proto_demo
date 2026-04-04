@@ -3,7 +3,7 @@ DOCX Renderer — converts FormattedDocument IR to a styled Word document.
 
 Preserves: fonts, sizes, colors, bold/italic/underline, super/subscript,
 paragraph spacing, alignment, heading levels, lists, table structure,
-and page margins.
+page margins, page breaks, and formula sub/superscript formatting.
 
 Usage:
     from src.formatter.docx_renderer import DOCXRenderer
@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import io
 import logging
+import re
 from typing import Any
 
 from src.formatter.extractor import (
@@ -28,6 +29,115 @@ from src.formatter.extractor import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Default fallback font when source font is empty or unresolvable
+_FALLBACK_FONT = "Calibri"
+
+# Regex to split formula HTML into normal text and <sub>/<sup> segments
+_FORMULA_TAG_RE = re.compile(r"(<su[bp]>)(.*?)(</su[bp]>)", re.DOTALL)
+
+
+def _strip_control_chars(text: str) -> str:
+    """Strip XML-invalid control characters while preserving tab/newline/return.
+
+    XML 1.0 allows: #x9 (tab), #xA (LF), #xD (CR), #x20-#xD7FF, etc.
+    We strip 0x00-0x08, 0x0B, 0x0C, 0x0E-0x1F which are all invalid.
+    """
+    return "".join(
+        c for c in text
+        if c in ("\t", "\n", "\r") or ord(c) >= 0x20
+    )
+
+
+def _parse_formula_html(html: str) -> list[tuple[str, str]]:
+    """Parse formula HTML into a list of (text, tag_type) tuples.
+
+    tag_type is one of: "normal", "sub", "sup".
+
+    Example:
+        "AUC<sub>0-inf</sub>" -> [("AUC", "normal"), ("0-inf", "sub")]
+        "CO<sub>2</sub>" -> [("CO", "normal"), ("2", "sub")]
+        "10<sup>6</sup> cells" -> [("10", "normal"), ("6", "sup"), (" cells", "normal")]
+    """
+    segments: list[tuple[str, str]] = []
+    pos = 0
+
+    for m in _FORMULA_TAG_RE.finditer(html):
+        # Text before this tag
+        if m.start() > pos:
+            pre = html[pos:m.start()]
+            if pre:
+                segments.append((pre, "normal"))
+        # The tagged content
+        open_tag = m.group(1)
+        content = m.group(2)
+        tag_type = "sub" if "sub" in open_tag else "sup"
+        if content:
+            segments.append((content, tag_type))
+        pos = m.end()
+
+    # Remaining text after last tag
+    if pos < len(html):
+        remaining = html[pos:]
+        if remaining:
+            segments.append((remaining, "normal"))
+
+    return segments
+
+
+def _set_cell_borders(cell_element: Any, border_color: str = "000000", border_size: str = "4") -> None:
+    """Set all four borders on a table cell via XML.
+
+    Args:
+        cell_element: The w:tc OxmlElement.
+        border_color: Hex color string (e.g. "000000" for black).
+        border_size: Border width in eighths of a point (4 = 0.5pt).
+    """
+    from docx.oxml.ns import qn
+    from docx.oxml import OxmlElement
+
+    tc_pr = cell_element.get_or_add_tcPr()
+
+    # Remove existing borders if any
+    existing = tc_pr.find(qn("w:tcBorders"))
+    if existing is not None:
+        tc_pr.remove(existing)
+
+    borders_el = OxmlElement("w:tcBorders")
+    for edge in ("top", "left", "bottom", "right"):
+        edge_el = OxmlElement(f"w:{edge}")
+        edge_el.set(qn("w:val"), "single")
+        edge_el.set(qn("w:sz"), border_size)
+        edge_el.set(qn("w:space"), "0")
+        edge_el.set(qn("w:color"), border_color)
+        borders_el.append(edge_el)
+    tc_pr.append(borders_el)
+
+
+def _set_cell_margin(cell_element: Any, margin_twips: int = 72) -> None:
+    """Set uniform cell padding (margins) on a table cell.
+
+    Args:
+        cell_element: The w:tc OxmlElement.
+        margin_twips: Margin size in twips (72 twips ~ 1mm, 144 ~ 2mm).
+    """
+    from docx.oxml.ns import qn
+    from docx.oxml import OxmlElement
+
+    tc_pr = cell_element.get_or_add_tcPr()
+
+    # Remove existing margins
+    existing = tc_pr.find(qn("w:tcMar"))
+    if existing is not None:
+        tc_pr.remove(existing)
+
+    mar_el = OxmlElement("w:tcMar")
+    for edge in ("top", "left", "bottom", "right"):
+        edge_el = OxmlElement(f"w:{edge}")
+        edge_el.set(qn("w:w"), str(margin_twips))
+        edge_el.set(qn("w:type"), "dxa")
+        mar_el.append(edge_el)
+    tc_pr.append(mar_el)
 
 
 class DOCXRenderer:
@@ -58,9 +168,17 @@ class DOCXRenderer:
                 section.page_width = Emu(int(p0.width * 12700))
                 section.page_height = Emu(int(p0.height * 12700))
 
-        for page in doc.pages:
+        for page_idx, page in enumerate(doc.pages):
+            # Insert page break before every page except the first
+            if page_idx > 0:
+                self._add_page_break(word_doc)
+
             # Interleave paragraphs and tables by Y position
             for para in page.paragraphs:
+                # Skip header/footer paragraphs — they belong in Word
+                # headers/footers, not the document body
+                if para.style in ("header", "footer"):
+                    continue
                 if para.style == "image":
                     self._add_image(word_doc, para)
                 else:
@@ -114,13 +232,26 @@ class DOCXRenderer:
                 section.page_width = Emu(int(p0.width * 12700))
                 section.page_height = Emu(int(p0.height * 12700))
 
-        for page in doc.pages:
+        for page_idx, page in enumerate(doc.pages):
+            # Page breaks between pages
+            if page_idx > 0:
+                self._add_page_break(word_doc)
+
             for para in page.paragraphs:
+                if para.style in ("header", "footer"):
+                    continue
                 self._add_paragraph(word_doc, para, profile)
 
         buf = io.BytesIO()
         word_doc.save(buf)
         return buf.getvalue()
+
+    def _add_page_break(self, word_doc: Any) -> None:
+        """Insert a page break into the document."""
+        from docx.enum.text import WD_BREAK
+        p = word_doc.add_paragraph()
+        run = p.add_run()
+        run.add_break(WD_BREAK.PAGE)
 
     def _add_paragraph(
         self,
@@ -132,10 +263,14 @@ class DOCXRenderer:
         from docx.shared import Pt, RGBColor
         from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-        # Determine style
+        # Determine Word style — heading1 through heading6 map to built-in
+        # "Heading 1" through "Heading 6" so they appear in navigation pane
         style_name = None
         if para.style.startswith("heading"):
-            level = para.style[-1] if para.style[-1].isdigit() else "3"
+            # Extract level: "heading1" -> "1", "heading12" -> "1" (take last digit)
+            digits = "".join(c for c in para.style if c.isdigit())
+            level = int(digits) if digits else 3
+            level = max(1, min(level, 6))  # Clamp to 1-6
             style_name = f"Heading {level}"
         elif para.style == "list_bullet":
             style_name = "List Bullet"
@@ -173,61 +308,161 @@ class DOCXRenderer:
                 if not span.text:
                     continue
 
-                # Ensure text is a valid string (guard against bytes/None)
-                text = str(span.text) if span.text else ""
-                # Strip control characters that Word XML rejects
-                # 0x00-0x08, 0x0B, 0x0C, 0x0E-0x1F are invalid in XML 1.0
-                text = "".join(
-                    c for c in text
-                    if c in ("\t", "\n", "\r") or ord(c) >= 0x20
-                )
-                if not text:
+                # Check if this span has a formula with HTML sub/sup tags
+                # that we can render as separate Word runs
+                if span.formula and self._render_formula_runs(wp, span, para, profile):
                     continue
 
-                run = wp.add_run(text)
+                # Standard span rendering (no formula or formula without HTML)
+                self._add_span_run(wp, span, para, profile)
 
-                # Font name
-                font_name = span.font_family
-                if profile and not para.style.startswith("heading"):
-                    font_name = profile.get("body_font", font_name)
-                elif profile and para.style.startswith("heading"):
-                    heading_fonts = profile.get("heading_fonts", {})
-                    font_name = heading_fonts.get(para.style, font_name)
+    def _render_formula_runs(
+        self,
+        wp: Any,
+        span: FormattedSpan,
+        para: FormattedParagraph,
+        profile: dict[str, Any] | None = None,
+    ) -> bool:
+        """Attempt to render a formula span as multiple Word runs with sub/sup.
 
-                run.font.name = font_name
+        Returns True if formula HTML was successfully parsed and rendered,
+        False if we should fall back to the standard span rendering.
+        """
+        from docx.shared import Pt, RGBColor
 
-                # Font size
-                size = span.size
-                if profile and not para.style.startswith("heading"):
-                    size = profile.get("body_size", size)
-                elif profile and para.style.startswith("heading"):
-                    heading_sizes = profile.get("heading_sizes", {})
-                    size = heading_sizes.get(para.style, size)
+        formula = span.formula
+        # Get the best HTML representation
+        html = ""
+        if hasattr(formula, "html") and formula.html:
+            html = formula.html
+        elif hasattr(formula, "plain_text") and formula.plain_text:
+            # No HTML available — fall back to standard rendering
+            return False
 
-                run.font.size = Pt(size)
+        if not html or ("<sub>" not in html and "<sup>" not in html):
+            return False
 
-                # Bold / Italic
-                run.font.bold = span.bold
-                run.font.italic = span.italic
+        segments = _parse_formula_html(html)
+        if not segments:
+            return False
 
-                # Underline
-                if span.underline:
-                    run.font.underline = True
+        # Resolve font and size for this span
+        font_name = self._resolve_font(span, para, profile)
+        size = self._resolve_size(span, para, profile)
 
-                # Superscript / Subscript
+        for seg_text, seg_type in segments:
+            seg_text = _strip_control_chars(seg_text)
+            if not seg_text:
+                continue
+
+            run = wp.add_run(seg_text)
+            run.font.name = font_name
+            run.font.size = Pt(size)
+            run.font.bold = span.bold
+            run.font.italic = span.italic
+            if span.underline:
+                run.font.underline = True
+
+            # Apply sub/sup from the formula HTML tag
+            if seg_type == "sub":
+                run.font.subscript = True
+            elif seg_type == "sup":
+                run.font.superscript = True
+            else:
+                # Normal segment — respect span-level sub/sup flags
                 if span.superscript:
                     run.font.superscript = True
                 elif span.subscript:
                     run.font.subscript = True
 
-                # Color — preserve ALL non-black colors (red instructions,
-                # blue links, grey headers)
-                r, g, b = span.color_rgb
-                if r > 20 or g > 20 or b > 20:
-                    run.font.color.rgb = RGBColor(r, g, b)
+            # Color
+            r, g, b = span.color_rgb
+            if r > 20 or g > 20 or b > 20:
+                run.font.color.rgb = RGBColor(r, g, b)
+
+        return True
+
+    def _add_span_run(
+        self,
+        wp: Any,
+        span: FormattedSpan,
+        para: FormattedParagraph,
+        profile: dict[str, Any] | None = None,
+    ) -> None:
+        """Add a single Word run for a span (standard path, no formula splitting)."""
+        from docx.shared import Pt, RGBColor
+
+        # Ensure text is a valid string (guard against bytes/None)
+        text = str(span.text) if span.text else ""
+        text = _strip_control_chars(text)
+        if not text:
+            return
+
+        run = wp.add_run(text)
+
+        # Font name (with fallback)
+        font_name = self._resolve_font(span, para, profile)
+        run.font.name = font_name
+
+        # Font size
+        size = self._resolve_size(span, para, profile)
+        run.font.size = Pt(size)
+
+        # Bold / Italic
+        run.font.bold = span.bold
+        run.font.italic = span.italic
+
+        # Underline
+        if span.underline:
+            run.font.underline = True
+
+        # Superscript / Subscript
+        if span.superscript:
+            run.font.superscript = True
+        elif span.subscript:
+            run.font.subscript = True
+
+        # Color — preserve ALL non-black colors (red instructions,
+        # blue links, grey headers)
+        r, g, b = span.color_rgb
+        if r > 20 or g > 20 or b > 20:
+            run.font.color.rgb = RGBColor(r, g, b)
+
+    def _resolve_font(
+        self, span: FormattedSpan, para: FormattedParagraph,
+        profile: dict[str, Any] | None = None,
+    ) -> str:
+        """Resolve font name for a span, applying profile overrides and fallback."""
+        font_name = span.font_family
+        if profile and not para.style.startswith("heading"):
+            font_name = profile.get("body_font", font_name)
+        elif profile and para.style.startswith("heading"):
+            heading_fonts = profile.get("heading_fonts", {})
+            font_name = heading_fonts.get(para.style, font_name)
+        # Fallback to Calibri if font is empty or blank
+        if not font_name or not font_name.strip():
+            font_name = _FALLBACK_FONT
+        return font_name
+
+    def _resolve_size(
+        self, span: FormattedSpan, para: FormattedParagraph,
+        profile: dict[str, Any] | None = None,
+    ) -> float:
+        """Resolve font size for a span, applying profile overrides."""
+        size = span.size
+        if profile and not para.style.startswith("heading"):
+            size = profile.get("body_size", size)
+        elif profile and para.style.startswith("heading"):
+            heading_sizes = profile.get("heading_sizes", {})
+            size = heading_sizes.get(para.style, size)
+        # Guard against zero/negative sizes
+        if size <= 0:
+            size = 10.0
+        return size
 
     def _add_table(self, word_doc: Any, table: Any) -> None:
-        """Add a formatted table to the Word document."""
+        """Add a formatted table to the Word document with proper borders,
+        header styling, cell padding, and column widths."""
         from docx.shared import Pt, RGBColor, Emu
         from docx.oxml.ns import qn
         from docx.oxml import OxmlElement
@@ -240,30 +475,68 @@ class DOCXRenderer:
         )
         doc_table.style = "Table Grid"
 
+        # Disable autofit so we can control column widths
+        doc_table.autofit = False
+
+        # Calculate available page width (approximate — use 6.5 inches as default)
+        try:
+            section = word_doc.sections[-1]
+            avail_width = section.page_width - section.left_margin - section.right_margin
+        except Exception:
+            avail_width = Emu(int(6.5 * 914400))  # 6.5 inches in EMU
+
+        # Set uniform column widths
+        if table.num_cols > 0:
+            col_width = avail_width // table.num_cols
+            for col_idx in range(table.num_cols):
+                for row in doc_table.rows:
+                    try:
+                        row.cells[col_idx].width = col_width
+                    except (IndexError, AttributeError):
+                        pass
+
         for r_idx, row in enumerate(table.rows):
             for c_idx, cell in enumerate(row):
                 if c_idx >= table.num_cols or r_idx >= table.num_rows:
                     continue
                 doc_cell = doc_table.cell(r_idx, c_idx)
+
+                # Clear default paragraph and set text properly
                 doc_cell.text = cell.text or ""
+
+                # Apply explicit cell borders (ensures all cells are bordered
+                # even if the style doesn't propagate)
+                _set_cell_borders(doc_cell._element)
+
+                # Set consistent cell padding
+                _set_cell_margin(doc_cell._element, margin_twips=72)
 
                 # Apply formatting to cell text
                 for paragraph in doc_cell.paragraphs:
+                    # Reduce paragraph spacing inside cells for compactness
+                    paragraph.paragraph_format.space_before = Pt(1)
+                    paragraph.paragraph_format.space_after = Pt(1)
                     for run in paragraph.runs:
-                        run.font.name = "Arial"
-                        run.font.size = Pt(10)
+                        run.font.name = "Calibri"
+                        run.font.size = Pt(9)
                         if cell.bold or cell.is_header:
                             run.font.bold = True
 
-                # Header row shading
+                # Header row shading — dark blue with white text
                 if cell.is_header:
+                    tc_pr = doc_cell._element.get_or_add_tcPr()
+                    # Remove any existing shading first
+                    existing_shd = tc_pr.find(qn("w:shd"))
+                    if existing_shd is not None:
+                        tc_pr.remove(existing_shd)
                     shading = OxmlElement("w:shd")
                     shading.set(qn("w:fill"), "1565C0")
                     shading.set(qn("w:val"), "clear")
-                    doc_cell._element.get_or_add_tcPr().append(shading)
+                    tc_pr.append(shading)
                     for paragraph in doc_cell.paragraphs:
                         for run in paragraph.runs:
                             run.font.color.rgb = RGBColor(255, 255, 255)
+                            run.font.bold = True
 
     def _add_image(self, word_doc: Any, para: Any) -> None:
         """Add an image to the Word document."""
