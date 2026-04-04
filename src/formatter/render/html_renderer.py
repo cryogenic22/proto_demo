@@ -66,10 +66,13 @@ class HTMLRenderer:
             body_size = self._default_size
             parts.append(
                 f'<div style="'
+                f"max-width:800px;"
+                f"margin:0 auto;"
+                f"padding:24px 32px;"
                 f"font-family:'{body_font}',sans-serif;"
                 f"font-size:{body_size:.1f}pt;"
                 f"color:#000000;"
-                f"line-height:1.4;"
+                f"line-height:1.6;"
                 f'">'
             )
 
@@ -77,7 +80,11 @@ class HTMLRenderer:
             parts.append(self._render_page(page))
             # Page break between pages (not after the last)
             if page_idx < len(doc.pages) - 1:
-                parts.append('<hr style="page-break-after:always;border:none;">')
+                parts.append(
+                    '<hr style="page-break-after:always;'
+                    'border:none;border-top:1px solid #ddd;'
+                    'margin:32px 0;">'
+                )
 
         if self._include_wrapper:
             parts.append("</div>")
@@ -229,6 +236,10 @@ class HTMLRenderer:
         """Render a single span as HTML with inline formatting."""
         text = html_module.escape(span.text)
 
+        # Track whether formula HTML already provides sub/sup formatting
+        formula_has_sub = False
+        formula_has_sup = False
+
         # If span has a formula, replace the formula's original text
         # within the span — preserving surrounding text
         if span.formula:
@@ -241,6 +252,11 @@ class HTMLRenderer:
                 formula_html = None
 
             if formula_html:
+                # Check if formula HTML already contains sub/sup tags
+                formula_lower = formula_html.lower()
+                formula_has_sub = "<sub>" in formula_lower
+                formula_has_sup = "<sup>" in formula_lower
+
                 plain = span.formula.plain_text or ""
                 if plain and plain in span.text:
                     # Replace only the formula portion, escape the rest
@@ -263,10 +279,16 @@ class HTMLRenderer:
             text = f"<em>{text}</em>"
         if span.underline:
             text = f"<u>{text}</u>"
-        if span.superscript:
+
+        # Avoid doubling sub/sup when formula HTML already provides them.
+        # The PDF extractor may set subscript/superscript on the span AND the
+        # formula enricher may annotate HTML with <sub>/<sup> — applying both
+        # would produce nested <sub><sub>...</sub></sub>.
+        if span.superscript and not formula_has_sup:
             text = f"<sup>{text}</sup>"
-        elif span.subscript:
+        elif span.subscript and not formula_has_sub:
             text = f"<sub>{text}</sub>"
+
         if span.strikethrough:
             text = f"<s>{text}</s>"
 
@@ -300,20 +322,22 @@ class HTMLRenderer:
             return ""
 
         parts: list[str] = [
-            '<table style="border-collapse:collapse;width:100%;">'
+            '<table style="border-collapse:collapse;width:100%;'
+            'margin-top:16px;margin-bottom:16px;">'
         ]
 
+        has_header = any(c.is_header for c in table.rows[0]) if table.rows else False
+        tbody_opened = False
+
         for r_idx, row in enumerate(table.rows):
-            # Detect header row
-            is_header_row = r_idx == 0 and any(c.is_header for c in row)
+            is_header_row = r_idx == 0 and has_header
 
             if is_header_row:
                 parts.append("<thead>")
-            elif r_idx == 1 or (r_idx == 0 and not is_header_row):
-                if r_idx == 1:
-                    pass  # thead was already closed
-                if r_idx == 0:
-                    parts.append("<tbody>")
+
+            if not is_header_row and not tbody_opened:
+                parts.append("<tbody>")
+                tbody_opened = True
 
             parts.append("<tr>")
             for cell in row:
@@ -334,10 +358,8 @@ class HTMLRenderer:
 
             if is_header_row:
                 parts.append("</thead>")
-                parts.append("<tbody>")
 
-        # Close tbody if we opened it
-        if table.rows:
+        if tbody_opened:
             parts.append("</tbody>")
 
         parts.append("</table>")
@@ -349,7 +371,7 @@ class HTMLRenderer:
 
     @staticmethod
     def _render_image_para(para: FormattedParagraph) -> str:
-        """Render an image paragraph as an <img> tag."""
+        """Render an image paragraph as a centered <img> tag."""
         if not para.lines or not para.lines[0].spans:
             return ""
 
@@ -361,14 +383,27 @@ class HTMLRenderer:
         width = span.x1
         height = span.y1
 
-        style_parts: list[str] = ["max-width:100%"]
+        style_parts: list[str] = [
+            "display:block",
+            "margin:16px auto",
+            "max-width:100%",
+        ]
         if width > 0:
             style_parts.append(f"width:{width:.0f}px")
         if height > 0:
             style_parts.append(f"height:{height:.0f}px")
 
         style_str = ";".join(style_parts)
-        return f'<img src="{src}" style="{style_str}" alt="" />'
+
+        # Build attributes
+        attrs = f'src="{src}" style="{style_str}"'
+        if width > 0:
+            attrs += f' width="{width:.0f}"'
+        if height > 0:
+            attrs += f' height="{height:.0f}"'
+        attrs += ' alt="Embedded image"'
+
+        return f"<img {attrs} />"
 
     # ------------------------------------------------------------------
     # CSS helpers
@@ -407,6 +442,12 @@ class HTMLRenderer:
         if para.spacing_after > 0:
             pts = min(para.spacing_after, 36)
             parts.append(f"margin-bottom:{pts:.0f}pt")
+        else:
+            # Default paragraph spacing for readability
+            if para.style == "body":
+                parts.append("margin-bottom:8pt")
+            elif para.style.startswith("heading"):
+                parts.append("margin-bottom:6pt")
 
         return ";".join(parts)
 

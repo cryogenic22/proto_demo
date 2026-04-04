@@ -177,6 +177,9 @@ class FormattingExtractor:
         font_counts: dict[str, int] = {}
         color_counts: dict[str, int] = {}
 
+        # Collect table bounding boxes per page for deduplication (Issue 3)
+        page_table_bboxes: dict[int, list[tuple[float, float, float, float]]] = {}
+
         for page_idx in range(doc.page_count):
             page = doc[page_idx]
             rect = page.rect
@@ -190,14 +193,20 @@ class FormattingExtractor:
             blocks = page.get_text("dict")["blocks"]
             self._detect_margins(fmt_page, blocks)
 
+            # Extract tables first so we know their bounding boxes
+            table_bboxes: list[tuple[float, float, float, float]] = []
+            fmt_page.tables = self._extract_tables(page, _out_bboxes=table_bboxes)
+            page_table_bboxes[page_idx] = table_bboxes
+
             # Extract spans with formatting
             lines = self._extract_lines(blocks, font_counts, color_counts)
 
+            # Filter out lines that overlap with table bounding boxes (Issue 3)
+            if table_bboxes:
+                lines = self._filter_table_overlapping_lines(lines, table_bboxes)
+
             # Group lines into paragraphs
             fmt_page.paragraphs = self._group_paragraphs(lines, fmt_page)
-
-            # Extract tables
-            fmt_page.tables = self._extract_tables(page)
 
             # Extract images
             self._extract_images(page, fmt_page)
@@ -205,6 +214,9 @@ class FormattingExtractor:
             pages.append(fmt_page)
 
         doc.close()
+
+        # Detect and mark headers/footers (Issue 4)
+        self._mark_headers_footers(pages)
 
         # Build style inventory
         style_counts: dict[str, int] = {}
@@ -248,7 +260,13 @@ class FormattingExtractor:
         font_counts: dict[str, int],
         color_counts: dict[str, int],
     ) -> list[FormattedLine]:
-        """Extract formatted lines from PyMuPDF blocks."""
+        """Extract formatted lines from PyMuPDF blocks.
+
+        Subscript detection uses a two-pass approach:
+        1. First pass: collect all spans for a line, compute dominant font size
+        2. Second pass: mark subscript only if span is < 80% of dominant size
+           AND positioned below the line's baseline (higher y1 value)
+        """
         lines: list[FormattedLine] = []
 
         for block in blocks:
@@ -256,16 +274,44 @@ class FormattingExtractor:
                 continue
 
             for line_data in block.get("lines", []):
-                fmt_line = FormattedLine()
-                spans = line_data.get("spans", [])
+                raw_spans = line_data.get("spans", [])
+                if not raw_spans:
+                    continue
 
-                prev_span_end_x = None
-
-                for i, span in enumerate(spans):
+                # --- First pass: collect span data + compute line metrics ---
+                span_entries: list[dict] = []
+                for span in raw_spans:
                     text = span.get("text", "")
                     if not text:
                         continue
+                    span_entries.append(span)
 
+                if not span_entries:
+                    continue
+
+                # Dominant font size = the most common (mode) size on this line,
+                # weighted by text length.  Falls back to max size.
+                size_weight: dict[float, int] = {}
+                for sp in span_entries:
+                    sz = round(sp.get("size", 10.0), 1)
+                    size_weight[sz] = size_weight.get(sz, 0) + len(sp.get("text", ""))
+                dominant_size = max(size_weight, key=size_weight.get)  # type: ignore[arg-type]
+
+                # Baseline: the maximum y1 (bottom) among spans at the dominant size
+                dominant_y1_values = [
+                    sp.get("bbox", sp.get("origin", [0, 0, 0, 0]))[3]
+                    for sp in span_entries
+                    if len(sp.get("bbox", sp.get("origin", [0, 0, 0, 0]))) >= 4
+                    and abs(sp.get("size", 10.0) - dominant_size) < 0.5
+                ]
+                line_baseline = max(dominant_y1_values) if dominant_y1_values else 0
+
+                # --- Second pass: build FormattedLine with corrected subscript ---
+                fmt_line = FormattedLine()
+                prev_span_end_x = None
+
+                for span in span_entries:
+                    text = span.get("text", "")
                     flags = span.get("flags", 0)
                     font_name = span.get("font", "")
                     font_size = span.get("size", 10.0)
@@ -276,14 +322,32 @@ class FormattingExtractor:
                     is_superscript = bool(flags & 1)
                     is_underline = bool(flags & 4)
 
-                    # Subscript: small font, not flagged as superscript
-                    is_subscript = False
-                    if not is_superscript and font_size < 7.5:
-                        is_subscript = True
-
                     bbox = span.get("bbox", span.get("origin", [0, 0, 0, 0]))
                     if len(bbox) == 2:
                         bbox = [bbox[0], bbox[1], bbox[0] + len(text) * font_size * 0.5, bbox[1] + font_size]
+
+                    # Subscript detection (improved):
+                    # A span is subscript only if:
+                    #  1. NOT already flagged as superscript
+                    #  2. Significantly smaller than the dominant size (< 80%)
+                    #  3. Positioned below the line baseline (y1 extends lower)
+                    #     OR its top (y0) is below the midpoint of dominant spans
+                    # This prevents header/footer text (uniformly small) from
+                    # being falsely marked as subscript.
+                    is_subscript = False
+                    if (not is_superscript
+                            and font_size < dominant_size * 0.80
+                            and dominant_size > 0):
+                        # Check vertical position: subscript sits lower
+                        span_y1 = bbox[3] if len(bbox) >= 4 else 0
+                        span_y0 = bbox[1] if len(bbox) >= 2 else 0
+                        # Subscript baseline extends beyond the dominant baseline,
+                        # or its top is near/below the dominant baseline
+                        if line_baseline > 0:
+                            baseline_offset = span_y1 - line_baseline
+                            top_below_baseline = span_y0 >= line_baseline - (dominant_size * 0.2)
+                            if baseline_offset > -0.5 or top_below_baseline:
+                                is_subscript = True
 
                     # Space injection for run-on words
                     if prev_span_end_x is not None and fmt_line.spans:
@@ -345,7 +409,14 @@ class FormattingExtractor:
     def _group_paragraphs(
         self, lines: list[FormattedLine], page: FormattedPage,
     ) -> list[FormattedParagraph]:
-        """Group lines into paragraphs based on Y-gap analysis."""
+        """Group lines into paragraphs based on Y-gap, x-position, and formatting.
+
+        Two consecutive lines are joined into one paragraph when:
+        - Y-gap is small (< 1.5x font size) — they're visually close
+        - X-positions are similar (within margin tolerance) — same column
+        - Neither line looks like a heading (short bold text)
+        - They share similar font size (within 1pt)
+        """
         if not lines:
             return []
 
@@ -358,10 +429,40 @@ class FormattingExtractor:
 
             # Compute Y gap
             y_gap = curr_line.y_center - prev_line.y_center
-            line_height = max(s.size for s in prev_line.spans) if prev_line.spans else 12.0
+            prev_size = max(s.size for s in prev_line.spans) if prev_line.spans else 12.0
+            curr_size = max(s.size for s in curr_line.spans) if curr_line.spans else 12.0
 
-            # New paragraph if gap > 1.5x line height or significant indent change
-            is_new_para = y_gap > line_height * 1.5
+            # --- Signals for paragraph break ---
+
+            # 1. Large vertical gap
+            gap_break = y_gap > prev_size * 1.5
+
+            # 2. Significant indent change (new indented block or de-indent)
+            indent_tolerance = 18.0  # ~0.25 inch
+            indent_diff = abs(curr_line.indent - prev_line.indent)
+            # A first-line indent (small rightward shift) is normal continuation
+            first_line_indent = (
+                curr_line.indent > prev_line.indent
+                and indent_diff < 36.0  # < 0.5 inch is first-line indent
+                and indent_diff > indent_tolerance
+            )
+            major_indent_change = indent_diff > indent_tolerance and not first_line_indent
+
+            # 3. Font size mismatch — different visual hierarchy
+            size_mismatch = abs(prev_size - curr_size) > 1.0
+
+            # 4. Both lines are short + bold → likely separate headings
+            prev_bold = all(s.bold for s in prev_line.spans if s.text.strip())
+            curr_bold = all(s.bold for s in curr_line.spans if s.text.strip())
+            prev_short = len(prev_line.text.split()) <= 10
+            curr_short = len(curr_line.text.split()) <= 10
+            heading_break = prev_bold and curr_bold and prev_short and curr_short and size_mismatch
+
+            # Determine break
+            is_new_para = gap_break or heading_break
+            # Size mismatch + indent change together are strong signals
+            if size_mismatch and major_indent_change:
+                is_new_para = True
 
             if is_new_para:
                 # Classify the completed paragraph
@@ -484,17 +585,164 @@ class FormattingExtractor:
                 if abs(center_of_para - center_of_content) < 20 and avg_width < content_width * 0.8:
                     para.alignment = "center"
 
+    # ── Issue 3: Table/paragraph deduplication ─────────────────────────
+
+    @staticmethod
+    def _rects_overlap(
+        r1: tuple[float, float, float, float],
+        r2: tuple[float, float, float, float],
+        tolerance: float = 2.0,
+    ) -> bool:
+        """Check if two rectangles (x0, y0, x1, y1) overlap."""
+        x0a, y0a, x1a, y1a = r1
+        x0b, y0b, x1b, y1b = r2
+        return (
+            x0a < x1b + tolerance
+            and x1a > x0b - tolerance
+            and y0a < y1b + tolerance
+            and y1a > y0b - tolerance
+        )
+
+    def _filter_table_overlapping_lines(
+        self,
+        lines: list[FormattedLine],
+        table_bboxes: list[tuple[float, float, float, float]],
+    ) -> list[FormattedLine]:
+        """Remove lines whose bounding box overlaps with any table region.
+
+        This prevents table content from being duplicated as paragraphs.
+        """
+        if not table_bboxes:
+            return lines
+
+        filtered: list[FormattedLine] = []
+        for line in lines:
+            if not line.spans:
+                filtered.append(line)
+                continue
+
+            # Compute the line's bounding box from its spans
+            line_x0 = min(s.x0 for s in line.spans)
+            line_y0 = min(s.y0 for s in line.spans)
+            line_x1 = max(s.x1 for s in line.spans)
+            line_y1 = max(s.y1 for s in line.spans)
+            line_bbox = (line_x0, line_y0, line_x1, line_y1)
+
+            overlaps = any(
+                self._rects_overlap(line_bbox, tb)
+                for tb in table_bboxes
+            )
+            if not overlaps:
+                filtered.append(line)
+
+        removed = len(lines) - len(filtered)
+        if removed > 0:
+            logger.debug("Filtered %d lines overlapping with tables", removed)
+        return filtered
+
+    # ── Issue 4: Header/footer detection & marking ───────────────────
+
+    # Pattern to strip page numbers from header/footer text for fingerprinting
+    _PAGE_NUM_RE = re.compile(r"\bpage\s*\d+\b", re.IGNORECASE)
+
+    def _normalize_hf_text(self, text: str) -> str:
+        """Normalize header/footer text for comparison.
+
+        Strips page numbers (e.g., 'Page 3') so that footers varying only
+        by page number are still detected as repeating.
+        """
+        fp = text.strip().lower()
+        fp = self._PAGE_NUM_RE.sub("", fp)
+        # Collapse whitespace
+        fp = re.sub(r"\s+", " ", fp).strip()
+        return fp
+
+    def _mark_headers_footers(self, pages: list[FormattedPage]) -> None:
+        """Detect repeating headers/footers and mark their paragraphs.
+
+        Text appearing in the top ~50pt or bottom ~50pt of a page that
+        repeats (same or very similar text) across 3+ pages is marked
+        with style 'header' or 'footer'.  Page numbers are normalized
+        out before comparison so 'Page 1' / 'Page 2' still match.
+        """
+        if len(pages) < 3:
+            return
+
+        header_zone = 50.0  # points from top
+        footer_zone = 50.0  # points from bottom
+
+        # Collect text fingerprints from header/footer zones per page
+        header_texts: dict[str, int] = {}  # normalized text -> page count
+        footer_texts: dict[str, int] = {}
+
+        for page in pages:
+            page_header_seen: set[str] = set()
+            page_footer_seen: set[str] = set()
+            for para in page.paragraphs:
+                if not para.lines or not para.lines[0].spans:
+                    continue
+                # Use the y-position of the first span to determine zone
+                first_y = para.lines[0].spans[0].y0
+                last_y = para.lines[-1].spans[-1].y1 if para.lines[-1].spans else first_y
+                text_fp = self._normalize_hf_text(para.text)
+                if not text_fp:
+                    continue
+
+                if first_y < page.margin_top + header_zone and first_y < 80:
+                    if text_fp not in page_header_seen:
+                        page_header_seen.add(text_fp)
+                        header_texts[text_fp] = header_texts.get(text_fp, 0) + 1
+                elif last_y > page.height - footer_zone and last_y > page.height - 80:
+                    if text_fp not in page_footer_seen:
+                        page_footer_seen.add(text_fp)
+                        footer_texts[text_fp] = footer_texts.get(text_fp, 0) + 1
+
+        # Texts appearing on 3+ pages are headers/footers
+        min_repeat = min(3, len(pages))
+        header_fps = {t for t, c in header_texts.items() if c >= min_repeat}
+        footer_fps = {t for t, c in footer_texts.items() if c >= min_repeat}
+
+        if not header_fps and not footer_fps:
+            return
+
+        # Second pass: mark matching paragraphs
+        marked = 0
+        for page in pages:
+            for para in page.paragraphs:
+                if not para.lines or not para.lines[0].spans:
+                    continue
+                first_y = para.lines[0].spans[0].y0
+                last_y = para.lines[-1].spans[-1].y1 if para.lines[-1].spans else first_y
+                text_fp = self._normalize_hf_text(para.text)
+                if not text_fp:
+                    continue
+
+                if text_fp in header_fps and first_y < page.margin_top + header_zone and first_y < 80:
+                    para.style = "header"
+                    marked += 1
+                elif text_fp in footer_fps and last_y > page.height - footer_zone and last_y > page.height - 80:
+                    para.style = "footer"
+                    marked += 1
+
+        if marked:
+            logger.debug("Marked %d paragraphs as headers/footers", marked)
+
     # Heuristic for detecting tabular content inside a single cell.
     # Matches lines that have 2+ columns separated by 2+ spaces or tab chars.
     _TABULAR_LINE_RE = re.compile(r"\S.*(?:\t|  {2,})\S")
 
-    def _extract_tables(self, page: Any) -> list[FormattedTable]:
+    def _extract_tables(
+        self, page: Any, _out_bboxes: list | None = None,
+    ) -> list[FormattedTable]:
         """Extract tables from a PDF page using PyMuPDF's find_tables().
 
         Also detects cells that contain nested/sub-table content (multiple
         aligned columns of data).  PyMuPDF flattens nested tables, so the
         inner content is preserved as text with a ``[nested table]`` marker
         prepended to flag downstream consumers.
+
+        If *_out_bboxes* is provided (a list), the bounding boxes of all
+        detected tables are appended to it for use in deduplication.
         """
         tables: list[FormattedTable] = []
         try:
@@ -503,6 +751,9 @@ class FormattingExtractor:
                 return []
 
             for tab in found.tables:
+                # Collect bbox for dedup if caller requested
+                if _out_bboxes is not None and hasattr(tab, "bbox"):
+                    _out_bboxes.append(tuple(tab.bbox))
                 extracted = tab.extract()
                 if not extracted or len(extracted) < 1:
                     continue
