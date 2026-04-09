@@ -37,6 +37,7 @@ Format-preserving document conversion built on a universal intermediate represen
 | Direction | Formats |
 |-----------|---------|
 | **Input (Ingest)** | PDF, DOCX, HTML, PPTX, XLSX, Markdown, Plain Text |
+| **Input (Protocol Import)** | JSON — digitized protocols imported directly into the knowledge store via `/api/protocols/import` |
 | **Output (Render)** | HTML, DOCX, PDF, PPTX, Markdown, Plain Text, JSON |
 
 ### Usage
