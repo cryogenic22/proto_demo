@@ -555,6 +555,183 @@ async def extract_protocol(file: UploadFile = File(...)):
     return {"job_id": job_id, "status": "pending"}
 
 
+# ── JSON Protocol Import ────────────────────────────────────────────────
+
+class ProtocolImportResponse(BaseModel):
+    protocol_id: str
+    document_name: str
+    status: str
+    tables_count: int = 0
+    procedures_count: int = 0
+    sections_count: int = 0
+    warnings: list[str] = Field(default_factory=list)
+
+
+@app.post("/api/protocols/import", response_model=ProtocolImportResponse)
+async def import_protocol_json(file: UploadFile = File(...)):
+    """Import a digitized protocol from a JSON file.
+
+    Accepts JSON files conforming to the Protocol schema (protocol_id, metadata,
+    sections, tables, procedures, etc.). Validates the structure, assigns
+    a protocol_id if missing, persists to the knowledge store, and generates
+    Knowledge Elements for the graph layer.
+
+    Supports large files up to 200MB. Partial/relaxed schemas are accepted —
+    missing optional fields are filled with sensible defaults.
+    """
+    if not file.filename or not file.filename.lower().endswith(".json"):
+        raise HTTPException(
+            status_code=400,
+            detail="Only JSON files are accepted. Upload a .json file.",
+        )
+
+    raw = await file.read()
+    if len(raw) == 0:
+        raise HTTPException(status_code=400, detail="Empty file")
+    if len(raw) > 200 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File too large (max 200MB)")
+
+    # -- Parse JSON --------------------------------------------------------
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid JSON: {exc.msg} at line {exc.lineno} col {exc.colno}",
+        )
+
+    if not isinstance(data, dict):
+        raise HTTPException(
+            status_code=400,
+            detail="JSON root must be an object, not an array or scalar.",
+        )
+
+    warnings: list[str] = []
+
+    # -- Auto-fill protocol_id if missing ----------------------------------
+    if not data.get("protocol_id"):
+        from src.persistence.protocol_bridge import _protocol_id_from
+        data["protocol_id"] = _protocol_id_from(file.filename or "import.json")
+        warnings.append(
+            f"No protocol_id in JSON; generated '{data['protocol_id']}' from filename."
+        )
+
+    # -- Auto-fill document_name if missing --------------------------------
+    if not data.get("document_name"):
+        data["document_name"] = file.filename or "imported_protocol.json"
+
+    # -- Ensure metadata is at least an empty object -----------------------
+    if "metadata" not in data or data["metadata"] is None:
+        data["metadata"] = {}
+        warnings.append("No metadata block found; created empty metadata.")
+
+    # -- Validate against Protocol schema ----------------------------------
+    from src.models.protocol import Protocol
+
+    try:
+        protocol = Protocol.model_validate(data)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Schema validation failed: {exc}",
+        )
+
+    # -- Check for duplicate -----------------------------------------------
+    store = create_ke_store()
+    existing = store.load_protocol(protocol.protocol_id)
+    if existing:
+        warnings.append(
+            f"Protocol '{protocol.protocol_id}' already exists and will be overwritten."
+        )
+
+    # -- Persist to knowledge store ----------------------------------------
+    store.save_protocol(protocol)
+    logger.info(
+        "Imported protocol %s (%s tables, %s procedures, %s sections)",
+        protocol.protocol_id,
+        len(protocol.tables),
+        len(protocol.procedures),
+        len(protocol.sections),
+    )
+
+    # -- Generate and persist Knowledge Elements ---------------------------
+    try:
+        kes = protocol.to_ke_graph()
+        if kes:
+            store.save_knowledge_elements(protocol.protocol_id, kes)
+            logger.info(
+                "Generated %d Knowledge Elements for %s",
+                len(kes),
+                protocol.protocol_id,
+            )
+    except Exception as exc:
+        warnings.append(f"KE graph generation failed (non-fatal): {exc}")
+        logger.warning("KE generation failed for %s: %s", protocol.protocol_id, exc)
+
+    # -- Count sections recursively ----------------------------------------
+    def _count_sections(sections: list) -> int:
+        count = len(sections)
+        for s in sections:
+            children = getattr(s, "children", None) or []
+            count += _count_sections(children)
+        return count
+
+    return ProtocolImportResponse(
+        protocol_id=protocol.protocol_id,
+        document_name=protocol.document_name,
+        status="imported",
+        tables_count=len(protocol.tables),
+        procedures_count=len(protocol.procedures),
+        sections_count=_count_sections(protocol.sections),
+        warnings=warnings,
+    )
+
+
+@app.post("/api/protocols/import-batch")
+async def import_protocol_batch(files: list[UploadFile] = File(...)):
+    """Import multiple protocol JSON files in one request.
+
+    Accepts multiple .json files. Each is validated and persisted independently.
+    Returns per-file results with successes and failures.
+    """
+    results: list[dict[str, Any]] = []
+
+    for file in files:
+        try:
+            resp = await import_protocol_json(file)
+            results.append({
+                "filename": file.filename,
+                "status": "imported",
+                "protocol_id": resp.protocol_id,
+                "tables_count": resp.tables_count,
+                "procedures_count": resp.procedures_count,
+                "sections_count": resp.sections_count,
+                "warnings": resp.warnings,
+            })
+        except HTTPException as exc:
+            results.append({
+                "filename": file.filename,
+                "status": "failed",
+                "error": exc.detail,
+            })
+        except Exception as exc:
+            results.append({
+                "filename": file.filename,
+                "status": "failed",
+                "error": str(exc),
+            })
+
+    imported = sum(1 for r in results if r["status"] == "imported")
+    failed = sum(1 for r in results if r["status"] == "failed")
+
+    return {
+        "total": len(results),
+        "imported": imported,
+        "failed": failed,
+        "results": results,
+    }
+
+
 def _task_done_callback(task: asyncio.Task):
     """Log any unhandled exception from background tasks so they don't crash the server."""
     if task.cancelled():

@@ -136,6 +136,8 @@ cd web && npm install && npm run dev
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/api/extract` | POST | Upload PDF, start extraction |
+| `/api/protocols/import` | POST | Import digitized protocol from JSON |
+| `/api/protocols/import-batch` | POST | Batch import multiple JSON protocols |
 | `/api/jobs/{id}` | GET | Check extraction status |
 | `/api/protocols` | GET | List stored protocols |
 | `/api/protocols/{id}` | GET | Get full protocol data |
