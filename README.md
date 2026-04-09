@@ -109,8 +109,8 @@ The **Formula Enricher** runs post-ingestion, mapping detected formula offsets b
 | CPT + effort-based coverage | 85% |
 | Formatting fidelity (PDF) | 79/100 (0 critical issues) |
 | DOCX formatting fidelity | 100% (native XML parsing) |
-| Test suite | 822 tests |
-| Protocols tested | 9 stored + 10 PDFs available |
+| Test suite | 916 tests |
+| Protocols tested | 19 stored + 10 PDFs available |
 
 ## Quick Start
 
@@ -243,7 +243,7 @@ src/
 ├── models/                      # Pydantic data models
 └── persistence/                 # Protocol storage (JSON + Neo4j)
 
-api/main.py                      # FastAPI backend (30+ endpoints)
+api/main.py                      # FastAPI backend (58 endpoints)
 web/                             # Next.js 16 frontend
 data/procedure_mapping.csv       # 552 canonical procedures with CPT codes
 data/procedure_exclusions.json   # Noise row exclusion patterns
@@ -275,7 +275,7 @@ data/procedure_exclusions.json   # Noise row exclusion patterns
 ## Running Tests
 
 ```bash
-# Full suite (822 tests)
+# Full suite (916 tests)
 pytest tests/ -v
 
 # Formatting fidelity eval
