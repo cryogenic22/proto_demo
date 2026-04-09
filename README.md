@@ -1,10 +1,17 @@
 # ProtoExtract
 
-AI-powered clinical trial protocol extraction platform. Extracts Schedule of Activities (SoA) tables from protocol PDFs/DOCX, builds structured protocol models, maps procedures to CPT codes, and generates site budget worksheets.
+AI-powered clinical trial protocol extraction and document digitization platform. Extracts Schedule of Activities (SoA) tables from protocol documents, builds structured protocol models, maps procedures to CPT codes, generates site budget worksheets, and provides format-preserving document conversion across 7 input and 7 output formats.
 
 ## Architecture
 
 ```
+                        ┌─────────────────────────────────────────────────────┐
+                        │           Document Digitization Pipeline            │
+                        │  PDF · DOCX · HTML · PPTX · XLSX · MD · TXT → IR   │
+                        │         ↓ Formula Enrichment ↓ Fidelity Check       │
+                        │  IR → HTML · DOCX · PDF · PPTX · MD · TXT · JSON   │
+                        └─────────────────────────────────────────────────────┘
+                                              ↓
 PDF/DOCX → [Extraction Pipeline] → Cells → [Structured Model Builder] → Protocol Model → [Budget Calculator] → Budget
                                                       ↓
                                               Knowledge Graph
@@ -13,12 +20,86 @@ PDF/DOCX → [Extraction Pipeline] → Cells → [Structured Model Builder] → 
 
 | Layer | Purpose |
 |-------|---------|
+| **Document Digitization** | Format-preserving ingestion (7 formats), formula detection, fidelity checking, multi-format rendering (7 formats) |
 | **Extraction Pipeline** | 14-stage PDF processing: table detection, dual-pass cell extraction, OCR grounding, adversarial validation |
 | **Structured Model Builder (SMB)** | Transforms cells into typed entities + relationships. YAML-driven, document-type agnostic |
 | **Trust Module** | 3-tier confidence: Cell → Row → Protocol. Evidence chain preserved from extraction passes |
 | **Procedure Vocabulary** | 552 canonical procedures, 3,400+ aliases, 187 CPT codes. 100% mapping across 9 test protocols |
 | **Budget Calculator** | Visit counting with cycle multiplication, span parsing, footnote modifiers, domain-aware cost tiers |
 | **Verbatim Extractor** | Zero-hallucination copy-paste: LLM locates, PyMuPDF/python-docx copies exact text |
+
+## Document Digitization Pipeline
+
+Format-preserving document conversion built on a universal intermediate representation (IR). Any supported input format can be converted to any supported output format while preserving formatting, structure, and formulas.
+
+### Supported Formats
+
+| Direction | Formats |
+|-----------|---------|
+| **Input (Ingest)** | PDF, DOCX, HTML, PPTX, XLSX, Markdown, Plain Text |
+| **Output (Render)** | HTML, DOCX, PDF, PPTX, Markdown, Plain Text, JSON |
+
+### Usage
+
+```python
+from src.formatter import DocHandler
+
+handler = DocHandler()
+
+# Ingest any format into universal IR
+doc = handler.ingest(pdf_bytes, format="pdf", filename="protocol.pdf")
+doc = handler.ingest(docx_bytes, format="docx")
+doc = handler.ingest(html_string, format="html")
+
+# Render to any output format
+html = handler.render(doc, format="html")      # str
+docx = handler.render(doc, format="docx")      # bytes
+pdf  = handler.render(doc, format="pdf")       # bytes
+json_str = handler.render(doc, format="json")  # str (IR dump)
+
+# One-shot conversion
+html = handler.convert(pdf_bytes, "pdf", "html")
+```
+
+### Intermediate Representation (IR)
+
+The IR preserves full document structure and formatting:
+
+```
+FormattedDocument
+├── pages[]
+│   ├── paragraphs[] — style, alignment, indent, spacing
+│   │   └── lines[]
+│   │       └── spans[] — text, font, size, color, bold/italic/underline,
+│   │                      superscript/subscript, strikethrough, coordinates,
+│   │                      formula annotations
+│   └── tables[] — rows × cols with header flags, rowspan/colspan
+├── font_inventory — font usage counts
+├── color_inventory — color usage counts
+└── style_inventory — paragraph style counts
+```
+
+### Formula Detection
+
+4-tier formula detection pipeline that identifies and annotates mathematical, chemical, and pharmacokinetic notation:
+
+| Tier | Method | Coverage |
+|------|--------|----------|
+| **Tier 1–2** | Regex detector — chemical formulas (CO₂, H₂O), dosing (mg/m²), PK parameters (AUC₀₋ᵢₙf), statistics (p<0.05) | Inline formulas |
+| **Tier 3** | Structured parser — partial derivatives, integrals, summations, factorials, named pharma formulas, PK differential equations | Complex notation |
+| **OMML** | Office MathML extractor — fractions, radicals, n-ary operators, super/subscript from DOCX | DOCX-native math |
+| **Tier 4** | Image classifier + OCR — equation-like images detected by aspect ratio/histogram analysis | Image-rendered formulas |
+
+The **Formula Enricher** runs post-ingestion, mapping detected formula offsets back to individual IR spans with HTML and LaTeX representations.
+
+### Quality Assurance
+
+| Tool | Purpose |
+|------|---------|
+| **Fidelity Checker** | Measures formatting conformance: spacing, fonts, alignment, run-on word detection, strikethrough analysis |
+| **Span Forensics** | Three-level diff (source → IR → output) identifying exactly where formatting is lost and why |
+| **Template Generator** | Applies blueprint template formatting to extracted content, producing CKEditor-compatible HTML |
+| **Site Contract Generator** | Fills CTSA template PDFs with protocol-specific data while preserving template formatting |
 
 ## Key Metrics
 
@@ -28,7 +109,7 @@ PDF/DOCX → [Extraction Pipeline] → Cells → [Structured Model Builder] → 
 | CPT + effort-based coverage | 85% |
 | Formatting fidelity (PDF) | 79/100 (0 critical issues) |
 | DOCX formatting fidelity | 100% (native XML parsing) |
-| Test suite | 415+ tests |
+| Test suite | 822 tests |
 | Protocols tested | 9 stored + 10 PDFs available |
 
 ## Quick Start
@@ -88,6 +169,44 @@ cd web && npm install && npm run dev
 
 ```
 src/
+├── formatter/                   # Document digitization pipeline
+│   ├── extractor.py             # PDF ingestor (PyMuPDF) + IR data model
+│   ├── docx_renderer.py         # DOCX output with borders, formulas, page breaks
+│   ├── fidelity_checker.py      # Formatting conformance measurement
+│   ├── site_contract_generator.py  # CTSA template PDF filler
+│   ├── template_generator.py    # Blueprint template → CKEditor HTML
+│   ├── ingest/                  # Format ingestors
+│   │   ├── docx_ingestor.py     # DOCX → IR
+│   │   ├── html_ingestor.py     # HTML → IR
+│   │   ├── markdown_ingestor.py # Markdown → IR
+│   │   ├── text_ingestor.py     # Plain text → IR
+│   │   ├── pptx_ingestor.py     # PowerPoint → IR
+│   │   └── excel_ingestor.py    # Excel → IR
+│   ├── render/                  # Format renderers
+│   │   ├── html_renderer.py     # IR → HTML (centered, formula-aware)
+│   │   ├── pdf_renderer.py      # IR → PDF
+│   │   ├── pptx_renderer.py     # IR → PowerPoint
+│   │   ├── markdown_renderer.py # IR → Markdown
+│   │   ├── text_renderer.py     # IR → Plain text
+│   │   └── json_renderer.py     # IR → JSON (full IR dump)
+│   ├── formula/                 # Formula detection & annotation
+│   │   ├── enricher.py          # Post-ingestion formula → span mapper
+│   │   ├── orchestrator.py      # Multi-tier detection coordinator
+│   │   ├── tools/
+│   │   │   ├── regex_detector.py      # Tier 1-2: inline formula patterns
+│   │   │   ├── structured_parser.py   # Tier 3: complex notation
+│   │   │   ├── omml_extractor.py      # DOCX Office MathML extraction
+│   │   │   ├── image_classifier.py    # Tier 4: equation image detection
+│   │   │   ├── ocr_backends.py        # Tier 4: OCR for image formulas
+│   │   │   └── renderers.py           # Formula rendering utilities
+│   │   └── registry.py         # Detection tool registry
+│   ├── analyze/                 # Quality analysis
+│   │   └── span_forensics.py    # 3-level formatting loss diff
+│   └── pipeline/                # Registry-based conversion routing
+│       ├── orchestrator.py      # Format routing orchestrator
+│       ├── registry.py          # Tool registry + metadata
+│       ├── adapters.py          # Ingestor/renderer adapters
+│       └── factory.py           # Tool factory
 ├── pipeline/                    # 14-stage extraction pipeline
 │   ├── orchestrator.py          # Main pipeline with 5-layer SoA filter
 │   ├── cell_extractor.py        # Dual-pass VLM cell extraction
@@ -154,7 +273,7 @@ data/procedure_exclusions.json   # Noise row exclusion patterns
 ## Running Tests
 
 ```bash
-# Full suite (415+ tests)
+# Full suite (822 tests)
 pytest tests/ -v
 
 # Formatting fidelity eval
