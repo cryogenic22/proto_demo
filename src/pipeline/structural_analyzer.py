@@ -158,8 +158,24 @@ class StructuralAnalyzer:
     def _get_table_images(
         self, region: TableRegion, pages: list[PageImage]
     ) -> list[bytes]:
+        """Get table images, cropping to bounding box when available."""
+        from src.pipeline.cell_extractor import _crop_page_image
         page_map = {p.page_number: p for p in pages}
-        return [page_map[pn].image_bytes for pn in region.pages if pn in page_map]
+        bbox_map = {bb.page: bb for bb in region.bounding_boxes} if region.bounding_boxes else {}
+
+        result = []
+        for pn in region.pages:
+            if pn not in page_map:
+                continue
+            page_img = page_map[pn]
+            bbox = bbox_map.get(pn)
+            if bbox and (bbox.y0 > 0 or bbox.y1 < 100):
+                cropped = _crop_page_image(page_img, bbox)
+                if cropped:
+                    result.append(cropped)
+                    continue
+            result.append(page_img.image_bytes)
+        return result
 
     def _parse_schema(self, raw: dict[str, Any], table_id: str) -> TableSchema:
         """Parse raw LLM response dict into TableSchema."""

@@ -368,6 +368,201 @@ class PipelineOrchestrator:
             processing_time_seconds=elapsed,
         )
 
+    async def run_from_digitized(
+        self,
+        digitized,  # DigitizedDocument
+        pdf_bytes: bytes,
+        document_name: str = "document.pdf",
+        on_progress: callable = None,
+        table_type_filter: str = "SOA",
+    ) -> PipelineOutput:
+        """Run extraction using pre-classified tables from Layer 1 digitizer.
+
+        Skips table detection (Stages 2-3b) entirely — uses the digitizer's
+        table classifications to build TableRegion objects with proper
+        bounding boxes. This prevents the VLM from picking up page headers,
+        body text, and footnotes as table content.
+
+        Args:
+            digitized: DigitizedDocument from DocumentDigitizer.
+            pdf_bytes: Raw PDF bytes (needed for page rendering).
+            document_name: Document name for output metadata.
+            on_progress: Optional progress callback.
+            table_type_filter: Only process tables of this type ("SOA", "OTHER", or None for all).
+        """
+        from src.models.digitized import TableType
+        from src.models.schema import BoundingBox, TableRegion as TR
+
+        start_time = time.time()
+        doc_hash = PipelineOutput.compute_hash(pdf_bytes)
+        warnings: list[str] = []
+        tables: list[ExtractedTable] = []
+
+        def _progress(pct: int, msg: str):
+            if on_progress:
+                on_progress(pct, msg)
+
+        _progress(10, "Using pre-classified tables from digitizer...")
+        logger.info("Running from digitized document — skipping detection stages")
+
+        # Filter tables by requested type
+        if table_type_filter:
+            classified = digitized.get_tables_by_type(table_type_filter)
+        else:
+            classified = digitized.table_classifications
+
+        if not classified:
+            warnings.append(f"No tables of type '{table_type_filter}' found by digitizer")
+            return PipelineOutput(
+                document_name=document_name,
+                document_hash=doc_hash,
+                total_pages=digitized.total_pages,
+                warnings=warnings,
+                processing_time_seconds=time.time() - start_time,
+            )
+
+        logger.info(
+            "Digitizer provided %d tables (type=%s): pages %s",
+            len(classified),
+            table_type_filter,
+            [tc.page_number for tc in classified],
+        )
+
+        # Build TableRegion objects from classifications with bounding boxes
+        regions = self._build_regions_from_digitized(digitized, classified)
+
+        # Render only the pages we need (not all 149 pages)
+        needed_pages = set()
+        for r in regions:
+            needed_pages.update(r.pages)
+
+        _progress(20, f"Rendering {len(needed_pages)} table pages...")
+        logger.info("Rendering %d pages (of %d total)", len(needed_pages), digitized.total_pages)
+
+        pages = self.ingestor.ingest_from_bytes(pdf_bytes, page_filter=needed_pages)
+        total_pages = digitized.total_pages
+
+        # Stitch multi-page tables
+        _progress(30, f"Stitching {len(regions)} table regions...")
+        try:
+            self.stitcher._pdf_bytes = pdf_bytes
+            regions = self.stitcher.stitch(regions)
+        except Exception as e:
+            logger.warning("Table stitching failed: %s", e)
+
+        # Process each table through stages 4-11
+        for i, region in enumerate(regions):
+            pct = 40 + int(50 * i / max(len(regions), 1))
+            _progress(pct, f"Extracting table {i + 1}/{len(regions)}...")
+            try:
+                table = await self._process_table(region, pages, pdf_bytes)
+                tables.append(table)
+            except Exception as e:
+                logger.error("Failed to process table %s: %s", region.table_id, e)
+                warnings.append(f"Table {region.table_id} failed: {e}")
+
+        elapsed = time.time() - start_time
+        logger.info(
+            "Pipeline (from digitized) complete: %d tables in %.1fs",
+            len(tables), elapsed,
+        )
+
+        return PipelineOutput(
+            document_name=document_name,
+            document_hash=doc_hash,
+            total_pages=total_pages,
+            tables=tables,
+            warnings=warnings,
+            processing_time_seconds=elapsed,
+        )
+
+    def _build_regions_from_digitized(
+        self, digitized, classified: list
+    ) -> list:
+        """Convert digitizer TableClassifications into pipeline TableRegions.
+
+        Uses FormattedTable data from the digitizer to build tight bounding
+        boxes, so the VLM only sees the actual table grid — not page headers,
+        body text, or footnotes.
+        """
+        from src.models.schema import BoundingBox, TableRegion
+
+        regions = []
+        # Group classifications by contiguous page ranges (multi-page tables)
+        # Sort by page number
+        sorted_cls = sorted(classified, key=lambda tc: tc.page_number)
+
+        # Group consecutive pages that likely form a single table
+        groups: list[list] = []
+        current_group: list = []
+        for tc in sorted_cls:
+            if not current_group:
+                current_group = [tc]
+            elif tc.page_number <= current_group[-1].page_number + 1:
+                # Consecutive or same page — same table
+                current_group.append(tc)
+            else:
+                groups.append(current_group)
+                current_group = [tc]
+        if current_group:
+            groups.append(current_group)
+
+        for gi, group in enumerate(groups):
+            pages_in_table = [tc.page_number for tc in group]
+            title = group[0].title or f"Table from pages {pages_in_table}"
+
+            # Build bounding boxes from FormattedTable data
+            bboxes = []
+            for tc in group:
+                page_data = digitized.formatted.pages[tc.page_number] if tc.page_number < len(digitized.formatted.pages) else None
+                if page_data and tc.table_index < len(page_data.tables):
+                    ft = page_data.tables[tc.table_index]
+                    # Estimate y position from FormattedTable
+                    # Tables typically occupy a portion of the page
+                    # Use y_position if available, otherwise estimate from row count
+                    page_height = page_data.height or 792.0
+
+                    # Calculate approximate y bounds from table content
+                    y_start_pct = max(0, (ft.y_position / page_height) * 100 - 2) if ft.y_position > 0 else 5
+                    # Estimate table height: ~15-20pt per row
+                    est_height = ft.num_rows * 18.0
+                    y_end_pct = min(100, y_start_pct + (est_height / page_height) * 100 + 5)
+
+                    # For SoA tables, they typically span most of the page width
+                    # but leave margins for headers/footers
+                    bboxes.append(BoundingBox(
+                        page=tc.page_number,
+                        x0=2.0,    # Leave small margin
+                        y0=y_start_pct,
+                        x1=98.0,
+                        y1=min(y_end_pct, 95.0),  # Don't include page footer
+                    ))
+                else:
+                    # Fallback: use most of the page but exclude header/footer bands
+                    bboxes.append(BoundingBox(
+                        page=tc.page_number,
+                        x0=2.0,
+                        y0=8.0,   # Skip page header (~top 8%)
+                        x1=98.0,
+                        y1=92.0,  # Skip page footer (~bottom 8%)
+                    ))
+
+            region = TableRegion(
+                table_id=f"digitized_soa_{gi}",
+                pages=pages_in_table,
+                bounding_boxes=bboxes,
+                table_type="SOA",
+                title=title,
+            )
+            regions.append(region)
+
+        logger.info(
+            "Built %d table regions from digitizer: %s",
+            len(regions),
+            [(r.table_id, r.pages) for r in regions],
+        )
+        return regions
+
     async def _process_table(self, region, pages, pdf_bytes: bytes = b"") -> ExtractedTable:
         """Process a single table through all extraction stages."""
         table_start = time.time()

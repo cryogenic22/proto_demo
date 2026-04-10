@@ -990,8 +990,8 @@ async def _run_extraction(
         config = _build_config(**mode_overrides)
         orchestrator = PipelineOrchestrator(config)
 
-        jobs[job_id]["progress"] = 10
-        jobs[job_id]["message"] = "Ingesting PDF..."
+        jobs[job_id]["progress"] = 5
+        jobs[job_id]["message"] = "Digitizing document (Layer 1)..."
 
         tel.log_run_start(job_id, filename, 0, config.model_dump())
 
@@ -1000,7 +1000,32 @@ async def _run_extraction(
             jobs[job_id]["message"] = msg
             tel.log_stage(job_id, "progress", detail=f"{pct}% {msg}")
 
-        result = await orchestrator.run(pdf_bytes, filename, on_progress=on_progress)
+        # Layer 1: Digitize the document first
+        from src.pipeline.digitizer import DocumentDigitizer
+        digitizer = DocumentDigitizer()
+        is_deep = extraction_mode == "deep"
+        digitized = digitizer.digitize(pdf_bytes, filename, deep=is_deep)
+
+        soa_tables = digitized.get_soa_tables()
+        logger.info(
+            "Layer 1 complete: %d pages, %d tables (%d SoA)",
+            digitized.total_pages,
+            digitized.total_tables,
+            len(soa_tables),
+        )
+        on_progress(15, f"Found {len(soa_tables)} SoA tables — starting extraction...")
+
+        # Layer 2: Run extraction using pre-classified tables
+        if soa_tables and extraction_mode in ("soa", "soa_plus", "deep"):
+            # Use digitizer-guided extraction (cropped images, proper bounding boxes)
+            result = await orchestrator.run_from_digitized(
+                digitized, pdf_bytes, filename,
+                on_progress=on_progress,
+                table_type_filter="SOA",
+            )
+        else:
+            # Full extraction or no SoA tables found — fall back to standard pipeline
+            result = await orchestrator.run(pdf_bytes, filename, on_progress=on_progress)
 
         # Serialize result — use try/except to handle serialization errors
         try:

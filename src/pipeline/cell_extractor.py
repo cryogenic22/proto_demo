@@ -13,6 +13,7 @@ from typing import Any
 
 from src.llm.client import LLMClient
 from src.models.schema import (
+    BoundingBox,
     CellDataType,
     ExtractedCell,
     PageImage,
@@ -23,6 +24,40 @@ from src.models.schema import (
 from src.pipeline.grid_anchor import GridSkeleton
 
 logger = logging.getLogger(__name__)
+
+
+def _crop_page_image(page_img: PageImage, bbox: BoundingBox) -> bytes | None:
+    """Crop a page image to the bounding box region.
+
+    BoundingBox coordinates are percentages (0-100). Converts to pixel
+    coordinates using page image dimensions.
+
+    Adds a small margin (2%) to avoid cutting off table borders.
+    """
+    try:
+        from PIL import Image
+        import io
+
+        img = Image.open(io.BytesIO(page_img.image_bytes))
+        w, h = img.size
+
+        margin = 2.0  # percent
+        left = max(0, int((bbox.x0 - margin) / 100.0 * w))
+        top = max(0, int((bbox.y0 - margin) / 100.0 * h))
+        right = min(w, int((bbox.x1 + margin) / 100.0 * w))
+        bottom = min(h, int((bbox.y1 + margin) / 100.0 * h))
+
+        # Don't crop if the region is essentially the full page
+        if (right - left) < w * 0.3 or (bottom - top) < h * 0.1:
+            return None  # Too small, likely a bad bbox
+
+        cropped = img.crop((left, top, right, bottom))
+        buf = io.BytesIO()
+        cropped.save(buf, format="PNG")
+        return buf.getvalue()
+    except Exception as e:
+        logger.warning("Image cropping failed: %s", e)
+        return None
 
 # Anchored prompt: VLM fills values against a deterministic grid skeleton.
 # Row indices come from PyMuPDF, not VLM inference — eliminates structural
@@ -513,12 +548,33 @@ class CellExtractor:
     def _get_table_images(
         region: TableRegion, pages: list[PageImage]
     ) -> list[bytes]:
+        """Get page images for a table region, cropping to bounding box if available.
+
+        When bounding boxes are present, crops the page image to just the table
+        area. This prevents the VLM from extracting page headers, body text,
+        and footnotes as table cells.
+        """
         page_map = {p.page_number: p for p in pages}
-        return [
-            page_map[pn].image_bytes
-            for pn in region.pages
-            if pn in page_map
-        ]
+        bbox_map = {bb.page: bb for bb in region.bounding_boxes} if region.bounding_boxes else {}
+
+        result = []
+        for pn in region.pages:
+            if pn not in page_map:
+                continue
+            page_img = page_map[pn]
+            bbox = bbox_map.get(pn)
+
+            if bbox and bbox.y0 > 0 or bbox and bbox.y1 < 100:
+                # Crop to bounding box (percentage → pixel coordinates)
+                cropped = _crop_page_image(page_img, bbox)
+                if cropped:
+                    result.append(cropped)
+                    continue
+
+            # Fallback: full page image
+            result.append(page_img.image_bytes)
+
+        return result
 
     @staticmethod
     def _build_col_description(schema: TableSchema) -> str:
