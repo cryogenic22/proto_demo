@@ -1,0 +1,469 @@
+{
+  "usdmVersion": "3.0",
+  "study": {
+    "id": "STUDY-001",
+    "studyTitle": "A Phase 3, Randomized, Double-Blind, Placebo-Controlled Study of Compound XYZ-123 in Patients with Advanced Non-Small Cell Lung Cancer",
+    "studyVersion": "2.0",
+    "studyRationale": "Compound XYZ-123 has shown promising anti-tumor activity in Phase 1/2 studies with a manageable safety profile. This Phase 3 study aims to confirm efficacy and safety in a larger patient population.",
+    "studyPhase": {
+      "standardCode": {
+        "code": "C49686",
+        "codeSystem": "CDISC CT",
+        "decode": "Phase III Trial"
+      }
+    },
+    "studyType": {
+      "code": "C98388",
+      "codeSystem": "CDISC CT",
+      "decode": "Interventional"
+    },
+    "studyIdentifiers": [
+      {
+        "id": "SI-001",
+        "studyIdentifier": "XYZ-2026-NSCLC-301",
+        "studyIdentifierScope": {
+          "organizationType": {
+            "code": "C70793",
+            "decode": "Sponsor"
+          },
+          "organizationName": "XYZ Therapeutics Inc"
+        }
+      },
+      {
+        "id": "SI-002",
+        "studyIdentifier": "NCT09876543",
+        "studyIdentifierScope": {
+          "organizationType": {
+            "code": "C93453",
+            "decode": "Clinical Study Registry"
+          },
+          "organizationName": "ClinicalTrials.gov"
+        }
+      }
+    ],
+    "studyDesigns": [
+      {
+        "id": "SD-001",
+        "studyDesignName": "Main Study Design",
+        "trialIntentTypes": [
+          {
+            "code": "C15714",
+            "decode": "Efficacy"
+          }
+        ],
+        "therapeuticAreas": [
+          {
+            "code": "C3262",
+            "codeSystem": "MedDRA",
+            "decode": "Neoplasms"
+          }
+        ],
+        "studyIndications": [
+          {
+            "id": "IND-001",
+            "indicationDescription": "Advanced Non-Small Cell Lung Cancer (NSCLC)",
+            "codes": [
+              {
+                "code": "C4878",
+                "codeSystem": "MedDRA",
+                "decode": "Non-Small Cell Lung Carcinoma"
+              }
+            ]
+          }
+        ],
+        "studyInvestigationalInterventions": [
+          {
+            "id": "II-001",
+            "interventionDescription": "XYZ-123 200mg administered intravenously every 3 weeks",
+            "codes": [
+              {
+                "code": "XYZ123",
+                "codeSystem": "Sponsor",
+                "decode": "Compound XYZ-123"
+              }
+            ]
+          },
+          {
+            "id": "II-002",
+            "interventionDescription": "Matching placebo administered intravenously every 3 weeks",
+            "codes": [
+              {
+                "code": "PLACEBO",
+                "codeSystem": "Sponsor",
+                "decode": "Placebo"
+              }
+            ]
+          }
+        ],
+        "studyArms": [
+          {
+            "id": "ARM-001",
+            "studyArmName": "XYZ-123 Treatment",
+            "studyArmDescription": "XYZ-123 200mg IV Q3W plus standard of care",
+            "studyArmType": {
+              "code": "C174266",
+              "decode": "Experimental Arm"
+            }
+          },
+          {
+            "id": "ARM-002",
+            "studyArmName": "Placebo Control",
+            "studyArmDescription": "Matching placebo IV Q3W plus standard of care",
+            "studyArmType": {
+              "code": "C174267",
+              "decode": "Placebo Control Arm"
+            }
+          }
+        ],
+        "studyEpochs": [
+          {
+            "id": "EPOCH-001",
+            "studyEpochName": "Screening",
+            "studyEpochDescription": "Screening assessments to determine eligibility",
+            "studyEpochType": {
+              "code": "C48262",
+              "decode": "Screening"
+            },
+            "sequenceNumber": 1
+          },
+          {
+            "id": "EPOCH-002",
+            "studyEpochName": "Treatment",
+            "studyEpochDescription": "Active treatment period with study drug or placebo",
+            "studyEpochType": {
+              "code": "C101526",
+              "decode": "Treatment"
+            },
+            "sequenceNumber": 2
+          },
+          {
+            "id": "EPOCH-003",
+            "studyEpochName": "Follow-up",
+            "studyEpochDescription": "Safety and survival follow-up after treatment completion",
+            "studyEpochType": {
+              "code": "C99158",
+              "decode": "Follow-up"
+            },
+            "sequenceNumber": 3
+          }
+        ],
+        "studyCells": [
+          {
+            "id": "CELL-001",
+            "studyArmId": "ARM-001",
+            "studyEpochId": "EPOCH-001"
+          },
+          {
+            "id": "CELL-002",
+            "studyArmId": "ARM-001",
+            "studyEpochId": "EPOCH-002"
+          },
+          {
+            "id": "CELL-003",
+            "studyArmId": "ARM-001",
+            "studyEpochId": "EPOCH-003"
+          },
+          {
+            "id": "CELL-004",
+            "studyArmId": "ARM-002",
+            "studyEpochId": "EPOCH-001"
+          },
+          {
+            "id": "CELL-005",
+            "studyArmId": "ARM-002",
+            "studyEpochId": "EPOCH-002"
+          },
+          {
+            "id": "CELL-006",
+            "studyArmId": "ARM-002",
+            "studyEpochId": "EPOCH-003"
+          }
+        ],
+        "encounters": [
+          {
+            "id": "ENC-001",
+            "encounterName": "Screening Visit",
+            "encounterDescription": "Initial screening assessments",
+            "encounterType": {
+              "code": "C48262",
+              "decode": "Screening"
+            },
+            "encounterScheduledAtTimingId": "TI-001",
+            "studyEpochId": "EPOCH-001"
+          },
+          {
+            "id": "ENC-002",
+            "encounterName": "Cycle 1 Day 1",
+            "encounterDescription": "First treatment administration",
+            "encounterType": {
+              "code": "C101526",
+              "decode": "Treatment"
+            },
+            "encounterScheduledAtTimingId": "TI-002",
+            "studyEpochId": "EPOCH-002"
+          },
+          {
+            "id": "ENC-003",
+            "encounterName": "Cycle 2 Day 1",
+            "encounterDescription": "Second treatment cycle",
+            "encounterType": {
+              "code": "C101526",
+              "decode": "Treatment"
+            },
+            "encounterScheduledAtTimingId": "TI-003",
+            "studyEpochId": "EPOCH-002"
+          },
+          {
+            "id": "ENC-004",
+            "encounterName": "Cycle 3 Day 1",
+            "encounterDescription": "Third treatment cycle",
+            "encounterType": {
+              "code": "C101526",
+              "decode": "Treatment"
+            },
+            "encounterScheduledAtTimingId": "TI-004",
+            "studyEpochId": "EPOCH-002"
+          },
+          {
+            "id": "ENC-005",
+            "encounterName": "End of Treatment",
+            "encounterDescription": "End of treatment assessments",
+            "encounterType": {
+              "code": "C101526",
+              "decode": "Treatment"
+            },
+            "encounterScheduledAtTimingId": "TI-005",
+            "studyEpochId": "EPOCH-002"
+          },
+          {
+            "id": "ENC-006",
+            "encounterName": "Follow-up Visit 1",
+            "encounterDescription": "30-day safety follow-up",
+            "encounterType": {
+              "code": "C99158",
+              "decode": "Follow-up"
+            },
+            "encounterScheduledAtTimingId": "TI-006",
+            "studyEpochId": "EPOCH-003"
+          }
+        ],
+        "timings": [
+          {"id": "TI-001", "timingValue": -28, "timingRelativeToFrom": "Randomization", "timingUnit": {"code": "C25301", "decode": "Day"}, "timingWindow": {"windowLower": 0, "windowUpper": 14, "windowUnit": {"code": "C25301", "decode": "Day"}}},
+          {"id": "TI-002", "timingValue": 1, "timingRelativeToFrom": "Randomization", "timingUnit": {"code": "C25301", "decode": "Day"}},
+          {"id": "TI-003", "timingValue": 22, "timingRelativeToFrom": "Randomization", "timingUnit": {"code": "C25301", "decode": "Day"}},
+          {"id": "TI-004", "timingValue": 43, "timingRelativeToFrom": "Randomization", "timingUnit": {"code": "C25301", "decode": "Day"}},
+          {"id": "TI-005", "timingValue": 64, "timingRelativeToFrom": "Randomization", "timingUnit": {"code": "C25301", "decode": "Day"}},
+          {"id": "TI-006", "timingValue": 94, "timingRelativeToFrom": "Randomization", "timingUnit": {"code": "C25301", "decode": "Day"}, "timingWindow": {"windowLower": 3, "windowUpper": 3, "windowUnit": {"code": "C25301", "decode": "Day"}}}
+        ],
+        "activities": [
+          {
+            "id": "ACT-001",
+            "activityName": "Informed Consent",
+            "activityDescription": "Obtain written informed consent",
+            "activityIsConditional": false,
+            "biomedicalConceptIds": []
+          },
+          {
+            "id": "ACT-002",
+            "activityName": "Vital Signs",
+            "activityDescription": "Measure blood pressure, heart rate, temperature, respiratory rate, weight",
+            "activityIsConditional": false,
+            "definedProcedures": [
+              {
+                "id": "PROC-001",
+                "procedureName": "Vital Signs Assessment",
+                "procedureType": "Clinical Assessment",
+                "codes": [{"code": "29274-8", "codeSystem": "LOINC", "decode": "Vital signs measurements"}]
+              }
+            ]
+          },
+          {
+            "id": "ACT-003",
+            "activityName": "Physical Examination",
+            "activityDescription": "Complete or symptom-directed physical examination",
+            "activityIsConditional": false,
+            "definedProcedures": [
+              {
+                "id": "PROC-002",
+                "procedureName": "Physical Examination",
+                "procedureType": "Clinical Assessment",
+                "codes": [{"code": "29545-1", "codeSystem": "LOINC", "decode": "Physical findings"}]
+              }
+            ]
+          },
+          {
+            "id": "ACT-004",
+            "activityName": "Hematology",
+            "activityDescription": "Complete blood count with differential",
+            "activityIsConditional": false,
+            "definedProcedures": [
+              {
+                "id": "PROC-003",
+                "procedureName": "Complete Blood Count",
+                "procedureType": "Laboratory",
+                "codes": [{"code": "85025", "codeSystem": "CPT", "decode": "CBC with differential"}]
+              }
+            ]
+          },
+          {
+            "id": "ACT-005",
+            "activityName": "Chemistry Panel",
+            "activityDescription": "Comprehensive metabolic panel",
+            "activityIsConditional": false,
+            "definedProcedures": [
+              {
+                "id": "PROC-004",
+                "procedureName": "Comprehensive Metabolic Panel",
+                "procedureType": "Laboratory",
+                "codes": [{"code": "80053", "codeSystem": "CPT", "decode": "Comprehensive metabolic panel"}]
+              }
+            ]
+          },
+          {
+            "id": "ACT-006",
+            "activityName": "12-Lead ECG",
+            "activityDescription": "Standard 12-lead electrocardiogram",
+            "activityIsConditional": false,
+            "definedProcedures": [
+              {
+                "id": "PROC-005",
+                "procedureName": "12-Lead ECG",
+                "procedureType": "Diagnostic",
+                "codes": [{"code": "93000", "codeSystem": "CPT", "decode": "Electrocardiogram routine"}]
+              }
+            ]
+          },
+          {
+            "id": "ACT-007",
+            "activityName": "CT/MRI Tumor Assessment",
+            "activityDescription": "CT scan or MRI for tumor response assessment per RECIST 1.1",
+            "activityIsConditional": false,
+            "definedProcedures": [
+              {
+                "id": "PROC-006",
+                "procedureName": "CT Scan Chest/Abdomen/Pelvis",
+                "procedureType": "Imaging",
+                "codes": [{"code": "74178", "codeSystem": "CPT", "decode": "CT abdomen and pelvis with contrast"}]
+              }
+            ]
+          },
+          {
+            "id": "ACT-008",
+            "activityName": "Study Drug Administration",
+            "activityDescription": "IV infusion of XYZ-123 or matching placebo",
+            "activityIsConditional": false,
+            "definedProcedures": [
+              {
+                "id": "PROC-007",
+                "procedureName": "IV Drug Administration",
+                "procedureType": "Treatment",
+                "codes": [{"code": "96413", "codeSystem": "CPT", "decode": "Chemotherapy administration IV infusion"}]
+              }
+            ]
+          }
+        ],
+        "scheduleTimelines": [
+          {
+            "id": "STL-001",
+            "scheduleTimelineName": "Main Schedule",
+            "scheduleTimelineDescription": "Primary schedule of activities for all arms",
+            "entryCondition": "Subject meets all inclusion and no exclusion criteria",
+            "scheduledInstances": [
+              {"id": "SI-001", "activityIds": ["ACT-001", "ACT-002", "ACT-003", "ACT-004", "ACT-005", "ACT-006", "ACT-007"], "encounterId": "ENC-001", "epochId": "EPOCH-001"},
+              {"id": "SI-002", "activityIds": ["ACT-002", "ACT-003", "ACT-004", "ACT-005", "ACT-006", "ACT-008"], "encounterId": "ENC-002", "epochId": "EPOCH-002"},
+              {"id": "SI-003", "activityIds": ["ACT-002", "ACT-004", "ACT-005", "ACT-008"], "encounterId": "ENC-003", "epochId": "EPOCH-002"},
+              {"id": "SI-004", "activityIds": ["ACT-002", "ACT-004", "ACT-005", "ACT-006", "ACT-007", "ACT-008"], "encounterId": "ENC-004", "epochId": "EPOCH-002"},
+              {"id": "SI-005", "activityIds": ["ACT-002", "ACT-003", "ACT-004", "ACT-005", "ACT-006", "ACT-007"], "encounterId": "ENC-005", "epochId": "EPOCH-002"},
+              {"id": "SI-006", "activityIds": ["ACT-002", "ACT-003"], "encounterId": "ENC-006", "epochId": "EPOCH-003"}
+            ]
+          }
+        ]
+      }
+    ],
+    "studyObjectives": [
+      {
+        "id": "OBJ-001",
+        "objectiveDescription": "To evaluate the efficacy of XYZ-123 compared to placebo in terms of progression-free survival (PFS) in patients with advanced NSCLC",
+        "objectiveLevel": {
+          "code": "C85826",
+          "decode": "Primary"
+        },
+        "objectiveEndpoints": ["EP-001"]
+      },
+      {
+        "id": "OBJ-002",
+        "objectiveDescription": "To evaluate the overall survival (OS) benefit of XYZ-123 compared to placebo",
+        "objectiveLevel": {
+          "code": "C85827",
+          "decode": "Secondary"
+        },
+        "objectiveEndpoints": ["EP-002"]
+      },
+      {
+        "id": "OBJ-003",
+        "objectiveDescription": "To evaluate the safety and tolerability of XYZ-123",
+        "objectiveLevel": {
+          "code": "C85827",
+          "decode": "Secondary"
+        },
+        "objectiveEndpoints": ["EP-003"]
+      }
+    ],
+    "studyEndpoints": [
+      {
+        "id": "EP-001",
+        "endpointDescription": "Progression-free survival (PFS) as assessed by BICR per RECIST 1.1",
+        "endpointPurposeDescription": "Primary efficacy endpoint",
+        "endpointLevel": {
+          "code": "C85826",
+          "decode": "Primary"
+        }
+      },
+      {
+        "id": "EP-002",
+        "endpointDescription": "Overall survival (OS) defined as time from randomization to death from any cause",
+        "endpointPurposeDescription": "Key secondary efficacy endpoint",
+        "endpointLevel": {
+          "code": "C85827",
+          "decode": "Secondary"
+        }
+      },
+      {
+        "id": "EP-003",
+        "endpointDescription": "Incidence and severity of adverse events graded per NCI CTCAE v5.0",
+        "endpointPurposeDescription": "Safety endpoint",
+        "endpointLevel": {
+          "code": "C85827",
+          "decode": "Secondary"
+        }
+      }
+    ],
+    "studyEligibilityCriteria": [
+      {
+        "id": "EC-001",
+        "criteriaType": "Inclusion",
+        "criteriaText": "Histologically or cytologically confirmed diagnosis of advanced (Stage IIIB/IV) NSCLC"
+      },
+      {
+        "id": "EC-002",
+        "criteriaType": "Inclusion",
+        "criteriaText": "Age >= 18 years at the time of informed consent"
+      },
+      {
+        "id": "EC-003",
+        "criteriaType": "Inclusion",
+        "criteriaText": "ECOG performance status 0-1"
+      },
+      {
+        "id": "EC-004",
+        "criteriaType": "Exclusion",
+        "criteriaText": "Prior treatment with anti-PD-1, anti-PD-L1, or anti-CTLA-4 antibodies"
+      },
+      {
+        "id": "EC-005",
+        "criteriaType": "Exclusion",
+        "criteriaText": "Known active central nervous system metastases"
+      }
+    ]
+  }
+}

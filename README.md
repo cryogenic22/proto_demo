@@ -36,9 +36,34 @@ Format-preserving document conversion built on a universal intermediate represen
 
 | Direction | Formats |
 |-----------|---------|
-| **Input (Ingest)** | PDF, DOCX, HTML, PPTX, XLSX, Markdown, Plain Text |
-| **Input (Protocol Import)** | JSON — digitized protocols imported directly into the knowledge store via `/api/protocols/import` |
+| **Input (Ingest)** | PDF, DOCX, HTML, PPTX, XLSX, Markdown, Plain Text, JSON (auto-detected) |
 | **Output (Render)** | HTML, DOCX, PDF, PPTX, Markdown, Plain Text, JSON |
+
+### JSON Ingest — Auto-Detecting Schema Framework
+
+The JSON ingestor automatically detects the schema of incoming JSON files and routes to the appropriate parser. No hard-coding — new schemas are added as plugins.
+
+| Schema | Detection | Output |
+|--------|-----------|--------|
+| **USDM** (CDISC Unified Study Definitions Model) | `study` + `studyDesigns` keys | Protocol + KEs + SMB Structured Model + FormattedDocument |
+| **Protocol IR** (ProtoExtract native) | `protocol_id` + `metadata` + `tables`/`sections` | Protocol + KEs |
+| **FormattedDocument IR** (JSONRenderer round-trip) | `pages` + `total_pages` | FormattedDocument (full format fidelity) |
+
+```python
+from src.formatter import DocHandler
+
+handler = DocHandler()
+
+# Auto-detects USDM, Protocol IR, or FormattedDocument IR
+doc = handler.ingest(json_string, format="json", filename="study.json")
+html = handler.render(doc, format="html")
+
+# USDM → SMB Structured Model (for knowledge graph + budget)
+from src.smb.adapters.usdm import USDMAdapter
+adapter = USDMAdapter()
+protocol = adapter.to_protocol(usdm_data)       # → persistence + KE graph
+extraction = adapter.to_extraction_input(usdm_data)  # → SMB engine
+```
 
 ### Usage
 
@@ -137,8 +162,8 @@ cd web && npm install && npm run dev
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/api/extract` | POST | Upload PDF, start extraction |
-| `/api/protocols/import` | POST | Import digitized protocol from JSON |
-| `/api/protocols/import-batch` | POST | Batch import multiple JSON protocols |
+| `/api/protocols/import` | POST | Import JSON (auto-detects USDM / Protocol IR / FormattedDoc IR) |
+| `/api/protocols/import-batch` | POST | Batch import multiple JSON files |
 | `/api/jobs/{id}` | GET | Check extraction status |
 | `/api/protocols` | GET | List stored protocols |
 | `/api/protocols/{id}` | GET | Get full protocol data |
@@ -179,6 +204,11 @@ src/
 │   ├── site_contract_generator.py  # CTSA template PDF filler
 │   ├── template_generator.py    # Blueprint template → CKEditor HTML
 │   ├── ingest/                  # Format ingestors
+│   │   ├── json_ingestor.py     # JSON → IR (auto-detecting framework)
+│   │   ├── json_schemas/        # Pluggable JSON schema parsers
+│   │   │   ├── usdm.py          # CDISC USDM detection + parsing
+│   │   │   ├── protocol_ir.py   # Protocol JSON detection + parsing
+│   │   │   └── formatted_doc_ir.py  # FormattedDocument round-trip
 │   │   ├── docx_ingestor.py     # DOCX → IR
 │   │   ├── html_ingestor.py     # HTML → IR
 │   │   ├── markdown_ingestor.py # Markdown → IR
@@ -221,6 +251,8 @@ src/
 │   ├── budget_calculator.py     # Site budget with cycle/span/conditional
 │   ├── section_parser.py        # Section parsing (PDF + DOCX + LLM fallback)
 │   └── verbatim_extractor.py    # Zero-hallucination copy-paste
+├── ingest/                      # Unified import routing
+│   └── json_router.py           # Auto-detect JSON schema, dispatch, persist
 ├── smb/                         # Structured Model Builder (standalone)
 │   ├── core/
 │   │   ├── engine.py            # SMBEngine — build pipeline orchestrator
@@ -235,7 +267,8 @@ src/
 │   │   ├── protocol/            # Protocol domain schema + builder
 │   │   └── ta_profiles/         # TA-specific YAML configs (oncology, vaccines...)
 │   ├── adapters/
-│   │   └── protoextract.py      # Pipeline output → SMB input adapter
+│   │   ├── protoextract.py      # Pipeline output → SMB input adapter
+│   │   └── usdm.py              # USDM JSON → Protocol + ExtractionInput + KEs
 │   └── storage/                 # In-memory + Neo4j backends
 ├── trust/                       # Trust module (cell → row → protocol)
 │   ├── models.py                # CellEvidence, RowTrust, ProtocolTrust

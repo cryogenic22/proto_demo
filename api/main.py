@@ -561,9 +561,11 @@ class ProtocolImportResponse(BaseModel):
     protocol_id: str
     document_name: str
     status: str
+    schema_type: str = "protocol_ir"
     tables_count: int = 0
     procedures_count: int = 0
     sections_count: int = 0
+    ke_count: int = 0
     warnings: list[str] = Field(default_factory=list)
 
 
@@ -571,13 +573,15 @@ class ProtocolImportResponse(BaseModel):
 async def import_protocol_json(file: UploadFile = File(...)):
     """Import a digitized protocol from a JSON file.
 
-    Accepts JSON files conforming to the Protocol schema (protocol_id, metadata,
-    sections, tables, procedures, etc.). Validates the structure, assigns
-    a protocol_id if missing, persists to the knowledge store, and generates
-    Knowledge Elements for the graph layer.
+    Auto-detects the JSON schema type and routes accordingly:
+    - **protocol_ir**: ProtoExtract Protocol JSON (protocol_id, metadata, tables, sections)
+    - **usdm**: CDISC Unified Study Definitions Model (study, studyDesigns)
+    - **formatted_doc_ir**: FormattedDocument IR (pages, paragraphs, spans)
 
-    Supports large files up to 200MB. Partial/relaxed schemas are accepted —
-    missing optional fields are filled with sensible defaults.
+    Validates structure, persists to knowledge store, generates Knowledge Elements,
+    and (for USDM) builds a Structured Model via SMB.
+
+    Supports large files up to 200MB.
     """
     if not file.filename or not file.filename.lower().endswith(".json"):
         raise HTTPException(
@@ -606,84 +610,38 @@ async def import_protocol_json(file: UploadFile = File(...)):
             detail="JSON root must be an object, not an array or scalar.",
         )
 
-    warnings: list[str] = []
-
-    # -- Auto-fill protocol_id if missing ----------------------------------
-    if not data.get("protocol_id"):
-        from src.persistence.protocol_bridge import _protocol_id_from
-        data["protocol_id"] = _protocol_id_from(file.filename or "import.json")
-        warnings.append(
-            f"No protocol_id in JSON; generated '{data['protocol_id']}' from filename."
-        )
-
-    # -- Auto-fill document_name if missing --------------------------------
-    if not data.get("document_name"):
-        data["document_name"] = file.filename or "imported_protocol.json"
-
-    # -- Ensure metadata is at least an empty object -----------------------
-    if "metadata" not in data or data["metadata"] is None:
-        data["metadata"] = {}
-        warnings.append("No metadata block found; created empty metadata.")
-
-    # -- Validate against Protocol schema ----------------------------------
-    from src.models.protocol import Protocol
+    # -- Route via auto-detection ------------------------------------------
+    from src.ingest.json_router import import_json
 
     try:
-        protocol = Protocol.model_validate(data)
+        result = import_json(data, filename=file.filename or "import.json")
+    except ValueError as exc:
+        # Auto-detection failed — fall back to protocol_ir
+        logger.warning("Auto-detection failed (%s), falling back to protocol_ir", exc)
+        try:
+            result = import_json(
+                data, filename=file.filename or "import.json",
+                force_schema="protocol_ir",
+            )
+            result.warnings.append(f"Auto-detection fell back to Protocol IR.")
+        except Exception as inner:
+            raise HTTPException(status_code=422, detail=str(inner))
     except Exception as exc:
         raise HTTPException(
             status_code=422,
-            detail=f"Schema validation failed: {exc}",
+            detail=f"Import failed: {exc}",
         )
-
-    # -- Check for duplicate -----------------------------------------------
-    store = create_ke_store()
-    existing = store.load_protocol(protocol.protocol_id)
-    if existing:
-        warnings.append(
-            f"Protocol '{protocol.protocol_id}' already exists and will be overwritten."
-        )
-
-    # -- Persist to knowledge store ----------------------------------------
-    store.save_protocol(protocol)
-    logger.info(
-        "Imported protocol %s (%s tables, %s procedures, %s sections)",
-        protocol.protocol_id,
-        len(protocol.tables),
-        len(protocol.procedures),
-        len(protocol.sections),
-    )
-
-    # -- Generate and persist Knowledge Elements ---------------------------
-    try:
-        kes = protocol.to_ke_graph()
-        if kes:
-            store.save_knowledge_elements(protocol.protocol_id, kes)
-            logger.info(
-                "Generated %d Knowledge Elements for %s",
-                len(kes),
-                protocol.protocol_id,
-            )
-    except Exception as exc:
-        warnings.append(f"KE graph generation failed (non-fatal): {exc}")
-        logger.warning("KE generation failed for %s: %s", protocol.protocol_id, exc)
-
-    # -- Count sections recursively ----------------------------------------
-    def _count_sections(sections: list) -> int:
-        count = len(sections)
-        for s in sections:
-            children = getattr(s, "children", None) or []
-            count += _count_sections(children)
-        return count
 
     return ProtocolImportResponse(
-        protocol_id=protocol.protocol_id,
-        document_name=protocol.document_name,
+        protocol_id=result.protocol.protocol_id,
+        document_name=result.protocol.document_name,
         status="imported",
-        tables_count=len(protocol.tables),
-        procedures_count=len(protocol.procedures),
-        sections_count=_count_sections(protocol.sections),
-        warnings=warnings,
+        schema_type=result.schema_type,
+        tables_count=result.tables_count,
+        procedures_count=result.procedures_count,
+        sections_count=result.sections_count,
+        ke_count=result.ke_count,
+        warnings=result.warnings,
     )
 
 

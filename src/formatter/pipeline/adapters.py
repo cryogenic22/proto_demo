@@ -13,6 +13,7 @@ All existing ingestors:
 - TextIngestor (text)           -> TextIngestorAdapter
 - PPTXIngestor (pptx)           -> PPTXIngestorAdapter
 - ExcelIngestor (xlsx)          -> ExcelIngestorAdapter
+- JsonIngestor (json)           -> JSONIngestorAdapter
 
 All existing renderers:
 - DOCXRenderer (docx)           -> DOCXRendererAdapter
@@ -464,6 +465,41 @@ class PPTXRendererAdapter(RendererTool):
 
 
 # ---------------------------------------------------------------------------
+# JSON Ingestor Adapter (auto-detecting)
+# ---------------------------------------------------------------------------
+
+class JSONIngestorAdapter(IngestorTool):
+    """Wraps JsonIngestor as a registered IngestorTool.
+
+    Auto-detects JSON schema (USDM, Protocol IR, FormattedDocument IR)
+    from the content and routes to the appropriate parser.
+    """
+
+    def __init__(self):
+        from src.formatter.ingest.json_ingestor import JsonIngestor, create_default_registry
+        self._inner = JsonIngestor(create_default_registry())
+
+    def metadata(self) -> ToolMetadata:
+        return ToolMetadata(
+            name="json-ingestor",
+            version="1.0.0",
+            description=(
+                "Auto-detects JSON schema (USDM, Protocol IR, FormattedDocument IR) "
+                "and converts to FormattedDocument IR."
+            ),
+            side_effects=ToolSideEffect.NONE,
+        )
+
+    def ingest(self, content: bytes | str, filename: str = "") -> FormattedDocument:
+        if isinstance(content, bytes):
+            content = content.decode("utf-8")
+        return self._inner.ingest(content, filename)
+
+    def supported_formats(self) -> list[str]:
+        return ["json"]
+
+
+# ---------------------------------------------------------------------------
 # Convenience: all adapters for factory registration
 # ---------------------------------------------------------------------------
 
@@ -475,6 +511,7 @@ ALL_INGESTOR_ADAPTERS = [
     TextIngestorAdapter,
     PPTXIngestorAdapter,
     ExcelIngestorAdapter,
+    JSONIngestorAdapter,
 ]
 
 ALL_RENDERER_ADAPTERS = [

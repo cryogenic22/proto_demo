@@ -1,6 +1,6 @@
 """Document Formatter — format-preserving document conversion.
 
-Supports: PDF, DOCX, HTML, Markdown, plain text
+Supports: PDF, DOCX, HTML, Markdown, plain text, PPTX, XLSX, JSON
 """
 from src.formatter.extractor import FormattingExtractor, FormattedDocument
 from src.formatter.docx_renderer import DOCXRenderer
@@ -16,6 +16,7 @@ from src.formatter.render.pptx_renderer import PPTXRenderer
 from src.formatter.ingest.pptx_ingestor import PPTXIngestor
 from src.formatter.ingest.excel_ingestor import ExcelIngestor
 from src.formatter.ingest.docx_ingestor import DOCXIngestor
+from src.formatter.ingest.json_ingestor import JsonIngestor, create_default_registry
 
 
 class DocHandler:
@@ -38,6 +39,7 @@ class DocHandler:
             "text": TextIngestor(),
             "pptx": PPTXIngestor(),
             "xlsx": ExcelIngestor(),
+            "json": JsonIngestor(create_default_registry()),
         }
         self._renderers = {
             "docx": DOCXRenderer(),
@@ -68,8 +70,6 @@ class DocHandler:
             raise ValueError(f"Unsupported input format: {format}")
         if format == "pdf":
             return ingestor.extract(content, filename)
-        if format in ("pptx", "xlsx"):
-            return ingestor.ingest(content, filename)
         return ingestor.ingest(content, filename)
 
     def render(self, doc: FormattedDocument, format: str):
