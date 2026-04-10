@@ -26,7 +26,7 @@ try:
 except ImportError:
     pass  # dotenv optional in production
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
@@ -308,7 +308,7 @@ def _build_config(**overrides) -> PipelineConfig:
         enable_challenger=merged.get("enable_challenger", True),
         max_concurrent_llm_calls=int(os.environ.get("MAX_CONCURRENT_LLM_CALLS", str(merged.get("max_concurrent_llm_calls", 10)))),
         openai_batch_mode=os.environ.get("OPENAI_BATCH_MODE", "").lower() in ("true", "1", "yes"),
-        soa_only=True,
+        soa_only=merged.get("soa_only", True),
         **{k: v for k, v in overrides.items() if k not in merged},
     )
 
@@ -519,9 +519,20 @@ async def check_procedure_mapping(names: list[str]):
 
 
 @app.post("/api/extract")
-async def extract_protocol(file: UploadFile = File(...)):
+async def extract_protocol(
+    file: UploadFile = File(...),
+    extraction_mode: str = Form("soa"),
+):
     """
     Upload a protocol PDF and start extraction.
+
+    Args:
+        file: The PDF file to extract.
+        extraction_mode: One of "full", "soa", "soa_plus".
+            - "full": Full document digitization (all text, tables, formatting)
+            - "soa": SoA table extraction only (for site budgets)
+            - "soa_plus": SoA tables + protocol elements (eligibility, endpoints, design)
+
     Returns a job_id for polling status.
     """
     if not file.filename or not file.filename.lower().endswith(".pdf"):
@@ -534,12 +545,18 @@ async def extract_protocol(file: UploadFile = File(...)):
     if len(pdf_bytes) > 100 * 1024 * 1024:  # 100MB limit
         raise HTTPException(status_code=400, detail="File too large (max 100MB)")
 
+    # Validate extraction mode
+    valid_modes = {"full", "soa", "soa_plus"}
+    if extraction_mode not in valid_modes:
+        extraction_mode = "soa"
+
     job_id = uuid.uuid4().hex[:12]
     jobs[job_id] = {
         "status": "pending",
         "progress": 0,
         "message": "Queued for processing",
         "document_name": file.filename,
+        "extraction_mode": extraction_mode,
         "result": None,
         "error": None,
         "created_at": time.time(),
@@ -549,10 +566,12 @@ async def extract_protocol(file: UploadFile = File(...)):
     _save_jobs()
 
     # Run extraction in background with error logging
-    task = asyncio.create_task(_run_extraction(job_id, pdf_bytes, file.filename))
+    task = asyncio.create_task(
+        _run_extraction(job_id, pdf_bytes, file.filename, extraction_mode)
+    )
     task.add_done_callback(_task_done_callback)
 
-    return {"job_id": job_id, "status": "pending"}
+    return {"job_id": job_id, "status": "pending", "extraction_mode": extraction_mode}
 
 
 # ── JSON Protocol Import ────────────────────────────────────────────────
@@ -937,7 +956,9 @@ async def get_job_review(job_id: str, format: str = "json"):
         return export_review_json(result)
 
 
-async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
+async def _run_extraction(
+    job_id: str, pdf_bytes: bytes, filename: str, extraction_mode: str = "soa"
+):
     """Background task to run the extraction pipeline.
 
     Wrapped in broad exception handling so the server NEVER crashes —
@@ -952,7 +973,16 @@ async def _run_extraction(job_id: str, pdf_bytes: bytes, filename: str):
         jobs[job_id]["progress"] = 5
         jobs[job_id]["message"] = "Initializing pipeline..."
 
-        config = _build_config()
+        # Map extraction mode to pipeline config
+        mode_overrides: dict = {}
+        if extraction_mode == "full":
+            mode_overrides["soa_only"] = False
+        elif extraction_mode == "soa":
+            mode_overrides["soa_only"] = True
+        elif extraction_mode == "soa_plus":
+            mode_overrides["soa_only"] = False
+
+        config = _build_config(**mode_overrides)
         orchestrator = PipelineOrchestrator(config)
 
         jobs[job_id]["progress"] = 10

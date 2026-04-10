@@ -202,24 +202,38 @@ class PipelineOrchestrator:
 
             validated_regions = []
             for region in regions:
-                # Layer 1: Page-range gate
+                # Layer 1: Page-range check (soft signal, not hard gate)
+                in_soa_range = True  # default: no range info = assume okay
                 if soa_page_range:
-                    in_range = any(p in soa_page_range for p in region.pages)
-                    if not in_range:
+                    in_soa_range = any(p in soa_page_range for p in region.pages)
+                    if not in_soa_range:
                         logger.info(
-                            f"REJECTED (page range): '{region.title}' on pages "
-                            f"{region.pages} — outside SoA range "
-                            f"{min(soa_page_range)}-{max(soa_page_range)}"
+                            f"Table '{region.title}' on pages {region.pages} is "
+                            f"outside SoA section range "
+                            f"{min(soa_page_range)}-{max(soa_page_range)} — "
+                            f"will validate by content"
                         )
-                        warnings.append(
-                            f"Rejected non-SoA table (outside SoA pages): "
-                            f"{region.title or region.table_id}"
-                        )
-                        continue
+                        # Don't skip — let _is_likely_soa decide
 
                 # Layer 2: Title + content validation
+                # Tables inside the SoA section range get a relaxed check
+                # Tables outside must pass the full content check
                 if self._is_likely_soa(region, pdf_bytes):
                     validated_regions.append(region)
+                    if in_soa_range:
+                        logger.info(
+                            f"ACCEPTED (page range + content): '{region.title}' "
+                            f"on pages {region.pages}"
+                        )
+                elif in_soa_range:
+                    # Inside the SoA section range but failed content check —
+                    # still include it (section parser is authoritative for location)
+                    validated_regions.append(region)
+                    logger.info(
+                        f"ACCEPTED (page range override): '{region.title}' "
+                        f"on pages {region.pages} — content check failed but "
+                        f"inside SoA section range"
+                    )
                 else:
                     logger.info(
                         f"REJECTED (content): '{region.title}' on pages {region.pages}"

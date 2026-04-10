@@ -5,23 +5,30 @@ AI-powered clinical trial protocol extraction and document digitization platform
 ## Architecture
 
 ```
-                        ┌─────────────────────────────────────────────────────┐
-                        │           Document Digitization Pipeline            │
-                        │  PDF · DOCX · HTML · PPTX · XLSX · MD · TXT → IR   │
-                        │         ↓ Formula Enrichment ↓ Fidelity Check       │
-                        │  IR → HTML · DOCX · PDF · PPTX · MD · TXT · JSON   │
-                        └─────────────────────────────────────────────────────┘
-                                              ↓
-PDF/DOCX → [Extraction Pipeline] → Cells → [Structured Model Builder] → Protocol Model → [Budget Calculator] → Budget
-                                                      ↓
-                                              Knowledge Graph
-                                    (Visits × Procedures × Footnotes)
+                ┌──────────────────────────────────────────────────────────┐
+                │  Layer 1: Document Digitization (DocumentDigitizer)     │
+                │  PDF · DOCX · HTML · PPTX · XLSX · MD · TXT · JSON     │
+                │      ↓ FormattedDocument + Sections + Table Classes     │
+                │      ↓ Formula Enrichment ↓ Fidelity Check              │
+                │  IR → HTML · DOCX · PDF · PPTX · MD · TXT · JSON       │
+                └──────────────────────────────────────────────────────────┘
+                                         ↓ DigitizedDocument
+                ┌──────────────────────────────────────────────────────────┐
+                │  Layer 2: Targeted Extraction (configurable)            │
+                │  ├── SoA Extractor → cells, procedures, visits, budget  │
+                │  ├── Eligibility Extractor → inclusion/exclusion KEs    │
+                │  └── Endpoints Extractor → objectives, endpoints KEs    │
+                └──────────────────────────────────────────────────────────┘
+                                         ↓
+        [Structured Model Builder] → Protocol Model → [Budget Calculator] → Budget
+                      ↓
+              Knowledge Graph (Visits × Procedures × Footnotes)
 ```
 
 | Layer | Purpose |
 |-------|---------|
-| **Document Digitization** | Format-preserving ingestion (7 formats), formula detection, fidelity checking, multi-format rendering (7 formats) |
-| **Extraction Pipeline** | 14-stage PDF processing: table detection, dual-pass cell extraction, OCR grounding, adversarial validation |
+| **Layer 1: Digitization** | Full document extraction: text, tables, formulas, sections, formatting. Table classification (SOA/OTHER). Format-preserving rendering (8 input, 7 output formats) |
+| **Layer 2: Extraction** | Targeted extractors operating on Layer 1 output. Configurable via UI: Full / SoA Only / SoA + Protocol Elements |
 | **Structured Model Builder (SMB)** | Transforms cells into typed entities + relationships. YAML-driven, document-type agnostic |
 | **Trust Module** | 3-tier confidence: Cell → Row → Protocol. Evidence chain preserved from extraction passes |
 | **Procedure Vocabulary** | 552 canonical procedures, 3,400+ aliases, 187 CPT codes. 100% mapping across 9 test protocols |
@@ -241,7 +248,8 @@ src/
 │       ├── adapters.py          # Ingestor/renderer adapters
 │       └── factory.py           # Tool factory
 ├── pipeline/                    # 14-stage extraction pipeline
-│   ├── orchestrator.py          # Main pipeline with 5-layer SoA filter
+│   ├── digitizer.py             # DocumentDigitizer — Layer 1 entry point
+│   ├── orchestrator.py          # Main pipeline with soft SoA filter
 │   ├── cell_extractor.py        # Dual-pass VLM cell extraction
 │   ├── reconciler.py            # Multi-pass reconciliation + evidence
 │   ├── challenger_agent.py      # Adversarial validation
@@ -253,6 +261,8 @@ src/
 │   └── verbatim_extractor.py    # Zero-hallucination copy-paste
 ├── ingest/                      # Unified import routing
 │   └── json_router.py           # Auto-detect JSON schema, dispatch, persist
+├── models/
+│   └── digitized.py             # DigitizedDocument + TableClassification (Layer 1↔2 contract)
 ├── smb/                         # Structured Model Builder (standalone)
 │   ├── core/
 │   │   ├── engine.py            # SMBEngine — build pipeline orchestrator

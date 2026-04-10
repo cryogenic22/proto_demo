@@ -135,9 +135,12 @@ export interface ExtractionMetadata {
   model_used: string;
 }
 
-export async function uploadProtocol(file: File): Promise<{ job_id: string }> {
+export type ExtractionMode = "full" | "soa" | "soa_plus";
+
+export async function uploadProtocol(file: File, mode: ExtractionMode = "soa"): Promise<{ job_id: string }> {
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("extraction_mode", mode);
 
   const res = await fetch(`${API_BASE}/api/extract`, {
     method: "POST",

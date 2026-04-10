@@ -342,6 +342,10 @@ class PipelineConfig(BaseModel):
     max_concurrent_llm_calls: int = Field(default=10, ge=1)
     openai_batch_mode: bool = Field(default=False, description="Use OpenAI Batch API for async processing (cheaper, slower)")
     soa_only: bool = Field(default=True, description="Only extract Schedule of Activities tables")
+    extraction_mode: str = Field(
+        default="soa",
+        description="Extraction mode: 'full' (all content), 'soa' (SoA tables only), 'soa_plus' (SoA + protocol elements)",
+    )
     anthropic_api_key: str = ""
     openai_api_key: str = ""
     azure_openai_api_key: str = ""
