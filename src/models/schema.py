@@ -344,7 +344,11 @@ class PipelineConfig(BaseModel):
     soa_only: bool = Field(default=True, description="Only extract Schedule of Activities tables")
     extraction_mode: str = Field(
         default="soa",
-        description="Extraction mode: 'full' (all content), 'soa' (SoA tables only), 'soa_plus' (SoA + protocol elements)",
+        description=(
+            "Extraction mode: 'full' (all content), 'soa' (SoA tables only), "
+            "'soa_plus' (SoA + protocol elements), 'deep' (maximum fidelity — "
+            "OCR verification, VLM table analysis, Tier 4 formulas, fidelity scoring)"
+        ),
     )
     anthropic_api_key: str = ""
     openai_api_key: str = ""

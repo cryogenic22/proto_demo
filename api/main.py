@@ -546,7 +546,7 @@ async def extract_protocol(
         raise HTTPException(status_code=400, detail="File too large (max 100MB)")
 
     # Validate extraction mode
-    valid_modes = {"full", "soa", "soa_plus"}
+    valid_modes = {"full", "soa", "soa_plus", "deep"}
     if extraction_mode not in valid_modes:
         extraction_mode = "soa"
 
@@ -974,13 +974,18 @@ async def _run_extraction(
         jobs[job_id]["message"] = "Initializing pipeline..."
 
         # Map extraction mode to pipeline config
-        mode_overrides: dict = {}
+        mode_overrides: dict = {"extraction_mode": extraction_mode}
         if extraction_mode == "full":
             mode_overrides["soa_only"] = False
         elif extraction_mode == "soa":
             mode_overrides["soa_only"] = True
         elif extraction_mode == "soa_plus":
             mode_overrides["soa_only"] = False
+        elif extraction_mode == "deep":
+            mode_overrides["soa_only"] = False
+            mode_overrides["enable_challenger"] = True
+            mode_overrides["max_extraction_passes"] = 3
+            mode_overrides["render_dpi"] = 200
 
         config = _build_config(**mode_overrides)
         orchestrator = PipelineOrchestrator(config)

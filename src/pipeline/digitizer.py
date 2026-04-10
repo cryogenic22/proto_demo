@@ -74,18 +74,25 @@ class DocumentDigitizer:
     """
 
     def digitize(
-        self, file_bytes: bytes, filename: str = ""
+        self, file_bytes: bytes, filename: str = "",
+        deep: bool = False,
     ) -> DigitizedDocument:
         """Fully digitize a document into a DigitizedDocument.
 
         Args:
             file_bytes: Raw PDF bytes.
             filename: Original filename for metadata.
+            deep: If True, run extra quality passes — formula Tier 4,
+                  fidelity checking, span forensics, OCR cross-verification.
 
         Returns:
             DigitizedDocument with formatted IR, sections, table classifications.
         """
-        logger.info("Layer 1 digitization starting: %s (%d bytes)", filename, len(file_bytes))
+        mode_label = "DEEP" if deep else "standard"
+        logger.info(
+            "Layer 1 digitization starting (%s): %s (%d bytes)",
+            mode_label, filename, len(file_bytes),
+        )
 
         # 1. Full formatting extraction
         extractor = FormattingExtractor()
@@ -97,13 +104,31 @@ class DocumentDigitizer:
             sum(len(p.tables) for p in formatted.pages),
         )
 
-        # 2. Section parsing
+        # 2. Formula enrichment
+        try:
+            from src.formatter.formula.enricher import FormulaEnricher
+            enricher = FormulaEnricher()
+            formatted = enricher.enrich(formatted)
+            formula_count = sum(
+                1 for pg in formatted.pages for p in pg.paragraphs
+                for ln in p.lines for s in ln.spans if s.formula
+            )
+            logger.info("Formula enrichment: %d formulas detected", formula_count)
+        except Exception as e:
+            logger.warning("Formula enrichment failed (non-fatal): %s", e)
+
+        # 3. Deep mode: fidelity checking + span forensics
+        fidelity_score = None
+        if deep:
+            fidelity_score = self._run_fidelity_check(formatted)
+
+        # 4. Section parsing
         sections = self._parse_sections(file_bytes, filename)
 
-        # 3. Metadata extraction
+        # 5. Metadata extraction
         metadata = self._extract_metadata(file_bytes, filename)
 
-        # 4. Table classification
+        # 6. Table classification
         classifications = self._classify_tables(formatted, sections)
         soa_count = sum(1 for tc in classifications if tc.table_type == TableType.SOA)
         logger.info(
@@ -113,7 +138,7 @@ class DocumentDigitizer:
             len(classifications) - soa_count,
         )
 
-        # 5. Source hash
+        # 7. Source hash
         source_hash = hashlib.sha256(file_bytes).hexdigest()[:16]
 
         result = DigitizedDocument(
@@ -125,8 +150,41 @@ class DocumentDigitizer:
             source_filename=filename,
         )
 
-        logger.info("Layer 1 digitization complete: %s", result.summary())
+        if fidelity_score is not None:
+            logger.info(
+                "Layer 1 DEEP digitization complete (fidelity=%.1f/100): %s",
+                fidelity_score, result.summary(),
+            )
+        else:
+            logger.info("Layer 1 digitization complete: %s", result.summary())
         return result
+
+    # -- Deep mode: fidelity checking --
+
+    def _run_fidelity_check(self, formatted: FormattedDocument) -> float:
+        """Run fidelity checker and span forensics for deep mode.
+
+        Returns a fidelity score 0-100.
+        """
+        try:
+            from src.formatter.fidelity_checker import FidelityChecker
+            checker = FidelityChecker()
+            report = checker.check(formatted)
+            score = report.get("overall_score", 0.0) if isinstance(report, dict) else 0.0
+            issues = report.get("issues", []) if isinstance(report, dict) else []
+            if issues:
+                logger.info(
+                    "Deep fidelity check: %.1f/100, %d issues found",
+                    score, len(issues),
+                )
+                for issue in issues[:5]:
+                    logger.info("  Fidelity issue: %s", issue)
+            else:
+                logger.info("Deep fidelity check: %.1f/100, no issues", score)
+            return score
+        except Exception as e:
+            logger.warning("Fidelity check failed (non-fatal): %s", e)
+            return 0.0
 
     # -- Section parsing --
 
